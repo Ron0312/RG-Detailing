@@ -8,8 +8,8 @@ describe('API submit-quote', () => {
             body: JSON.stringify({
                 email: 'test@example.com',
                 size: 'small',
-                condition: 'new',
-                package: 'basic'
+                condition: 'good',
+                package: 'wash_interior'
             })
         });
         const res = await POST({ request: req } as any);
