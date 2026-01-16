@@ -1,0 +1,45 @@
+---
+import { reviews } from '../data/reviews';
+---
+
+<section class="py-20 bg-slate-900 border-t border-slate-800">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">Was Kunden sagen</h2>
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <span class="text-yellow-400 text-2xl">★★★★★</span>
+                <span class="text-slate-400 font-medium">5.0 auf Google</span>
+            </div>
+            <p class="text-slate-400 max-w-2xl mx-auto">Echte Meinungen von Kunden aus Tensfeld, Bad Segeberg und Umgebung.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {reviews.map((review) => (
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg hover:border-slate-600 transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                            {review.name.charAt(0)}
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm">{review.name}</div>
+                            <div class="text-slate-500 text-xs">{review.date}</div>
+                        </div>
+                    </div>
+                    <div class="text-yellow-400 text-sm mb-3">
+                        {"★".repeat(review.stars)}
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed line-clamp-6">
+                        "{review.text}"
+                    </p>
+                </div>
+            ))}
+        </div>
+
+        <div class="text-center mt-12">
+             <a href="https://www.google.com/search?q=RG+Detailing+Tensfeld#lrd=0x47b2299999999999:0x9999999999999999,1,,," target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition">
+                <span>Alle Bewertungen auf Google lesen</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+             </a>
+        </div>
+    </div>
+</section>

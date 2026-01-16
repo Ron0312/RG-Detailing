@@ -11,6 +11,8 @@
   "dependencies": {
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
+    "@fontsource/hind": "^5.2.8",
+    "@fontsource/roboto": "^5.2.9",
     "@nanostores/react": "^1.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.8",

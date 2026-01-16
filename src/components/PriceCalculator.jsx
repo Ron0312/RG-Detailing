@@ -78,7 +78,7 @@ export default function PriceCalculator() {
     );
 
     return (
-        <div className="w-full max-w-3xl mx-auto bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 p-6 md:p-12" id="rechner">
+        <div className="w-full max-w-3xl mx-auto bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 p-6 md:p-12">
             {/* Progress Bar */}
             <div className="flex justify-between mb-8 relative">
                 <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-800 -z-10 -translate-y-1/2"></div>
