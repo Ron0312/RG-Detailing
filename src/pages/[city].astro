@@ -4,24 +4,24 @@ import { getCollection } from 'astro:content';
 import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 import PriceCalculator from '../components/PriceCalculator.jsx';
 
-export const prerender = false; // Ensure SSR
+export const prerender = true;
 
-const { city } = Astro.params;
-
-const cities = await getCollection('cities');
-const cityEntry = cities.find(c => c.data.slug === city);
-
-if (!cityEntry) {
-    return Astro.redirect('/404');
+export async function getStaticPaths() {
+  const cities = await getCollection('cities');
+  return cities.map(city => ({
+    params: { city: city.data.slug },
+    props: { cityEntry: city },
+  }));
 }
 
-const { name, metaDescription, introText, geo } = cityEntry.data;
+const { cityEntry } = Astro.props;
+const { name, metaDescription, introText, geo, distance } = cityEntry.data;
 
 const schema = {
   "@context": "https://schema.org",
   "@type": "AutoRepair",
   "name": "RG Detailing",
-  "url": `https://rg-detailing.de/${city}`,
+  "url": `https://rg-detailing.de/${cityEntry.data.slug}`,
   "description": metaDescription,
   "areaServed": {
     "@type": "City",
@@ -42,63 +42,119 @@ const schema = {
 };
 ---
 
-<Layout title={`Fahrzeugaufbereitung ${name}`} description={metaDescription} schema={schema}>
-    <main class="container mx-auto px-4 py-12">
-        {/* Header Section */}
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            Fahrzeugaufbereitung in <span class="text-red-600">{name}</span>
-        </h1>
+<Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema}>
 
-        <div class="prose prose-invert prose-lg max-w-3xl mb-12">
-            <p class="text-xl text-zinc-400 leading-relaxed">{introText}</p>
+    {/* City Hero */}
+    <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        {/* Background Gradients */}
+        <div class="absolute inset-0 bg-black z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black z-10"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-red-900/20 blur-[120px] rounded-full z-0 animate-pulse"></div>
+
+        <div class="container mx-auto px-4 z-20 text-center relative pt-20">
+             <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-red-400 text-sm font-bold tracking-wider mb-6">
+                RG DETAILING NEAR {name.toUpperCase()}
+            </span>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight">
+                Premium Aufbereitung <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">für {name}</span>
+            </h1>
+            <p class="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                {introText}
+            </p>
+             <div class="flex justify-center gap-4">
+                 <span class="flex items-center gap-2 text-zinc-300 bg-zinc-900/50 px-4 py-2 rounded-lg border border-white/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Nur {distance} Anfahrt
+                 </span>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-20 relative z-20 -mt-20">
+
+        {/* Why RG Card */}
+        <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-5xl mx-auto shadow-2xl mb-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-white">Lohnt sich der Weg aus {name}?</h2>
+                    <p class="text-zinc-400 mb-6 leading-relaxed">
+                        Definitiv. In {name} finden Sie viele Waschanlagen und schnelle Aufbereiter.
+                        Doch RG Detailing in Tensfeld steht für <strong>Detailversessenheit</strong>.
+                        Wir nehmen uns die Zeit, die Ihr Fahrzeug verdient.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-red-900/20 flex items-center justify-center text-red-500">✓</div>
+                            <span class="text-zinc-300">Zertifizierter Labocosmetica Detailer</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                             <div class="w-8 h-8 rounded-full bg-red-900/20 flex items-center justify-center text-red-500">✓</div>
+                            <span class="text-zinc-300">Spezialist für dunkle Lacke & Keramik</span>
+                        </li>
+                         <li class="flex items-center gap-3">
+                             <div class="w-8 h-8 rounded-full bg-red-900/20 flex items-center justify-center text-red-500">✓</div>
+                            <span class="text-zinc-300">Hol- & Bringservice (auf Anfrage)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-zinc-900/50 p-2 rounded-xl border border-white/5">
+                    {/* Placeholder for Route Map or similar */}
+                    <div class="aspect-video bg-zinc-950 rounded-lg flex flex-col items-center justify-center text-zinc-600">
+                         <span class="text-4xl mb-2">🗺️</span>
+                         <span class="text-sm">Route: {name} ➔ Tensfeld ({distance})</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {/* Visual Storytelling */}
-        <div class="mb-20">
-            <h2 class="text-2xl font-bold mb-6 border-l-4 border-red-600 pl-4">Das Ergebnis spricht für sich</h2>
-            <div class="max-w-4xl mx-auto">
-                <BeforeAfterSlider
+        {/* Services Grid */}
+        <div class="mb-24">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">Unsere Expertise</h2>
+                <div class="w-24 h-1 bg-red-600 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card p-8 rounded-2xl group hover:bg-zinc-900/80 cursor-pointer">
+                    <div class="text-4xl mb-6 group-hover:scale-110 transition-transform duration-300">✨</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Lackkorrektur</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">Entfernung von Kratzern, Swirls und Hologrammen. Wir holen den Neuwagen-Glanz zurück.</p>
+                </div>
+                 <div class="glass-card p-8 rounded-2xl group hover:bg-zinc-900/80 cursor-pointer">
+                    <div class="text-4xl mb-6 group-hover:scale-110 transition-transform duration-300">🛡️</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Keramikversiegelung</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">Langzeitschutz bis zu 5 Jahren. Hydrophober Effekt und extremer Tiefenglanz.</p>
+                </div>
+                 <div class="glass-card p-8 rounded-2xl group hover:bg-zinc-900/80 cursor-pointer">
+                    <div class="text-4xl mb-6 group-hover:scale-110 transition-transform duration-300">🧖</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Innenraum Wellness</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">Tiefenreinigung mit 170°C Trockendampf. Hygienisch rein ohne Chemie.</p>
+                </div>
+            </div>
+        </div>
+
+        {/* Proof */}
+        <div class="mb-24">
+             <h2 class="text-3xl font-bold text-center mb-12 text-white">Vorher / Nachher</h2>
+             <div class="max-w-4xl mx-auto border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
+                 <BeforeAfterSlider
                     client:visible
-                    beforeImage="https://placehold.co/800x450/333/999?text=Vorher:+Kratzer"
-                    afterImage="https://placehold.co/800x450/000/fff?text=Nachher:+Spiegelglanz"
+                    beforeImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-1.jpg"
+                    afterImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-2.jpg"
+                    alt="Aufbereitung Ergebnis"
                 />
-            </div>
+             </div>
         </div>
 
-        {/* Local Context */}
-        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
-            <div class="p-8 bg-zinc-900 rounded-2xl border border-zinc-800 shadow-xl">
-                <h2 class="text-2xl font-bold mb-4">Warum Kunden aus {name} kommen</h2>
-                <ul class="space-y-4 text-zinc-400">
-                    <li class="flex items-start">
-                        <span class="text-red-500 mr-2">✓</span>
-                        <span>Nur {cityEntry.data.distance} Anfahrt für Premium-Qualität</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-red-500 mr-2">✓</span>
-                        <span>Spezialisiert auf Leasingrückläufer & Lackveredelung</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-red-500 mr-2">✓</span>
-                        <span>Digitale Transparenz statt "Preis auf Anfrage"</span>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                 <div class="aspect-video bg-zinc-900 rounded-xl flex flex-col items-center justify-center text-zinc-600 border-2 border-dashed border-zinc-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" class="mb-2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-                    <span>Route von {name}</span>
-                 </div>
-            </div>
-        </div>
-
-        {/* Calculator Section */}
-        <div class="mb-20 scroll-mt-24" id="rechner">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold mb-4">Was kostet die Aufbereitung?</h2>
-                <p class="text-zinc-400">Berechnen Sie jetzt unverbindlich Ihren Preis in 3 Schritten.</p>
-            </div>
-            <PriceCalculator client:visible />
+        {/* CTA */}
+        <div id="rechner" class="glass-panel p-8 md:p-12 rounded-3xl border border-red-900/30 relative overflow-hidden">
+             <div class="absolute top-0 right-0 w-64 h-64 bg-red-900/20 blur-[80px] rounded-full pointer-events-none"></div>
+             <div class="relative z-10 text-center mb-12">
+                 <h2 class="text-3xl font-bold mb-4 text-white">Ihr Angebot in 30 Sekunden</h2>
+                 <p class="text-zinc-400">Wählen Sie Ihr Fahrzeug und erhalten Sie sofort einen Richtpreis.</p>
+             </div>
+             <PriceCalculator client:visible />
         </div>
 
     </main>
