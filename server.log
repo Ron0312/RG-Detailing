@@ -1,24 +1,5 @@
-12:12:39 [ERROR] [@astrojs/node] Unhandled rejection while rendering undefined
-Error: listen EADDRINUSE: address already in use ::1:4321
-    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
-    at listenInCluster (node:net:1997:12)
-    at GetAddrInfoReqWrap.callback (node:net:2206:7)
-    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:134:8) {
-  code: 'EADDRINUSE',
-  errno: -98,
-  syscall: 'listen',
-  address: '::1',
-  port: 4321
-}
-12:12:39 [ERROR] [@astrojs/node] Unhandled rejection while rendering undefined
-Error: listen EADDRINUSE: address already in use ::1:4321
-    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
-    at listenInCluster (node:net:1997:12)
-    at GetAddrInfoReqWrap.callback (node:net:2206:7)
-    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:134:8) {
-  code: 'EADDRINUSE',
-  errno: -98,
-  syscall: 'listen',
-  address: '::1',
-  port: 4321
-}
+
+> app@0.0.1 start
+> node app.js
+
+16:17:04 [@astrojs/node] Server listening on http://localhost:4321

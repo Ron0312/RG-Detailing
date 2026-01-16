@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "RG Detailing - Dampfreinigung",
+  "description": "Hygienische Innenreinigung mit 170°C Trockendampf in Tensfeld. Ideal für Allergiker und Familien.",
+  "priceRange": "$$"
+};
+---
+
+<Layout title="Hygienische Dampfreinigung" description="Tiefenreinigung ohne Chemie. 170°C Trockendampf gegen Bakterien, Milben und Gerüche. Offizieller Dampftec Partner." schema={schema}>
+    <main class="container mx-auto px-4 py-12">
+        {/* Header */}
+        <div class="mb-12 text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                Der "Dampfdrache" <br/>
+                <span class="text-red-600">Reine Physik. 0% Chemie. 100% Hygiene.</span>
+            </h1>
+            <p class="text-xl text-zinc-400 leading-relaxed">
+                Tiefenreinigung mit 170°C Trockendampf. Ideal für Familien, Tierbesitzer und Allergiker.
+            </p>
+        </div>
+
+        {/* Content Section */}
+        <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+            <div>
+                 <img
+                    src="https://rg-detailing.de/wp-content/uploads/2023/01/Dampfreinigung-Innenraum.jpg"
+                    alt="Dampfreinigung Innenraum"
+                    class="rounded-2xl shadow-2xl border border-zinc-800 w-full object-cover h-auto mb-6"
+                    onerror="this.src='https://placehold.co/600x400/18181b/dc2626?text=Dampfreinigung'"
+                />
+                 <div class="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
+                    <p class="font-bold text-white mb-2">Offizieller Partner:</p>
+                    <div class="text-2xl font-bold text-zinc-300">DAMPFTEC <span class="text-red-600">SYSTEMS</span></div>
+                 </div>
+            </div>
+
+            <div class="prose prose-invert prose-lg">
+                <h2 class="text-2xl font-bold text-white mb-4">Warum Dampf besser ist als Chemie</h2>
+                <p>
+                    Klassische Innenreiniger arbeiten oft mit Tensiden und Duftstoffen. Sie überdecken Gerüche und hinterlassen chemische Rückstände auf den Polstern. Wenn im Sommer die Sonne draufscheint, dünsten diese Stoffe aus – Gift für Allergiker und kleine Kinder.
+                </p>
+                <p>
+                    Wir gehen einen anderen Weg. Der <strong>Dampfdrache</strong> erzeugt 170°C heißen Trockendampf. Diese Hitze überlebt nichts:
+                </p>
+                <ul class="list-disc pl-5 text-zinc-400 space-y-2">
+                    <li><strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</li>
+                    <li><strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</li>
+                    <li><strong>Schimmelsporen:</strong> Werden in der Tiefe neutralisiert.</li>
+                </ul>
+
+                <h2 class="text-2xl font-bold text-white mt-8 mb-4">Keine Nässe, kein Schimmelrisiko</h2>
+                <p>
+                    Viele scheuen die Polsterreinigung aus Angst vor Nässe ("Das trocknet doch nie!"). Bei billigen Nasssaugern stimmt das. Aber wir nutzen <strong>Trockendampf</strong>.
+                </p>
+                <p>
+                    Der Dampf hat nur einen minimalen Wasseranteil. Er löst den Schmutz in Sekundenbruchteilen, und wird sofort wieder abgesaugt. Das Ergebnis: Die Polster sind porentief rein und nach kürzester Zeit wieder komplett trocken. Schokoflecken vom Rücksitz? Verschwunden. Hundegeruch? Neutralisiert.
+                </p>
+
+                <div class="mt-8 p-4 border-l-4 border-red-600 bg-zinc-900">
+                    <p class="italic text-zinc-300">
+                        "Gerade für Eltern ist das ein Gamechanger. Sie können Ihre Kinder wieder bedenkenlos auf den Rücksitz setzen, ohne dass sie in einer Chemiewolke sitzen."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+         {/* CTA */}
+         <div class="text-center mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Gönnen Sie sich ein gesundes Auto</h2>
+            <a href="#rechner" class="bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-red-900/30">
+                Preis jetzt berechnen
+            </a>
+         </div>
+
+    </main>
+</Layout>
