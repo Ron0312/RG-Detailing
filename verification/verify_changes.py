@@ -1,36 +1,43 @@
 from playwright.sync_api import sync_playwright, expect
+import time
 
 def run(playwright):
     browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context(viewport={"width": 1280, "height": 3000}) # Large height to capture full page
+    # Desktop View
+    context = browser.new_context(viewport={"width": 1440, "height": 1200})
     page = context.new_page()
 
     # 1. Verify Home
-    print("Verifying Home...")
+    print("Verifying Home (High-End Design)...")
     page.goto("http://localhost:4321")
-    expect(page.get_by_role("heading", name="Schluss mit Waschanlagen-Kratzern")).to_be_visible()
-    page.screenshot(path="verification/home.png")
+    # Verify new H1
+    expect(page.get_by_role("heading", name="Wellness für Ihr Automobil")).to_be_visible()
+    # Verify Cities Grid exists
+    expect(page.get_by_text("Wir sind aktiv in")).to_be_visible()
+    expect(page.get_by_role("link", name="Kiel")).to_be_visible()
 
-    # 2. Verify Wohnmobil
-    print("Verifying Wohnmobil...")
-    # Navigate via link
-    page.get_by_role("link", name="Wohnmobil-Spezial").click()
-    expect(page.get_by_role("heading", name="Wohnmobil & Caravan")).to_be_visible()
-    page.screenshot(path="verification/wohnmobil.png")
+    # Wait for font/layout
+    time.sleep(1)
+    page.screenshot(path="verification/home_v2.png", full_page=True)
 
-    # 3. Verify Dampfreinigung
-    print("Verifying Dampfreinigung...")
-    page.goto("http://localhost:4321")
-    page.get_by_role("link", name="Innen & Hygiene").click()
-    expect(page.get_by_role("heading", name="Der \"Dampfdrache\"")).to_be_visible()
-    page.screenshot(path="verification/dampfreinigung.png")
+    # 2. Verify City Landing Page (Kiel)
+    print("Verifying Kiel Landing Page...")
+    page.get_by_role("link", name="Kiel").click()
+    # Verify dynamic H1
+    expect(page.get_by_role("heading", name="Premium Aufbereitung für Kiel")).to_be_visible()
+    # Verify content injection
+    expect(page.get_by_text("Kieler Autos haben einen natürlichen Feind")).to_be_visible()
 
-    # 4. Verify Leasing
-    print("Verifying Leasing...")
-    page.goto("http://localhost:4321")
-    page.get_by_role("link", name="Leasing-Rettung").click()
-    expect(page.get_by_role("heading", name="Leasing Rückgabe")).to_be_visible()
-    page.screenshot(path="verification/leasing.png")
+    time.sleep(1)
+    page.screenshot(path="verification/city_kiel.png", full_page=True)
+
+    # 3. Verify Mobile View
+    print("Verifying Mobile View...")
+    context_mobile = browser.new_context(viewport={"width": 390, "height": 844})
+    page_mobile = context_mobile.new_page()
+    page_mobile.goto("http://localhost:4321")
+    time.sleep(1)
+    page_mobile.screenshot(path="verification/home_mobile.png")
 
     browser.close()
 
