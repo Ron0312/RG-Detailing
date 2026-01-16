@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PriceCalculator from '../components/PriceCalculator.jsx';
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 
 const schema = {
   "@context": "https://schema.org",
@@ -12,17 +13,29 @@ const schema = {
 ---
 
 <Layout title="Wohnmobil & Caravan Aufbereitung" description="Ihr Experte für Wohnmobil-Pflege, GFK-Versiegelung und hygienische Innenreinigung in Schleswig-Holstein." schema={schema}>
-    <main class="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div class="mb-12 text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+
+    {/* HERO SECTION */}
+    <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black">
+        <div class="absolute inset-0">
+             <img
+                src="/images/caravan_after.jpg"
+                alt="Wohnmobil Aufbereitung Hero"
+                class="w-full h-full object-cover opacity-60"
+             />
+             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+        </div>
+        <div class="container mx-auto px-4 z-10 text-center pt-20">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
                 Wohnmobil & Caravan <br/>
-                <span class="text-red-600">Urlaub fängt beim Einsteigen an</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">Urlaub fängt beim Einsteigen an</span>
             </h1>
-            <p class="text-xl text-zinc-400 leading-relaxed">
+            <p class="text-xl md:text-2xl text-zinc-400 leading-relaxed max-w-3xl mx-auto font-light">
                 Nicht beim Putzen. Wir kümmern uns um die "Großen" – mit Halle, Gerüst und Spezialwissen.
             </p>
         </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-12">
 
         {/* Content Section */}
         <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
@@ -52,12 +65,12 @@ const schema = {
                 </p>
             </div>
             <div>
-                 <img
-                    src="https://rg-detailing.de/wp-content/uploads/2023/01/Wohnmobil-Aufbereitung-Tensfeld.jpg"
-                    alt="Wohnmobil Aufbereitung bei RG Detailing"
-                    class="rounded-2xl shadow-2xl border border-zinc-800 w-full object-cover h-auto"
-                    onerror="this.src='https://placehold.co/600x800/18181b/dc2626?text=Wohnmobil+Pflege'"
-                />
+                 <BeforeAfterSlider
+                    client:visible
+                    beforeImage="/images/caravan_before.jpg"
+                    afterImage="/images/caravan_after.jpg"
+                    alt="Wohnmobil Aufbereitung Vorher Nachher"
+                 />
                  <div class="mt-6 p-6 bg-zinc-900 rounded-xl border border-zinc-800">
                     <h3 class="font-bold text-white mb-2">Unser Wohnmobil-Spezial:</h3>
                     <ul class="space-y-2 text-zinc-400">
