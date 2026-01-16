@@ -25,7 +25,14 @@ export default function PriceCalculator() {
         const newSelections = { ...selections, [key]: value };
         setSelections(newSelections);
 
-        if (key === 'size') setStep(STEPS.CONDITION);
+        if (key === 'size') {
+            // Special logic for Camper: Skip conditions, go straight to "Request" result?
+            // Actually config says isRequestOnly. Let's proceed normally but handle it in calculation/result.
+            // If camper is selected, condition might be irrelevant but UI needs a flow.
+            // Let's assume standard flow but "Camper" might have limited conditions or we just default.
+            // For now, standard flow.
+            setStep(STEPS.CONDITION);
+        }
         if (key === 'condition') setStep(STEPS.PACKAGE);
         if (key === 'package') {
             const result = calculatePrice(value, newSelections.size, newSelections.condition);
@@ -76,6 +83,48 @@ export default function PriceCalculator() {
         </button>
     );
 
+    const renderResult = () => {
+        // Case 1: Request Only (e.g. Camper)
+        if (quote.isRequestOnly) {
+            return (
+                 <div className="bg-zinc-800/50 p-8 rounded-2xl border border-red-900/50 mb-8 inline-block w-full max-w-md relative overflow-hidden">
+                    <div className="text-xl font-bold text-white mb-2">Individuelles Angebot</div>
+                    <div className="text-zinc-400 text-sm">Für dieses Fahrzeug erstellen wir Ihnen gerne ein maßgeschneidertes Angebot nach Besichtigung.</div>
+                </div>
+            )
+        }
+
+        // Case 2: Standard Range
+        return (
+            <div className="bg-zinc-800/50 p-8 rounded-2xl border border-red-900/50 mb-8 inline-block w-full max-w-md relative overflow-hidden">
+                <div className="absolute inset-0 bg-red-900/10 blur-xl"></div>
+                <div className="text-red-400 text-sm mb-2 uppercase tracking-wide relative z-10">Geschätzter Kostenrahmen</div>
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2 relative z-10">
+                    {quote.minPrice}€ - {quote.maxPrice}€
+                </div>
+                <div className="text-zinc-500 text-xs relative z-10">*Endgültiger Preis nach Besichtigung</div>
+            </div>
+        );
+    };
+
+    const renderClubAbo = () => {
+        // Show Club Abo info if Full Detailing selected
+        const pkg = config.packages[selections.package];
+        if (pkg && pkg.hasClubAbo) {
+            return (
+                <div className="max-w-md mx-auto mb-8 bg-gradient-to-r from-yellow-900/20 to-zinc-900 border border-yellow-700/30 p-4 rounded-xl">
+                    <div className="text-yellow-500 font-bold mb-1 flex items-center gap-2">
+                        <span className="text-lg">👑</span> Werterhalt-Garantie
+                    </div>
+                    <p className="text-zinc-300 text-sm">
+                        Sichern Sie sich <strong>-20%</strong> bei Nachpflege alle 2 Monate oder <strong>-10%</strong> alle 3 Monate.
+                    </p>
+                </div>
+            )
+        }
+        return null;
+    };
+
     return (
         <div className="w-full max-w-3xl mx-auto bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800 p-6 md:p-12">
             {/* Progress Bar */}
@@ -95,25 +144,16 @@ export default function PriceCalculator() {
                 {step === STEPS.SIZE && (
                     <div className="animate-fade-in">
                         <StepTitle>Fahrzeuggröße wählen</StepTitle>
-                        <div className="grid md:grid-cols-3 gap-4">
-                            <Card
-                                title="Kleinwagen"
-                                desc="z.B. Fiat 500, Smart, Mini"
-                                onClick={() => handleSelect('size', 'small')}
-                                active={selections.size === 'small'}
-                            />
-                            <Card
-                                title="Mittelklasse / Kombi"
-                                desc="z.B. Golf, Passat, 3er BMW"
-                                onClick={() => handleSelect('size', 'medium')}
-                                active={selections.size === 'medium'}
-                            />
-                            <Card
-                                title="SUV / Oberklasse"
-                                desc="z.B. X5, Q7, S-Klasse, Bus"
-                                onClick={() => handleSelect('size', 'large')}
-                                active={selections.size === 'large'}
-                            />
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {Object.entries(config.sizes).map(([key, size]) => (
+                                <Card
+                                    key={key}
+                                    title={size.name}
+                                    desc=""
+                                    onClick={() => handleSelect('size', key)}
+                                    active={selections.size === key}
+                                />
+                            ))}
                         </div>
                     </div>
                 )}
@@ -122,24 +162,15 @@ export default function PriceCalculator() {
                     <div className="animate-fade-in">
                         <StepTitle>Lackzustand bewerten</StepTitle>
                         <div className="grid md:grid-cols-3 gap-4">
-                            <Card
-                                title="Neuwertig"
-                                desc="Keine Kratzer, hoher Glanz"
-                                onClick={() => handleSelect('condition', 'new')}
-                                active={selections.condition === 'new'}
-                            />
-                            <Card
-                                title="Gebraucht"
-                                desc="Waschanlagenkratzer (Swirls)"
-                                onClick={() => handleSelect('condition', 'used')}
-                                active={selections.condition === 'used'}
-                            />
-                            <Card
-                                title="Verwittert / Matt"
-                                desc="Sichtbare Kratzer, kein Glanz"
-                                onClick={() => handleSelect('condition', 'bad')}
-                                active={selections.condition === 'bad'}
-                            />
+                             {Object.entries(config.conditions).map(([key, cond]) => (
+                                <Card
+                                    key={key}
+                                    title={cond.name}
+                                    desc=""
+                                    onClick={() => handleSelect('condition', key)}
+                                    active={selections.condition === key}
+                                />
+                            ))}
                         </div>
                         <div className="mt-4 text-center">
                             <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-500 hover:text-white underline text-sm">Zurück</button>
@@ -155,7 +186,7 @@ export default function PriceCalculator() {
                                 <Card
                                     key={key}
                                     title={pkg.name}
-                                    desc={`Basispreis ab ${pkg.basePrice}€`}
+                                    desc={pkg.description || `Basispreis ab ${pkg.basePrice}€`}
                                     onClick={() => handleSelect('package', key)}
                                     active={selections.package === key}
                                 />
@@ -170,14 +201,9 @@ export default function PriceCalculator() {
                 {step === STEPS.RESULT && !submitted && quote && (
                     <div className="animate-fade-in text-center">
                         <StepTitle>Ihre Preisschätzung</StepTitle>
-                        <div className="bg-zinc-800/50 p-8 rounded-2xl border border-red-900/50 mb-8 inline-block w-full max-w-md relative overflow-hidden">
-                             <div className="absolute inset-0 bg-red-900/10 blur-xl"></div>
-                            <div className="text-red-400 text-sm mb-2 uppercase tracking-wide relative z-10">Geschätzter Kostenrahmen</div>
-                            <div className="text-4xl md:text-5xl font-bold text-white mb-2 relative z-10">
-                                {quote.minPrice}€ - {quote.maxPrice}€
-                            </div>
-                            <div className="text-zinc-500 text-xs relative z-10">*Endgültiger Preis nach Besichtigung</div>
-                        </div>
+
+                        {renderResult()}
+                        {renderClubAbo()}
 
                         <form onSubmit={submitQuote} className="max-w-md mx-auto">
                             <div className="flex gap-2">

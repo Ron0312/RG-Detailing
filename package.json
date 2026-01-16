@@ -8,6 +8,7 @@
     "build": "astro build",
     "start": "node app.js",
     "preview": "astro preview",
+    "test": "vitest run",
     "astro": "astro"
   },
   "dependencies": {

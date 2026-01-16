@@ -10,6 +10,7 @@ export interface PriceQuote {
     packageId: PackageId;
     sizeId: SizeId;
     conditionId: ConditionId;
+    isRequestOnly: boolean;
 }
 
 export function calculatePrice(
@@ -17,20 +18,37 @@ export function calculatePrice(
     sizeId: SizeId,
     conditionId: ConditionId
 ): PriceQuote {
+    // Basic validation
     if (!config.packages[packageId] || !config.sizes[sizeId] || !config.conditions[conditionId]) {
-        throw new Error("Invalid selection parameters");
+         throw new Error("Invalid selection parameters");
     }
 
     const pkg = config.packages[packageId];
-    const sizeMult = config.sizes[sizeId];
-    const condMult = config.conditions[conditionId];
+    const size = config.sizes[sizeId];
+    const cond = config.conditions[conditionId];
+
+    // Check for "Request Only" logic (e.g. Camper)
+    // @ts-ignore - JSON types are loose here
+    if (size.isRequestOnly) {
+        return {
+            minPrice: 0,
+            maxPrice: 0,
+            packageId,
+            sizeId,
+            conditionId,
+            isRequestOnly: true
+        };
+    }
+
+    const sizeMult = size.multiplier as number;
+    const condMult = cond.multiplier as number;
 
     const calculatedBase = pkg.basePrice * sizeMult * condMult;
 
-    // Round to nearest 10 for cleaner numbers
+    // Round to nearest 10
     const minPrice = Math.round(calculatedBase / 10) * 10;
 
-    // Create a realistic range (e.g., +15-20% buffer for unseen variables)
+    // Create range +15%
     const maxPrice = Math.round((minPrice * 1.15) / 10) * 10;
 
     return {
@@ -38,6 +56,7 @@ export function calculatePrice(
         maxPrice,
         packageId,
         sizeId,
-        conditionId
+        conditionId,
+        isRequestOnly: false
     };
 }

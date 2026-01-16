@@ -1,17 +1,37 @@
 {
-    "packages": {
-        "basic": { "basePrice": 150, "name": "Verkaufsaufbereitung" },
-        "premium": { "basePrice": 250, "name": "Glanz & Schutz" },
-        "high-end": { "basePrice": 400, "name": "Defektkorrektur" }
+  "basePrice": 0,
+  "sizes": {
+    "small": { "name": "Kleinwagen", "multiplier": 1.0 },
+    "medium": { "name": "Limousine / Kombi", "multiplier": 1.2 },
+    "large": { "name": "SUV / Bus", "multiplier": 1.4 },
+    "camper": { "name": "Wohnmobil / Caravan", "multiplier": null, "isRequestOnly": true }
+  },
+  "conditions": {
+    "good": { "name": "Gepflegt", "multiplier": 1.0 },
+    "normal": { "name": "Normal (Alltag)", "multiplier": 1.1 },
+    "bad": { "name": "Stark verschmutzt / Tierhaare", "multiplier": 1.3 }
+  },
+  "packages": {
+    "wash_interior": {
+      "name": "Interior & Wash",
+      "basePrice": 350,
+      "description": "Gründliche Außenwäsche + intensive Innenraumreinigung."
     },
-    "sizes": {
-        "small": 1.0,
-        "medium": 1.2,
-        "large": 1.5
+    "all_in_one": {
+      "name": "All-in-One",
+      "basePrice": 500,
+      "description": "Hochglanzpolitur (bis 75% Defektkorrektur), Innenraum, Polymerversiegelung (1 Jahr)."
     },
-    "conditions": {
-        "new": 1.0,
-        "used": 1.2,
-        "bad": 1.5
+    "full_detailing": {
+      "name": "Full Detailing",
+      "basePrice": 800,
+      "description": "Mehrstufige Politur, High-End Keramik-/Graphenversiegelung (Labocosmetica).",
+      "hasClubAbo": true
+    },
+    "leasing": {
+        "name": "Leasing Rückgabe",
+        "basePrice": 400,
+        "description": "One-Step Politur, Innenraum, Sprühversiegelung. Ziel: Mängelfreie Rückgabe."
     }
+  }
 }
