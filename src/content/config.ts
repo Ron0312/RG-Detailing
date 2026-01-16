@@ -1,0 +1,35 @@
+import { defineCollection, z } from 'astro:content';
+
+const citiesCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    name: z.string(),
+    slug: z.string(), // e.g. 'fahrzeugaufbereitung-bad-segeberg'
+    distance: z.string(),
+    metaDescription: z.string(),
+    heroImage: z.string().optional(),
+    geo: z.object({
+      latitude: z.number(),
+      longitude: z.number(),
+    }),
+    zip: z.string(),
+    introText: z.string(),
+  }),
+});
+
+const servicesCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    shortDescription: z.string(),
+    fullDescription: z.string(),
+    icon: z.string().optional(),
+    priceRange: z.string(), // e.g. "$$-$$$"
+  }),
+});
+
+export const collections = {
+  'cities': citiesCollection,
+  'services': servicesCollection,
+};

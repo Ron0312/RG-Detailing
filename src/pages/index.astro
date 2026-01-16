@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+import { getCollection } from 'astro:content';
+
+const cities = await getCollection('cities');
+---
+
+<Layout title="RG Detailing | Premium Fahrzeugaufbereitung" description="Ihr Experte für Lackveredelung und Keramikversiegelung in Tensfeld, Bad Segeberg und Umgebung.">
+    {/* Hero Section */}
+    <div class="relative bg-slate-900 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 -z-10"></div>
+        <div class="container mx-auto px-4 py-24 md:py-32 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter text-white">
+                Perfektion <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">bis ins Detail</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-10">
+                Premium Fahrzeugaufbereitung in Schleswig-Holstein. <br/>
+                Wir verwandeln Ihr Auto zurück in den Neuwagenzustand.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#rechner" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-blue-900/50">
+                    Preis jetzt berechnen
+                </a>
+                <a href="#leistungen" class="bg-slate-800 hover:bg-slate-700 text-white px-8 py-4 rounded-full font-bold text-lg transition border border-slate-700">
+                    Unsere Leistungen
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-12">
+        {/* Cities Links */}
+        <div class="mb-20 text-center">
+            <h2 class="text-xl text-slate-400 mb-6 uppercase tracking-widest">Unser Einzugsgebiet</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                {cities.map(city => (
+                    <a href={`/${city.data.slug}`} class="px-6 py-2 rounded-full border border-slate-700 hover:border-blue-500 hover:text-blue-400 transition text-slate-300">
+                        {city.data.name}
+                    </a>
+                ))}
+            </div>
+        </div>
+
+        {/* Visual Storytelling */}
+        <div class="mb-20">
+             <h2 class="text-3xl font-bold mb-8 text-center">Ergebnisse, die begeistern</h2>
+             <div class="max-w-4xl mx-auto">
+                <BeforeAfterSlider
+                    client:visible
+                    beforeImage="https://placehold.co/800x450/333/999?text=Vorher"
+                    afterImage="https://placehold.co/800x450/000/fff?text=Nachher"
+                />
+            </div>
+        </div>
+
+        {/* Calculator */}
+        <div id="rechner" class="scroll-mt-24">
+             <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Preisrechner</h2>
+                <p class="text-slate-400">Transparente Preise für Ihr Fahrzeug.</p>
+            </div>
+            <PriceCalculator client:visible />
+        </div>
+
+        {/* Services Placeholder */}
+        <div id="leistungen" class="mb-20 pt-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">Unsere Pakete</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                 <div class="p-6 bg-slate-800 rounded-xl">
+                    <h3 class="text-xl font-bold mb-2">Verkaufsaufbereitung</h3>
+                    <p class="text-slate-400">Ideal für den Verkauf oder Leasingrückgabe.</p>
+                 </div>
+                 <div class="p-6 bg-slate-800 rounded-xl border border-blue-500">
+                    <h3 class="text-xl font-bold mb-2">Glanz & Schutz</h3>
+                    <p class="text-slate-400">Tiefenglanz und langanhaltende Versiegelung.</p>
+                 </div>
+                 <div class="p-6 bg-slate-800 rounded-xl">
+                    <h3 class="text-xl font-bold mb-2">Defektkorrektur</h3>
+                    <p class="text-slate-400">Entfernung von Kratzern für Liebhaberfahrzeuge.</p>
+                 </div>
+            </div>
+        </div>
+    </main>
+</Layout>

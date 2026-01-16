@@ -1,0 +1,17 @@
+{
+    "packages": {
+        "basic": { "basePrice": 150, "name": "Verkaufsaufbereitung" },
+        "premium": { "basePrice": 250, "name": "Glanz & Schutz" },
+        "high-end": { "basePrice": 400, "name": "Defektkorrektur" }
+    },
+    "sizes": {
+        "small": 1.0,
+        "medium": 1.2,
+        "large": 1.5
+    },
+    "conditions": {
+        "new": 1.0,
+        "used": 1.2,
+        "bad": 1.5
+    }
+}

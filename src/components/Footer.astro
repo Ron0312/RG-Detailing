@@ -1,0 +1,32 @@
+---
+const currentYear = new Date().getFullYear();
+---
+<footer class="bg-slate-950 text-slate-400 py-12 mt-20 border-t border-slate-900">
+    <div class="container mx-auto px-4 grid md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+            <h3 class="text-white font-bold text-xl mb-4">RG Detailing</h3>
+            <p class="max-w-xs mb-4">Premium Fahrzeugaufbereitung, Keramikversiegelung und Lackveredelung für Schleswig-Holstein. Wir bringen den Neuwagen-Glanz zurück.</p>
+        </div>
+        <div>
+            <h3 class="text-white font-bold text-lg mb-4">Service</h3>
+            <ul class="space-y-2">
+                <li><a href="/fahrzeugaufbereitung-bad-segeberg" class="hover:text-white transition">Bad Segeberg</a></li>
+                <li><a href="/fahrzeugaufbereitung-tensfeld" class="hover:text-white transition">Tensfeld</a></li>
+                <li><a href="/#rechner" class="hover:text-white transition">Preisrechner</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="text-white font-bold text-lg mb-4">Kontakt</h3>
+            <p>Bahnhofstraße 15<br/>23824 Tensfeld</p>
+            <p class="mt-4"><a href="tel:0123456789" class="text-white hover:text-blue-400">0123 456 789</a></p>
+            <p><a href="mailto:info@rg-detailing.de" class="hover:text-white">info@rg-detailing.de</a></p>
+        </div>
+    </div>
+    <div class="text-center mt-12 pt-8 border-t border-slate-900 text-sm">
+        <div class="flex justify-center gap-6 mb-4">
+            <a href="/impressum" class="hover:text-white">Impressum</a>
+            <a href="/datenschutz" class="hover:text-white">Datenschutz</a>
+        </div>
+        &copy; {currentYear} RG Detailing.
+    </div>
+</footer>
