@@ -24,7 +24,7 @@ const { title, description = "Premium Fahrzeugaufbereitung in Schleswig-Holstein
 		<title>{title} | RG Detailing</title>
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 	</head>
-	<body class="bg-slate-900 text-slate-50 antialiased min-h-screen flex flex-col">
+	<body class="bg-zinc-950 text-zinc-50 antialiased min-h-screen flex flex-col selection:bg-red-500 selection:text-white">
         <Header />
         <div class="flex-grow">
 		    <slot />

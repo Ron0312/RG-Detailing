@@ -2,9 +2,11 @@
   "name": "app",
   "type": "module",
   "version": "0.0.1",
+  "main": "app.js",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "start": "node app.js",
     "preview": "astro preview",
     "astro": "astro"
   },
