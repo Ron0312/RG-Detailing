@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+
+export const prerender = false; // Ensure SSR
+
+const { city } = Astro.params;
+
+const cities = await getCollection('cities');
+const cityEntry = cities.find(c => c.data.slug === city);
+
+if (!cityEntry) {
+    return Astro.redirect('/404');
+}
+
+const { name, metaDescription, introText, geo } = cityEntry.data;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "RG Detailing",
+  "url": `https://rg-detailing.de/${city}`,
+  "description": metaDescription,
+  "areaServed": {
+    "@type": "City",
+    "name": name,
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": geo.latitude,
+        "longitude": geo.longitude
+    }
+  },
+  "priceRange": "$$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Tensfeld",
+    "postalCode": "23824",
+    "streetAddress": "Dorfstraße 11"
+  }
+};
+---
+
+<Layout title={`Fahrzeugaufbereitung ${name}`} description={metaDescription} schema={schema}>
+    <main class="container mx-auto px-4 py-12">
+        {/* Header Section */}
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            Fahrzeugaufbereitung in <span class="text-blue-500">{name}</span>
+        </h1>
+
+        <div class="prose prose-invert prose-lg max-w-3xl mb-12">
+            <p class="text-xl text-slate-300 leading-relaxed">{introText}</p>
+        </div>
+
+        {/* Visual Storytelling */}
+        <div class="mb-20">
+            <h2 class="text-2xl font-bold mb-6 border-l-4 border-blue-500 pl-4">Das Ergebnis spricht für sich</h2>
+            <div class="max-w-4xl mx-auto">
+                <BeforeAfterSlider
+                    client:visible
+                    beforeImage="https://placehold.co/800x450/333/999?text=Vorher:+Kratzer"
+                    afterImage="https://placehold.co/800x450/000/fff?text=Nachher:+Spiegelglanz"
+                />
+            </div>
+        </div>
+
+        {/* Local Context */}
+        <div class="mb-20 grid md:grid-cols-2 gap-12 items-center">
+            <div class="p-8 bg-slate-800 rounded-2xl border border-slate-700 shadow-xl">
+                <h2 class="text-2xl font-bold mb-4">Warum Kunden aus {name} kommen</h2>
+                <ul class="space-y-4 text-slate-300">
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">✓</span>
+                        <span>Nur {cityEntry.data.distance} Anfahrt für Premium-Qualität</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">✓</span>
+                        <span>Spezialisiert auf Leasingrückläufer & Lackveredelung</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-green-400 mr-2">✓</span>
+                        <span>Digitale Transparenz statt "Preis auf Anfrage"</span>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                 <div class="aspect-video bg-slate-800 rounded-xl flex flex-col items-center justify-center text-slate-500 border-2 border-dashed border-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" class="mb-2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                    <span>Route von {name}</span>
+                 </div>
+            </div>
+        </div>
+
+        {/* Calculator Section */}
+        <div class="mb-20 scroll-mt-24" id="rechner">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Was kostet die Aufbereitung?</h2>
+                <p class="text-slate-400">Berechnen Sie jetzt unverbindlich Ihren Preis in 3 Schritten.</p>
+            </div>
+            <PriceCalculator client:visible />
+        </div>
+
+    </main>
+</Layout>
