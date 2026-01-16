@@ -10,9 +10,21 @@ interface Props {
 	title: string;
     description?: string;
     schema?: object;
+    keywords?: string;
+    image?: string;
 }
 
-const { title, description = "Premium Fahrzeugaufbereitung in Schleswig-Holstein", schema } = Astro.props;
+const {
+    title,
+    description = "RG Detailing: Ihre Experten für Premium Fahrzeugaufbereitung in Schleswig-Holstein. Zertifizierte Keramikversiegelung & Lackveredelung in Tensfeld.",
+    schema,
+    keywords = "Fahrzeugaufbereitung, Autoaufbereitung, Autoreinigung, Innenraumreinigung, KFZ Aufbereitung, Keramikversiegelung, Lackaufbereitung, Leasing Rückgabe, Motorwäsche, Schleswig-Holstein, Bad Segeberg, Neumünster, Tensfeld",
+    image = "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// If image is an external URL, use it directly. If relative, resolve it.
+const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.site);
 ---
 <!doctype html>
 <html lang="de" class="scroll-smooth">
@@ -21,8 +33,26 @@ const { title, description = "Premium Fahrzeugaufbereitung in Schleswig-Holstein
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+
+        <title>{title} | RG Detailing</title>
         <meta name="description" content={description} />
-		<title>{title} | RG Detailing</title>
+        <meta name="keywords" content={keywords} />
+        <link rel="canonical" href={canonicalURL} />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={socialImageURL} />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalURL} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={socialImageURL} />
+
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
 	</head>

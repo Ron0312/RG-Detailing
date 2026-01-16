@@ -10,15 +10,72 @@ import { services } from '../data/services';
 const cities = await getCollection('cities');
 // Sort cities by name or importance? Let's just take them all.
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoDetailing",
+  "name": "RG Detailing",
+  "image": "https://rg-detailing.de/logo.png",
+  "description": "Premium Fahrzeugaufbereitung in Schleswig-Holstein. Experten für Keramikversiegelung, Lackveredelung und Leasing-Rückläufer.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Dorfstraße 11",
+    "addressLocality": "Tensfeld",
+    "postalCode": "23824",
+    "addressCountry": "DE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 54.0667,
+    "longitude": 10.3000
+  },
+  "url": "https://rg-detailing.de",
+  "telephone": "+491633845081",
+  "priceRange": "$$-$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "areaServed": sortedCities.map(city => city.data.name),
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Fahrzeugaufbereitung Services",
+    "itemListElement": services.map((service, index) => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.title,
+        "description": service.description
+      }
+    }))
+  }
+};
+
 ---
 
-<Layout title="Premium Fahrzeugaufbereitung Schleswig-Holstein" description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld.">
+<Layout
+    title="Premium Fahrzeugaufbereitung Schleswig-Holstein"
+    description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld."
+    schema={schema}
+>
 
     {/* HERO SECTION */}
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-        {/* Abstract Background */}
-        {/* If no image, fallback to gradient */}
-        <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black opacity-90"></div>
+        {/* High-End Hero Image */}
+        <div class="absolute inset-0">
+             <img
+                src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop"
+                alt="Premium Fahrzeugaufbereitung Luxuswagen"
+                class="w-full h-full object-cover opacity-60"
+             />
+             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+             {/* Subtle Red Overlay for Brand Identity */}
+             <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
+        </div>
 
         {/* Red Accents */}
         <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-red-600/10 blur-[150px] rounded-full animate-pulse"></div>
@@ -33,7 +90,7 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">Ihr Automobil</span>
             </h1>
             <p class="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-                Wir verwandeln Gebrauchsgegenstände zurück in Wertanlagen. <br class="hidden md:block"/>
+                Professionelle <strong class="text-white">Fahrzeugaufbereitung</strong>, <strong class="text-white">Autoreinigung</strong> und Lackveredelung in Schleswig-Holstein.<br class="hidden md:block"/>
                 Erleben Sie den Unterschied zwischen Waschanlage und Detailing.
             </p>
             <div class="flex flex-col md:flex-row justify-center gap-6">
@@ -80,7 +137,9 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
                 <div class="text-center mb-20">
                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Was wir tun</span>
                     <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
-                    <p class="text-zinc-400 max-w-2xl mx-auto">Keine Kompromisse. Nur die besten Produkte und Techniken für Ihr Fahrzeug.</p>
+                    <p class="text-zinc-400 max-w-2xl mx-auto">
+                        Ob KFZ Aufbereitung, Keramikversiegelung oder Innenraumreinigung – wir setzen auf Qualität statt Quantität.
+                    </p>
                 </div>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -90,7 +149,7 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
 
                              <div class="relative z-10">
                                 <div class="w-14 h-14 bg-zinc-900 rounded-xl border border-white/10 flex items-center justify-center text-2xl mb-8 group-hover:border-red-500/50 transition-colors shadow-lg">
-                                    {index === 0 ? '🧖' : index === 1 ? '✨' : index === 2 ? '💎' : index === 3 ? '🚐' : '🔄'}
+                                    {index === 0 ? '🧖' : index === 1 ? '✨' : index === 2 ? '💎' : index === 3 ? '🚐' : index === 4 ? '🔄' : '🏍️'}
                                 </div>
                                 <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
                                 <p class="text-zinc-400 leading-relaxed mb-6">{service.shortDescription}</p>
@@ -152,6 +211,29 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
                     <PriceCalculator client:visible />
                  </div>
              </div>
+        </section>
+
+        {/* FAQ SECTION FOR SEO */}
+        <section class="py-20 border-t border-white/5">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen</h2>
+                    <div class="space-y-6">
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
+                            <p class="text-zinc-400">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Was kostet eine Fahrzeugaufbereitung?</h3>
+                            <p class="text-zinc-400">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
+                            <p class="text-zinc-400">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         {/* CITIES SEO GRID */}
