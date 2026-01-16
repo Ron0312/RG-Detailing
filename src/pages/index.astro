@@ -10,15 +10,60 @@ import { services } from '../data/services';
 const cities = await getCollection('cities');
 // Sort cities by name or importance? Let's just take them all.
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoDetailing",
+  "name": "RG Detailing",
+  "image": "https://rg-detailing.de/logo.png",
+  "description": "Premium Fahrzeugaufbereitung in Schleswig-Holstein. Experten für Keramikversiegelung, Lackveredelung und Leasing-Rückläufer.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Dorfstraße 11",
+    "addressLocality": "Tensfeld",
+    "postalCode": "23824",
+    "addressCountry": "DE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 54.0667,
+    "longitude": 10.3000
+  },
+  "url": "https://rg-detailing.de",
+  "telephone": "+491633845081",
+  "priceRange": "$$-$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "areaServed": sortedCities.map(city => city.data.name)
+};
+
 ---
 
-<Layout title="Premium Fahrzeugaufbereitung Schleswig-Holstein" description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld.">
+<Layout
+    title="Premium Fahrzeugaufbereitung Schleswig-Holstein"
+    description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld."
+    schema={schema}
+>
 
     {/* HERO SECTION */}
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-        {/* Abstract Background */}
-        {/* If no image, fallback to gradient */}
-        <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black opacity-90"></div>
+        {/* High-End Hero Image */}
+        <div class="absolute inset-0">
+             <img
+                src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop"
+                alt="Premium Fahrzeugaufbereitung Luxuswagen"
+                class="w-full h-full object-cover opacity-60"
+             />
+             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+             {/* Subtle Red Overlay for Brand Identity */}
+             <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
+        </div>
 
         {/* Red Accents */}
         <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-red-600/10 blur-[150px] rounded-full animate-pulse"></div>

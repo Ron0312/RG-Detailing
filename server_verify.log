@@ -1,1 +1,31 @@
-12:14:20 [@astrojs/node] Server listening on http://localhost:4321
+
+> app@0.0.1 dev
+> astro dev
+
+17:20:43 [@astrojs/node] Enabling sessions with filesystem storage
+17:20:43 [types] Generated 1ms
+17:20:44 [content] Syncing content
+17:20:44 [content] Synced content
+17:20:44 [vite] Re-optimizing dependencies because vite config has changed
+
+ astro  v5.16.10 ready in 1018 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+
+17:20:44 watching for file changes...
+17:21:24 [200] / 154ms
+17:21:38 [watch] verification/page_dump.html
+17:21:38 [200] / 15ms
+17:21:38 [watch] verification/page_dump.html
+17:22:00 [watch] verification/verify_changes.py
+17:22:00 [watch] verification/verify_changes.py
+17:22:00 [watch] verification/verify_ci_simple.py
+17:22:00 [watch] verification/verify_ci_simple.py
+17:22:00 [watch] verification/verify_ci.py
+17:22:00 [watch] verification/verify_ci.py
+17:22:00 [watch] verification/page_dump.html
+17:22:00 [watch] verification/verify_seo.py
+17:22:00 [watch] verification/verify_seo.py
+17:22:00 [watch] verification/verify_app.py
+17:22:00 [watch] verification/verify_app.py
