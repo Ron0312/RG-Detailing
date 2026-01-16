@@ -28,7 +28,6 @@ export default function PriceCalculator() {
         if (key === 'size') setStep(STEPS.CONDITION);
         if (key === 'condition') setStep(STEPS.PACKAGE);
         if (key === 'package') {
-            // Need to ensure previous steps are set (if user jumps back, though currently linear)
             const result = calculatePrice(value, newSelections.size, newSelections.condition);
             setQuote(result);
             setStep(STEPS.RESULT);
@@ -69,22 +68,22 @@ export default function PriceCalculator() {
         <button
             onClick={onClick}
             className={`p-6 rounded-xl border-2 transition-all w-full text-left
-                ${active ? 'border-blue-500 bg-blue-900/20 ring-2 ring-blue-500/50' : 'border-slate-700 bg-slate-800 hover:border-slate-500 hover:bg-slate-750'}
+                ${active ? 'border-red-500 bg-red-900/10 ring-1 ring-red-500/50' : 'border-zinc-800 bg-zinc-900 hover:border-zinc-600 hover:bg-zinc-800'}
             `}
         >
             <div className="font-bold text-lg text-white mb-1">{title}</div>
-            {desc && <div className="text-slate-400 text-sm">{desc}</div>}
+            {desc && <div className="text-zinc-400 text-sm">{desc}</div>}
         </button>
     );
 
     return (
-        <div className="w-full max-w-3xl mx-auto bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-700 p-6 md:p-12">
+        <div className="w-full max-w-3xl mx-auto bg-zinc-900 rounded-2xl shadow-2xl overflow-hidden border border-zinc-800 p-6 md:p-12">
             {/* Progress Bar */}
             <div className="flex justify-between mb-8 relative">
-                <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-800 -z-10 -translate-y-1/2"></div>
+                <div className="absolute top-1/2 left-0 right-0 h-1 bg-zinc-800 -z-10 -translate-y-1/2"></div>
                 {[0, 1, 2, 3].map(i => (
                     <div key={i} className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors duration-500
-                        ${step >= i ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}
+                        ${step >= i ? 'bg-red-600 text-white shadow-lg shadow-red-500/30' : 'bg-zinc-800 text-zinc-600'}
                     `}>
                         {i + 1}
                     </div>
@@ -101,16 +100,19 @@ export default function PriceCalculator() {
                                 title="Kleinwagen"
                                 desc="z.B. Fiat 500, Smart, Mini"
                                 onClick={() => handleSelect('size', 'small')}
+                                active={selections.size === 'small'}
                             />
                             <Card
                                 title="Mittelklasse / Kombi"
                                 desc="z.B. Golf, Passat, 3er BMW"
                                 onClick={() => handleSelect('size', 'medium')}
+                                active={selections.size === 'medium'}
                             />
                             <Card
                                 title="SUV / Oberklasse"
                                 desc="z.B. X5, Q7, S-Klasse, Bus"
                                 onClick={() => handleSelect('size', 'large')}
+                                active={selections.size === 'large'}
                             />
                         </div>
                     </div>
@@ -124,20 +126,23 @@ export default function PriceCalculator() {
                                 title="Neuwertig"
                                 desc="Keine Kratzer, hoher Glanz"
                                 onClick={() => handleSelect('condition', 'new')}
+                                active={selections.condition === 'new'}
                             />
                             <Card
                                 title="Gebraucht"
                                 desc="Waschanlagenkratzer (Swirls)"
                                 onClick={() => handleSelect('condition', 'used')}
+                                active={selections.condition === 'used'}
                             />
                             <Card
                                 title="Verwittert / Matt"
                                 desc="Sichtbare Kratzer, kein Glanz"
                                 onClick={() => handleSelect('condition', 'bad')}
+                                active={selections.condition === 'bad'}
                             />
                         </div>
                         <div className="mt-4 text-center">
-                            <button onClick={() => setStep(STEPS.SIZE)} className="text-slate-400 hover:text-white underline text-sm">Zurück</button>
+                            <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-500 hover:text-white underline text-sm">Zurück</button>
                         </div>
                     </div>
                 )}
@@ -152,11 +157,12 @@ export default function PriceCalculator() {
                                     title={pkg.name}
                                     desc={`Basispreis ab ${pkg.basePrice}€`}
                                     onClick={() => handleSelect('package', key)}
+                                    active={selections.package === key}
                                 />
                             ))}
                         </div>
                         <div className="mt-4 text-center">
-                            <button onClick={() => setStep(STEPS.CONDITION)} className="text-slate-400 hover:text-white underline text-sm">Zurück</button>
+                            <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-500 hover:text-white underline text-sm">Zurück</button>
                         </div>
                     </div>
                 )}
@@ -164,12 +170,13 @@ export default function PriceCalculator() {
                 {step === STEPS.RESULT && !submitted && quote && (
                     <div className="animate-fade-in text-center">
                         <StepTitle>Ihre Preisschätzung</StepTitle>
-                        <div className="bg-gradient-to-br from-blue-900 to-slate-800 p-8 rounded-2xl border border-blue-500/30 mb-8 inline-block w-full max-w-md">
-                            <div className="text-slate-300 text-sm mb-2 uppercase tracking-wide">Geschätzter Kostenrahmen</div>
-                            <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                        <div className="bg-zinc-800/50 p-8 rounded-2xl border border-red-900/50 mb-8 inline-block w-full max-w-md relative overflow-hidden">
+                             <div className="absolute inset-0 bg-red-900/10 blur-xl"></div>
+                            <div className="text-red-400 text-sm mb-2 uppercase tracking-wide relative z-10">Geschätzter Kostenrahmen</div>
+                            <div className="text-4xl md:text-5xl font-bold text-white mb-2 relative z-10">
                                 {quote.minPrice}€ - {quote.maxPrice}€
                             </div>
-                            <div className="text-slate-400 text-xs">*Endgültiger Preis nach Besichtigung</div>
+                            <div className="text-zinc-500 text-xs relative z-10">*Endgültiger Preis nach Besichtigung</div>
                         </div>
 
                         <form onSubmit={submitQuote} className="max-w-md mx-auto">
@@ -178,21 +185,21 @@ export default function PriceCalculator() {
                                     type="email"
                                     required
                                     placeholder="Ihre E-Mail für das Angebot"
-                                    className="flex-grow bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+                                    className="flex-grow bg-zinc-800 border border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition disabled:opacity-50 whitespace-nowrap"
+                                    className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-bold transition disabled:opacity-50 whitespace-nowrap shadow-lg shadow-red-900/20"
                                 >
                                     {loading ? 'Sende...' : 'Anfragen'}
                                 </button>
                             </div>
                         </form>
                         <div className="mt-4 text-center">
-                            <button onClick={() => setStep(STEPS.PACKAGE)} className="text-slate-400 hover:text-white underline text-sm">Zurück</button>
+                            <button onClick={() => setStep(STEPS.PACKAGE)} className="text-zinc-500 hover:text-white underline text-sm">Zurück</button>
                         </div>
                     </div>
                 )}
@@ -201,8 +208,8 @@ export default function PriceCalculator() {
                     <div className="animate-fade-in text-center py-12">
                         <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">✓</div>
                         <h3 className="text-2xl font-bold text-white mb-4">Anfrage versendet!</h3>
-                        <p className="text-slate-400 mb-8">Wir haben Ihnen eine Bestätigung an {email} gesendet und melden uns in Kürze.</p>
-                        <button onClick={reset} className="text-blue-400 hover:text-blue-300 underline">Neue Berechnung starten</button>
+                        <p className="text-zinc-400 mb-8">Wir haben Ihnen eine Bestätigung an {email} gesendet und melden uns in Kürze.</p>
+                        <button onClick={reset} className="text-red-400 hover:text-red-300 underline">Neue Berechnung starten</button>
                     </div>
                 )}
             </div>
