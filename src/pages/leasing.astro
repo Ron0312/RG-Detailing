@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "RG Detailing - Leasing Aufbereitung",
+  "description": "Leasingrückgabe ohne Nachzahlung. Professionelle Aufbereitung und Smart-Repair in Tensfeld.",
+  "priceRange": "$$$"
+};
+---
+
+<Layout title="Leasing Rückgabe & Aufbereitung" description="Vermeiden Sie hohe Nachzahlungen bei der Leasingrückgabe. Wir bereiten Ihr Fahrzeug professionell vor." schema={schema}>
+    <main class="container mx-auto px-4 py-12">
+        {/* Header */}
+        <div class="mb-12 text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                Leasing Rückgabe <br/>
+                <span class="text-red-600">Entspannt zum Gutachter-Termin</span>
+            </h1>
+            <p class="text-xl text-zinc-400 leading-relaxed">
+                Das Autohaus sucht nach Fehlern. Wir lassen sie vorher verschwinden.
+            </p>
+        </div>
+
+        {/* Content Section */}
+        <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+             <div class="prose prose-invert prose-lg">
+                <h2 class="text-2xl font-bold text-white mb-4">Die teure Falle: Der Rückgabe-Tag</h2>
+                <p>
+                    Der Leasingvertrag läuft aus. Der Gutachter geht mit der Lupe um Ihr Fahrzeug. Jeder Kratzer, jede kleine Delle, jeder Fleck im Polster wird notiert.
+                </p>
+                <p>
+                    Das böse Erwachen folgt mit der Endabrechnung: Oft werden Pauschalen für "Instandsetzung" berechnet, die weit über den tatsächlichen Kosten liegen. Ein Kratzer an der Stoßstange? "Muss lackiert werden – 500€". Ein Fleck im Sitz? "Spezialreinigung – 150€".
+                </p>
+
+                <h2 class="text-2xl font-bold text-white mt-8 mb-4">Die einfache Rechnung</h2>
+                <p>
+                    <strong>Investieren Sie lieber vorher einen Bruchteil der Summe in eine professionelle Aufbereitung.</strong>
+                </p>
+                <p>
+                    Bei RG Detailing entfernen wir genau die Spuren, auf die Prüfer achten. Wir polieren Kratzer aus, die sonst als "Lackschaden" berechnet würden. Wir entfernen Flecken, die sonst als "Wertminderung" gelten.
+                </p>
+                <ul class="list-disc pl-5 text-zinc-400 space-y-2">
+                    <li><strong>Lack:</strong> Entfernung von Waschstraßenkratzern und Schrammen.</li>
+                    <li><strong>Innenraum:</strong> Tiefenreinigung für Neuwagen-Optik.</li>
+                    <li><strong>Smart Repair:</strong> Beulen und Dellen beheben wir über unser Partnernetzwerk – ohne teure Lackierung.</li>
+                </ul>
+
+                <h2 class="text-2xl font-bold text-white mt-8 mb-4">Der psychologische Vorteil</h2>
+                <p>
+                    Ein sauberes, glänzendes und wohlriechendes Auto signalisiert dem Prüfer sofort: <em>"Mit diesem Wagen wurde pfleglich umgegangen."</em> Das beeinflusst die Bewertung oft positiv. Wer ein "Wrack" abgibt, muss damit rechnen, dass der Prüfer jeden Millimeter doppelt prüft.
+                </p>
+            </div>
+            <div>
+                 <div class="bg-zinc-900 rounded-2xl border border-zinc-800 p-8 shadow-xl">
+                    <h3 class="text-2xl font-bold text-white mb-6 text-center">Beispielrechnung</h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
+                            <span class="text-red-400">Kosten Autohaus (Schätzung)</span>
+                            <span class="text-red-400 font-bold text-xl">2.500 €</span>
+                        </div>
+                         <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
+                            <span class="text-green-400">Kosten RG Detailing</span>
+                            <span class="text-green-400 font-bold text-xl">ca. 450 €</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-white font-bold">Ihre Ersparnis</span>
+                            <span class="text-white font-bold text-2xl">2.050 €</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <p class="text-sm text-zinc-500 mb-4">*Beispielwerte. Abhängig vom Fahrzeugzustand.</p>
+                        <a href="#kontakt" class="block w-full bg-white text-black font-bold py-3 rounded-full hover:bg-zinc-200 transition">
+                            Kostenlosen Vorab-Check vereinbaren
+                        </a>
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+    </main>
+</Layout>
