@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PriceCalculator from '../components/PriceCalculator';
+import Schema from '../components/Schema.astro';
+
+const { city } = Astro.params;
+
+const cityData = {
+  'bad-segeberg': {
+      name: 'Bad Segeberg',
+      distance: '15 Minuten',
+      description: 'Ihr Experte für Fahrzeugaufbereitung nahe Bad Segeberg. Keramikversiegelung und Polieren in höchster Qualität.',
+      landmark: ' unweit des Kalkbergs'
+  },
+  'neumuenster': {
+      name: 'Neumünster',
+      distance: '20 Minuten',
+      description: 'Professionelle Autoaufbereitung für Neumünster. Wir bringen Neuwagen-Glanz zurück.',
+      landmark: ' schnell erreichbar vom Designer Outlet'
+  },
+  'wahlstedt': {
+      name: 'Wahlstedt',
+      distance: '10 Minuten',
+      description: 'Fahrzeugpflege und Detailing direkt bei Wahlstedt. Ihr Partner für Werterhalt.',
+      landmark: ' direkt im Nachbarort'
+  },
+};
+
+const data = cityData[city];
+
+if (!data) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title={`Fahrzeugaufbereitung ${data.name} | RG Detailing`} description={data.description}>
+    <Schema cityName={data.name} />
+
+	<div class="text-center py-12">
+		<h1 class="text-4xl md:text-5xl font-bold mb-4">Fahrzeugaufbereitung für <span class="text-blue-500">{data.name}</span></h1>
+		<p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            Nur {data.distance} Anfahrt. {data.description}
+        </p>
+	</div>
+
+    <section class="mb-12 container mx-auto px-4">
+        <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-1">
+                <h2 class="text-3xl font-bold mb-4">Warum Kunden aus {data.name} zu uns kommen</h2>
+                <p class="text-slate-300 mb-4">
+                    RG Detailing in Tensfeld ist {data.landmark} gelegen und bietet eine Qualität, die in {data.name} oft schwer zu finden ist.
+                    Wir nehmen uns Zeit für Ihr Fahrzeug und setzen auf modernste Technologien.
+                </p>
+                <ul class="list-disc list-inside text-slate-300 space-y-2">
+                    <li>Kostenloser Hol- und Bringservice für {data.name} (ab Premium-Paket)</li>
+                    <li>Transparente Preise statt "Überraschungen"</li>
+                    <li>Zertifizierte Keramikversiegelungen</li>
+                </ul>
+            </div>
+            <div class="flex-1 bg-slate-700 rounded-lg h-64 w-full flex items-center justify-center text-slate-500">
+                [Bild: Zufriedener Kunde aus {data.name}]
+            </div>
+        </div>
+    </section>
+
+	<section class="max-w-4xl mx-auto bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
+		<h2 class="text-3xl font-bold mb-2 text-center">Preis berechnen für {data.name}</h2>
+		<p class="mb-8 text-center text-slate-400">
+            Starten Sie jetzt Ihre Anfrage und erhalten Sie ein individuelles Angebot.
+        </p>
+		<PriceCalculator client:load />
+	</section>
+</Layout>

@@ -1,0 +1,41 @@
+---
+interface Props {
+	title: string;
+    description?: string;
+}
+
+const { title, description = "Premium Fahrzeugaufbereitung in Tensfeld, Bad Segeberg und Neumünster." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="bg-slate-900 text-white min-h-screen flex flex-col">
+		<header class="p-4 border-b border-slate-700 bg-slate-900/95 sticky top-0 z-50 backdrop-blur">
+			<nav class="container mx-auto flex justify-between items-center">
+				<a href="/" class="text-2xl font-bold text-blue-500">RG Detailing</a>
+				<ul class="hidden md:flex gap-6">
+					<li><a href="/" class="hover:text-blue-400 transition-colors">Home</a></li>
+					<li><a href="/bad-segeberg" class="hover:text-blue-400 transition-colors">Bad Segeberg</a></li>
+                    <li><a href="/neumuenster" class="hover:text-blue-400 transition-colors">Neumünster</a></li>
+                    <li><a href="/wahlstedt" class="hover:text-blue-400 transition-colors">Wahlstedt</a></li>
+				</ul>
+			</nav>
+		</header>
+		<main class="flex-grow container mx-auto p-4">
+			<slot />
+		</main>
+		<footer class="p-8 border-t border-slate-700 mt-12 bg-slate-950 text-center text-slate-400">
+            <div class="container mx-auto">
+                <p>&copy; {new Date().getFullYear()} RG Detailing. Technologie trifft Handwerk.</p>
+            </div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,44 @@
+---
+interface Props {
+    cityName?: string;
+}
+const { cityName } = Astro.props;
+
+// If we are on a city page, we add that city to areaServed.
+// Always serving Tensfeld as base.
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "RG Detailing",
+  "description": "Premium Fahrzeugaufbereitung, Keramikversiegelung und Polieren in Schleswig-Holstein.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Dorfstraße 1",
+    "addressLocality": "Tensfeld",
+    "postalCode": "23824",
+    "addressCountry": "DE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 54.0667,
+    "longitude": 10.3
+  },
+  "url": Astro.url.href,
+  "telephone": "+491234567890",
+  "priceRange": "$$-$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "08:00",
+      "closes": "18:00"
+    }
+  ],
+  "areaServed": [
+    { "@type": "City", "name": "Tensfeld" },
+    ...(cityName ? [{ "@type": "City", "name": cityName }] : [])
+  ]
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
