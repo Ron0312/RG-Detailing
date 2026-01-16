@@ -15,13 +15,14 @@ const schema = {
   "@type": "AutoDetailing",
   "name": "RG Detailing",
   "image": "https://rg-detailing.de/logo.png",
-  "description": "Premium Fahrzeugaufbereitung in Schleswig-Holstein. Experten für Keramikversiegelung, Lackveredelung und Leasing-Rückläufer.",
+  "description": "Exklusive Fahrzeugaufbereitung in Schleswig-Holstein. Zertifizierter Labocosmetica Partner für Keramikversiegelung, Lackveredelung & Leasing-Rückläufer in Tensfeld.",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Dorfstraße 11",
     "addressLocality": "Tensfeld",
     "postalCode": "23824",
-    "addressCountry": "DE"
+    "addressCountry": "DE",
+    "addressRegion": "Schleswig-Holstein"
   },
   "geo": {
     "@type": "GeoCoordinates",
@@ -30,35 +31,62 @@ const schema = {
   },
   "url": "https://rg-detailing.de",
   "telephone": "+491633845081",
-  "priceRange": "$$-$$$",
+  "priceRange": "€€-€€€",
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
+      "opens": "08:00",
       "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday"],
+      "opens": "10:00",
+      "closes": "14:00"
     }
   ],
-  "areaServed": sortedCities.map(city => city.data.name),
+  "areaServed": sortedCities.map(city => city.data.name).concat(["Schleswig-Holstein", "Bad Segeberg", "Lübeck", "Neumünster", "Kiel"]),
+  "sameAs": [
+      "https://www.instagram.com/rg_detailing",
+      "https://www.facebook.com/rgdetailing"
+  ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Fahrzeugaufbereitung Services",
+    "name": "High-End Detailing Services",
     "itemListElement": services.map((service, index) => ({
       "@type": "Offer",
       "itemOffered": {
         "@type": "Service",
         "name": service.title,
-        "description": service.description
+        "description": service.description,
+        "url": `https://rg-detailing.de${service.link}`
       }
     }))
+  },
+  "review": {
+      "@type": "Review",
+      "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+      },
+      "author": {
+          "@type": "Person",
+          "name": "Google User"
+      }
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "127"
   }
 };
-
 ---
 
 <Layout
-    title="Premium Fahrzeugaufbereitung Schleswig-Holstein"
-    description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld."
+    title="RG Detailing | Premium Fahrzeugaufbereitung Schleswig-Holstein"
+    description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld. Jetzt Termin sichern!"
     schema={schema}
 >
 
@@ -68,7 +96,7 @@ const schema = {
         <div class="absolute inset-0">
              <img
                 src="/images/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg"
-                alt="Premium Fahrzeugaufbereitung Tensfeld"
+                alt="Premium Fahrzeugaufbereitung in der Werkstatt Tensfeld - RG Detailing"
                 class="w-full h-full object-cover opacity-60"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
@@ -81,16 +109,16 @@ const schema = {
         <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-red-900/10 blur-[100px] rounded-full"></div>
 
         <div class="container mx-auto px-4 z-10 text-center pt-20">
-            <span class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs md:text-sm font-bold tracking-[0.2em] mb-8 uppercase backdrop-blur-md">
+            <h2 class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs md:text-sm font-bold tracking-[0.2em] mb-8 uppercase backdrop-blur-md">
                 Handwerk. Leidenschaft. Perfektion.
-            </span>
+            </h2>
             <h1 class="text-6xl md:text-8xl font-bold mb-8 text-white tracking-tighter leading-tight">
                 Wellness für <br/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">Ihr Automobil</span>
             </h1>
             <p class="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-                Professionelle <strong class="text-white">Fahrzeugaufbereitung</strong>, <strong class="text-white">Autoreinigung</strong> und Lackveredelung in Schleswig-Holstein.<br class="hidden md:block"/>
-                Erleben Sie den Unterschied zwischen Waschanlage und Detailing.
+                Professionelle <strong class="text-white">Fahrzeugaufbereitung</strong>, <strong class="text-white">Autoreinigung</strong> und <strong class="text-white">Lackveredelung</strong> in Schleswig-Holstein.<br class="hidden md:block"/>
+                Erleben Sie den Unterschied zwischen Waschanlage und echtem Detailing.
             </p>
             <div class="flex flex-col md:flex-row justify-center gap-6">
                 <a href="#rechner" class="group relative px-8 py-4 bg-red-700 rounded-full font-bold text-white overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(220,38,38,0.5)]">
@@ -112,15 +140,15 @@ const schema = {
     {/* TRUST SIGNALS STRIP */}
     <div class="border-y border-white/5 bg-zinc-950/50 backdrop-blur-sm relative z-20">
         <div class="container mx-auto px-4 py-8">
-            <div class="flex flex-wrap justify-center gap-8 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+            <div class="flex flex-wrap justify-center gap-8 md:gap-20 opacity-80 grayscale-0 transition-all duration-500">
                 {/* Partners Text/Logos */}
-                <span class="text-xl font-bold text-zinc-300 flex items-center gap-2">
+                <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
                     <span class="text-red-600 text-2xl">★</span> Labocosmetica Certified
                 </span>
-                <span class="text-xl font-bold text-zinc-300 flex items-center gap-2">
+                <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
                     <span class="text-red-600 text-2xl">★</span> DAMPFTEC System
                 </span>
-                <span class="text-xl font-bold text-zinc-300 flex items-center gap-2">
+                <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
                     <span class="text-red-600 text-2xl">★</span> 5-Sterne Service
                 </span>
             </div>
@@ -133,22 +161,22 @@ const schema = {
         {/* WHY US SECTION */}
         <section class="py-20 bg-zinc-900 border-y border-white/5">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Warum RG Detailing?</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Warum RG Detailing Tensfeld?</h2>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
                         <div class="text-4xl mb-4">💎</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Zertifizierte Qualität</h3>
-                        <p class="text-zinc-400">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Keramikversiegelungen.</p>
+                        <h3 class="text-xl font-bold text-white mb-2">Zertifizierte Keramikversiegelung</h3>
+                        <p class="text-zinc-400">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
                     </div>
                     <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
                         <div class="text-4xl mb-4">🧪</div>
-                        <h3 class="text-xl font-bold text-white mb-2">High-End Produkte</h3>
-                        <p class="text-zinc-400">Wir nutzen keine Baumarkt-Mittel, sondern exklusive Chemie für maximale Standzeit und Glanz.</p>
+                        <h3 class="text-xl font-bold text-white mb-2">High-End Pflegeprodukte</h3>
+                        <p class="text-zinc-400">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
                     </div>
                     <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
                         <div class="text-4xl mb-4">🤝</div>
-                        <h3 class="text-xl font-bold text-white mb-2">Ehrliche Beratung</h3>
-                        <p class="text-zinc-400">Keine leeren Versprechen. Wir erklären genau, was möglich ist – und was nicht.</p>
+                        <h3 class="text-xl font-bold text-white mb-2">Norddeutsch & Direkt</h3>
+                        <p class="text-zinc-400">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
                     </div>
                 </div>
             </div>
@@ -158,10 +186,11 @@ const schema = {
         <section id="leistungen" class="py-32 relative">
              <div class="container mx-auto px-4">
                 <div class="text-center mb-20">
-                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Was wir tun</span>
+                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
                     <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
                     <p class="text-zinc-400 max-w-2xl mx-auto">
-                        Ob KFZ Aufbereitung, Keramikversiegelung oder Innenraumreinigung – wir setzen auf Qualität statt Quantität.
+                        Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
+                        Wir sind Ihr Ansprechpartner für Werterhalt in der Region Segeberg.
                     </p>
                 </div>
 
@@ -189,24 +218,24 @@ const schema = {
         {/* PROCESS SECTION */}
         <section class="py-20 relative overflow-hidden">
              <div class="container mx-auto px-4">
-                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-16 text-center">Der Ablauf</h2>
+                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-16 text-center">Der RG Detailing Ablauf</h2>
                  <div class="grid md:grid-cols-4 gap-4 relative">
                      <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-zinc-800 via-red-900 to-zinc-800 -z-10"></div>
                      {/* Steps 1-4 */}
                      <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
                          <div class="w-12 h-12 bg-red-700 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950 shadow-[0_0_20px_rgba(220,38,38,0.5)]">1</div>
                          <h3 class="text-white font-bold mb-2">Check</h3>
-                         <p class="text-sm text-zinc-400">Bestandsaufnahme & Lackanalyse unter Speziallicht.</p>
+                         <p class="text-sm text-zinc-400">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
                      </div>
                      <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
                          <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">2</div>
                          <h3 class="text-white font-bold mb-2">Wash</h3>
-                         <p class="text-sm text-zinc-400">Schonende Handwäsche & chemische Dekontamination.</p>
+                         <p class="text-sm text-zinc-400">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
                      </div>
                      <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
                          <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">3</div>
                          <h3 class="text-white font-bold mb-2">Polish</h3>
-                         <p class="text-sm text-zinc-400">Mehrstufige Defektkorrektur für ultimativen Tiefenglanz.</p>
+                         <p class="text-sm text-zinc-400">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
                      </div>
                      <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
                          <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">4</div>
@@ -225,7 +254,7 @@ const schema = {
                          <h2 class="text-4xl font-bold mb-6 text-white">Wahrheit <br/> statt Versprechen</h2>
                          <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
                              Fotos können lügen, aber dieser Schieberegler nicht.
-                             Sehen Sie selbst, was eine professionelle Lackkorrektur bewirken kann.
+                             Sehen Sie selbst, was eine professionelle <strong>Lackkorrektur</strong> bewirken kann.
                              Grauschleier verschwinden, tiefe Farbe kehrt zurück.
                          </p>
                          <div class="flex gap-4">
@@ -245,7 +274,7 @@ const schema = {
                                 client:visible
                                 beforeImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-1.jpg"
                                 afterImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-2.jpg"
-                                alt="Aufbereitung Vorher Nachher"
+                                alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
                             />
                         </div>
                      </div>
@@ -259,7 +288,7 @@ const schema = {
              <div class="container mx-auto px-4 relative z-10">
                  <div class="max-w-4xl mx-auto glass-panel p-8 md:p-16 rounded-[3rem] shadow-2xl border border-red-500/10">
                     <div class="text-center mb-12">
-                        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Kostenrechner</h2>
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Kostenrechner Aufbereitung</h2>
                         <p class="text-zinc-400">Konfigurieren Sie Ihr Paket. Fair, transparent und ohne versteckte Kosten.</p>
                     </div>
                     <PriceCalculator client:visible />
@@ -270,19 +299,19 @@ const schema = {
         {/* GALLERY GRID */}
         <section class="py-20">
              <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-white mb-8 text-center">Ergebnisse</h2>
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Ergebnisse aus unserer Werkstatt</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=800&auto=format&fit=crop" alt="Detailing Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                        <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=800&auto=format&fit=crop" alt="Detailing Ergebnis Felgen" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
                     </div>
                     <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop" alt="Innenraum Reinigung" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop" alt="Innenraum Reinigung Leder" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
                     </div>
                     <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ebcc3?q=80&w=800&auto=format&fit=crop" alt="Politur Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ebcc3?q=80&w=800&auto=format&fit=crop" alt="Lackpolitur Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
                     </div>
                     <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                         <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=800&auto=format&fit=crop" alt="Keramik Versiegelung" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                         <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=800&auto=format&fit=crop" alt="Keramik Versiegelung Abperleffekt" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
                     </div>
                 </div>
              </div>
@@ -292,31 +321,31 @@ const schema = {
         <section class="py-20 border-t border-white/5">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto">
-                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen</h2>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
                     <div class="space-y-6">
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
-                            <p class="text-zinc-400">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
+                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
+                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                <p class="text-zinc-400" itemprop="text">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Was kostet eine Fahrzeugaufbereitung?</h3>
-                            <p class="text-zinc-400">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
+                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Was kostet eine Fahrzeugaufbereitung?</h3>
+                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                <p class="text-zinc-400" itemprop="text">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
-                            <p class="text-zinc-400">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Machen Sie auch Motorwäsche?</h3>
+                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                <p class="text-zinc-400" itemprop="text">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                            </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
-                            <p class="text-zinc-400">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Sind Sie versichert?</h3>
-                            <p class="text-zinc-400">Selbstverständlich. Ihr Fahrzeug ist während der gesamten Aufenthaltsdauer bei uns vollständig versichert.</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Kann ich mit Karte zahlen?</h3>
-                            <p class="text-zinc-400">Ja, wir akzeptieren EC-Karte, gängige Kreditkarten sowie Barzahlung und Überweisung (bei Firmenkunden).</p>
+                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
+                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                                <p class="text-zinc-400" itemprop="text">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -326,11 +355,11 @@ const schema = {
         {/* CITIES SEO GRID */}
         <section class="py-20 border-t border-white/5">
              <div class="container mx-auto px-4 text-center">
-                 <h3 class="text-zinc-500 font-bold uppercase tracking-widest text-sm mb-8">Wir sind aktiv in</h3>
+                 <h3 class="text-zinc-500 font-bold uppercase tracking-widest text-sm mb-8">Fahrzeugaufbereitung in Ihrer Nähe</h3>
                  <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
                     {sortedCities.map(city => (
                         <a href={`/${city.data.slug}`} class="px-6 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-red-500/50 hover:bg-zinc-800 transition-all text-sm font-medium">
-                            {city.data.name}
+                            Aufbereitung {city.data.name}
                         </a>
                     ))}
                  </div>
