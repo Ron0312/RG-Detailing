@@ -36,3 +36,14 @@ Possible dynamic routes being matched: src/pages/[city].astro.
 23:35:22 [200] /fahrzeugaufbereitung-bad-segeberg 13ms
 23:38:43 [watch] verification/verify_seo.py
 23:38:43 [watch] verification/verify_seo.py
+23:47:39 [watch] src/components/Header.astro
+23:47:39 [watch] src/components/Header.astro
+23:49:03 [200] / 238ms
+23:49:30 [watch] verification/verify_header_text.py
+23:49:30 [watch] verification/verify_header_text.py
+23:49:36 [200] / 34ms
+23:49:56 [watch] verification/verify_header_text.py
+23:49:56 [watch] verification/verify_header_text.py
+23:50:01 [200] / 34ms
+23:51:42 [watch] verification/verify_header_text.py
+23:51:42 [watch] verification/verify_header_text.py
