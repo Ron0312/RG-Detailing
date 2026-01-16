@@ -5,6 +5,8 @@ import '@fontsource/inter';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import LocalSchema from '../components/LocalSchema.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
 
 interface Props {
 	title: string;
@@ -45,6 +47,8 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={socialImageURL} />
+        <meta property="og:locale" content="de_DE" />
+        <meta property="og:site_name" content="RG Detailing" />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
@@ -62,5 +66,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
 		    <slot />
         </div>
         <Footer />
+        <WhatsAppButton />
+        <ScrollToTop />
 	</body>
 </html>

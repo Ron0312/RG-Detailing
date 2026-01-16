@@ -8,7 +8,6 @@ import { getCollection } from 'astro:content';
 import { services } from '../data/services';
 
 const cities = await getCollection('cities');
-// Sort cities by name or importance? Let's just take them all.
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
 const schema = {
@@ -71,6 +70,8 @@ const schema = {
                 src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop"
                 alt="Premium Fahrzeugaufbereitung Luxuswagen"
                 class="w-full h-full object-cover opacity-60"
+                width="2070"
+                height="1380"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              {/* Subtle Red Overlay for Brand Identity */}
@@ -131,6 +132,30 @@ const schema = {
     <main>
         <About />
 
+        {/* WHY US SECTION */}
+        <section class="py-20 bg-zinc-900 border-y border-white/5">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Warum RG Detailing?</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
+                        <div class="text-4xl mb-4">💎</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Zertifizierte Qualität</h3>
+                        <p class="text-zinc-400">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Keramikversiegelungen.</p>
+                    </div>
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
+                        <div class="text-4xl mb-4">🧪</div>
+                        <h3 class="text-xl font-bold text-white mb-2">High-End Produkte</h3>
+                        <p class="text-zinc-400">Wir nutzen keine Baumarkt-Mittel, sondern exklusive Chemie für maximale Standzeit und Glanz.</p>
+                    </div>
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Ehrliche Beratung</h3>
+                        <p class="text-zinc-400">Keine leeren Versprechen. Wir erklären genau, was möglich ist – und was nicht.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {/* SERVICES SECTION */}
         <section id="leistungen" class="py-32 relative">
              <div class="container mx-auto px-4">
@@ -144,7 +169,7 @@ const schema = {
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {services.map((service, index) => (
-                        <a href={service.link} class="group glass-card p-10 rounded-3xl relative overflow-hidden hover:-translate-y-2 transition-transform duration-500">
+                        <a href={service.link} class="group glass-card p-10 rounded-3xl relative overflow-hidden hover:-translate-y-2 transition-transform duration-500 block">
                              <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-600/20 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150"></div>
 
                              <div class="relative z-10">
@@ -161,6 +186,37 @@ const schema = {
                     ))}
                 </div>
             </div>
+        </section>
+
+        {/* PROCESS SECTION */}
+        <section class="py-20 relative overflow-hidden">
+             <div class="container mx-auto px-4">
+                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-16 text-center">Der Ablauf</h2>
+                 <div class="grid md:grid-cols-4 gap-4 relative">
+                     <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-zinc-800 via-red-900 to-zinc-800 -z-10"></div>
+                     {/* Steps 1-4 */}
+                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
+                         <div class="w-12 h-12 bg-red-700 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950 shadow-[0_0_20px_rgba(220,38,38,0.5)]">1</div>
+                         <h3 class="text-white font-bold mb-2">Check</h3>
+                         <p class="text-sm text-zinc-400">Bestandsaufnahme & Lackanalyse unter Speziallicht.</p>
+                     </div>
+                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
+                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">2</div>
+                         <h3 class="text-white font-bold mb-2">Wash</h3>
+                         <p class="text-sm text-zinc-400">Schonende Handwäsche & chemische Dekontamination.</p>
+                     </div>
+                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
+                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">3</div>
+                         <h3 class="text-white font-bold mb-2">Polish</h3>
+                         <p class="text-sm text-zinc-400">Mehrstufige Defektkorrektur für ultimativen Tiefenglanz.</p>
+                     </div>
+                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
+                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">4</div>
+                         <h3 class="text-white font-bold mb-2">Protect</h3>
+                         <p class="text-sm text-zinc-400">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
+                     </div>
+                 </div>
+             </div>
         </section>
 
         {/* COMPARISON SLIDER */}
@@ -213,6 +269,27 @@ const schema = {
              </div>
         </section>
 
+        {/* GALLERY GRID */}
+        <section class="py-20">
+             <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Ergebnisse</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=800&auto=format&fit=crop" alt="Detailing Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                    </div>
+                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop" alt="Innenraum Reinigung" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                    </div>
+                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
+                        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ebcc3?q=80&w=800&auto=format&fit=crop" alt="Politur Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                    </div>
+                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
+                         <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=800&auto=format&fit=crop" alt="Keramik Versiegelung" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="400" height="400" />
+                    </div>
+                </div>
+             </div>
+        </section>
+
         {/* FAQ SECTION FOR SEO */}
         <section class="py-20 border-t border-white/5">
             <div class="container mx-auto px-4">
@@ -230,6 +307,18 @@ const schema = {
                         <div class="glass-card p-6 rounded-2xl">
                             <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
                             <p class="text-zinc-400">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
+                            <p class="text-zinc-400">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Sind Sie versichert?</h3>
+                            <p class="text-zinc-400">Selbstverständlich. Ihr Fahrzeug ist während der gesamten Aufenthaltsdauer bei uns vollständig versichert.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Kann ich mit Karte zahlen?</h3>
+                            <p class="text-zinc-400">Ja, wir akzeptieren EC-Karte, gängige Kreditkarten sowie Barzahlung und Überweisung (bei Firmenkunden).</p>
                         </div>
                     </div>
                 </div>
