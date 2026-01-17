@@ -6,9 +6,19 @@ import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
+import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike } from 'lucide-react';
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const iconMap = {
+  0: Droplets,
+  1: Sparkles,
+  2: ShieldCheck,
+  3: Caravan,
+  4: RefreshCw,
+  5: Bike
+};
 
 const mainSchema = {
   "@context": "https://schema.org",
@@ -202,18 +212,24 @@ const faqSchema = {
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Warum RG Detailing Tensfeld?</h2>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
-                        <div class="text-4xl mb-4">💎</div>
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
+                        <div class="mb-4 text-red-500">
+                            <Gem size={48} strokeWidth={1.5} />
+                        </div>
                         <h3 class="text-xl font-bold text-white mb-2">Zertifizierte Keramikversiegelung</h3>
                         <p class="text-zinc-400">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
                     </div>
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
-                        <div class="text-4xl mb-4">🧪</div>
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
+                        <div class="mb-4 text-red-500">
+                            <FlaskConical size={48} strokeWidth={1.5} />
+                        </div>
                         <h3 class="text-xl font-bold text-white mb-2">High-End Pflegeprodukte</h3>
                         <p class="text-zinc-400">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
                     </div>
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300">
-                        <div class="text-4xl mb-4">🤝</div>
+                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
+                        <div class="mb-4 text-red-500">
+                            <Handshake size={48} strokeWidth={1.5} />
+                        </div>
                         <h3 class="text-xl font-bold text-white mb-2">Norddeutsch & Direkt</h3>
                         <p class="text-zinc-400">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
                     </div>
@@ -234,13 +250,15 @@ const faqSchema = {
                 </div>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services.map((service, index) => (
+                    {services.map((service, index) => {
+                        const IconComponent = iconMap[index] || Sparkles;
+                        return (
                         <a href={service.link} class="group glass-card p-10 rounded-3xl relative overflow-hidden hover:-translate-y-2 transition-transform duration-500 block">
                              <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-600/20 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150"></div>
 
                              <div class="relative z-10">
-                                <div class="w-14 h-14 bg-zinc-900 rounded-xl border border-white/10 flex items-center justify-center text-2xl mb-8 group-hover:border-red-500/50 transition-colors shadow-lg">
-                                    {index === 0 ? '🧖' : index === 1 ? '✨' : index === 2 ? '💎' : index === 3 ? '🚐' : index === 4 ? '🔄' : '🏍️'}
+                                <div class="w-14 h-14 bg-zinc-900 rounded-xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500">
+                                    <IconComponent size={24} strokeWidth={1.5} />
                                 </div>
                                 <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
                                 <p class="text-zinc-400 leading-relaxed mb-6">{service.shortDescription}</p>
@@ -249,7 +267,8 @@ const faqSchema = {
                                 </div>
                              </div>
                         </a>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>
