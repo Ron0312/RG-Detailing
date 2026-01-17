@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import config from '../lib/pricingConfig.json';
-import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight } from 'lucide-react';
+import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb } from 'lucide-react';
 
 const STEPS = {
     SIZE: 0,
@@ -217,7 +217,7 @@ export default function PriceCalculator() {
                     </div>
 
                     <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
-                        <div className="text-3xl shrink-0">💡</div>
+                        <Lightbulb className="w-8 h-8 text-yellow-500 shrink-0" />
                         <div>
                             <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
                             <div className="text-sm text-zinc-300 leading-relaxed">
