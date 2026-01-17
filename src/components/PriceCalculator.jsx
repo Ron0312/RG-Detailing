@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import config from '../lib/pricingConfig.json';
-import { Check, Star, Shield, Truck, Sparkles, ArrowRight, Info } from 'lucide-react';
+import { Check, Star, Shield, Truck, Sparkles, ArrowRight } from 'lucide-react';
 
 const STEPS = {
     SIZE: 0,
+    CAMPER_LENGTH: 0.5, // Intermediate step for camper
     CONDITION: 1,
     PACKAGE: 2,
     RESULT: 3
@@ -22,7 +23,8 @@ export default function PriceCalculator() {
     const [selections, setSelections] = useState({
         size: null,
         condition: null,
-        package: null
+        package: null,
+        camperLength: 6.5
     });
     const [quote, setQuote] = useState(null);
     const [email, setEmail] = useState('');
@@ -43,14 +45,8 @@ export default function PriceCalculator() {
 
         if (key === 'size') {
             if (value === 'camper') {
-                // Camper Special Flow
-                // We set dummy values for condition/package to satisfy the calculator logic,
-                // but the UI will handle the specific Camper display.
-                newSelections = { ...newSelections, condition: 'good', package: 'all_in_one' };
-                const result = calculatePrice('all_in_one', 'camper', 'good');
-                setQuote(result);
                 setSelections(newSelections);
-                setStep(STEPS.RESULT);
+                setStep(STEPS.CAMPER_LENGTH);
                 return;
             }
             setStep(STEPS.CONDITION);
@@ -65,12 +61,29 @@ export default function PriceCalculator() {
         setSelections(newSelections);
     };
 
+    const handleCamperConfirm = () => {
+        // Mock result for camper
+        const newSelections = { ...selections, condition: 'good', package: 'all_in_one' };
+        const result = calculatePrice('all_in_one', 'camper', 'good');
+        setQuote(result);
+        setSelections(newSelections);
+        setStep(STEPS.RESULT);
+    };
+
     const submitQuote = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 800)); // Sim delay
-            // In a real app, this would hit an API endpoint
+
+            const payload = { ...selections, quote, email };
+
+            const res = await fetch('/api/submit-quote', {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
             setSubmitted(true);
         } catch (err) {
             console.error(err);
@@ -81,7 +94,7 @@ export default function PriceCalculator() {
 
     const reset = () => {
         setStep(STEPS.SIZE);
-        setSelections({ size: null, condition: null, package: null });
+        setSelections({ size: null, condition: null, package: null, camperLength: 6.5 });
         setQuote(null);
         setSubmitted(false);
         setEmail('');
@@ -154,34 +167,39 @@ export default function PriceCalculator() {
 
         // --- CASE 1: CAMPER / WOHNMOBIL ---
         if (quote.isRequestOnly) {
-            const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung. Bitte um Rückruf für ein individuelles Angebot.`;
+            const meterPrice = 18; // Example price per meter
+            const washPrice = Math.round(selections.camperLength * meterPrice);
+
+            const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
+
             return (
                  <div className="bg-zinc-900/80 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-red-900/30 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl">
                     <div className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Wohnmobil Spezial</div>
 
+                    <div className="bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 mb-8 text-center">
+                        <div className="text-zinc-500 text-sm uppercase tracking-wider mb-2">Ihr Wäsche-Preis ({selections.camperLength}m)</div>
+                        <div className="text-4xl font-bold text-white mb-1">{washPrice}€</div>
+                         <div className="text-xs text-zinc-600 mb-4">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m)</div>
+                         <div className="h-px bg-white/10 w-full my-4"></div>
+                         <div className="text-zinc-400 text-sm">
+                            <span className="text-white font-bold">Keramik & Politur:</span><br/>
+                            Individuelles Angebot nach Besichtigung
+                         </div>
+                    </div>
+
                     <div className="space-y-4 mb-8">
-                        <div className="flex gap-4 items-start p-4 rounded-xl bg-zinc-950/50 border border-zinc-800">
-                            <Shield className="w-6 h-6 text-red-500 shrink-0 mt-1" />
-                            <div>
-                                <h4 className="font-bold text-white">GFK & Gelcoat Schutz</h4>
-                                <p className="text-zinc-400 text-sm">Spezialbehandlung gegen Auskreiden und UV-Schäden. Werterhalt für Ihr Fahrzeug.</p>
+                        <div className="flex gap-4 items-start p-3 rounded-lg bg-zinc-950/30 border border-white/5">
+                            <Shield className="w-5 h-5 text-red-500 shrink-0 mt-1" />
+                            <div className="text-sm">
+                                <span className="font-bold text-white block">GFK & Gelcoat Schutz</span>
+                                <span className="text-zinc-500">Werterhalt gegen UV-Schäden.</span>
                             </div>
                         </div>
-                        <div className="flex gap-4 items-start p-4 rounded-xl bg-zinc-950/50 border border-zinc-800">
-                            <Sparkles className="w-6 h-6 text-blue-400 shrink-0 mt-1" />
-                            <div>
-                                <h4 className="font-bold text-white">Dampftec Hygiene</h4>
-                                <p className="text-zinc-400 text-sm">Chemiefreie Tiefenreinigung der Polster. Tötet Sporen und verhindert Schimmel.</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 items-start p-4 rounded-xl bg-zinc-950/50 border border-zinc-800">
-                            <Info className="w-6 h-6 text-zinc-400 shrink-0 mt-1" />
-                            <div>
-                                <h4 className="font-bold text-white">Preisstruktur</h4>
-                                <p className="text-zinc-400 text-sm">
-                                    <span className="block">• Wäsche: ab 15-20€ pro lfd. Meter</span>
-                                    <span className="block">• Keramik/Politur: Individuell nach Besichtigung</span>
-                                </p>
+                        <div className="flex gap-4 items-start p-3 rounded-lg bg-zinc-950/30 border border-white/5">
+                            <Sparkles className="w-5 h-5 text-blue-400 shrink-0 mt-1" />
+                            <div className="text-sm">
+                                <span className="font-bold text-white block">Dampftec Hygiene</span>
+                                <span className="text-zinc-500">Chemiefrei gegen Sporen & Schimmel.</span>
                             </div>
                         </div>
                     </div>
@@ -294,7 +312,7 @@ export default function PriceCalculator() {
             {/* Progress Bar */}
             <div className="flex justify-between mb-8 relative px-4 md:px-12">
                 <div className="absolute top-1/2 left-4 right-4 md:left-12 md:right-12 h-1 bg-zinc-800 -z-10 -translate-y-1/2 rounded-full overflow-hidden">
-                     <div className="h-full bg-red-600 transition-all duration-500" style={{ width: `${(step / 3) * 100}%` }}></div>
+                     <div className="h-full bg-red-600 transition-all duration-500" style={{ width: `${(step >= STEPS.RESULT ? 1 : step / 3) * 100}%` }}></div>
                 </div>
                 {[0, 1, 2, 3].map(i => (
                     <div key={i} className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-all duration-500 relative z-10
@@ -325,6 +343,42 @@ export default function PriceCalculator() {
                             ))}
                         </div>
                     </div>
+                )}
+
+                {step === STEPS.CAMPER_LENGTH && (
+                     <div className="animate-fade-in">
+                        <StepTitle>Fahrzeuglänge</StepTitle>
+                        <StepSubtitle>Bitte geben Sie die Länge in Metern an (inkl. Deichsel/Aufbau).</StepSubtitle>
+
+                        <div className="max-w-md mx-auto bg-zinc-950 p-8 rounded-2xl border border-zinc-800">
+                            <div className="text-center mb-8">
+                                <div className="text-6xl font-bold text-white mb-2">{selections.camperLength}m</div>
+                                <div className="text-zinc-500">Fahrzeuglänge</div>
+                            </div>
+
+                            <input
+                                type="range"
+                                min="4"
+                                max="12"
+                                step="0.5"
+                                value={selections.camperLength}
+                                onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
+                                className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-red-600 mb-8"
+                            />
+
+                            <button
+                                onClick={handleCamperConfirm}
+                                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-red-900/20 flex items-center justify-center gap-2"
+                            >
+                                Weiter zur Berechnung <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </div>
+                         <div className="mt-8 text-center">
+                            <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto">
+                                <ArrowRight className="rotate-180 w-4 h-4" /> Zurück
+                            </button>
+                        </div>
+                     </div>
                 )}
 
                 {step === STEPS.CONDITION && (
@@ -407,8 +461,8 @@ export default function PriceCalculator() {
                         </form>
                         <div className="mt-8 text-center">
                             <button onClick={() => {
-                                // If camper, go back to size. Else go back to package
-                                if (selections.size === 'camper') setStep(STEPS.SIZE);
+                                // If camper, go back to length step. Else go back to package
+                                if (selections.size === 'camper') setStep(STEPS.CAMPER_LENGTH);
                                 else setStep(STEPS.PACKAGE);
                             }} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto">
                                 <ArrowRight className="rotate-180 w-4 h-4" /> Zurück zur Auswahl

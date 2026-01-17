@@ -11,7 +11,8 @@ const QuoteSchema = z.object({
     email: z.string().email(),
     package: PackageEnum,
     size: SizeEnum,
-    condition: ConditionEnum
+    condition: ConditionEnum,
+    camperLength: z.number().optional()
 });
 
 export const POST: APIRoute = async ({ request }) => {
@@ -23,7 +24,8 @@ export const POST: APIRoute = async ({ request }) => {
             email: body.email,
             package: body.package, // client sends 'package', 'size', 'condition'
             size: body.size,
-            condition: body.condition
+            condition: body.condition,
+            camperLength: body.camperLength
         });
 
         if (!result.success) {
@@ -45,11 +47,19 @@ export const POST: APIRoute = async ({ request }) => {
         // MOCK EMAIL SENDING LOGIC
         console.log(">>> [MOCK EMAIL] To: owner@rg-detailing.de");
         console.log(`>>> Subject: Neue Anfrage von ${data.email}`);
-        console.log(`>>> Body: Fahrzeug ${data.size}, Zustand ${data.condition}, Paket ${data.package}. Preis: ${priceQuote.minPrice}-${priceQuote.maxPrice}€`);
+        let bodyText = `Fahrzeug ${data.size}, Zustand ${data.condition}, Paket ${data.package}.`;
+
+        if (data.size === 'camper' && data.camperLength) {
+            bodyText += ` Länge: ${data.camperLength}m. (Kunde hat Camper-Flow genutzt).`;
+        }
+
+        bodyText += ` Preis-Range: ${priceQuote.minPrice}-${priceQuote.maxPrice}€`;
+
+        console.log(`>>> Body: ${bodyText}`);
 
         console.log(">>> [MOCK EMAIL] To: " + data.email);
         console.log(`>>> Subject: Ihre Anfrage bei RG Detailing`);
-        console.log(`>>> Body: Danke! Ihre Schätzung: ${priceQuote.minPrice}€ - ${priceQuote.maxPrice}€. Wir melden uns.`);
+        console.log(`>>> Body: Danke! Ihre Anfrage ist eingegangen. Wir melden uns.`);
 
         return new Response(JSON.stringify({
             success: true,
