@@ -11,9 +11,14 @@ import Layout from '../layouts/Layout.astro';
             <p class="text-zinc-400 text-xl mb-8 max-w-md mx-auto">
                 Ups! Die Seite, die Sie suchen, existiert nicht oder wurde verschoben.
             </p>
-            <a href="/" class="px-8 py-4 bg-red-700 rounded-full font-bold text-white hover:bg-red-600 transition shadow-lg shadow-red-900/30">
-                Zurück zur Startseite
-            </a>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="/" class="px-8 py-4 bg-red-700 rounded-full font-bold text-white hover:bg-red-600 transition shadow-lg shadow-red-900/30">
+                    Zurück zur Startseite
+                </a>
+                <a href="/#leistungen" class="px-8 py-4 bg-zinc-800 rounded-full font-bold text-white hover:bg-zinc-700 transition border border-zinc-700">
+                    Zu den Leistungen
+                </a>
+            </div>
         </div>
     </div>
 </Layout>

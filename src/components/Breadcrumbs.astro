@@ -1,0 +1,39 @@
+---
+interface Props {
+  crumbs: {
+    label: string;
+    href: string;
+  }[];
+}
+
+const { crumbs } = Astro.props;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": crumbs.map((crumb, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": crumb.label,
+    "item": `https://rg-detailing.de${crumb.href}`
+  }))
+};
+---
+
+<nav aria-label="Breadcrumb" class="py-4 text-sm text-zinc-400">
+  <ol class="flex items-center space-x-2">
+    {crumbs.map((crumb, index) => (
+      <li class="flex items-center">
+        {index > 0 && <span class="mx-2 text-zinc-600">/</span>}
+        {index === crumbs.length - 1 ? (
+          <span class="text-white font-medium" aria-current="page">{crumb.label}</span>
+        ) : (
+          <a href={crumb.href} class="hover:text-red-500 transition-colors">
+            {crumb.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</nav>

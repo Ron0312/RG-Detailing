@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PriceCalculator from '../components/PriceCalculator.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ServiceSchema from '../components/ServiceSchema.astro';
 
 const schema = {
   "@context": "https://schema.org",
@@ -11,10 +13,19 @@ const schema = {
 };
 ---
 
-<Layout title="Wohnmobil & Caravan Aufbereitung" description="Ihr Experte für Wohnmobil-Pflege, GFK-Versiegelung und hygienische Innenreinigung in Schleswig-Holstein." schema={schema}>
+<Layout title="Wohnmobil & Caravan Aufbereitung Schleswig-Holstein | RG Detailing" description="Ihr Experte für Wohnmobil-Pflege, GFK-Versiegelung und hygienische Innenreinigung in Schleswig-Holstein." schema={schema}>
+    <ServiceSchema
+        name="Wohnmobil Aufbereitung"
+        description="Spezialpflege für Wohnmobile und Caravans. GFK-Politur, Keramikversiegelung und Innenraum-Hygiene in großer Halle."
+    />
     <main class="container mx-auto px-4 py-12">
+        <Breadcrumbs crumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Wohnmobil Aufbereitung', href: '/wohnmobil' }
+        ]} />
+
         {/* Header */}
-        <div class="mb-12 text-center max-w-3xl mx-auto">
+        <div class="mb-12 text-center max-w-3xl mx-auto mt-8">
             <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
                 Wohnmobil & Caravan <br/>
                 <span class="text-red-600">Urlaub fängt beim Einsteigen an</span>
@@ -55,6 +66,9 @@ const schema = {
                  <img
                     src="https://rg-detailing.de/wp-content/uploads/2023/01/Wohnmobil-Aufbereitung-Tensfeld.jpg"
                     alt="Wohnmobil Aufbereitung bei RG Detailing"
+                    loading="lazy"
+                    width="600"
+                    height="800"
                     class="rounded-2xl shadow-2xl border border-zinc-800 w-full object-cover h-auto"
                     onerror="this.src='https://placehold.co/600x800/18181b/dc2626?text=Wohnmobil+Pflege'"
                 />

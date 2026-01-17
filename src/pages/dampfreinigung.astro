@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PriceCalculator from '../components/PriceCalculator.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ServiceSchema from '../components/ServiceSchema.astro';
 
 const schema = {
   "@context": "https://schema.org",
@@ -11,10 +13,20 @@ const schema = {
 };
 ---
 
-<Layout title="Hygienische Dampfreinigung" description="Tiefenreinigung ohne Chemie. 170°C Trockendampf gegen Bakterien, Milben und Gerüche. Offizieller Dampftec Partner." schema={schema}>
+<Layout title="Hygienische Dampfreinigung Fahrzeug Innenraum | RG Detailing" description="Tiefenreinigung ohne Chemie. 170°C Trockendampf gegen Bakterien, Milben und Gerüche. Offizieller Dampftec Partner." schema={schema}>
+    <ServiceSchema
+        name="Dampfreinigung Innenraum"
+        description="Hygienische Tiefenreinigung des Fahrzeug-Innenraums mit 170°C Trockendampf. Entfernt Bakterien, Keime und Gerüche ohne Chemie."
+        price="350"
+    />
     <main class="container mx-auto px-4 py-12">
+        <Breadcrumbs crumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Dampfreinigung', href: '/dampfreinigung' }
+        ]} />
+
         {/* Header */}
-        <div class="mb-12 text-center max-w-3xl mx-auto">
+        <div class="mb-12 text-center max-w-3xl mx-auto mt-8">
             <h1 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
                 Der "Dampfdrache" <br/>
                 <span class="text-red-600">Reine Physik. 0% Chemie. 100% Hygiene.</span>
@@ -30,6 +42,9 @@ const schema = {
                  <img
                     src="https://rg-detailing.de/wp-content/uploads/2023/01/Dampfreinigung-Innenraum.jpg"
                     alt="Dampfreinigung Innenraum"
+                    loading="lazy"
+                    width="600"
+                    height="400"
                     class="rounded-2xl shadow-2xl border border-zinc-800 w-full object-cover h-auto mb-6"
                     onerror="this.src='https://placehold.co/600x400/18181b/dc2626?text=Dampfreinigung'"
                 />
