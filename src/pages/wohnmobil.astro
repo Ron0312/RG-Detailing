@@ -4,6 +4,11 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/wohnmobil-hero.jpg';
+import { Check } from 'lucide-react';
+
+export const prerender = true;
 
 const schema = {
   "@context": "https://schema.org",
@@ -23,11 +28,12 @@ const schema = {
     {/* HERO SECTION */}
     <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black">
         <div class="absolute inset-0">
-             <img
-                src="/images/wohnmobil-hero.jpg"
+             <Image
+                src={heroImage}
                 alt="Wohnmobil Aufbereitung in der Halle"
                 class="w-full h-full object-cover opacity-60"
                 fetchpriority="high"
+                loading="eager"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
@@ -89,10 +95,10 @@ const schema = {
                  <div class="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
                     <h3 class="font-bold text-white mb-2">Unser Wohnmobil-Spezial:</h3>
                     <ul class="space-y-2 text-zinc-400">
-                        <li class="flex items-center"><span class="text-red-500 mr-2">✓</span> Halle für Fahrzeuge bis 7m+</li>
-                        <li class="flex items-center"><span class="text-red-500 mr-2">✓</span> GFK-Spezialpolitur gegen Auskreiden</li>
-                        <li class="flex items-center"><span class="text-red-500 mr-2">✓</span> Keramikversiegelung für Langzeitschutz</li>
-                        <li class="flex items-center"><span class="text-red-500 mr-2">✓</span> Hygienische Innenreinigung</li>
+                        <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Halle für Fahrzeuge bis 7m+</li>
+                        <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> GFK-Spezialpolitur gegen Auskreiden</li>
+                        <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Keramikversiegelung für Langzeitschutz</li>
+                        <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Hygienische Innenreinigung</li>
                     </ul>
                  </div>
             </div>

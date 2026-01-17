@@ -6,7 +6,11 @@ import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
-import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike } from 'lucide-react';
+import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, Star, ArrowDown } from 'lucide-react';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
+
+export const prerender = true;
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -156,12 +160,11 @@ const faqSchema = {
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* High-End Hero Image */}
         <div class="absolute inset-0">
-             <img
-                src="/images/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg"
+             <Image
+                src={heroImage}
                 alt="Premium Fahrzeugaufbereitung in der Werkstatt Tensfeld - RG Detailing"
                 class="w-full h-full object-cover opacity-60"
-                width="2752"
-                height="1536"
+                loading="eager"
                 fetchpriority="high"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
@@ -198,7 +201,7 @@ const faqSchema = {
 
         {/* Scroll Indicator */}
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-zinc-500">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+             <ArrowDown className="w-6 h-6" />
         </div>
     </div>
 
@@ -208,13 +211,13 @@ const faqSchema = {
             <div class="flex flex-wrap justify-center gap-8 md:gap-20 opacity-80 grayscale-0 transition-all duration-500">
                 {/* Partners Text/Logos */}
                 <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
-                    <span class="text-red-600 text-2xl">★</span> Labocosmetica Certified
+                    <Star className="text-red-600 w-6 h-6 fill-red-600" /> Labocosmetica Certified
                 </span>
                 <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
-                    <span class="text-red-600 text-2xl">★</span> DAMPFTEC System
+                    <Star className="text-red-600 w-6 h-6 fill-red-600" /> DAMPFTEC System
                 </span>
                 <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
-                    <span class="text-red-600 text-2xl">★</span> 5-Sterne Service
+                    <Star className="text-red-600 w-6 h-6 fill-red-600" /> 5-Sterne Service
                 </span>
             </div>
         </div>
