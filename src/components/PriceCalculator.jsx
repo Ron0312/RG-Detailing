@@ -311,19 +311,19 @@ export default function PriceCalculator() {
 
                 {/* Progress Bar */}
                 <div className="mb-12 md:mb-16 relative px-4 max-w-3xl mx-auto mt-6 md:mt-0">
-                    {/* Track Background */}
-                    <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/5 -z-10 -translate-y-1/2 rounded-full"></div>
-
-                    {/* Active Track */}
-                    <div className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-red-800 to-red-500 -z-10 -translate-y-1/2 rounded-full transition-all duration-700 ease-out"
-                         style={{ width: `${(step >= STEPS.RESULT ? 1 : step / 3) * 100}%` }}>
-                         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-400 rounded-full blur-[4px]"></div>
-                    </div>
-
                     <div className="flex justify-between relative">
+                        {/* Track Wrapper - Positioned between centers of first and last circle */}
+                        <div className="absolute top-1/2 left-5 right-5 md:left-6 md:right-6 -translate-y-1/2 h-1 bg-white/5 -z-10 rounded-full">
+                            {/* Active Track */}
+                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-800 to-red-500 rounded-full transition-all duration-700 ease-out"
+                                style={{ width: `${(step >= STEPS.RESULT ? 1 : step / 3) * 100}%` }}>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-400 rounded-full blur-[4px] shadow-[0_0_10px_rgba(248,113,113,0.8)]"></div>
+                            </div>
+                        </div>
+
                         {[0, 1, 2, 3].map(i => (
-                            <div key={i} className="flex flex-col items-center gap-1 md:gap-3">
-                                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-all duration-500 relative z-10 border-4
+                            <div key={i} className="flex flex-col items-center gap-1 md:gap-3 z-10">
+                                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-all duration-500 border-4
                                     ${step >= i
                                         ? 'bg-zinc-900 text-white border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.4)] scale-110'
                                         : 'bg-zinc-900 text-zinc-600 border-zinc-800'
