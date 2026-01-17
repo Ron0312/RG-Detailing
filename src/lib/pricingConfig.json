@@ -15,23 +15,28 @@
     "wash_interior": {
       "name": "Interior & Wash",
       "basePrice": 350,
-      "description": "Gründliche Außenwäsche + intensive Innenraumreinigung."
-    },
-    "all_in_one": {
-      "name": "All-in-One",
-      "basePrice": 500,
-      "description": "Hochglanzpolitur (bis 75% Defektkorrektur), Innenraum, Polymerversiegelung (1 Jahr)."
-    },
-    "full_detailing": {
-      "name": "Full Detailing",
-      "basePrice": 800,
-      "description": "Mehrstufige Politur, High-End Keramik-/Graphenversiegelung (Labocosmetica).",
-      "hasClubAbo": true
+      "description": "Hygienische Tiefenreinigung (Dampftec) & schonende Außenwäsche. Der perfekte Einstieg.",
+      "badge": "Trust Builder"
     },
     "leasing": {
         "name": "Leasing Rückgabe",
         "basePrice": 400,
-        "description": "One-Step Politur, Innenraum, Sprühversiegelung. Ziel: Mängelfreie Rückgabe."
+        "description": "Minimierung von Nachzahlungen durch Smart-Repair & Aufbereitung. Investition statt Strafe.",
+        "badge": "Spar-Tipp"
+    },
+    "all_in_one": {
+      "name": "All-in-One",
+      "basePrice": 500,
+      "description": "Innenraum + Hochglanzpolitur + Versiegelung. Das 'Neuwagen-Gefühl' für Verkauf oder Genuss.",
+      "badge": "Bestseller",
+      "highlight": true
+    },
+    "full_detailing": {
+      "name": "Full Detailing",
+      "basePrice": 800,
+      "description": "Mehrstufige Defektkorrektur & Labocosmetica Keramikversiegelung. High-End Schutz.",
+      "badge": "Königsklasse",
+      "hasClubAbo": true
     }
   }
 }
