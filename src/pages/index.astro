@@ -10,7 +10,7 @@ import { services } from '../data/services';
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
-const schema = {
+const mainSchema = {
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
   "name": "RG Detailing",
@@ -82,12 +82,51 @@ const schema = {
     "reviewCount": "127"
   }
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Bieten Sie auch eine reine Innenraumreinigung an?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, wir bieten professionelle Innenraumreinigungen an. Unser \"Innen & Hygiene\" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet eine Fahrzeugaufbereitung?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren Preisrechner für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Machen Sie auch Motorwäsche?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange muss mein Auto bei Ihnen bleiben?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit)."
+      }
+    }
+  ]
+};
 ---
 
 <Layout
     title="RG Detailing | Premium Fahrzeugaufbereitung Schleswig-Holstein"
     description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld. Jetzt Termin sichern!"
-    schema={schema}
+    schema={[mainSchema, faqSchema]}
 >
 
     {/* HERO SECTION */}
@@ -323,28 +362,28 @@ const schema = {
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
                     <div class="space-y-6">
-                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
-                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                                <p class="text-zinc-400" itemprop="text">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
+                            <div>
+                                <p class="text-zinc-400">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
                             </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Was kostet eine Fahrzeugaufbereitung?</h3>
-                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                                <p class="text-zinc-400" itemprop="text">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Was kostet eine Fahrzeugaufbereitung?</h3>
+                            <div>
+                                <p class="text-zinc-400">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
                             </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Machen Sie auch Motorwäsche?</h3>
-                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                                <p class="text-zinc-400" itemprop="text">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
+                            <div>
+                                <p class="text-zinc-400">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
                             </div>
                         </div>
-                        <div class="glass-card p-6 rounded-2xl" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                            <h3 class="text-xl font-bold text-white mb-2" itemprop="name">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
-                            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                                <p class="text-zinc-400" itemprop="text">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
+                        <div class="glass-card p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-white mb-2">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
+                            <div>
+                                <p class="text-zinc-400">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
                             </div>
                         </div>
                     </div>

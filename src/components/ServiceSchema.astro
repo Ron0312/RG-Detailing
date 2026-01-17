@@ -1,0 +1,53 @@
+---
+interface Props {
+  name: string;
+  description: string;
+  image?: string;
+  price?: string;
+  priceCurrency?: string;
+}
+
+const { name, description, image, price, priceCurrency = "EUR" } = Astro.props;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": name,
+  "description": description,
+  "provider": {
+    "@type": "AutoRepair",
+    "name": "RG Detailing",
+    "image": "https://rg-detailing.de/logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Dorfstraße 11",
+      "addressLocality": "Tensfeld",
+      "postalCode": "23824",
+      "addressCountry": "DE"
+    },
+    "telephone": "+491633845081",
+    "priceRange": "$$$"
+  },
+  "areaServed": {
+    "@type": "State",
+    "name": "Schleswig-Holstein"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": name,
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": name
+        },
+        "price": price,
+        "priceCurrency": priceCurrency
+      }
+    ]
+  },
+  ...(image && { "image": image })
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

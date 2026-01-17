@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 import PriceCalculator from '../components/PriceCalculator.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 export const prerender = true;
 
@@ -54,6 +55,13 @@ const schema = {
 ---
 
 <Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema}>
+
+    <div class="absolute top-24 left-0 w-full z-30 container mx-auto px-4">
+        <Breadcrumbs crumbs={[
+            { label: 'Home', href: '/' },
+            { label: `Aufbereitung ${name}`, href: `/${cityEntry.data.slug}` }
+        ]} />
+    </div>
 
     {/* City Hero */}
     <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
