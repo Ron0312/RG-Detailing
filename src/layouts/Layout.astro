@@ -60,7 +60,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
 	</head>
-	<body class="bg-black text-zinc-100 antialiased min-h-screen flex flex-col selection:bg-red-600 selection:text-white">
+	<body class="bg-black text-zinc-100 antialiased min-h-screen flex flex-col selection:bg-red-600 selection:text-white overflow-x-hidden">
         <Header />
         <div class="flex-grow">
 		    <slot />
