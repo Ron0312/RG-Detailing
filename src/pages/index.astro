@@ -74,6 +74,19 @@ const mainSchema = {
       }
     }))
   },
+  "makesOffer": services.map((service) => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.title,
+        "description": service.description,
+        "url": `https://rg-detailing.de${service.link}`,
+        "provider": {
+            "@type": "AutoDetailing",
+            "name": "RG Detailing"
+        }
+      }
+  })),
   "review": {
       "@type": "Review",
       "reviewRating": {
@@ -147,6 +160,9 @@ const faqSchema = {
                 src="/images/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg"
                 alt="Premium Fahrzeugaufbereitung in der Werkstatt Tensfeld - RG Detailing"
                 class="w-full h-full object-cover opacity-60"
+                width="2752"
+                height="1536"
+                fetchpriority="high"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              {/* Subtle Red Overlay for Brand Identity */}
