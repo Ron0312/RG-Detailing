@@ -1,16 +1,16 @@
 export const services = [
     {
         title: "Innen & Hygiene",
-        description: "Professionelle Innenraumreinigung inkl. Lederpflege, Textilreinigung und Kunststoffpflege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
+        description: "Professionelle Innenraumreinigung inkl. Polsterreinigung, Lederpflege, Textilreinigung und Tierhaarentfernung. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Ideal bei Hundehaaren oder Gerüchen.",
         icon: "droplet",
-        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
+        shortDescription: "Tiefenreinigung (Polster/Leder) mit 170°C Trockendampf. Ideal bei Tierhaaren.",
         link: "/dampfreinigung"
     },
     {
         title: "All-in-One",
-        description: "Die perfekte Fahrzeugpflege für den Verkauf oder Frühjahrsputz. Inklusive lackschonender Wäsche, Lackreinigung (Flugrost, Harze), Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
+        description: "Die perfekte KFZ Aufbereitung für Verkauf oder Frühjahrsputz. Inklusive lackschonender Wäsche, Türeinstiege reinigen, Lackreinigung (Flugrost, Harze), Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
         icon: "sparkles",
-        shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung.",
+        shortDescription: "Die smarte Lösung: Innenreinigung + Türeinstiege + Hochglanzpolitur + Versiegelung.",
         link: "#rechner"
     },
     {
