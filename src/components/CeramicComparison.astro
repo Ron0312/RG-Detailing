@@ -1,0 +1,156 @@
+---
+import { ShieldCheck, Droplets, Sparkles, Car, Sun, CloudRain } from 'lucide-react';
+---
+
+<div class="glass-card p-4 md:p-10 rounded-3xl border border-white/10 bg-zinc-900/40 relative overflow-hidden">
+    {/* Decorative Background */}
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 blur-[100px] rounded-full -z-10 pointer-events-none"></div>
+
+    <div class="text-center mb-12">
+        <h3 class="text-2xl md:text-4xl font-bold text-white mb-4">Maximaler Lackschutz – Welches Paket passt zu Ihnen?</h3>
+        <p class="text-zinc-400 max-w-2xl mx-auto">
+            Als zertifizierter <strong>Labocosmetica Partner</strong> bieten wir Ihnen die Königsklasse der Keramikversiegelungen.
+            Wählen Sie zwischen extremer Widerstandskraft für den Alltag oder dem ultimativen Showcar-Glanz.
+        </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        {/* PACKAGE 1: BLINDO PLUS */}
+        <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-b from-zinc-800/50 to-zinc-900/50 rounded-2xl transform transition-transform duration-500 group-hover:scale-[1.02]"></div>
+            <div class="relative p-6 md:p-8 rounded-2xl border border-white/10 h-full flex flex-col hover:border-red-900/50 transition-colors">
+
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h4 class="text-2xl font-bold text-white mb-1">BLINDO PLUS <span class="text-red-500">+ HPC PRO</span></h4>
+                        <span class="text-xs font-bold uppercase tracking-widest text-zinc-500">Der Alltags-Held</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 border border-white/5">
+                        <Car size={24} />
+                    </div>
+                </div>
+
+                <div class="space-y-6 mb-8 flex-grow">
+                    <div class="flex items-start gap-4">
+                        <ShieldCheck className="text-red-500 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Schutzdauer</span>
+                            <span class="text-white text-lg">Bis zu 5 Jahre / 75.000 km</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <Droplets className="text-blue-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Wasserabweisung</span>
+                            <span class="text-zinc-400">Starker Lotus-Effekt, extrem einfache Reinigung.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <Sparkles className="text-yellow-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Glanz & Optik</span>
+                            <span class="text-zinc-400">Tiefer, seidiger Spiegelglanz.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <CloudRain className="text-zinc-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Resistenz</span>
+                            <span class="text-zinc-400 text-sm">Hohe Beständigkeit gegen Kalk, Chemikalien & extreme Temperaturen.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-black/30 p-5 rounded-xl border border-white/5">
+                    <span class="block text-xs font-bold text-red-500 uppercase tracking-widest mb-3">Perfekt geeignet für:</span>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Täglich genutzte Fahrzeuge (Daily Driver)
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Laternenparker (draußen stehend)
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Waschanlagen-Nutzer (hohe Härte)
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        {/* PACKAGE 2: STC */}
+        <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-b from-red-900/10 to-zinc-900/50 rounded-2xl transform transition-transform duration-500 group-hover:scale-[1.02]"></div>
+            <div class="relative p-6 md:p-8 rounded-2xl border border-red-900/30 h-full flex flex-col hover:border-red-500/50 transition-colors shadow-[0_0_30px_-10px_rgba(220,38,38,0.1)]">
+
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl uppercase tracking-wider">
+                    Showcar Choice
+                </div>
+
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h4 class="text-2xl font-bold text-white mb-1">STC <span class="text-red-500">+ HPC PRO</span></h4>
+                        <span class="text-xs font-bold uppercase tracking-widest text-zinc-500">Der Ästhet</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-red-900/20 flex items-center justify-center text-red-500 border border-red-500/20">
+                        <Sparkles size={24} />
+                    </div>
+                </div>
+
+                <div class="space-y-6 mb-8 flex-grow">
+                     <div class="flex items-start gap-4">
+                        <ShieldCheck className="text-red-500 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Schutzdauer</span>
+                            <span class="text-white text-lg">Bis zu 6 Jahre / 90.000 km</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <Droplets className="text-blue-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Wasserabweisung</span>
+                            <span class="text-zinc-400">Starker Lotus-Effekt & antistatische Wirkung.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <Sparkles className="text-yellow-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Glanz & Optik</span>
+                            <span class="text-zinc-400">Intensiver "Candy Gloss" 3D-Effekt.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <Sun className="text-zinc-400 mt-1 shrink-0" size={20} />
+                        <div>
+                            <span class="block text-zinc-300 font-bold text-sm">Resistenz</span>
+                            <span class="text-zinc-400 text-sm">Hohe Beständigkeit gegen Streusalz, Teer & UV-Strahlung.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-black/30 p-5 rounded-xl border border-white/5">
+                    <span class="block text-xs font-bold text-red-500 uppercase tracking-widest mb-3">Perfekt geeignet für:</span>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Neuwagen & frisch aufbereitete Fahrzeuge
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Liebhaberfahrzeuge & Showcars
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Garagenwagen & Handwäsche
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center">
+        <p class="text-sm text-zinc-500 italic">
+            Beide Systeme basieren auf modernster Nanotechnologie und werden in mehreren Schichten (Base Coat + Top Coat) appliziert.
+        </p>
+    </div>
+</div>
