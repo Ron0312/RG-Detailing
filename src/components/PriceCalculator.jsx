@@ -303,7 +303,7 @@ export default function PriceCalculator() {
     };
 
     return (
-        <div className="relative w-full max-w-5xl mx-auto my-12" ref={containerRef}>
+        <div id="calculator" className="relative w-full max-w-5xl mx-auto my-12" ref={containerRef}>
             {/* Ambient Background Glow */}
             <div className="absolute -inset-4 bg-red-600/20 blur-[100px] rounded-full pointer-events-none opacity-50 mix-blend-screen animate-pulse"></div>
 
