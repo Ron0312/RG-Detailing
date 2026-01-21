@@ -119,7 +119,7 @@ const faqSchema = {
       "name": "Bieten Sie auch eine reine Innenraumreinigung an?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja, wir bieten professionelle Innenraumreinigungen an. Unser \"Innen & Hygiene\" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung."
+        "text": "Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege."
       }
     },
     {
@@ -135,7 +135,7 @@ const faqSchema = {
       "name": "Machen Sie auch Motorwäsche?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird."
+        "text": "Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile."
       }
     },
     {
@@ -199,10 +199,6 @@ const faqSchema = {
             </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-zinc-500">
-             <ArrowDown className="w-6 h-6" />
-        </div>
     </div>
 
     {/* TRUST SIGNALS STRIP */}
@@ -214,7 +210,7 @@ const faqSchema = {
                     <Star className="text-red-600 w-6 h-6 fill-red-600" /> Labocosmetica Certified
                 </span>
                 <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
-                    <Star className="text-red-600 w-6 h-6 fill-red-600" /> DAMPFTEC System
+                    <Star className="text-red-600 w-6 h-6 fill-red-600" /> Trockendampf Reinigung
                 </span>
                 <span class="text-lg md:text-xl font-bold text-zinc-300 flex items-center gap-3">
                     <Star className="text-red-600 w-6 h-6 fill-red-600" /> 5-Sterne Service
@@ -268,6 +264,42 @@ const faqSchema = {
                     </p>
                 </div>
 
+                {/* High-End Sealing Overview */}
+                <div class="mb-20 glass-card p-2 md:p-8 rounded-3xl border border-white/10 bg-zinc-900/40">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                         <div class="rounded-2xl overflow-hidden border border-white/10">
+                             <img src="/images/ceramic-coating-overview.jpg" alt="Labocosmetica Keramikversiegelung Vergleich" class="w-full h-full object-cover" loading="lazy" />
+                         </div>
+                         <div>
+                             <h3 class="text-2xl font-bold text-white mb-6">Exklusiver Lackschutz: Ihre Wahl</h3>
+                             <p class="text-zinc-400 mb-6">Wir bieten Ihnen drei Qualitätsstufen, perfekt abgestimmt auf Ihr Fahrzeug und Budget.</p>
+                             <ul class="space-y-4">
+                                 <li class="flex gap-4">
+                                     <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 shrink-0 font-bold border border-white/5">1</div>
+                                     <div>
+                                         <h4 class="text-white font-bold">Polymer Versiegelung</h4>
+                                         <p class="text-sm text-zinc-500">Standzeit: 9 - 12 Monate. Solider Basisschutz.</p>
+                                     </div>
+                                 </li>
+                                 <li class="flex gap-4">
+                                     <div class="w-10 h-10 rounded-full bg-red-900/20 flex items-center justify-center text-red-500 shrink-0 font-bold border border-red-500/20">2</div>
+                                     <div>
+                                         <h4 class="text-white font-bold">Standard Keramik</h4>
+                                         <p class="text-sm text-zinc-500">Standzeit: Bis zu 3 Jahre. Hervorragender Glanz & Abperleffekt.</p>
+                                     </div>
+                                 </li>
+                                 <li class="flex gap-4">
+                                     <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white shrink-0 font-bold shadow-lg shadow-red-900/40">3</div>
+                                     <div>
+                                         <h4 class="text-white font-bold">High-End Labocosmetica</h4>
+                                         <p class="text-sm text-zinc-500">Standzeit: Bis zu 6 Jahre. 2-Schicht-System für maximalen Härtegrad & Tiefenglanz.</p>
+                                     </div>
+                                 </li>
+                             </ul>
+                         </div>
+                    </div>
+                </div>
+
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {services.map((service, index) => {
                         const IconComponent = iconMap[index] || Sparkles;
@@ -290,6 +322,38 @@ const faqSchema = {
                     })}
                 </div>
             </div>
+        </section>
+
+        {/* PARTNER & SHOP SECTION */}
+        <section class="py-20 border-t border-white/5 bg-zinc-900/30">
+             <div class="container mx-auto px-4">
+                 <div class="grid md:grid-cols-2 gap-12 items-center">
+                     <div>
+                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Shop & Partner</span>
+                         <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6 text-white">Profi-Produkte für Zuhause</h2>
+                         <p class="text-zinc-400 mb-8 leading-relaxed">
+                             Sie möchten Ihr Fahrzeug auch zwischen den Aufbereitungen perfekt pflegen?
+                             Erwerben Sie exklusive <strong>Labocosmetica</strong> Produkte direkt bei uns vor Ort oder
+                             bestellen Sie bequem online bei unserem Partner <strong>Glossboss</strong>.
+                         </p>
+                         <div class="bg-black/40 p-6 rounded-2xl border border-white/5 flex flex-col sm:flex-row gap-6 items-center">
+                             <div class="text-center sm:text-left">
+                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Online Sparen</div>
+                                 <div class="text-2xl font-bold text-white">Code: <span class="text-red-500">Remo10</span></div>
+                             </div>
+                             <div class="hidden sm:block w-px h-12 bg-white/10"></div>
+                             <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-zinc-200 transition-colors">
+                                 Zum Glossboss Shop →
+                             </a>
+                         </div>
+                     </div>
+                     <div class="flex justify-center md:justify-end">
+                         <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-white/5">
+                             <img src="/images/labocosmetica-logo.jpg" alt="Labocosmetica Logo" class="w-64 md:w-80 opacity-90" loading="lazy" />
+                         </div>
+                     </div>
+                 </div>
+             </div>
         </section>
 
         {/* PROCESS SECTION */}
@@ -406,7 +470,7 @@ const faqSchema = {
                         <div class="glass-card p-6 rounded-2xl">
                             <h3 class="text-xl font-bold text-white mb-2">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
                             <div>
-                                <p class="text-zinc-400">Ja, wir bieten professionelle Innenraumreinigungen an. Unser "Innen & Hygiene" Paket beinhaltet eine Tiefenreinigung mit 170°C Trockendampf – ideal für Allergiker und zur Geruchsneutralisierung.</p>
+                                <p class="text-zinc-400">Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege, damit Ihr Fahrzeug nicht "halbfertig" aussieht.</p>
                             </div>
                         </div>
                         <div class="glass-card p-6 rounded-2xl">
@@ -418,7 +482,7 @@ const faqSchema = {
                         <div class="glass-card p-6 rounded-2xl">
                             <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
                             <div>
-                                <p class="text-zinc-400">Ja, als Teil unserer Spezial-Leistungen führen wir schonende Motorwäschen durch, bei denen empfindliche Elektronik geschützt wird.</p>
+                                <p class="text-zinc-400">Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile – für maximale Sicherheit.</p>
                             </div>
                         </div>
                         <div class="glass-card p-6 rounded-2xl">

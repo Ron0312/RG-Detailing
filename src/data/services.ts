@@ -1,23 +1,23 @@
 export const services = [
     {
         title: "Innen & Hygiene",
-        description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie.",
+        description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
         icon: "droplet",
-        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Tötet Bakterien & Schimmel ohne Chemie.",
+        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
         link: "/dampfreinigung"
     },
     {
         title: "All-in-One",
-        description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Gründliche Innenreinigung, Hochglanzpolitur und Lackschutz in einem.",
+        description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Innenreinigung, Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
         icon: "sparkles",
         shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung.",
         link: "#rechner"
     },
     {
         title: "Full Detailing",
-        description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer und Hologramme für den perfekten Showroom-Glanz.",
+        description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
         icon: "shield",
-        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung.",
+        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo.",
         link: "#rechner"
     },
     {
@@ -35,10 +35,10 @@ export const services = [
         link: "/leasing"
     },
     {
-        title: "Motorrad & Spezial",
-        description: "Schonende Motorwäsche, Cabrioverdeck-Imprägnierung und komplette Motorrad-Aufbereitung für Liebhaberstücke.",
-        icon: "bike",
-        shortDescription: "Motorwäsche, Cabrio-Pflege und Motorrad-Aufbereitung bis ins kleinste Detail.",
+        title: "Spezial-Leistungen",
+        description: "Schonende Motorwäsche mit Trockendampf und Cabrioverdeck-Imprägnierung. Schonend für Material und Umwelt.",
+        icon: "sparkles",
+        shortDescription: "Motorwäsche (Trockendampf) und Cabrio-Verdeck Imprägnierung.",
         link: "#kontakt"
     }
 ];
