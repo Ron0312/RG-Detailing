@@ -5,6 +5,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
+import FAQ from '../components/FAQ.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
 import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, Star, ArrowDown } from 'lucide-react';
@@ -24,6 +25,25 @@ const iconMap = {
   4: RefreshCw,
   5: Bike
 };
+
+const faqItems = [
+  {
+    question: "Bieten Sie auch eine reine Innenraumreinigung an?",
+    answer: 'Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege, damit Ihr Fahrzeug nicht "halbfertig" aussieht.'
+  },
+  {
+    question: "Was kostet eine Fahrzeugaufbereitung?",
+    answer: 'Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.'
+  },
+  {
+    question: "Machen Sie auch Motorwäsche?",
+    answer: "Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile – für maximale Sicherheit."
+  },
+  {
+    question: "Wie lange muss mein Auto bei Ihnen bleiben?",
+    answer: "Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit)."
+  }
+];
 
 const mainSchema = {
   "@context": "https://schema.org",
@@ -114,40 +134,14 @@ const mainSchema = {
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Bieten Sie auch eine reine Innenraumreinigung an?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Was kostet eine Fahrzeugaufbereitung?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren Preisrechner für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Machen Sie auch Motorwäsche?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Wie lange muss mein Auto bei Ihnen bleiben?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit)."
-      }
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer.replace(/<[^>]*>?/gm, '') // Strip HTML tags for schema
     }
-  ]
+  }))
 };
 ---
 
@@ -205,18 +199,18 @@ const faqSchema = {
     {/* ZERTIFIZIERUNGEN UND QUALITÄTSVERSPRECHEN */}
     <div class="border-y border-white/5 bg-zinc-950/80 backdrop-blur-md relative z-20 shadow-[0_0_50px_-20px_rgba(220,38,38,0.1)]">
         <div class="container mx-auto px-4 py-6">
-            <div class="flex flex-wrap justify-center items-center gap-4 md:gap-16">
-                <div class="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-16">
+                <div class="w-full md:w-auto flex justify-center items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
                     <Star className="text-red-600 w-5 h-5 fill-red-600 shrink-0" />
                     <span class="text-sm md:text-lg font-bold text-zinc-200 tracking-wide">Labocosmetica <span class="text-red-500">Certified</span></span>
                 </div>
                 <div class="hidden md:block w-px h-8 bg-white/10"></div>
-                <div class="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
+                <div class="w-full md:w-auto flex justify-center items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
                     <Star className="text-red-600 w-5 h-5 fill-red-600 shrink-0" />
                     <span class="text-sm md:text-lg font-bold text-zinc-200 tracking-wide">Trockendampf <span class="text-red-500">Hygiene</span></span>
                 </div>
                 <div class="hidden md:block w-px h-8 bg-white/10"></div>
-                <div class="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
+                <div class="w-full md:w-auto flex justify-center items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/5 hover:border-red-900/30 transition-colors">
                     <Star className="text-red-600 w-5 h-5 fill-red-600 shrink-0" />
                     <span class="text-sm md:text-lg font-bold text-zinc-200 tracking-wide">5-Sterne <span class="text-red-500">Service</span></span>
                 </div>
@@ -440,48 +434,9 @@ const faqSchema = {
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
-                    <div class="space-y-6">
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Bieten Sie auch eine reine Innenraumreinigung an?</h3>
-                            <div>
-                                <p class="text-zinc-400">Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege, damit Ihr Fahrzeug nicht "halbfertig" aussieht.</p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Was kostet eine Fahrzeugaufbereitung?</h3>
-                            <div>
-                                <p class="text-zinc-400">Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.</p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Machen Sie auch Motorwäsche?</h3>
-                            <div>
-                                <p class="text-zinc-400">Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile – für maximale Sicherheit.</p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-6 rounded-2xl">
-                            <h3 class="text-xl font-bold text-white mb-2">Wie lange muss mein Auto bei Ihnen bleiben?</h3>
-                            <div>
-                                <p class="text-zinc-400">Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit).</p>
-                            </div>
-                        </div>
-                    </div>
+                    <FAQ client:visible items={faqItems} />
                 </div>
             </div>
-        </section>
-
-        {/* CITIES SEO GRID */}
-        <section class="py-20 border-t border-white/5">
-             <div class="container mx-auto px-4 text-center">
-                 <h3 class="text-zinc-500 font-bold uppercase tracking-widest text-sm mb-8">Fahrzeugaufbereitung in Ihrer Nähe</h3>
-                 <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
-                    {sortedCities.map(city => (
-                        <a href={`/${city.data.slug}`} class="px-6 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-red-500/50 hover:bg-zinc-800 transition-all text-sm font-medium">
-                            Aufbereitung {city.data.name}
-                        </a>
-                    ))}
-                 </div>
-             </div>
         </section>
 
     </main>
