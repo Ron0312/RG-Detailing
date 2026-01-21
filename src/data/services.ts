@@ -1,21 +1,21 @@
 export const services = [
     {
         title: "Innen & Hygiene",
-        description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
+        description: "Professionelle Innenraumreinigung inkl. Lederpflege, Textilreinigung und Kunststoffpflege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
         icon: "droplet",
         shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
         link: "/dampfreinigung"
     },
     {
         title: "All-in-One",
-        description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Innenreinigung, Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
+        description: "Die perfekte Fahrzeugpflege für den Verkauf oder Frühjahrsputz. Inklusive lackschonender Wäsche, Lackreinigung (Flugrost, Harze), Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
         icon: "sparkles",
         shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung.",
         link: "#rechner"
     },
     {
         title: "Full Detailing",
-        description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
+        description: "High-End Lackaufbereitung und Keramikversiegelung. Mehrstufiges Polieren beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
         icon: "shield",
         shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo.",
         link: "#rechner"
