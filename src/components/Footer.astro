@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import PrivacyMap from './PrivacyMap.astro';
 
 const currentYear = new Date().getFullYear();
 const cities = await getCollection('cities');
@@ -38,16 +39,10 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
             <p><a href="mailto:kontakt@rg-detailing.de" class="hover:text-red-500 py-1 block">kontakt@rg-detailing.de</a></p>
         </div>
         <div class="h-48 rounded-xl overflow-hidden grayscale hover:grayscale-0 transition duration-500 border border-zinc-800">
-             <iframe
+             <PrivacyMap
                 src="https://maps.google.com/maps?q=RG+Detailing+Tensfeld&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                style="border:0;"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
                 title="RG Detailing Standort Tensfeld"
-            ></iframe>
+             />
         </div>
     </div>
 
