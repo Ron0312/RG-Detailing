@@ -1,91 +1,91 @@
 # Verbesserungsvorschläge für RG Detailing
 
-Hier sind 80 Punkte, aufgeteilt in vier Kategorien, um die Webseite, SEO, UX/UI und den Content zu verbessern.
+Hier sind 80 Punkte, die spezifisch auf fehlende Funktionen und potenzielle Erweiterungen Ihrer aktuellen Webseite eingehen. Bereits vorhandene Elemente (wie Schema-Markup, City-Landingpages, Lazy-Loading oder der Preisrechner) wurden hier ausgeklammert.
 
-## Website (Technik & Allgemein)
-1.  **Lazy Loading:** Implementieren Sie Lazy Loading für alle Bilder unterhalb des sichtbaren Bereichs ("below the fold").
-2.  **Content-Visibility:** Nutzen Sie CSS `content-visibility` für lange Seiten, um die Render-Performance zu steigern.
-3.  **Bild-Dimensionen:** Stellen Sie sicher, dass alle `img`-Tags explizite `width` und `height` Attribute haben, um Layout Shifts (CLS) zu vermeiden.
-4.  **Service Worker:** Richten Sie einen Service Worker für Offline-Fähigkeiten (PWA) und Caching ein.
-5.  **CDN Nutzung:** Liefern Sie statische Assets (Bilder, Fonts) über ein Content Delivery Network (CDN) aus.
-6.  **SVG Optimierung:** Minifizieren und komprimieren Sie alle SVG-Dateien (z.B. mit SVGO).
-7.  **Critical CSS:** Inlinen Sie das kritische CSS für den "Above-the-Fold"-Bereich.
-8.  **Link-Sicherheit:** Ergänzen Sie alle externen Links mit `rel="noopener noreferrer"`.
-9.  **Automatisierte Sitemap:** Generieren Sie eine `sitemap.xml`, die sich bei neuen Seiten automatisch aktualisiert.
-10. **Robots.txt:** Pflegen Sie eine saubere `robots.txt` zur Steuerung der Crawler.
-11. **Logging:** Implementieren Sie ein strukturiertes Error-Logging für serverseitige Fehler.
-12. **Semantisches HTML:** Nutzen Sie konsequent HTML5-Tags (`<article>`, `<section>`, `<nav>`, `<aside>`).
-13. **Custom 404:** Erstellen Sie eine hilfreiche 404-Fehlerseite, die Nutzer zurück zu relevanten Inhalten führt.
-14. **Barrierefreiheit:** Prüfen Sie die Seite auf WCAG 2.1 AA Konformität (Kontraste, Screenreader-Support).
-15. **Tastatur-Navigation:** Stellen Sie sicher, dass alle Menüs und Slider per Tastatur bedienbar sind.
-16. **Font-Loading:** Nutzen Sie `font-display: swap` für Webfonts, um Text sofort sichtbar zu machen.
-17. **Code-Cleaning:** Entfernen Sie ungenutztes CSS und JavaScript aus dem Bundle.
-18. **Security Headers:** Setzen Sie HTTP Security Headers (CSP, X-Frame-Options, HSTS).
-19. **Moderne Bildformate:** Nutzen Sie das `<picture>` Element für WebP/AVIF Formate mit Fallbacks.
-20. **Backups:** Richten Sie regelmäßige, automatisierte Backups für Code und Inhalte ein.
+## Website (Technik & Infrastruktur)
+1.  **Service Worker (PWA):** Machen Sie die Seite offline-fähig und installierbar durch eine `manifest.json` und Service Worker.
+2.  **Cookie-Consent-Banner:** Implementieren Sie eine granulare Cookie-Steuerung (sofern Tracking-Tools genutzt werden), um DSGVO-konform zu bleiben.
+3.  **Security Headers:** Härten Sie die Antwort-Header (CSP, HSTS, X-Content-Type-Options) serverseitig.
+4.  **Print-Stylesheet:** Optimieren Sie das CSS für den Druck, damit Nutzer Angebote/Infos sauber ausdrucken können.
+5.  **Dark/Light Mode Toggle:** Geben Sie Nutzern die Wahl zwischen dem aktuellen Dark Mode und einer hellen Variante für sonnige Umgebungen.
+6.  **Error Tracking:** Integrieren Sie Sentry oder LogRocket, um JavaScript-Fehler bei Kunden proaktiv zu erkennen.
+7.  **Privacy-Friendly Analytics:** Nutzen Sie Plausible oder Fathom Analytics statt Google Analytics für datenschutzfreundliche Statistiken.
+8.  **Resource Hints:** Nutzen Sie `dns-prefetch` und `preconnect` für externe Domains (z.B. Google Maps, Fonts).
+9.  **Noscript Fallback:** Stellen Sie sicher, dass kritische Inhalte auch ohne JavaScript lesbar sind.
+10. **Barrierefreiheits-Audit:** Führen Sie einen strengen WCAG-Test durch (Farbkontraste im Dark Mode prüfen, Screenreader-Tests).
+11. **HTML Minification:** Stellen Sie sicher, dass der Build-Prozess das HTML aggressiv minifiziert.
+12. **Brotli Kompression:** Aktivieren Sie Brotli statt Gzip auf dem Server für bessere Textkompression.
+13. **Image CDN:** Nutzen Sie bei vielen Bildern ein dediziertes Image-CDN (z.B. Cloudinary) für erweiterte Transformationen.
+14. **Reduce Motion Support:** Beachten Sie `prefers-reduced-motion` Media-Queries für Animationen.
+15. **Performance Budget:** Setzen Sie Limits im Build-Prozess, um versehentliches Aufblähen der Seite zu verhindern.
+16. **Skip Links:** Implementieren Sie "Zum Inhalt springen"-Links für Tastatur-Nutzer.
+17. **Focus Indicators:** Gestalten Sie sichtbare und CI-konforme Fokus-Rahmen für die Tastaturbedienung.
+18. **Uptime Monitoring:** Richten Sie externe Überwachung ein (z.B. UptimeRobot).
+19. **RSS Feed:** Generieren Sie einen RSS-Feed, sobald der Blog steht.
+20. **404 Tracking:** Protokollieren Sie Aufrufe der 404-Seite, um defekte Links zu finden.
 
-## SEO (Suchmaschinenoptimierung)
-1.  **Meta Titles:** Optimieren Sie alle Titel (50-60 Zeichen) mit den Haupt-Keywords an vorderer Stelle.
-2.  **Meta Descriptions:** Schreiben Sie klickstarke Beschreibungen (150-160 Zeichen) mit klarem Call-to-Action.
-3.  **Schema Markup:** Nutzen Sie strukturiertes Daten-Markup für `AutoDetailing`, `Service` und `FAQPage`.
-4.  **Local SEO:** Implementieren Sie `LocalBusiness` Schema mit exakten Geo-Koordinaten.
-5.  **Landing Pages:** Erstellen Sie dedizierte Unterseiten für jede Hauptdienstleistung (nicht nur Sektionen auf der Startseite).
-6.  **URL-Struktur:** Nutzen Sie sprechende, kurze URLs (z.B. `/keramikversiegelung` statt `/service?id=12`).
-7.  **Alt-Texte:** Versehen Sie jedes Bild mit beschreibenden Alt-Texten, die Keywords natürlich enthalten.
-8.  **Blog/Ratgeber:** Starten Sie einen Blog, um Long-Tail-Keywords (z.B. "Lackpflege im Winter") abzudecken.
-9.  **Interne Verlinkung:** Bauen Sie Themen-Cluster auf und verlinken Sie verwandte Inhalte stark untereinander.
-10. **HTTPS/HSTS:** Stellen Sie sicher, dass alle Varianten der Domain auf die HTTPS-Version weiterleiten.
-11. **Standort-Seiten:** Erstellen Sie Landingpages für umliegende Städte (wie bereits begonnen), optimiert auf "Aufbereitung [Stadt]".
-12. **Google Reviews:** Binden Sie Bewertungen direkt auf den Service-Seiten ein (Social Proof).
-13. **Broken Links:** Prüfen und korrigieren Sie regelmäßig 404-Fehler.
-14. **Core Web Vitals:** Optimieren Sie LCP, FID und CLS, da diese Ranking-Faktoren sind.
-15. **Canonicals:** Setzen Sie Canonical Tags korrekt, um Duplicate Content zu vermeiden.
-16. **Search Console:** Reichen Sie die Sitemap bei der Google Search Console ein und prüfen Sie auf Indexierungsfehler.
-17. **Keyword-Monitoring:** Überwachen Sie Rankings und passen Sie Inhalte bei Bedarf an.
-18. **Social Meta Tags:** Implementieren Sie Open Graph und Twitter Cards für schönes Teilen in sozialen Medien.
-19. **Heading-Struktur:** Nutzen Sie H1-H6 hierarchisch korrekt (nur eine H1 pro Seite).
-20. **Google My Business:** Halten Sie das GMB-Profil aktuell (Öffnungszeiten, neue Fotos, Beiträge).
+## SEO (Content-Strategie & Erweiterung)
+1.  **Blog / Ratgeber-Hub:** Erstellen Sie einen Bereich für Artikel wie "Lederpflege im Sommer" oder "Keramik vs. Wachs".
+2.  **Glossar / Wiki:** Legen Sie ein Verzeichnis für Fachbegriffe (Hologramme, Kneten, Standzeit) an.
+3.  **Video-SEO:** Starten Sie einen YouTube-Kanal und binden Sie Videos mit VideoObject-Schema ein.
+4.  **Voice Search Optimierung:** Formulieren Sie FAQ-Antworten so, dass sie als "Direct Answers" vorgelesen werden können.
+5.  **Bilder-Sitemap:** Reichen Sie eine separate XML-Sitemap nur für Ihre hochwertigen Galeriebilder ein.
+6.  **Autoren-Schema:** Verknüpfen Sie Blog-Artikel mit einem `Person`-Profil (Remo Gerhardt) für E-E-A-T.
+7.  **HowTo Schema:** Nutzen Sie strukturiertes Daten-Markup für Anleitungen (z.B. "Auto richtig waschen").
+8.  **Produkt-Schema:** Falls Pflegeprodukte verkauft/empfohlen werden, nutzen Sie `Product`-Markup.
+9.  **Saisonale Landingpages:** Erstellen Sie Seiten speziell für "Frühjahrscheck" oder "Winterversiegelung".
+10. **Link Building:** Starten Sie eine aktive Kampagne für Backlinks von lokalen Partnern oder Auto-Blogs.
+11. **Bing Places:** Optimieren Sie den Eintrag auch für Bing (wird oft vergessen).
+12. **Fahrzeug-Spezifische Seiten:** Erstellen Sie Landingpages für Marken (z.B. "Porsche Aufbereitung", "Tesla Lackschutz").
+13. **Strukturierte Daten Testing:** Validieren Sie regelmäßig alle Rich Snippets im Google Test-Tool.
+14. **Orphan Pages Audit:** Finden und verlinken Sie verwaiste Seiten intern.
+15. **Content Pruning:** Planen Sie jährliche Reviews, um veraltete Inhalte zu aktualisieren oder zu löschen.
+16. **User Generated Content:** Animieren Sie Kunden, Fotos ihrer Ergebnisse direkt hochzuladen (ggf. mit Review-Tool).
+17. **Featured Snippets:** Optimieren Sie Definitionen im Glossar gezielt auf "Position 0".
+18. **International SEO:** (Optional) Prüfen Sie, ob eine dänische Version für Grenzgänger sinnvoll ist.
+19. **Local Citations:** Tragen Sie die Firma in relevante Branchenverzeichnisse ein (Gelbe Seiten, Das Örtliche).
+20. **Konkurrenz-Analyse:** Überwachen Sie quartalsweise die Keywords der lokalen Mitbewerber.
 
-## UX/UI (User Experience & Interface)
-1.  **Sticky CTA:** Halten Sie den "Termin vereinbaren"-Button auf Mobile immer im sichtbaren Bereich.
-2.  **Formular-Optimierung:** Reduzieren Sie Formularfelder auf das Nötigste, um die Hürde zu senken.
-3.  **Authentizität:** Nutzen Sie echte Fotos der Arbeit statt Stock-Fotos.
-4.  **Kontraste:** Erhöhen Sie den Kontrast bei Texten (besonders grau auf schwarz) für bessere Lesbarkeit.
-5.  **Mobile Navigation:** Gestalten Sie das Hamburger-Menü großflächig und einfach bedienbar.
-6.  **Back-to-Top:** Fügen Sie bei langen Seiten einen "Nach oben"-Button hinzu.
-7.  **Touch Targets:** Stellen Sie sicher, dass alle klickbaren Elemente auf Mobile mindestens 44x44px groß sind.
-8.  **Konsistenz:** Nutzen Sie einheitliche Abstände (Spacing System) und Farben auf allen Seiten.
-9.  **Feedback:** Geben Sie visuelles Feedback bei Interaktionen (Hover, Focus, Klick, Ladezustand).
-10. **Testimonials:** Platzieren Sie Kundenstimmen strategisch nah an den Conversion-Elementen.
-11. **Preistransparenz:** Zeigen Sie "Ab"-Preise, um Vertrauen zu schaffen und falsche Erwartungen zu vermeiden.
-12. **Loading States:** Nutzen Sie Skeletons statt Spinnern für ein gefühlt schnelleres Laden.
-13. **Schriftgröße:** Nutzen Sie mindestens 16px für Fließtext, um die Lesbarkeit auf allen Geräten zu sichern.
-14. **Whitespace:** Nutzen Sie mehr Weißraum (bzw. Schwarzraum), um Inhalte atmen zu lassen und den Fokus zu lenken.
-15. **Hierarchie:** Gestalten Sie Überschriften visuell deutlich unterschiedlich, um die Struktur scannbar zu machen.
-16. **Breadcrumbs:** Nutzen Sie Brotkrumen-Navigation für tiefere Seitenstrukturen.
-17. **Suche:** Fügen Sie eine Suchfunktion hinzu, wenn der Content-Umfang wächst.
-18. **Validierung:** Validieren Sie Formulareingaben in Echtzeit (inline).
-19. **Micro-Interactions:** Nutzen Sie dezente Animationen, um die Wertigkeit der Seite zu unterstreichen.
-20. **Responsive Testing:** Testen Sie regelmäßig auf echten Geräten (iOS, Android, Tablet).
+## UX/UI (Interaktion & Features)
+1.  **Suchfunktion:** Integrieren Sie eine globale Suche (CMD+K Stil), um Services und Tipps schnell zu finden.
+2.  **Filterbare Galerie:** Erlauben Sie das Filtern der "Ergebnisse" nach Marke, Lackfarbe oder Dienstleistung.
+3.  **Lightbox / Zoom:** Implementieren Sie eine Klick-Vergrößerung für die Galerie-Bilder.
+4.  **Termin-Buchungssystem:** Integrieren Sie ein Tool wie Calendly für direkte Terminbuchungen statt nur Kontaktanfragen.
+5.  **Interaktiver Quiz:** "Welches Paket passt zu mir?" – Ein geführter Dialog zur Bedarfsermittlung.
+6.  **Merkliste:** Lassen Sie Nutzer Pakete oder Infos "speichern" (lokal im Browser).
+7.  **Historie:** Zeigen Sie "Zuletzt angesehene Leistungen" an.
+8.  **Toast-Notifications:** Nutzen Sie kleine Popups für Feedback ("Nachricht gesendet", "Link kopiert").
+9.  **Exit-Intent Popup:** Bieten Sie beim Verlassen der Seite (Mausbewegung nach oben) nochmals die Beratung an.
+10. **Schriftgrößen-Anpassung:** Ein Widget für Nutzer mit Sehschwäche (A+ / A-).
+11. **Reading Progress Bar:** Zeigen Sie bei zukünftigen Blog-Artikeln den Lesefortschritt an.
+12. **Share-Buttons:** Schwebende Buttons zum Teilen von Inhalten auf WhatsApp/Social Media (mobil-optimiert).
+13. **Skeleton Screens:** Nutzen Sie Platzhalter-Animationen statt Spinner beim Laden schwerer Inhalte.
+14. **Live-Chat / Chatbot:** Ein einfacher Bot für Erstfragen ("Was kostet eine Politur?").
+15. **3D-Ansicht:** (Visionär) Ein 3D-Modell eines Autos, an dem man Dienstleistungen "klicken" kann.
+16. **Kunden-Login:** (Optional) Ein Bereich, in dem Stammkunden ihre Termine/Rechnungen sehen.
+17. **Sticky Table Headers:** Falls Preistabellen genutzt werden, sollten die Kopfzeilen beim Scrollen haften.
+18. **Copy-to-Clipboard:** Button zum schnellen Kopieren der Adresse oder Telefonnummer.
+19. **Map-Styling:** Passen Sie die Google Maps Farben (Dark Mode) an das Webdesign an.
+20. **Druck-Ansicht für Angebote:** Ein Button "Angebot als PDF", der die Konfiguration sauber formatiert.
 
-## Content (Inhalt & Text)
-1.  **Nutzen statt Features:** Schreiben Sie darüber, was der Kunde davon hat (z.B. "Werterhalt" statt "Politur").
-2.  **Kurze Absätze:** Halten Sie Textblöcke kurz (max. 3-4 Zeilen) für bessere Lesbarkeit am Bildschirm.
-3.  **Listen:** Nutzen Sie Aufzählungszeichen für Vorteile und Fakten.
-4.  **Einwandbehandlung:** Adressieren Sie Bedenken (z.B. "Ist das teuer?", "Dauert das lange?") proaktiv im Text.
-5.  **Tonalität:** Behalten Sie den "Norddeutsch-direkt" Stil bei – ehrlich, hochwertig, ohne Übertreibungen.
-6.  **Case Studies:** Zeigen Sie detaillierte "Vorher-Nachher"-Vergleiche mit Erklärung der durchführten Schritte.
-7.  **Video-Content:** Binden Sie kurze Videos ein, die Arbeitsschritte oder Ergebnisse zeigen.
-8.  **FAQ:** Ergänzen Sie jede Serviceseite mit spezifischen Fragen und Antworten.
-9.  **USP Highlight:** Stellen Sie Alleinstellungsmerkmale (z.B. "Zertifiziert", "Dampf statt Chemie") heraus.
-10. **Storytelling:** Erzählen Sie Geschichten von geretteten "Härtefällen", um Emotionalität zu wecken.
-11. **Einfache Sprache:** Vermeiden Sie Fachjargon oder erklären Sie ihn sofort verständlich.
-12. **Aktualität:** Halten Sie Inhalte aktuell (z.B. saisonale Angebote für Winter/Frühling).
-13. **Handlungsaufforderung:** Sagen Sie dem Nutzer klar, was der nächste Schritt ist (z.B. "Jetzt anrufen").
-14. **Team-Vorstellung:** Zeigen Sie die Menschen hinter der Arbeit ("Über uns"), das schafft Vertrauen.
-15. **Glossar:** Erklären Sie Begriffe wie "Coating", "Hologramme" oder "Kneten" in einem Glossar.
-16. **Vergleiche:** Erstellen Sie Entscheidungshilfen (z.B. "Wachs vs. Keramik – was passt zu mir?").
-17. **Lektorat:** Prüfen Sie Texte penibel auf Rechtschreib- und Grammatikfehler.
-18. **Daten & Fakten:** Untermauern Sie Aussagen mit Zahlen (z.B. "Hält bis zu 50 Wäschen").
-19. **Lokalisierung:** Sprechen Sie Nutzer auf Landingpages direkt mit ihrem Wohnort an.
-20. **Lead Magnets:** Bieten Sie Checklisten (z.B. "Leasing-Rückgabe Checkliste") als PDF zum Download an.
+## Content (Neue Formate & Themen)
+1.  **Lead Magnets:** Bieten Sie PDFs an (z.B. "Checkliste Leasing-Rückgabe", "Pflege-Guide für Mattlack").
+2.  **Newsletter:** Starten Sie einen E-Mail-Verteiler für Pflegetipps und saisonale Angebote.
+3.  **Mitarbeiter-Interviews:** "Behind the Scenes" – Wer arbeitet am Auto? (Mehr als nur 'Über mich').
+4.  **Video-Walkarounds:** Kurze Clips, die einmal um ein fertig aufbereitetes Auto führen.
+5.  **Gastartikel:** Lassen Sie Partner (z.B. vom Beulendoktor) Fachartikel schreiben.
+6.  **Podcast:** Ein Audio-Format über Autopflege-Mythen (z.B. "Spüli im Wischwasser?").
+7.  **Infografiken:** Visualisieren Sie den Schichtaufbau einer Keramikversiegelung.
+8.  **Whitepapers:** Technische Deep-Dives zur Chemie der Versiegelungen (für Enthusiasten).
+9.  **User Stories:** Detaillierte Interviews mit Kunden über deren "Auto-Geschichte".
+10. **Pressebereich:** Ein Bereich für Journalisten mit Logo-Paket und Pressemitteilungen.
+11. **Karriere / Jobs:** Eine Seite für Stellenangebote oder Ausbildungsplätze.
+12. **Partner-Seite:** Eine dedizierte Seite, die das Netzwerk (Lackierer, Beulendoktor) vorstellt und verlinkt.
+13. **DIY-Tipps:** Eine Rubrik "Was Sie selbst tun können" (baut Vertrauen auf).
+14. **Produkt-Tests:** Reviews zu den verwendeten Produkten (Labocosmetica vs. Baumarkt).
+15. **Event-Kalender:** Termine für "Cars & Coffee" oder "Tag der offenen Tür".
+16. **Zertifikate-Download:** Hochauflösende Ansicht der Zertifikate als Vertrauensbeweis.
+17. **Pflegepläne:** Downloadbare Pläne "Wann muss ich was waschen?".
+18. **Gutschein-Shop:** Eine Möglichkeit, Gutscheine direkt online zu kaufen/auszudrucken.
+19. **Projekt-Tagebuch:** Ein Blog-Format, das ein "Restaurations-Projekt" über Wochen begleitet.
+20. **FAQ-Suche:** Bei wachsender FAQ eine Suchfunktion speziell für Fragen.
