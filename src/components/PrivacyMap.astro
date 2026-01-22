@@ -1,0 +1,67 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  class?: string;
+}
+
+const { src, title, class: className = "" } = Astro.props;
+---
+
+<div class={`relative w-full h-full bg-zinc-900 rounded-lg overflow-hidden privacy-map-container ${className}`} data-src={src} data-title={title}>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-zinc-900 z-10 privacy-overlay">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-zinc-600 mb-4"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <p class="text-white font-bold mb-2">Google Maps laden</p>
+        <p class="text-xs text-zinc-400 mb-6 max-w-xs mx-auto">
+            Mit dem Laden der Karte akzeptieren Sie die Datenschutzerklärung von Google.
+            Es werden personenbezogene Daten an Google übertragen.
+        </p>
+        <button class="bg-red-700 hover:bg-red-600 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-colors shadow-lg shadow-red-900/20 load-map-btn cursor-pointer">
+            Karte anzeigen
+        </button>
+    </div>
+    {/* Visual Placeholder */}
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-800 to-zinc-950 opacity-50 pointer-events-none"></div>
+</div>
+
+<script>
+    function initMaps() {
+        const containers = document.querySelectorAll('.privacy-map-container');
+
+        containers.forEach(container => {
+            // Check if already initialized to avoid duplicate listeners
+            if (container.hasAttribute('data-initialized')) return;
+
+            const btn = container.querySelector('.load-map-btn');
+
+            btn?.addEventListener('click', () => {
+                const src = container.getAttribute('data-src');
+                const title = container.getAttribute('data-title');
+
+                if (!src) return;
+
+                const iframe = document.createElement('iframe');
+                iframe.setAttribute('src', src);
+                iframe.setAttribute('width', '100%');
+                iframe.setAttribute('height', '100%');
+                iframe.style.border = '0';
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('loading', 'lazy');
+                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+                if (title) iframe.setAttribute('title', title);
+
+                // Clear content and append iframe
+                container.innerHTML = '';
+                container.appendChild(iframe);
+            });
+
+            container.setAttribute('data-initialized', 'true');
+        });
+    }
+
+    // Run on initial load
+    initMaps();
+
+    // Support View Transitions
+    document.addEventListener('astro:page-load', initMaps);
+</script>

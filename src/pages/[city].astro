@@ -5,6 +5,7 @@ import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PrivacyMap from '../components/PrivacyMap.astro';
 import { getSeoContent } from '../lib/seoContent';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
@@ -166,16 +167,10 @@ const schema = {
                 <div class="bg-zinc-900/50 p-2 rounded-xl border border-white/5 h-full flex flex-col">
                     {/* Google Map Embed */}
                     <div class="w-full aspect-video rounded-lg overflow-hidden relative bg-zinc-800 mb-4">
-                         <iframe
+                         <PrivacyMap
                             src="https://maps.google.com/maps?q=RG+Detailing+Tensfeld&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                            width="100%"
-                            height="100%"
-                            style="border:0;"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
                             title={`Karte von ${name} nach Tensfeld`}
-                        ></iframe>
+                         />
                     </div>
                     <a
                         href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(name)}&destination=RG+Detailing,+Dorfstraße+11,+23824+Tensfeld`}
