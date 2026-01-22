@@ -5,7 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg'; // Reusing main hero for consistent dark vibe
-import { Check, Flame, Droplets, Wind } from 'lucide-react';
+import { Check, Flame, Droplets, Wind, ShoppingBag } from 'lucide-react';
 
 const schema = {
   "@context": "https://schema.org",
@@ -122,6 +122,45 @@ const schema = {
                 <Check className="w-10 h-10 text-red-500 mb-4" />
                 <h3 class="text-xl font-bold text-white mb-2">Allergikerfreundlich</h3>
                 <p class="text-zinc-400 text-sm">Ohne aggressive Chemie. Sie steigen in ein gesundes, reines Fahrzeugklima ein.</p>
+            </div>
+        </div>
+
+        {/* NEW: Dampfdrachen Sales Section */}
+        <div id="vertrieb" class="mb-24 relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/50">
+            <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/10 blur-[100px] rounded-full"></div>
+            <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-12 flex flex-col justify-center">
+                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase mb-2">Für Gewerbe & Privat</span>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Dampfdrachen <br/> kaufen</h2>
+                    <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
+                        Wir sind offizieller Vertriebspartner für <strong>Dampfdrachen</strong>.
+                        Die wohl besten Trockendampfreiniger der Welt - Made in Germany.
+                        Nutzen Sie die gleiche Profi-Technik wie wir für Ihr Unternehmen oder Ihr Zuhause.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                         <li class="flex items-center gap-3 text-zinc-300">
+                            <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500"><Check size={16} /></div>
+                            <span>Individuelle Vorführung vor Ort</span>
+                         </li>
+                         <li class="flex items-center gap-3 text-zinc-300">
+                            <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500"><Check size={16} /></div>
+                            <span>Verkauf, Schulung & Support</span>
+                         </li>
+                    </ul>
+                    <div>
+                        <a href="tel:01633845081" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-colors">
+                            <ShoppingBag className="w-5 h-5 mr-2" />
+                            Jetzt Beratung anfordern
+                        </a>
+                    </div>
+                </div>
+                <div class="relative min-h-[400px] bg-zinc-950 flex items-center justify-center p-8">
+                     <img
+                        src="/images/remo-steam-cleaning.jpg"
+                        alt="Dampfdrachen Gerät"
+                        class="relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover transform md:rotate-3 hover:rotate-0 transition duration-500"
+                    />
+                </div>
             </div>
         </div>
 

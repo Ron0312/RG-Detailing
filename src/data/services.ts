@@ -1,23 +1,16 @@
 export const services = [
     {
-        title: "Innen & Hygiene",
-        description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
-        icon: "droplet",
-        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
-        link: "/dampfreinigung"
+        title: "Full Detailing",
+        description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
+        icon: "shield",
+        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo.",
+        link: "#rechner"
     },
     {
         title: "All-in-One",
         description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Innenreinigung, Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
         icon: "sparkles",
         shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung.",
-        link: "#rechner"
-    },
-    {
-        title: "Full Detailing",
-        description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
-        icon: "shield",
-        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo.",
         link: "#rechner"
     },
     {
@@ -33,6 +26,13 @@ export const services = [
         icon: "file-check",
         shortDescription: "Smart-Repair & Aufbereitung vor Rückgabe. Vermeiden Sie hohe Nachzahlungen.",
         link: "/leasing"
+    },
+    {
+        title: "Innen & Hygiene",
+        description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
+        icon: "droplet",
+        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
+        link: "/dampfreinigung"
     },
     {
         title: "Spezial-Leistungen",

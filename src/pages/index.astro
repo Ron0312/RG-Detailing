@@ -18,12 +18,12 @@ const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
 const iconMap = {
-  0: Droplets,
-  1: Sparkles,
-  2: ShieldCheck,
-  3: Caravan,
-  4: RefreshCw,
-  5: Bike
+  0: ShieldCheck, // Full Detailing
+  1: Sparkles,    // All-in-One
+  2: Caravan,     // Wohnmobil
+  3: RefreshCw,   // Leasing
+  4: Droplets,    // Innen & Hygiene
+  5: Bike         // Spezial
 };
 
 const faqItems = [
@@ -295,30 +295,52 @@ const faqSchema = {
         {/* PARTNER & SHOP SECTION */}
         <section class="py-20 border-t border-white/5 bg-zinc-900/30">
              <div class="container mx-auto px-4">
-                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                     <div>
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Shop & Partner</span>
-                         <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6 text-white">Profi-Produkte für Zuhause</h2>
-                         <p class="text-zinc-400 mb-8 leading-relaxed">
-                             Sie möchten Ihr Fahrzeug auch zwischen den Aufbereitungen perfekt pflegen?
-                             Erwerben Sie exklusive <strong>Labocosmetica</strong> Produkte direkt bei uns vor Ort oder
-                             bestellen Sie bequem online bei unserem Partner <strong>Glossboss</strong>.
-                         </p>
-                         <div class="bg-black/40 p-6 rounded-2xl border border-white/5 flex flex-col sm:flex-row gap-6 items-center">
-                             <div class="text-center sm:text-left">
-                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-1">Online Sparen</div>
-                                 <div class="text-2xl font-bold text-white">Code: <span class="text-red-500">Remo10</span></div>
+                 <div class="text-center mb-16">
+                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Shop & Partner</span>
+                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Profi-Equipment für Sie</h2>
+                 </div>
+
+                 <div class="grid md:grid-cols-2 gap-8">
+                     {/* DAMPFDRACHEN VERTRIEB */}
+                     <div class="glass-panel p-8 rounded-3xl border border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
+                         <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
+                         <div class="relative z-10">
+                             <div class="inline-block px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                                 Offizieller Vertrieb
                              </div>
-                             <div class="hidden sm:block w-px h-12 bg-white/10"></div>
-                             <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-zinc-200 transition-colors">
-                                 Zum Glossboss Shop →
-                             </a>
+                             <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
+                             <p class="text-zinc-400 mb-8 leading-relaxed">
+                                 Holen Sie sich die Kraft des Trockendampfs nach Hause oder in Ihr Unternehmen.
+                                 Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
+                             </p>
+                             <div class="flex items-center gap-4">
+                                 <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors">
+                                     Geräte ansehen
+                                 </a>
+                             </div>
                          </div>
+                         <img src="/images/remo-steam-cleaning.jpg" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity" />
                      </div>
-                     <div class="flex justify-center md:justify-end">
-                         <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-white/5">
-                             <img src="/images/labocosmetica-logo.jpg" alt="Labocosmetica Logo" class="w-64 md:w-80 opacity-90" loading="lazy" />
+
+                     {/* LABOCOSMETICA & GLOSSBOSS */}
+                     <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-zinc-900 relative overflow-hidden">
+                         <div class="relative z-10">
+                             <div class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-bold uppercase tracking-wider mb-6">
+                                 Car Care Products
+                             </div>
+                             <h3 class="text-3xl font-bold text-white mb-4">Pflege & Zubehör</h3>
+                             <p class="text-zinc-400 mb-8 leading-relaxed">
+                                 Nutzen Sie die Produkte, denen wir vertrauen.
+                                 <strong>Labocosmetica</strong> für High-End Pflege oder <strong>Glossboss</strong> für das beste Zubehör.
+                             </p>
+                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                                 <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
+                                     Zum Glossboss Shop
+                                 </a>
+                                 <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
+                             </div>
                          </div>
+                         <img src="/images/labocosmetica-logo.jpg" class="absolute bottom-4 right-4 w-32 opacity-30 mix-blend-screen" />
                      </div>
                  </div>
              </div>
