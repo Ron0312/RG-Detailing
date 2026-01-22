@@ -57,10 +57,10 @@ const schema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": `Bekomme ich einen Ersatzwagen für die Rückfahrt nach ${name}?`,
+      "name": "Muss ich das Auto vorher waschen?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": `Ja, damit Sie mobil bleiben, stellen wir Ihnen für die Dauer der Aufbereitung gerne unseren kostenlosen Ersatzwagen zur Verfügung. So kommen Sie bequem zurück nach ${name}.`
+        "text": "Nein, eine schonende Handwäsche ist bei uns der erste Schritt jeder Aufbereitung. Sie können Ihr Fahrzeug einfach so zu uns bringen, wie es ist."
       }
     },
     {
@@ -156,7 +156,7 @@ const schema = {
                              <div class="w-8 h-8 rounded-full bg-red-900/20 flex items-center justify-center text-red-500 shrink-0">
                                 <Check className="w-5 h-5" />
                              </div>
-                            <span class="text-zinc-300">Kostenloses Ersatzfahrzeug (nach Absprache)</span>
+                            <span class="text-zinc-300">Hygienische Innenraumreinigung (170°C Dampf)</span>
                         </li>
                     </ul>
                 </div>
@@ -242,9 +242,9 @@ const schema = {
                 </div>
                 <div class="glass-card p-6 rounded-2xl text-center border border-white/5 relative">
                      <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">3</div>
-                     <Key className="w-8 h-8 text-white mx-auto mb-3" />
-                     <h3 class="font-bold text-white mb-2">Ersatzwagen</h3>
-                     <p class="text-xs text-zinc-400">Kostenlos mobil bleiben während der Pflege.</p>
+                     <Sparkles className="w-8 h-8 text-white mx-auto mb-3" />
+                     <h3 class="font-bold text-white mb-2">Transformation</h3>
+                     <p class="text-xs text-zinc-400">Wir bringen Lack und Interieur auf Hochglanz.</p>
                 </div>
                  <div class="glass-card p-6 rounded-2xl text-center border border-white/5 relative">
                      <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">4</div>
@@ -275,10 +275,10 @@ const schema = {
                 <div class="glass-card p-6 rounded-2xl border border-white/5">
                     <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-3">
                         <HelpCircle className="w-5 h-5 text-red-500" />
-                        Bekomme ich einen Ersatzwagen für die Rückfahrt nach {name}?
+                        Muss ich das Auto vorher waschen?
                     </h3>
                     <p class="text-zinc-400 leading-relaxed pl-8">
-                        Ja, damit Sie mobil bleiben, stellen wir Ihnen für die Dauer der Aufbereitung gerne unseren kostenlosen Ersatzwagen zur Verfügung. So kommen Sie bequem zurück nach {name}.
+                        Nein, eine schonende Handwäsche ist bei uns der erste Schritt jeder Aufbereitung. Sie können Ihr Fahrzeug einfach so zu uns bringen, wie es ist.
                     </p>
                 </div>
                  <div class="glass-card p-6 rounded-2xl border border-white/5">
