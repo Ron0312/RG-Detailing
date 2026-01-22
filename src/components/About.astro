@@ -1,79 +1,85 @@
 ---
 import { Youtube, Podcast } from 'lucide-react';
+import ExpandableText from './ExpandableText.jsx';
 ---
-<section class="py-20 bg-black" id="about">
-    <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="relative">
-                <div class="absolute inset-0 bg-red-600 rounded-2xl rotate-3 opacity-20 transform translate-x-4 translate-y-4"></div>
+<section class="section-spacing bg-black relative overflow-hidden" id="about">
+    {/* Background Gradient */}
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-zinc-900/30 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            {/* Image Side */}
+            <div class="relative order-2 md:order-1">
+                <div class="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent rounded-[2rem] rotate-3 transform translate-x-4 translate-y-4 blur-sm"></div>
                 <img
                     src="https://rg-detailing.de/wp-content/uploads/2024/07/1000084105-957x1024.jpg"
                     alt="Remo Gerhardt - RG Detailing"
-                    class="relative rounded-2xl shadow-2xl w-full max-w-md mx-auto object-cover border border-zinc-800"
+                    class="relative rounded-[2rem] shadow-2xl w-full max-w-md mx-auto object-cover border border-white/10"
                 />
+
+                {/* Stats Overlay */}
+                <div class="absolute -bottom-6 -right-6 bg-zinc-900/90 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl hidden md:block">
+                    <div class="text-3xl font-bold text-white mb-1">100%</div>
+                    <div class="text-sm text-zinc-400 font-medium">Kundenzufriedenheit</div>
+                </div>
             </div>
-            <div>
-                <h2 class="text-red-500 font-bold tracking-widest uppercase mb-2">Über mich</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">Remo Gerhardt – Vom Hobby zur Perfektion</h3>
 
-                <div class="space-y-4 text-zinc-400 leading-relaxed">
-                    <p>
-                        Moin, ich bin Remo. Früher habe ich mich über jeden Kratzer an meinem eigenen Auto geärgert. Die Waschanlage war für mich Sperrzone. Ich habe stundenlang in der Garage gestanden, poliert und versiegelt – immer auf der Jagd nach dem perfekten Glanz.
-                    </p>
-                    <p>
-                        Irgendwann wurde aus dem Hobby eine Berufung. Freunde fragten: "Kannst du das auch bei meinem machen?" Doch "Hobby-Niveau" reichte mir nicht. Ich wollte Profi-Qualität. Heute bin ich <strong>zertifizierter Labocosmetica Detailer</strong> und offizieller <strong>Dampfdrachen Vertriebspartner</strong>.
-                    </p>
-                    <p>
-                        Bei RG Detailing gibt es keine Massenabfertigung wie am Fließband. Ich nehme mir die Zeit, die Ihr Fahrzeug braucht. Das ist Wellness für das Auto. Egal ob Sportwagen oder Familienkombi – ich behandle jedes Fahrzeug, als wäre es mein eigenes.
-                    </p>
-                    <p>
-                        Ehrlich, direkt und norddeutsch: Ich schnacke Ihnen nichts an, was Sie nicht brauchen. Aber ich verspreche Ihnen: Wenn Sie Ihr Auto abholen, werden Sie den Unterschied sehen und fühlen.
-                    </p>
+            {/* Content Side */}
+            <div class="order-1 md:order-2">
+                <h2 class="text-red-500 font-bold tracking-widest uppercase mb-4 text-sm">Über mich</h2>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Remo Gerhardt <br/><span class="text-zinc-500">Vom Hobby zur Perfektion</span></h3>
 
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:border-green-600 hover:text-green-500 transition-colors text-sm font-medium text-zinc-300">
+                <div class="text-zinc-400 leading-relaxed text-lg">
+                    <ExpandableText client:visible initialHeight={240}>
+                        <div class="space-y-6">
+                            <p>
+                                Moin, ich bin Remo. Früher habe ich mich über jeden Kratzer an meinem eigenen Auto geärgert. Die Waschanlage war für mich Sperrzone. Ich habe stundenlang in der Garage gestanden, poliert und versiegelt – immer auf der Jagd nach dem perfekten Glanz.
+                            </p>
+                            <p>
+                                Irgendwann wurde aus dem Hobby eine Berufung. Freunde fragten: "Kannst du das auch bei meinem machen?" Doch "Hobby-Niveau" reichte mir nicht. Ich wollte Profi-Qualität. Heute bin ich <strong>zertifizierter Labocosmetica Detailer</strong> und offizieller <strong>Dampfdrachen Vertriebspartner</strong>.
+                            </p>
+                            <p>
+                                Bei RG Detailing gibt es keine Massenabfertigung wie am Fließband. Ich nehme mir die Zeit, die Ihr Fahrzeug braucht. Das ist Wellness für das Auto. Egal ob Sportwagen oder Familienkombi – ich behandle jedes Fahrzeug, als wäre es mein eigenes.
+                            </p>
+                            <p>
+                                Ehrlich, direkt und norddeutsch: Ich schnacke Ihnen nichts an, was Sie nicht brauchen. Aber ich verspreche Ihnen: Wenn Sie Ihr Auto abholen, werden Sie den Unterschied sehen und fühlen.
+                            </p>
+                        </div>
+                    </ExpandableText>
+
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-green-600/50 hover:bg-green-900/10 hover:text-green-500 transition-all text-sm font-bold text-zinc-300">
                             <Podcast size={18} />
-                            <span>Podcast hören</span>
+                            <span>Podcast</span>
                         </a>
-                        <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:border-red-600 hover:text-red-500 transition-colors text-sm font-medium text-zinc-300">
+                        <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-red-600/50 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm font-bold text-zinc-300">
                             <Youtube size={18} />
-                            <span>YouTube Kanal</span>
+                            <span>YouTube</span>
                         </a>
                     </div>
                 </div>
 
-                <div class="mt-8 pt-8 border-t border-zinc-800 grid grid-cols-2 gap-6">
-                    <div>
-                        <div class="text-2xl font-bold text-white mb-1">100%</div>
-                        <div class="text-sm text-zinc-500">Leidenschaft</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold text-white mb-1">100%</div>
-                        <div class="text-sm text-slate-500">Kundenzufriedenheit</div>
-                    </div>
-                </div>
-
-                <div class="mt-8 pt-8 border-t border-zinc-800">
-                    <h4 class="text-white font-bold mb-4">Zertifizierte Kompetenz & Partner</h4>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="mt-12 pt-12 border-t border-white/5">
+                    <h4 class="text-white font-bold mb-6 text-sm tracking-widest uppercase">Zertifizierte Kompetenz</h4>
+                    <div class="grid grid-cols-3 gap-4">
                         <img
                             src="/images/remo-gerhardt-zertifikat.jpg"
                             alt="Remo Gerhardt Zertifikat"
-                            class="rounded-xl border border-zinc-800 hover:scale-105 transition-transform duration-500 hover:border-red-900/50"
+                            class="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900"
                         />
                         <img
                             src="/images/remo-gerhardt-labocosmetica-zertifikat.jpg"
                             alt="Labocosmetica Zertifikat"
-                            class="rounded-xl border border-zinc-800 hover:scale-105 transition-transform duration-500 hover:border-red-900/50"
+                            class="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900"
                         />
-                        <div class="relative group">
+                        <div class="relative group h-full rounded-xl overflow-hidden border border-white/10 hover:border-red-500/30 transition-colors">
                             <img
                                 src="/images/remo-steam-cleaning.jpg"
                                 alt="Remo Gerhardt Dampfdrachen Vertriebspartner"
-                                class="rounded-xl border border-zinc-800 hover:scale-105 transition-transform duration-500 hover:border-red-900/50 h-full object-cover"
+                                class="h-full w-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-110 transform"
                             />
-                            <div class="absolute bottom-2 left-2 right-2 bg-black/60 backdrop-blur-sm p-2 rounded-lg text-xs text-white text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                Dampfdrachen Partner
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-transparent transition-colors">
+                                <span class="text-xs font-bold text-white uppercase tracking-wider backdrop-blur-md px-2 py-1 rounded bg-black/50 border border-white/10">Partner</span>
                             </div>
                         </div>
                     </div>

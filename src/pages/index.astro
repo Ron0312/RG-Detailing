@@ -9,7 +9,7 @@ import GalleryLightbox from '../components/GalleryLightbox.jsx';
 import FAQ from '../components/FAQ.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
-import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, Star, ArrowDown } from 'lucide-react';
+import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, Star, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 
@@ -228,70 +228,42 @@ const faqSchema = {
     </div>
 
     <main>
-        <About />
-
-        {/* WHY US SECTION */}
-        <section class="py-20 bg-zinc-900 border-y border-white/5">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Warum RG Detailing Tensfeld?</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
-                        <div class="mb-4 text-red-500">
-                            <Gem size={48} strokeWidth={1.5} />
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Zertifizierte Keramikversiegelung</h3>
-                        <p class="text-zinc-400">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
-                    </div>
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
-                        <div class="mb-4 text-red-500">
-                            <FlaskConical size={48} strokeWidth={1.5} />
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">High-End Pflegeprodukte</h3>
-                        <p class="text-zinc-400">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
-                    </div>
-                    <div class="text-center p-6 rounded-2xl bg-black/20 border border-white/5 hover:border-red-900/50 transition duration-300 flex flex-col items-center">
-                        <div class="mb-4 text-red-500">
-                            <Handshake size={48} strokeWidth={1.5} />
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Norddeutsch & Direkt</h3>
-                        <p class="text-zinc-400">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         {/* SERVICES SECTION */}
-        <section id="leistungen" class="py-32 relative">
+        <section id="leistungen" class="section-spacing relative">
              <div class="container mx-auto px-4">
                 <div class="text-center mb-20">
                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
                     <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
-                    <p class="text-zinc-400 max-w-2xl mx-auto">
+                    <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
                         Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
                         Wir sind Ihr Ansprechpartner für Werterhalt in der Region Segeberg.
                     </p>
                 </div>
 
-                {/* High-End Sealing Overview (Components replaced by CeramicComparison) */}
+                {/* High-End Sealing Overview */}
                 <div class="mb-20">
                     <CeramicComparison />
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {services.map((service, index) => {
                         const IconComponent = iconMap[index] || Sparkles;
                         return (
-                        <a href={service.link} class="group glass-card p-10 rounded-3xl relative overflow-hidden hover:-translate-y-2 transition-transform duration-500 block">
-                             <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-600/20 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150"></div>
+                        <a href={service.link} class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
+                             <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20"></div>
 
-                             <div class="relative z-10">
-                                <div class="w-14 h-14 bg-zinc-900 rounded-xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500">
-                                    <IconComponent size={24} strokeWidth={1.5} />
+                             <div class="relative z-10 flex-grow">
+                                <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
+                                    <IconComponent size={28} strokeWidth={1.5} />
                                 </div>
                                 <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
                                 <p class="text-zinc-400 leading-relaxed mb-6">{service.shortDescription}</p>
+                             </div>
+
+                             <div class="relative z-10 mt-auto pt-6 border-t border-white/5">
                                 <div class="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
-                                    Mehr erfahren <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                                    Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                                 </div>
                              </div>
                         </a>
@@ -301,115 +273,32 @@ const faqSchema = {
             </div>
         </section>
 
-        {/* PARTNER & SHOP SECTION */}
-        <section class="py-20 border-t border-white/5 bg-zinc-900/30">
-             <div class="container mx-auto px-4">
-                 <div class="text-center mb-16">
-                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Shop & Partner</span>
-                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Profi-Equipment für Sie</h2>
-                 </div>
-
-                 <div class="grid md:grid-cols-2 gap-8">
-                     {/* DAMPFDRACHEN VERTRIEB */}
-                     <div class="glass-panel p-8 rounded-3xl border border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
-                         <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
-                         <div class="relative z-10">
-                             <div class="inline-block px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
-                                 Offizieller Vertrieb
-                             </div>
-                             <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
-                             <p class="text-zinc-400 mb-8 leading-relaxed">
-                                 Holen Sie sich die Kraft des Trockendampfs nach Hause oder in Ihr Unternehmen.
-                                 Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
-                             </p>
-                             <div class="flex items-center gap-4">
-                                 <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors">
-                                     Geräte ansehen
-                                 </a>
-                             </div>
-                         </div>
-                         <img src="/images/remo-steam-cleaning.jpg" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity" />
-                     </div>
-
-                     {/* LABOCOSMETICA & GLOSSBOSS */}
-                     <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-zinc-900 relative overflow-hidden">
-                         <div class="relative z-10">
-                             <div class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-bold uppercase tracking-wider mb-6">
-                                 Car Care Products
-                             </div>
-                             <h3 class="text-3xl font-bold text-white mb-4">Pflege & Zubehör</h3>
-                             <p class="text-zinc-400 mb-8 leading-relaxed">
-                                 Nutzen Sie die Produkte, denen wir vertrauen.
-                                 <strong>Labocosmetica</strong> für High-End Pflege oder <strong>Glossboss</strong> für das beste Zubehör.
-                             </p>
-                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                                 <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
-                                     Zum Glossboss Shop
-                                 </a>
-                                 <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
-                             </div>
-                         </div>
-                         <img src="/images/labocosmetica-logo.jpg" class="absolute bottom-4 right-4 w-32 opacity-30 mix-blend-screen" />
-                     </div>
-                 </div>
-             </div>
-        </section>
-
-        {/* PROCESS SECTION */}
-        <section class="py-20 relative overflow-hidden">
-             <div class="container mx-auto px-4">
-                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-16 text-center">Der RG Detailing Ablauf</h2>
-                 <div class="grid md:grid-cols-4 gap-4 relative">
-                     <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-zinc-800 via-red-900 to-zinc-800 -z-10"></div>
-                     {/* Steps 1-4 */}
-                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
-                         <div class="w-12 h-12 bg-red-700 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950 shadow-[0_0_20px_rgba(220,38,38,0.5)]">1</div>
-                         <h3 class="text-white font-bold mb-2">Check</h3>
-                         <p class="text-sm text-zinc-400">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
-                     </div>
-                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
-                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">2</div>
-                         <h3 class="text-white font-bold mb-2">Wash</h3>
-                         <p class="text-sm text-zinc-400">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
-                     </div>
-                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
-                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">3</div>
-                         <h3 class="text-white font-bold mb-2">Polish</h3>
-                         <p class="text-sm text-zinc-400">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
-                     </div>
-                     <div class="relative bg-zinc-950/80 p-6 rounded-xl border border-zinc-800 text-center backdrop-blur-sm hover:border-red-900/50 transition">
-                         <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 border-4 border-zinc-950">4</div>
-                         <h3 class="text-white font-bold mb-2">Protect</h3>
-                         <p class="text-sm text-zinc-400">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
-                     </div>
-                 </div>
-             </div>
-        </section>
-
         {/* COMPARISON SLIDER */}
-        <section class="py-20 bg-zinc-900/30 border-y border-white/5">
+        <section class="section-spacing bg-zinc-900/20 border-y border-white/5">
             <div class="container mx-auto px-4">
-                 <div class="flex flex-col md:flex-row items-center gap-12">
+                 <div class="flex flex-col md:flex-row items-center gap-16">
                      <div class="md:w-1/3">
-                         <h2 class="text-4xl font-bold mb-6 text-white">Wahrheit <br/> statt Versprechen</h2>
+                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Der Beweis</span>
+                         <h2 class="text-4xl font-bold mb-6 text-white mt-2">Wahrheit <br/> statt Versprechen</h2>
                          <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
                              Fotos können lügen, aber dieser Schieberegler nicht.
                              Sehen Sie selbst, was eine professionelle <strong>Lackkorrektur</strong> bewirken kann.
                              Grauschleier verschwinden, tiefe Farbe kehrt zurück.
                          </p>
-                         <div class="flex gap-4">
+                         <div class="flex gap-8">
                              <div class="text-center">
-                                 <div class="text-3xl font-bold text-red-500">85%</div>
-                                 <div class="text-xs text-zinc-500 uppercase tracking-wider">Defekt-Korrektur</div>
+                                 <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">85%</div>
+                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
                              </div>
                              <div class="text-center">
-                                 <div class="text-3xl font-bold text-red-500">100%</div>
-                                 <div class="text-xs text-zinc-500 uppercase tracking-wider">Tiefenglanz</div>
+                                 <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">100%</div>
+                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
                              </div>
                          </div>
                      </div>
                      <div class="md:w-2/3 w-full">
-                        <div class="rounded-2xl overflow-hidden shadow-2xl border border-zinc-700">
+                        <div class="rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative group">
+                            <div class="absolute inset-0 z-10 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
                              <BeforeAfterSlider
                                 client:visible
                                 beforeImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-1.jpg"
@@ -422,30 +311,160 @@ const faqSchema = {
             </div>
         </section>
 
+        {/* WHY US SECTION */}
+        <section class="section-spacing">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
+                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Warum RG Detailing?</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                            <Gem size={32} className="text-red-500" strokeWidth={1.5} />
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Zertifizierte Keramikversiegelung</h3>
+                        <p class="text-zinc-400 leading-relaxed">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
+                    </div>
+                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                            <FlaskConical size={32} className="text-red-500" strokeWidth={1.5} />
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">High-End Pflegeprodukte</h3>
+                        <p class="text-zinc-400 leading-relaxed">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
+                    </div>
+                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                            <Handshake size={32} className="text-red-500" strokeWidth={1.5} />
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-4">Norddeutsch & Direkt</h3>
+                        <p class="text-zinc-400 leading-relaxed">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* PARTNER & SHOP SECTION (Moved here to bridge Why Us and Process) */}
+        <section class="section-spacing pt-0 pb-20 border-b border-white/5 bg-gradient-to-b from-black to-zinc-900/20">
+             <div class="container mx-auto px-4">
+                 <div class="grid md:grid-cols-2 gap-8">
+                     {/* DAMPFDRACHEN VERTRIEB */}
+                     <div class="glass-panel p-8 md:p-12 border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
+                         <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
+                         <div class="relative z-10">
+                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                                 <CheckCircle2 size={12} /> Offizieller Vertrieb
+                             </div>
+                             <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
+                             <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
+                                 Holen Sie sich die Kraft des Trockendampfs nach Hause oder in Ihr Unternehmen.
+                                 Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
+                             </p>
+                             <div class="flex items-center gap-4">
+                                 <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-900/20">
+                                     Geräte ansehen
+                                 </a>
+                             </div>
+                         </div>
+                         <img src="/images/remo-steam-cleaning.jpg" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
+                     </div>
+
+                     {/* LABOCOSMETICA & GLOSSBOSS */}
+                     <div class="glass-panel p-8 md:p-12 relative overflow-hidden">
+                         <div class="relative z-10">
+                             <div class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-bold uppercase tracking-wider mb-6">
+                                 Car Care Products
+                             </div>
+                             <h3 class="text-3xl font-bold text-white mb-4">Pflege & Zubehör</h3>
+                             <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
+                                 Nutzen Sie die Produkte, denen wir vertrauen.
+                                 <strong>Labocosmetica</strong> für High-End Pflege oder <strong>Glossboss</strong> für das beste Zubehör.
+                             </p>
+                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                                 <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
+                                     Zum Glossboss Shop
+                                 </a>
+                                 <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
+                             </div>
+                         </div>
+                         <img src="/images/labocosmetica-logo.jpg" class="absolute bottom-4 right-4 w-40 opacity-20 mix-blend-screen" />
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        {/* PROCESS SECTION */}
+        <section class="section-spacing relative overflow-hidden">
+             <div class="container mx-auto px-4">
+                 <div class="text-center mb-20">
+                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Transparenz</span>
+                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Der RG Detailing Ablauf</h2>
+                 </div>
+
+                 <div class="relative">
+                     {/* Connector Line (Desktop) */}
+                     <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-zinc-700 to-transparent -translate-y-1/2 z-0"></div>
+
+                     <div class="grid md:grid-cols-4 gap-8 relative z-10">
+                         {/* Step 1 */}
+                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
+                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">1</div>
+                             <h3 class="text-white font-bold text-xl mb-3">Check</h3>
+                             <p class="text-sm text-zinc-400 leading-relaxed">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
+                         </div>
+                         {/* Step 2 */}
+                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-100">
+                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">2</div>
+                             <h3 class="text-white font-bold text-xl mb-3">Wash</h3>
+                             <p class="text-sm text-zinc-400 leading-relaxed">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
+                         </div>
+                         {/* Step 3 */}
+                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-200">
+                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">3</div>
+                             <h3 class="text-white font-bold text-xl mb-3">Polish</h3>
+                             <p class="text-sm text-zinc-400 leading-relaxed">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
+                         </div>
+                         {/* Step 4 */}
+                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-300">
+                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">4</div>
+                             <h3 class="text-white font-bold text-xl mb-3">Protect</h3>
+                             <p class="text-sm text-zinc-400 leading-relaxed">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </section>
+
         {/* CALCULATOR */}
-        <section id="rechner" class="py-32 relative overflow-hidden">
+        <section id="rechner" class="section-spacing relative overflow-hidden">
              <div class="absolute inset-0 bg-red-900/5 z-0"></div>
+             <div class="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
+
              <div class="container mx-auto px-4 relative z-10">
-                 <div class="max-w-4xl mx-auto glass-panel p-8 md:p-16 rounded-[3rem] shadow-2xl border border-red-500/10">
+                 <div class="max-w-5xl mx-auto glass-panel p-8 md:p-16 rounded-[3rem] shadow-2xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-2xl">
                     <div class="text-center mb-12">
                         <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Kostenrechner Aufbereitung</h2>
-                        <p class="text-zinc-400">Konfigurieren Sie Ihr Paket. Fair, transparent und ohne versteckte Kosten.</p>
+                        <p class="text-zinc-400 text-lg">Konfigurieren Sie Ihr Paket. Fair, transparent und ohne versteckte Kosten.</p>
                     </div>
                     <PriceCalculator client:visible />
                  </div>
              </div>
         </section>
 
+        {/* ABOUT (Moved down) */}
+        <About />
+
         {/* GALLERY GRID */}
-        <section class="py-20">
+        <section class="section-spacing">
              <div class="container mx-auto px-4">
-                <h2 class="text-3xl font-bold text-white mb-8 text-center">Ergebnisse aus unserer Werkstatt</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
                 <GalleryLightbox client:visible images={galleryImages} />
              </div>
         </section>
 
         {/* FAQ SECTION FOR SEO */}
-        <section class="py-20 border-t border-white/5">
+        <section class="section-spacing border-t border-white/5 bg-zinc-900/20">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>

@@ -20,13 +20,18 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
-/* Glassmorphism Utilities */
+/* Consistent Spacing */
+.section-spacing {
+  @apply py-24 md:py-32;
+}
+
+/* Glassmorphism Utilities - High End Upgrade */
 .glass-panel {
-  @apply bg-zinc-900/40 backdrop-blur-md border border-white/5;
+  @apply bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl;
 }
 
 .glass-card {
-  @apply bg-zinc-900/60 backdrop-blur-sm border border-white/10 transition-all duration-300;
+  @apply bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-3xl transition-all duration-500 hover:bg-zinc-900/80 hover:border-white/20 hover:shadow-[0_0_30px_-10px_rgba(220,38,38,0.15)];
 }
 
 .text-gradient {
