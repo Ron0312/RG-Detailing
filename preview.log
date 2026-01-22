@@ -1,6 +1,0 @@
-
-> app@0.0.1 preview
-> astro preview
-
-00:20:39 [@astrojs/node] Enabling sessions with filesystem storage
-00:20:39 [@astrojs/node] Server listening on http://localhost:4321

@@ -2,10 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import { ShieldCheck, CalendarClock, Gem, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Image } from 'astro:assets';
-// Ideally we would use a specific hero image here, but reusing the main hero or a relevant placeholder is fine.
-// I'll check if there's a suitable image in /public/images/ or similar.
-// For now, I'll use a gradient header to keep it clean if no specific image is obvious,
-// or reuse the one from index if it's generic enough.
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 
 export const prerender = true;
@@ -21,17 +17,18 @@ export const prerender = true;
              <Image
                 src={heroImage}
                 alt="RG Detailing Werterhalt Garantie"
-                class="w-full h-full object-cover opacity-40"
+                class="w-full h-full object-cover opacity-30"
                 loading="eager"
              />
-             <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/60 to-zinc-950"></div>
+             <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-950/60 to-zinc-950"></div>
+             <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
         </div>
 
         <div class="container mx-auto px-4 z-10 text-center pt-20">
-            <span class="inline-block py-1 px-3 rounded-full bg-red-900/30 border border-red-500/30 text-red-500 text-xs font-bold tracking-[0.2em] mb-6 uppercase backdrop-blur-md">
+            <span class="inline-block py-1 px-3 rounded-full bg-red-900/20 border border-red-500/30 text-red-500 text-xs font-bold tracking-[0.2em] mb-6 uppercase backdrop-blur-md">
                 Exklusiv für Bestandskunden
             </span>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight leading-tight">
                 Die RG <span class="text-red-600">Werterhalt</span>-Garantie
             </h1>
             <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -40,12 +37,12 @@ export const prerender = true;
         </div>
     </div>
 
-    <main class="bg-zinc-950">
+    <main class="bg-zinc-950 relative z-20 -mt-20">
 
         {/* EXPLAINER SECTION */}
-        <section class="py-20 -mt-20 relative z-20">
+        <section class="py-12">
             <div class="container mx-auto px-4">
-                <div class="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 bg-zinc-900/80 shadow-2xl max-w-5xl mx-auto">
+                <div class="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 bg-zinc-900/80 shadow-2xl max-w-5xl mx-auto backdrop-blur-xl">
                     <div class="grid md:grid-cols-2 gap-12 items-center">
                         <div>
                             <h2 class="text-3xl font-bold text-white mb-6">Warum ein Pflege-Abo?</h2>
@@ -58,22 +55,22 @@ export const prerender = true;
                             </p>
 
                             <div class="flex flex-col gap-4 mt-8">
-                                <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5">
+                                <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5 hover:border-red-500/20 transition-colors">
                                     <Gem className="text-red-500 shrink-0" />
                                     <span class="text-zinc-200 font-bold">Nur für Full Detailing Kunden</span>
                                 </div>
-                                <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5">
+                                <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5 hover:border-red-500/20 transition-colors">
                                     <ShieldCheck className="text-red-500 shrink-0" />
                                     <span class="text-zinc-200 font-bold">Maximale Standzeit Ihrer Versiegelung</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-red-600/20 blur-[80px] rounded-full"></div>
-                            <div class="relative glass-card p-8 rounded-2xl border border-red-500/20 bg-gradient-to-br from-zinc-900 to-black text-center">
-                                <span class="text-6xl font-bold text-white block mb-2">20<span class="text-red-600">%</span></span>
+                        <div class="relative flex justify-center">
+                            <div class="absolute inset-0 bg-red-600/20 blur-[100px] rounded-full"></div>
+                            <div class="relative glass-card p-10 rounded-2xl border border-red-500/20 bg-gradient-to-br from-zinc-900 to-black text-center shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                                <span class="text-7xl font-bold text-white block mb-2 leading-none">20<span class="text-red-600">%</span></span>
                                 <span class="text-xl text-zinc-400 uppercase tracking-widest block mb-6">Rabatt</span>
-                                <p class="text-sm text-zinc-500">auf jede Maintenance-Wäsche im 2-Monats-Intervall</p>
+                                <p class="text-sm text-zinc-500 font-medium">auf jede Maintenance-Wäsche <br/>im 2-Monats-Intervall</p>
                             </div>
                         </div>
                     </div>
@@ -91,8 +88,8 @@ export const prerender = true;
 
                 <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Tier 1 */}
-                    <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300">
-                        <div class="absolute top-0 right-0 p-4">
+                    <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-2">
+                        <div class="absolute top-0 right-0 p-6">
                             <CalendarClock className="text-zinc-600 group-hover:text-red-500 transition-colors" size={32} />
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-2">Der Perfektionist</h3>
@@ -103,25 +100,25 @@ export const prerender = true;
                             <span class="text-zinc-500">auf die Wäsche</span>
                         </div>
 
-                        <ul class="space-y-3 mb-8 text-zinc-400">
+                        <ul class="space-y-4 mb-8 text-zinc-400">
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-red-500" />
+                                <CheckCircle2 size={18} className="text-red-500 shrink-0" />
                                 <span>Schonende Handwäsche</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-red-500" />
+                                <CheckCircle2 size={18} className="text-red-500 shrink-0" />
                                 <span>Kontrolle der Versiegelung</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-red-500" />
+                                <CheckCircle2 size={18} className="text-red-500 shrink-0" />
                                 <span>Innenraum-Quick-Check</span>
                             </li>
                         </ul>
                     </div>
 
                     {/* Tier 2 */}
-                    <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300">
-                         <div class="absolute top-0 right-0 p-4">
+                    <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-2">
+                         <div class="absolute top-0 right-0 p-6">
                             <CalendarClock className="text-zinc-600 group-hover:text-red-500 transition-colors" size={32} />
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-2">Der Werterhalter</h3>
@@ -132,17 +129,17 @@ export const prerender = true;
                             <span class="text-zinc-500">auf die Wäsche</span>
                         </div>
 
-                        <ul class="space-y-3 mb-8 text-zinc-400">
+                        <ul class="space-y-4 mb-8 text-zinc-400">
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors" />
+                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors shrink-0" />
                                 <span>Schonende Handwäsche</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors" />
+                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors shrink-0" />
                                 <span>Kontrolle der Versiegelung</span>
                             </li>
                             <li class="flex items-center gap-3">
-                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors" />
+                                <CheckCircle2 size={18} className="text-zinc-500 group-hover:text-red-500 transition-colors shrink-0" />
                                 <span>Innenraum-Quick-Check</span>
                             </li>
                         </ul>
