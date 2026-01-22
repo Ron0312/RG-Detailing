@@ -1,6 +1,13 @@
 ---
 import { reviews } from '../data/reviews';
 import { Star } from 'lucide-react';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
 ---
 
 <section class="py-20 bg-zinc-950 border-t border-zinc-900">
@@ -21,7 +28,7 @@ import { Star } from 'lucide-react';
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {reviews.map((review) => (
+            {displayedReviews.map((review) => (
                 <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-red-700 rounded-full flex items-center justify-center text-white font-bold">
