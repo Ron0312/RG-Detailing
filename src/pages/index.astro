@@ -5,6 +5,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
+import GalleryLightbox from '../components/GalleryLightbox.jsx';
 import FAQ from '../components/FAQ.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
@@ -25,6 +26,14 @@ const iconMap = {
   4: Droplets,    // Innen & Hygiene
   5: Bike         // Spezial
 };
+
+const galleryImages = [
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png", alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg", alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg", alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg", alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg", alt: "Exklusives Detailing Ergebnis Schleswig-Holstein" }
+];
 
 const faqItems = [
   {
@@ -431,23 +440,7 @@ const faqSchema = {
         <section class="py-20">
              <div class="container mx-auto px-4">
                 <h2 class="text-3xl font-bold text-white mb-8 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="/images/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png" alt="Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="800" height="800" />
-                    </div>
-                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg" alt="Professionelle Innenraumreinigung Vorher-Nachher RG Detailing" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="800" height="800" />
-                    </div>
-                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                        <img src="/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg" alt="Keramikversiegelung Hochglanz Ergebnis Labocosmetica" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="800" height="800" />
-                    </div>
-                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                         <img src="/images/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg" alt="Fahrzeugaufbereitung Detailarbeit Ergebnis" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="800" height="800" />
-                    </div>
-                    <div class="aspect-square bg-zinc-800 rounded-xl overflow-hidden group">
-                         <img src="/images/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg" alt="Exklusives Detailing Ergebnis Schleswig-Holstein" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" loading="lazy" width="800" height="800" />
-                    </div>
-                </div>
+                <GalleryLightbox client:visible images={galleryImages} />
              </div>
         </section>
 

@@ -22,3 +22,26 @@ import Layout from '../layouts/Layout.astro';
         </div>
     </div>
 </Layout>
+
+<script>
+  // Log 404 to server
+  const log404 = async () => {
+    try {
+      await fetch('/api/log-404', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: window.location.href,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent
+        }),
+      });
+    } catch (e) {
+      console.error('Failed to log 404', e);
+    }
+  };
+
+  log404();
+</script>
