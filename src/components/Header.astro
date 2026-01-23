@@ -23,9 +23,8 @@
                 Galerie
                 <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </a>
-             <a href="/#rechner" class="hover:text-white transition py-2 relative group">
+             <a href="/#rechner" class="bg-red-900/20 border border-red-500/30 text-red-500 px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition-all shadow-[0_0_15px_-5px_rgba(220,38,38,0.3)]">
                 Preisrechner
-                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full"></span>
             </a>
             <a href="/#about" class="hover:text-white transition py-2 relative group">
                 Über mich
@@ -132,4 +131,58 @@
     mobileLinks.forEach(link => {
         link.addEventListener('click', toggleMenu);
     });
+
+    // ScrollSpy
+    const sections = ['leistungen', 'gallery', 'rechner', 'about', 'faq'];
+    const navLinks = document.querySelectorAll('nav a');
+
+    function onScroll() {
+        let currentSection = '';
+        const scrollPosition = window.scrollY + 200; // Offset for header height
+
+        sections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section && section.offsetTop <= scrollPosition) {
+                currentSection = sectionId;
+            }
+        });
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            // Skip the calculator button for span animation, but we can highlight it
+            if (href.includes('#rechner')) {
+                 if (currentSection === 'rechner') {
+                     link.classList.add('bg-red-500', 'text-white');
+                     link.classList.remove('bg-red-900/20', 'text-red-500');
+                 } else {
+                     link.classList.remove('bg-red-500', 'text-white');
+                     link.classList.add('bg-red-900/20', 'text-red-500');
+                 }
+                 return;
+            }
+
+            const span = link.querySelector('span');
+            if (!span) return;
+
+            link.classList.remove('text-white');
+            span.style.width = '0';
+
+            if (currentSection) {
+                 if (href.includes('#' + currentSection)) {
+                     link.classList.add('text-white');
+                     span.style.width = '100%';
+                 }
+            } else {
+                // If no section matches and we are near top, it's Startseite
+                if ((href === '/' || href === '/#') && window.scrollY < 300) {
+                     link.classList.add('text-white');
+                     span.style.width = '100%';
+                }
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScroll);
+    // Initial call
+    onScroll();
 </script>
