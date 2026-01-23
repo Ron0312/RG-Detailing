@@ -41,6 +41,13 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta name="keywords" content={keywords} />
         <link rel="canonical" href={canonicalURL} />
 
+        <!-- GEO & Local -->
+        <meta name="geo.region" content="DE-SH" />
+        <meta name="geo.placename" content="Tensfeld" />
+        <meta name="geo.position" content="54.0667;10.3000" />
+        <meta name="ICBM" content="54.0667, 10.3000" />
+        <link rel="manifest" href="/manifest.json" />
+
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalURL} />
