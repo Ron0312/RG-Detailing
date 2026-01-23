@@ -456,7 +456,7 @@ const faqSchema = {
         <About />
 
         {/* GALLERY GRID */}
-        <section class="section-spacing">
+        <section id="gallery" class="section-spacing">
              <div class="container mx-auto px-4">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
                 <GalleryLightbox client:visible images={galleryImages} />
@@ -464,7 +464,7 @@ const faqSchema = {
         </section>
 
         {/* FAQ SECTION FOR SEO */}
-        <section class="section-spacing border-t border-white/5 bg-zinc-900/20">
+        <section id="faq" class="section-spacing border-t border-white/5 bg-zinc-900/20">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
