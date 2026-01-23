@@ -29,7 +29,17 @@ const servicesCollection = defineCollection({
   }),
 });
 
+const glossaryCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    category: z.string(),
+  }),
+});
+
 export const collections = {
   'cities': citiesCollection,
   'services': servicesCollection,
+  'glossary': glossaryCollection,
 };
