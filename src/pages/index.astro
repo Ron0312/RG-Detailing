@@ -105,7 +105,18 @@ const faqSchema = {
 <Layout
     title="RG Detailing | Premium Fahrzeugaufbereitung Schleswig-Holstein"
     description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld. Jetzt Termin sichern!"
-    schema={[howToSchema, faqSchema]}
+    schema={[
+        howToSchema,
+        faqSchema,
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "RG Detailing Startseite",
+            "dateModified": new Date().toISOString().split('T')[0],
+            "description": "Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung.",
+            "url": "https://rg-detailing.de"
+        }
+    ]}
     preloadImage={heroImage.src}
 >
 
