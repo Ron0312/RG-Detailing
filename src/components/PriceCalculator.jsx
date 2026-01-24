@@ -176,7 +176,7 @@ export default function PriceCalculator() {
                     <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
                         <div className="text-zinc-500 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
                         <div className="text-5xl font-bold text-white mb-2 tracking-tight">{washPrice}€</div>
-                         <div className="text-xs text-zinc-500 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m)</div>
+                         <div className="text-xs text-zinc-500 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
                          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
                          <div className="text-zinc-300 text-sm font-medium">
                             <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
@@ -228,7 +228,7 @@ export default function PriceCalculator() {
                     </div>
 
                     <div className="text-center mb-8">
-                        <div className="text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">Geschätzte Investition</div>
+                        <div className="text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
                         <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-500 align-top ml-1">*</span></div>
                     </div>
 

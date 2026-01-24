@@ -41,3 +41,35 @@ h1, h2, h3, h4, h5, h6 {
 .text-gradient-red {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700;
 }
+
+/* Accessibility: Focus States */
+:focus-visible {
+    outline: 2px solid #D80000;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Print Optimization */
+@media print {
+    header, footer, #cookie-banner, .no-print {
+        display: none !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    a {
+        text-decoration: none !important;
+        color: black !important;
+    }
+    .text-white {
+        color: black !important;
+    }
+    .bg-black, .bg-zinc-900, .bg-zinc-950 {
+        background: transparent !important;
+    }
+    /* Ensure content is visible */
+    p, h1, h2, h3, li {
+        color: black !important;
+    }
+}
