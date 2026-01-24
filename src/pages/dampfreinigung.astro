@@ -5,7 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
-import remoImage from '../assets/remo-profile-cropped.png';
+import remoImage from '../assets/remo-dampfdrachen-full.jpg';
 import { Check, Flame, Droplets, Wind, ShoppingBag } from 'lucide-react';
 
 const schema = {
@@ -34,6 +34,10 @@ const schema = {
                 fetchpriority="high"
                 loading="eager"
              />
+             {/* Integrated Logo in Background */}
+             <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+                 <img src="/images/dampfdrachen-logo.webp" alt="" class="w-[80%] md:w-[50%] object-contain" />
+             </div>
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
         </div>
@@ -78,7 +82,7 @@ const schema = {
                     <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Logo" class="h-16 w-auto mb-6" />
                     <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-500">VERTRIEBSPARTNER</span></div>
                     <p class="text-zinc-400 text-sm mb-4">
-                        Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Qualität Made in Germany.
+                        Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.
                     </p>
                  </div>
             </div>
@@ -135,7 +139,7 @@ const schema = {
                     <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Dampfdrachen <br/> kaufen</h2>
                     <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
                         Wir sind offizieller Vertriebspartner für <strong>Dampfdrachen</strong>.
-                        Die wohl besten Trockendampfreiniger der Welt - Made in Germany.
+                        Die wohl besten Trockendampfreiniger der Welt - Deutsches Ingenieur Know-how, gefertigt in Italien.
                         Nutzen Sie die gleiche Profi-Technik wie wir für Ihr Unternehmen oder Ihr Zuhause.
                     </p>
                     <ul class="space-y-4 mb-8">
