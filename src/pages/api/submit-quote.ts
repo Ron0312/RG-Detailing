@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import { calculatePrice, type PackageId, type SizeId, type ConditionId } from '../../lib/pricing';
 import config from '../../lib/pricingConfig.json';
+import { checkRateLimit } from '../../lib/rate-limit';
 
 const PackageEnum = z.enum(Object.keys(config.packages) as [string, ...string[]]);
 const SizeEnum = z.enum(Object.keys(config.sizes) as [string, ...string[]]);
@@ -15,8 +16,13 @@ const QuoteSchema = z.object({
     camperLength: z.number().optional()
 });
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
+        const ip = clientAddress || request.headers.get('x-forwarded-for') || 'unknown';
+        if (!checkRateLimit(`submit-quote:${ip}`, 5, 60 * 60 * 1000)) { // 5 requests per hour
+            return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
+        }
+
         const body = await request.json();
 
         // Validate input

@@ -12,7 +12,7 @@ describe('API submit-quote', () => {
                 package: 'wash_interior'
             })
         });
-        const res = await POST({ request: req } as any);
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(200);
         const data = await res.json();
         expect(data.success).toBe(true);
@@ -26,7 +26,24 @@ describe('API submit-quote', () => {
                 size: 'invalid',
             })
         });
-        const res = await POST({ request: req } as any);
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(400);
+    });
+
+    it('returns 429 when rate limit exceeded', async () => {
+        const createRequest = () => new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({})
+        });
+        const clientAddress = '10.0.0.1';
+
+        // Burn through limit (5)
+        for (let i = 0; i < 5; i++) {
+            await POST({ request: createRequest(), clientAddress } as any);
+        }
+
+        // 6th request should fail
+        const res = await POST({ request: createRequest(), clientAddress } as any);
+        expect(res.status).toBe(429);
     });
 });
