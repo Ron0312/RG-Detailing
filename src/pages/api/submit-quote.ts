@@ -44,22 +44,86 @@ export const POST: APIRoute = async ({ request }) => {
             data.condition as ConditionId
         );
 
-        // MOCK EMAIL SENDING LOGIC
-        console.log(">>> [MOCK EMAIL] To: owner@rg-detailing.de");
-        console.log(`>>> Subject: Neue Anfrage von ${data.email}`);
-        let bodyText = `Fahrzeug ${data.size}, Zustand ${data.condition}, Paket ${data.package}.`;
+        // Prepare email content
+        const sizeName = config.sizes[data.size]?.name || data.size;
+        const conditionName = config.conditions[data.condition]?.name || data.condition;
+        const packageName = config.packages[data.package]?.name || data.package;
 
-        if (data.size === 'camper' && data.camperLength) {
-            bodyText += ` Länge: ${data.camperLength}m. (Kunde hat Camper-Flow genutzt).`;
+        const subject = `Neue Preisanfrage: ${sizeName} - ${packageName}`;
+
+        // HTML Body for the email
+        const htmlContent = `
+            <div style="font-family: sans-serif; color: #333;">
+                <h2 style="color: #D80000;">Neue Anfrage über Preisrechner</h2>
+                <p>Ein Kunde hat eine Kalkulation durchgeführt und um Kontaktaufnahme gebeten.</p>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+
+                <h3>Kunde</h3>
+                <p><strong>E-Mail:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+
+                <h3>Fahrzeug & Zustand</h3>
+                <ul>
+                    <li><strong>Fahrzeuggröße:</strong> ${sizeName}</li>
+                    <li><strong>Zustand:</strong> ${conditionName}</li>
+                    <li><strong>Camper Länge:</strong> ${data.camperLength ? data.camperLength + 'm' : 'N/A'}</li>
+                </ul>
+
+                <h3>Gewähltes Paket</h3>
+                <p><strong>${packageName}</strong></p>
+
+                <h3>Kalkulation</h3>
+                <p style="font-size: 1.2em; font-weight: bold;">
+                    Geschätzter Preis: ${priceQuote.minPrice}€ - ${priceQuote.maxPrice}€
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p style="font-size: 0.8em; color: #888;">
+                    Diese E-Mail wurde automatisch von rg-detailing.de gesendet via Web3Forms.
+                </p>
+            </div>
+        `;
+
+        // Send via Web3Forms if Key is present
+        const apiKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+
+        if (apiKey) {
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        access_key: apiKey,
+                        subject: subject,
+                        email: data.email, // Reply-To address
+                        from_name: "RG Detailing Rechner",
+                        message: htmlContent,
+                        // Additional metadata fields
+                        "Fahrzeug": sizeName,
+                        "Paket": packageName,
+                        "Preis_Min": priceQuote.minPrice,
+                        "Preis_Max": priceQuote.maxPrice
+                    })
+                });
+
+                const apiResult = await response.json();
+
+                if (apiResult.success) {
+                    console.log(`>>> Email sent successfully to owner via Web3Forms (Ref: ${data.email})`);
+                } else {
+                    console.error(">>> Web3Forms API Error:", apiResult);
+                }
+            } catch (err) {
+                console.error(">>> Failed to send email via Web3Forms:", err);
+            }
+        } else {
+            console.log(">>> [MOCK EMAIL] WEB3FORMS_ACCESS_KEY missing. Printing to console:");
+            console.log(`To: owner@rg-detailing.de | Subject: ${subject}`);
+            console.log(`Data: ${JSON.stringify(data)}`);
         }
-
-        bodyText += ` Preis-Range: ${priceQuote.minPrice}-${priceQuote.maxPrice}€`;
-
-        console.log(`>>> Body: ${bodyText}`);
-
-        console.log(">>> [MOCK EMAIL] To: " + data.email);
-        console.log(`>>> Subject: Ihre Anfrage bei RG Detailing`);
-        console.log(`>>> Body: Danke! Ihre Anfrage ist eingegangen. Wir melden uns.`);
 
         return new Response(JSON.stringify({
             success: true,
