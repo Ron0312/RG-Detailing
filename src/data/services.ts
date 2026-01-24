@@ -3,35 +3,35 @@ export const services = [
         title: "Full Detailing",
         description: "High-End Lackaufbereitung und Keramikversiegelung. Beseitigt Kratzer für den perfekten Showroom-Glanz. Labocosmetica Keramikversiegelung (bis zu 6 Jahre). Inklusive exklusivem Pflege-Abo.",
         icon: "shield",
-        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo.",
+        shortDescription: "Mehrstufige Lackkorrektur + zertifizierte Labocosmetica Keramikversiegelung + Pflege-Abo. Ab 800 €.",
         link: "#rechner"
     },
     {
         title: "All-in-One",
         description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Innenreinigung, Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
         icon: "sparkles",
-        shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung.",
+        shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung. Ab 500 €.",
         link: "#rechner"
     },
     {
         title: "Wohnmobil-Spezial",
         description: "Spezialisierte Wohnmobil Aufbereitung und Keramikversiegelung. Wir schützen GFK und Lack vor Auskreiden und Vergilben.",
         icon: "bus",
-        shortDescription: "Halle für Fahrzeuge bis 8m+. GFK-Pflege und Versiegelung gegen Auskreiden.",
+        shortDescription: "Halle für Fahrzeuge bis 8m+. GFK-Pflege und Versiegelung gegen Auskreiden. Individuelles Angebot.",
         link: "/wohnmobil"
     },
     {
         title: "Leasing-Rettung",
         description: "Professionelle Leasing Rückgabe Aufbereitung. Wir beseitigen Gebrauchsspuren und Dellen, um hohe Nachzahlungen zu vermeiden.",
         icon: "file-check",
-        shortDescription: "Smart-Repair & Aufbereitung vor Rückgabe. Vermeiden Sie hohe Nachzahlungen.",
+        shortDescription: "Smart-Repair & Aufbereitung vor Rückgabe. Vermeiden Sie hohe Nachzahlungen. Ab 400 €.",
         link: "/leasing"
     },
     {
         title: "Innen & Hygiene",
         description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
         icon: "droplet",
-        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar.",
+        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar. Ab 350 €.",
         link: "/dampfreinigung"
     },
     {
