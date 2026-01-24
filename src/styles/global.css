@@ -25,6 +25,12 @@ h1, h2, h3, h4, h5, h6 {
   @apply py-24 md:py-32;
 }
 
+/* Performance Utilities */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
+}
+
 /* Glassmorphism Utilities - High End Upgrade */
 .glass-panel {
   @apply bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl;

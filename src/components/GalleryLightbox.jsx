@@ -52,6 +52,7 @@ export default function GalleryLightbox({ images }) {
               alt={image.alt}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
               loading="lazy"
+              decoding="async"
               width="800"
               height="800"
             />
