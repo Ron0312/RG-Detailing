@@ -1,0 +1,44 @@
+<div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-[200] p-4 bg-zinc-950/95 border-t border-white/10 backdrop-blur-md translate-y-full transition-transform duration-500 ease-out invisible">
+    <div class="container mx-auto max-w-5xl flex flex-col md:flex-row items-center gap-4 justify-between">
+        <div class="text-sm text-zinc-300">
+            <p>
+                Wir nutzen Cookies und externe Dienste (Google Maps), um Ihr Nutzererlebnis zu verbessern.
+                Weitere Informationen finden Sie in unserer <a href="/datenschutz" class="text-white underline hover:text-red-500">Datenschutzerklärung</a>.
+            </p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+            <button id="cookie-decline" class="px-4 py-2 rounded-lg border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 transition text-xs font-bold uppercase tracking-wider">
+                Ablehnen
+            </button>
+            <button id="cookie-accept" class="px-6 py-2 rounded-lg bg-red-700 hover:bg-red-600 text-white shadow-lg shadow-red-900/20 transition text-xs font-bold uppercase tracking-wider">
+                Akzeptieren
+            </button>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    // Simple Vanilla JS Cookie Consent
+    window.addEventListener('load', () => {
+        const banner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('cookie-accept');
+        const declineBtn = document.getElementById('cookie-decline');
+
+        if (!localStorage.getItem('cookie-consent')) {
+            // Show banner
+            banner.classList.remove('invisible', 'translate-y-full');
+        }
+
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem('cookie-consent', 'accepted');
+            banner.classList.add('translate-y-full');
+            setTimeout(() => banner.classList.add('invisible'), 500);
+        });
+
+        declineBtn.addEventListener('click', () => {
+            localStorage.setItem('cookie-consent', 'declined');
+            banner.classList.add('translate-y-full');
+            setTimeout(() => banner.classList.add('invisible'), 500);
+        });
+    });
+</script>

@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { BookOpen, PenTool } from 'lucide-react';
+---
+
+<Layout title="Ratgeber & News | RG Detailing" description="Tipps und Tricks zur Fahrzeugpflege, News aus der Werkstatt und Experten-Wissen von Remo Gerhardt.">
+    <div class="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-black">
+         <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black"></div>
+         <div class="container mx-auto px-4 z-10 text-center pt-20">
+            <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-bold tracking-wider mb-6 uppercase backdrop-blur-md">
+                Expertenwissen
+            </span>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">Ratgeber & <span class="text-red-500">News</span></h1>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-12 -mt-20 relative z-20">
+        <Breadcrumbs crumbs={[
+            { label: 'Startseite', href: '/' },
+            { label: 'Blog', href: '/blog' }
+        ]} />
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            {/* Article 1 (Static) */}
+            <article class="glass-panel overflow-hidden group hover:bg-zinc-800 transition-colors flex flex-col">
+                <div class="h-48 bg-zinc-800 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                     {/* Placeholder Image */}
+                    <div class="w-full h-full bg-zinc-700 flex items-center justify-center text-zinc-500 group-hover:scale-105 transition-transform duration-700">
+                        <PenTool size={48} />
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <div class="flex items-center gap-2 mb-4 text-xs font-bold text-red-500 uppercase tracking-widest">
+                        <span>Pflege-Tipps</span>
+                        <span class="w-1 h-1 rounded-full bg-zinc-600"></span>
+                        <span class="text-zinc-500">Coming Soon</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">Lederpflege im Sommer</h2>
+                    <p class="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed">
+                        Warum UV-Strahlung und Hitze Gift für Ihr Leder sind und wie Sie Risse vermeiden.
+                    </p>
+                    <div class="mt-auto pt-4 border-t border-white/5">
+                        <span class="text-sm font-bold text-zinc-500 group-hover:text-white transition-colors">Demnächst verfügbar</span>
+                    </div>
+                </div>
+            </article>
+
+             {/* Article 2 (Static) */}
+            <article class="glass-panel overflow-hidden group hover:bg-zinc-800 transition-colors flex flex-col">
+                <div class="h-48 bg-zinc-800 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                    <div class="w-full h-full bg-zinc-700 flex items-center justify-center text-zinc-500 group-hover:scale-105 transition-transform duration-700">
+                        <BookOpen size={48} />
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <div class="flex items-center gap-2 mb-4 text-xs font-bold text-red-500 uppercase tracking-widest">
+                        <span>Technik</span>
+                        <span class="w-1 h-1 rounded-full bg-zinc-600"></span>
+                        <span class="text-zinc-500">Coming Soon</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">Keramik vs. Wachs</h2>
+                    <p class="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed">
+                        Der ewige Vergleich. Wann lohnt sich die teure Versiegelung und für wen reicht das klassische Carnaubawachs?
+                    </p>
+                    <div class="mt-auto pt-4 border-t border-white/5">
+                        <span class="text-sm font-bold text-zinc-500 group-hover:text-white transition-colors">Demnächst verfügbar</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="mt-20 p-12 glass-panel text-center">
+            <h3 class="text-2xl font-bold text-white mb-4">Bleiben Sie auf dem Laufenden</h3>
+            <p class="text-zinc-400 max-w-xl mx-auto mb-8">
+                Wir arbeiten an hochwertigen Artikeln rund um die Fahrzeugpflege.
+                Folgen Sie uns auf Instagram, um den Start nicht zu verpassen.
+            </p>
+            <a href="https://www.instagram.com/rg_detailing" target="_blank" rel="noopener noreferrer" class="inline-block bg-red-700 hover:bg-red-600 text-white px-8 py-3 rounded-full font-bold transition-colors">
+                Instagram Folgen
+            </a>
+        </div>
+    </main>
+</Layout>
