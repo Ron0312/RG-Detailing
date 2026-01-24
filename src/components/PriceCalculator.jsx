@@ -33,6 +33,25 @@ export default function PriceCalculator() {
 
     const containerRef = useRef(null);
 
+    // Initial URL Parameter Parsing
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const preselect = params.get('preselect');
+
+        if (preselect === 'camper') {
+            handleSelect('size', 'camper');
+        } else if (preselect === 'leasing') {
+             // For leasing we need a size first, but we can preset the intent
+             // Actually, we can just preset the package if size is chosen later?
+             // Or better: Simulate a "medium" car selection then go to leasing package logic?
+             // Let's just preset size=medium (common) and package=leasing to show result?
+             // No, let's keep it simple: Select size first, but highlight leasing package later.
+             // Or: Start with size selection but automatically select leasing package when we get there?
+             // Let's try: If leasing, user still needs to pick size.
+             // Let's just set a flag or just handle 'camper' for now as it skips steps.
+        }
+    }, []);
+
     useEffect(() => {
         if (containerRef.current && step !== STEPS.SIZE) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -48,8 +67,25 @@ export default function PriceCalculator() {
                 setStep(STEPS.CAMPER_LENGTH);
                 return;
             }
+            // Check for preselect leasing intent if passed (not implemented fully above, keeping simple)
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('preselect') === 'leasing') {
+                 // Skip condition step for leasing?
+                 // Leasing usually needs "All-in-One" or "Politur".
+                 // Let's just go standard flow.
+            }
             setStep(STEPS.CONDITION);
         } else if (key === 'condition') {
+             // If preselect=leasing, maybe auto-select leasing package?
+             const params = new URLSearchParams(window.location.search);
+             if (params.get('preselect') === 'leasing') {
+                  // Auto-select leasing package
+                  const result = calculatePrice('leasing', newSelections.size, value); // Leasing package ID
+                  setQuote(result);
+                  setSelections({...newSelections, package: 'leasing'});
+                  setStep(STEPS.RESULT);
+                  return;
+             }
             setStep(STEPS.PACKAGE);
         } else if (key === 'package') {
             const result = calculatePrice(value, newSelections.size, newSelections.condition);
@@ -72,7 +108,9 @@ export default function PriceCalculator() {
         e.preventDefault();
         setLoading(true);
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // await new Promise(resolve => setTimeout(resolve, 1500)); // Remove artificial delay for better UX? Keep it for "processing" feel.
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
             const payload = { ...selections, quote, email };
             await fetch('/api/submit-quote', {
                 method: 'POST',
@@ -93,6 +131,8 @@ export default function PriceCalculator() {
         setQuote(null);
         setSubmitted(false);
         setEmail('');
+        // Clear URL param?
+        window.history.replaceState({}, '', window.location.pathname);
     };
 
     const StepTitle = ({ children }) => (

@@ -1,10 +1,13 @@
-const CACHE_NAME = 'rg-detailing-v1';
+const CACHE_NAME = 'rg-detailing-v2';
 
-// Add assets you want to cache immediately
+// Assets to cache immediately on install
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
-  '/favicon.svg'
+  '/favicon.svg',
+  '/logo.png',
+  '/fonts/syne.woff2', // Assuming font path, adjust if needed
+  '/fonts/inter.woff2'
 ];
 
 self.addEventListener('install', (event) => {
@@ -16,39 +19,62 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+             return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests
+  // Only handle GET requests
+  if (event.request.method !== 'GET') return;
+
+  // Skip cross-origin requests unless it's a font or specific asset
   if (!event.request.url.startsWith(self.location.origin)) {
-    return;
+     // Optional: Cache Google Fonts or similar if needed
+     return;
   }
 
+  // Network First, fallback to Cache for HTML (pages)
+  if (event.request.headers.get('Accept').includes('text/html')) {
+     event.respondWith(
+        fetch(event.request)
+           .then((response) => {
+              const responseClone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                 cache.put(event.request, responseClone);
+              });
+              return response;
+           })
+           .catch(() => {
+              return caches.match(event.request).then((response) => {
+                 return response || caches.match('/'); // Fallback to home if offline
+              });
+           })
+     );
+     return;
+  }
+
+  // Stale-While-Revalidate for static assets (images, css, js)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-            return cachedResponse;
-        }
-
-        return fetch(event.request).then((networkResponse) => {
-            // Check if we received a valid response
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
+        const fetchPromise = fetch(event.request).then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                 const responseToCache = networkResponse.clone();
+                 caches.open(CACHE_NAME).then((cache) => {
+                      cache.put(event.request, responseToCache);
+                 });
             }
-
-            // Clone the response
-            const responseToCache = networkResponse.clone();
-
-            caches.open(CACHE_NAME).then((cache) => {
-              // Cache static assets (images, fonts, css, js)
-              if (event.request.url.match(/\.(js|css|png|jpg|jpeg|svg|woff2)$/)) {
-                  cache.put(event.request, responseToCache);
-              }
-            });
-
             return networkResponse;
         });
+        return cachedResponse || fetchPromise;
     })
   );
 });

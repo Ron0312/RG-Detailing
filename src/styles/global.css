@@ -48,11 +48,29 @@ h1, h2, h3, h4, h5, h6 {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700;
 }
 
-/* Accessibility: Focus States */
+/* Accessibility: Focus States (Enhanced) */
 :focus-visible {
     outline: 2px solid #D80000;
     outline-offset: 4px;
     border-radius: 4px;
+}
+
+/* Touch Targets (Mobile) */
+@media (max-width: 768px) {
+    button, a {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Exceptions for inline links inside text */
+    p a, li a {
+        min-height: auto;
+        min-width: auto;
+        display: inline;
+    }
 }
 
 /* Print Optimization */

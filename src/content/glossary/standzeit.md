@@ -1,20 +1,16 @@
 ---
 title: "Standzeit"
-description: "Die Lebensdauer einer Versiegelung (Wachs, Keramik, Polymer) auf dem Lack, bevor die Schutzwirkung nachlässt."
+description: "Die Lebensdauer eines Lackschutzes. Gibt an, wie lange eine Versiegelung (Wachs oder Keramik) ihre schützende und wasserabweisende Wirkung behält."
 category: "Versiegelung"
 ---
 
-## Definition
+## Was bedeutet Standzeit?
+In der Fahrzeugpflege beschreibt die Standzeit den Zeitraum, in dem ein aufgetragenes Schutzprodukt (Wachs, Versiegelung, Keramik) aktiv auf dem Lack verbleibt und seine Eigenschaften (Glanz, Hydrophobie, Schutz) beibehält.
 
-In der Fahrzeugpflege beschreibt die "Standzeit" den Zeitraum, in dem ein Schutzprodukt (Wachs, Versiegelung, Keramik) seine volle Wirkung auf der Oberfläche behält. Dies äußert sich durch Abperlverhalten (Beading), Glanz und einfache Reinigung (Easy-to-Clean Effekt).
+### Faktoren für die Standzeit
+*   **Produktqualität:** Carnaubawachs (4-8 Wochen) vs. Polymerversiegelung (6-9 Monate) vs. Keramik (2-5+ Jahre).
+*   **Fahrleistung:** Ein "Garagenwagen" behält seinen Schutz länger als ein "Daily Driver", der täglich 100km Autobahn fährt.
+*   **Pflege:** Aggressive Waschanlagen-Chemie verkürzt die Standzeit drastisch. Eine PH-neutrale Handwäsche verlängert sie.
+*   **Parkplatz:** Laternenparker sind UV-Strahlung und Baumharz stärker ausgesetzt als Garagenparker.
 
-## Faktoren für die Standzeit
-
-Die tatsächliche Standzeit hängt von vielen Faktoren ab:
-*   **Produkt:** Ein Carnaubawachs hält oft nur 2-4 Monate, eine hochwertige Keramikversiegelung bis zu 5 Jahre.
-*   **Fahrprofil:** Ein Garagenwagen, der selten bewegt wird, behält seinen Schutz länger als ein "Laternenparker", der täglich 100km fährt.
-*   **Pflege:** Aggressive Reiniger oder falsche Wäsche können die Versiegelung vorzeitig abbauen.
-
-## Wann muss erneuert werden?
-
-Wenn das Wasser auf dem Lack nicht mehr perlt, sondern einen flachen Film bildet, und der Schmutz sich schwerer lösen lässt, ist die Standzeit abgelaufen. Dann sollte der Schutz aufgefrischt werden.
+Bei RG Detailing geben wir realistische Standzeiten an (z.B. "bis zu 30.000 km"), da Zeit allein oft kein präziser Indikator ist.
