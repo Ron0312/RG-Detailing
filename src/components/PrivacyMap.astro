@@ -25,37 +25,45 @@ const { src, title, class: className = "" } = Astro.props;
 </div>
 
 <script>
+    function loadContainerMap(container) {
+        // Prevent reloading if already loaded
+        if (container.querySelector('iframe')) return;
+
+        const src = container.getAttribute('data-src');
+        const title = container.getAttribute('data-title');
+
+        if (!src) return;
+
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', src);
+        iframe.setAttribute('width', '100%');
+        iframe.setAttribute('height', '100%');
+        iframe.style.border = '0';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+        if (title) iframe.setAttribute('title', title);
+
+        // Clear content and append iframe
+        container.innerHTML = '';
+        container.appendChild(iframe);
+    }
+
     function initMaps() {
         const containers = document.querySelectorAll('.privacy-map-container');
+        const hasConsent = localStorage.getItem('cookie-consent') === 'accepted';
 
         containers.forEach(container => {
-            // Check if already initialized to avoid duplicate listeners
-            if (container.hasAttribute('data-initialized')) return;
+            if (hasConsent) {
+                loadContainerMap(container);
+            } else {
+                // Only add listener if not yet initialized
+                if (container.hasAttribute('data-initialized')) return;
 
-            const btn = container.querySelector('.load-map-btn');
-
-            btn?.addEventListener('click', () => {
-                const src = container.getAttribute('data-src');
-                const title = container.getAttribute('data-title');
-
-                if (!src) return;
-
-                const iframe = document.createElement('iframe');
-                iframe.setAttribute('src', src);
-                iframe.setAttribute('width', '100%');
-                iframe.setAttribute('height', '100%');
-                iframe.style.border = '0';
-                iframe.setAttribute('allowfullscreen', '');
-                iframe.setAttribute('loading', 'lazy');
-                iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-                if (title) iframe.setAttribute('title', title);
-
-                // Clear content and append iframe
-                container.innerHTML = '';
-                container.appendChild(iframe);
-            });
-
-            container.setAttribute('data-initialized', 'true');
+                const btn = container.querySelector('.load-map-btn');
+                btn?.addEventListener('click', () => loadContainerMap(container));
+                container.setAttribute('data-initialized', 'true');
+            }
         });
     }
 
@@ -64,4 +72,7 @@ const { src, title, class: className = "" } = Astro.props;
 
     // Support View Transitions
     document.addEventListener('astro:page-load', initMaps);
+
+    // Listen for cookie acceptance event
+    window.addEventListener('cookie-consent-accepted', initMaps);
 </script>
