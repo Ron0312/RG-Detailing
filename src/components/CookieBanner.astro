@@ -31,6 +31,8 @@
 
         acceptBtn.addEventListener('click', () => {
             localStorage.setItem('cookie-consent', 'accepted');
+            // Dispatch event for components like PrivacyMap
+            window.dispatchEvent(new Event('cookie-consent-accepted'));
             banner.classList.add('translate-y-full');
             setTimeout(() => banner.classList.add('invisible'), 500);
         });
