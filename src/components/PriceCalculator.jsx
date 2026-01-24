@@ -270,7 +270,7 @@ export default function PriceCalculator() {
                              <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
                              <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
                         </div>
-                        <div className="text-zinc-500 text-xs font-medium tracking-wide">*Endgültiger Preis nach Fahrzeugbesichtigung</div>
+                        <div className="text-zinc-500 text-xs font-medium tracking-wide">*Endgültiger Preis nach Fahrzeugbesichtigung. Alle Preise inkl. MwSt.</div>
                     </div>
 
                     <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
@@ -495,7 +495,7 @@ export default function PriceCalculator() {
                                         disabled={loading}
                                         className="w-full bg-zinc-100 hover:bg-white text-black px-6 py-4 rounded-xl font-bold transition-all duration-300 disabled:opacity-50 whitespace-nowrap border border-transparent hover:scale-[1.02] flex items-center justify-center gap-2 shadow-lg text-lg active:scale-95"
                                     >
-                                        {loading ? <Spinner /> : <>Angebot anfordern <ArrowRight className="w-5 h-5" /></>}
+                                        {loading ? <><Spinner /> Sende...</> : <>Angebot anfordern <ArrowRight className="w-5 h-5" /></>}
                                     </button>
                                 </div>
                                 <p className="text-[10px] text-zinc-500 mt-4 text-center leading-normal">
@@ -526,7 +526,7 @@ export default function PriceCalculator() {
                             <p className="text-zinc-400 mb-12 max-w-md mx-auto leading-relaxed text-lg">
                                 Wir haben Ihre Konfiguration erhalten. Ein Mitarbeiter wird sich in Kürze mit Ihrem persönlichen Angebot bei Ihnen melden.
                             </p>
-                            <button onClick={reset} className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10 font-bold uppercase tracking-wider text-sm hover:border-white/20 active:scale-95">
+                            <button onClick={reset} className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-xl transition-all font-bold uppercase tracking-wider text-sm shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95">
                                 Neue Berechnung
                             </button>
                         </div>

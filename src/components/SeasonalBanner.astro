@@ -1,0 +1,36 @@
+---
+---
+<div id="seasonal-banner" class="bg-gradient-to-r from-red-900 to-zinc-900 text-white text-sm py-2 px-4 hidden relative z-50 border-b border-red-500/20">
+    <div class="container mx-auto flex justify-between items-center gap-4">
+        <div class="flex items-center gap-2 overflow-hidden">
+             <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shrink-0 animate-pulse">Neu</span>
+             <p class="truncate font-medium">
+                 <span class="hidden md:inline">Frühjahrs-Aktion: </span>
+                 Jetzt Lack prüfen lassen & <strong>10% Rabatt</strong> auf Keramikversiegelung sichern!
+             </p>
+        </div>
+        <div class="flex items-center gap-4 shrink-0">
+             <a href="/#kontakt" class="underline hover:text-red-400 font-bold hidden sm:block">Termin vereinbaren</a>
+             <button id="close-banner" class="text-white/60 hover:text-white p-1" aria-label="Banner schließen">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+             </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const banner = document.getElementById('seasonal-banner');
+    const closeBtn = document.getElementById('close-banner');
+    const STORAGE_KEY = 'rg-seasonal-banner-closed-v1'; // Versioning allows resharing later
+
+    if (banner && !localStorage.getItem(STORAGE_KEY)) {
+        banner.classList.remove('hidden');
+    }
+
+    if (closeBtn && banner) {
+        closeBtn.addEventListener('click', () => {
+            banner.classList.add('hidden');
+            localStorage.setItem(STORAGE_KEY, 'true');
+        });
+    }
+</script>
