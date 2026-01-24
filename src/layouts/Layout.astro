@@ -6,6 +6,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import LocalSchema from '../components/LocalSchema.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
+import MobileStickyBar from '../components/MobileStickyBar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 
@@ -89,7 +90,10 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
 		    <slot />
         </div>
         <Footer />
-        <WhatsAppButton />
+        <div class="hidden md:block">
+            <WhatsAppButton />
+        </div>
+        <MobileStickyBar />
         <ScrollToTop />
         <CookieBanner />
 	</body>
