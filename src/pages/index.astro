@@ -7,6 +7,9 @@ import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
 import GalleryLightbox from '../components/GalleryLightbox.jsx';
 import FAQ from '../components/FAQ.jsx';
+import ParticleHero from '../components/ParticleHero.jsx';
+import ScrollReveal from '../components/ScrollReveal.jsx';
+import GlossaryLinker from '../components/GlossaryLinker.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
 import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, Star, ArrowRight, CheckCircle2 } from 'lucide-react';
@@ -122,8 +125,13 @@ const faqSchema = {
 
     {/* HERO SECTION */}
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+        {/* Particle Canvas Layer */}
+        <div class="absolute inset-0 z-10 pointer-events-none">
+            <ParticleHero client:load />
+        </div>
+
         {/* High-End Hero Image */}
-        <div class="absolute inset-0">
+        <div class="absolute inset-0 z-0">
              <Image
                 src={heroImage}
                 alt="Premium Fahrzeugaufbereitung in der Werkstatt Tensfeld - RG Detailing"
@@ -132,27 +140,26 @@ const faqSchema = {
                 fetchpriority="high"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
-             {/* Subtle Red Overlay for Brand Identity */}
              <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
         </div>
 
         {/* Red Accents */}
-        <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-red-600/10 blur-[150px] rounded-full animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-red-900/10 blur-[100px] rounded-full"></div>
+        <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-red-600/10 blur-[150px] rounded-full animate-pulse z-0"></div>
+        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-red-900/10 blur-[100px] rounded-full z-0"></div>
 
-        <div class="container mx-auto px-4 z-10 text-center pt-20">
-            <h2 class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs md:text-sm font-bold tracking-[0.2em] mb-8 uppercase backdrop-blur-md">
+        <div class="container mx-auto px-4 z-20 text-center pt-20">
+            <h2 class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs md:text-sm font-bold tracking-[0.2em] mb-8 uppercase backdrop-blur-md animate-fade-in-up">
                 Handwerk. Leidenschaft. Perfektion.
             </h2>
-            <h1 class="text-6xl md:text-8xl font-bold mb-8 text-white tracking-tighter leading-tight">
+            <h1 class="text-6xl md:text-8xl font-bold mb-8 text-white tracking-tighter leading-tight animate-fade-in-up delay-100">
                 Wellness für <br/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">Ihr Automobil</span>
             </h1>
-            <p class="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+            <p class="text-xl md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed animate-fade-in-up delay-200">
                 Professionelle <strong class="text-white">Fahrzeugaufbereitung</strong>, <strong class="text-white">Autoreinigung</strong> und <strong class="text-white">Lackveredelung</strong> in Schleswig-Holstein.<br class="hidden md:block"/>
                 Erleben Sie den Unterschied zwischen Waschanlage und echtem Detailing.
             </p>
-            <div class="flex flex-col md:flex-row justify-center gap-6">
+            <div class="flex flex-col md:flex-row justify-center gap-6 animate-fade-in-up delay-300">
                 <a href="#rechner" class="group relative px-8 py-4 bg-red-700 rounded-full font-bold text-white overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(220,38,38,0.5)]">
                     <span class="relative z-10">Fahrzeugwert berechnen</span>
                     <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -192,14 +199,16 @@ const faqSchema = {
         {/* SERVICES SECTION */}
         <section id="leistungen" class="section-spacing relative">
              <div class="container mx-auto px-4">
-                <div class="text-center mb-20">
-                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
-                    <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
-                    <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
-                        Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
-                        Wir sind Ihr Ansprechpartner für Werterhalt in der Region Segeberg.
-                    </p>
-                </div>
+                <ScrollReveal client:visible>
+                    <div class="text-center mb-20">
+                        <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
+                        <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
+                        <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
+                            Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
+                            Wir sind Ihr Ansprechpartner für Werterhalt in der Region Segeberg.
+                        </p>
+                    </div>
+                </ScrollReveal>
 
                 {/* High-End Sealing Overview */}
                 <div class="mb-20">
@@ -210,23 +219,27 @@ const faqSchema = {
                     {services.map((service, index) => {
                         const IconComponent = iconMap[index] || Sparkles;
                         return (
-                        <a href={service.link} class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
-                             <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20"></div>
+                        <ScrollReveal client:visible delay={index * 100}>
+                            <a href={service.link} class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
+                                 <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20"></div>
 
-                             <div class="relative z-10 flex-grow">
-                                <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
-                                    <IconComponent size={28} strokeWidth={1.5} />
-                                </div>
-                                <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
-                                <p class="text-zinc-400 leading-relaxed mb-6">{service.shortDescription}</p>
-                             </div>
+                                 <div class="relative z-10 flex-grow">
+                                    <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
+                                        <IconComponent size={28} strokeWidth={1.5} />
+                                    </div>
+                                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
+                                    <p class="text-zinc-400 leading-relaxed mb-6">
+                                        <GlossaryLinker text={service.shortDescription} />
+                                    </p>
+                                 </div>
 
-                             <div class="relative z-10 mt-auto pt-6 border-t border-white/5">
-                                <div class="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
-                                    Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                                </div>
-                             </div>
-                        </a>
+                                 <div class="relative z-10 mt-auto pt-6 border-t border-white/5">
+                                    <div class="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
+                                        Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                 </div>
+                            </a>
+                        </ScrollReveal>
                         );
                     })}
                 </div>
@@ -238,34 +251,38 @@ const faqSchema = {
             <div class="container mx-auto px-4">
                  <div class="flex flex-col md:flex-row items-center gap-16">
                      <div class="md:w-1/3">
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Der Beweis</span>
-                         <h2 class="text-4xl font-bold mb-6 text-white mt-2">Wahrheit <br/> statt Versprechen</h2>
-                         <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
-                             Fotos können lügen, aber dieser Schieberegler nicht.
-                             Sehen Sie selbst, was eine professionelle <strong>Lackkorrektur</strong> bewirken kann.
-                             Grauschleier verschwinden, tiefe Farbe kehrt zurück.
-                         </p>
-                         <div class="flex gap-8">
-                             <div class="text-center">
-                                 <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">85%</div>
-                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
+                         <ScrollReveal client:visible>
+                             <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Der Beweis</span>
+                             <h2 class="text-4xl font-bold mb-6 text-white mt-2">Wahrheit <br/> statt Versprechen</h2>
+                             <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
+                                 Fotos können lügen, aber dieser Schieberegler nicht.
+                                 Sehen Sie selbst, was eine professionelle <strong>Lackkorrektur</strong> bewirken kann.
+                                 Grauschleier verschwinden, tiefe Farbe kehrt zurück.
+                             </p>
+                             <div class="flex gap-8">
+                                 <div class="text-center">
+                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">85%</div>
+                                     <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
+                                 </div>
+                                 <div class="text-center">
+                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">100%</div>
+                                     <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
+                                 </div>
                              </div>
-                             <div class="text-center">
-                                 <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">100%</div>
-                                 <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
-                             </div>
-                         </div>
+                         </ScrollReveal>
                      </div>
                      <div class="md:w-2/3 w-full">
-                        <div class="rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative group">
-                            <div class="absolute inset-0 z-10 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
-                             <BeforeAfterSlider
-                                client:visible
-                                beforeImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-1.jpg"
-                                afterImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-2.jpg"
-                                alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
-                            />
-                        </div>
+                        <ScrollReveal client:visible delay={200}>
+                            <div class="rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative group">
+                                <div class="absolute inset-0 z-10 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
+                                 <BeforeAfterSlider
+                                    client:visible
+                                    beforeImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-1.jpg"
+                                    afterImage="https://rg-detailing.de/wp-content/uploads/2023/01/Fahrzeugaufbereitung-vorher-nacher-2.jpg"
+                                    alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
+                                />
+                            </div>
+                        </ScrollReveal>
                      </div>
                  </div>
             </div>
@@ -274,33 +291,41 @@ const faqSchema = {
         {/* WHY US SECTION */}
         <section class="section-spacing">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-16">
-                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
-                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Warum RG Detailing?</h2>
-                </div>
+                <ScrollReveal client:visible>
+                    <div class="text-center mb-16">
+                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
+                         <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Warum RG Detailing?</h2>
+                    </div>
+                </ScrollReveal>
 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                            <Gem size={32} className="text-red-500" strokeWidth={1.5} />
+                    <ScrollReveal client:visible delay={100}>
+                        <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                                <Gem size={32} className="text-red-500" strokeWidth={1.5} />
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-4">Zertifizierte Keramikversiegelung</h3>
+                            <p class="text-zinc-400 leading-relaxed">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Zertifizierte Keramikversiegelung</h3>
-                        <p class="text-zinc-400 leading-relaxed">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
-                    </div>
-                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                            <FlaskConical size={32} className="text-red-500" strokeWidth={1.5} />
+                    </ScrollReveal>
+                    <ScrollReveal client:visible delay={200}>
+                        <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                                <FlaskConical size={32} className="text-red-500" strokeWidth={1.5} />
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-4">High-End Pflegeprodukte</h3>
+                            <p class="text-zinc-400 leading-relaxed">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-4">High-End Pflegeprodukte</h3>
-                        <p class="text-zinc-400 leading-relaxed">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
-                    </div>
-                    <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                        <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                            <Handshake size={32} className="text-red-500" strokeWidth={1.5} />
+                    </ScrollReveal>
+                    <ScrollReveal client:visible delay={300}>
+                        <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
+                                <Handshake size={32} className="text-red-500" strokeWidth={1.5} />
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-4">Norddeutsch & Direkt</h3>
+                            <p class="text-zinc-400 leading-relaxed">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-4">Norddeutsch & Direkt</h3>
-                        <p class="text-zinc-400 leading-relaxed">Keine leeren Versprechen. Wir erklären genau, was bei Ihrer Aufbereitung möglich ist – und was nicht.</p>
-                    </div>
+                    </ScrollReveal>
                 </div>
             </div>
         </section>
@@ -311,10 +336,12 @@ const faqSchema = {
         {/* PROCESS SECTION */}
         <section class="section-spacing relative overflow-hidden">
              <div class="container mx-auto px-4">
-                 <div class="text-center mb-20">
-                     <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Transparenz</span>
-                     <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Der RG Detailing Ablauf</h2>
-                 </div>
+                 <ScrollReveal client:visible>
+                     <div class="text-center mb-20">
+                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Transparenz</span>
+                         <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Der RG Detailing Ablauf</h2>
+                     </div>
+                 </ScrollReveal>
 
                  <div class="relative">
                      {/* Connector Line (Desktop) */}
@@ -322,29 +349,37 @@ const faqSchema = {
 
                      <div class="grid md:grid-cols-4 gap-8 relative z-10">
                          {/* Step 1 */}
-                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">1</div>
-                             <h3 class="text-white font-bold text-xl mb-3">Check</h3>
-                             <p class="text-sm text-zinc-400 leading-relaxed">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
-                         </div>
+                         <ScrollReveal client:visible delay={100}>
+                             <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">1</div>
+                                 <h3 class="text-white font-bold text-xl mb-3">Check</h3>
+                                 <p class="text-sm text-zinc-400 leading-relaxed">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
+                             </div>
+                         </ScrollReveal>
                          {/* Step 2 */}
-                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-100">
-                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">2</div>
-                             <h3 class="text-white font-bold text-xl mb-3">Wash</h3>
-                             <p class="text-sm text-zinc-400 leading-relaxed">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
-                         </div>
+                         <ScrollReveal client:visible delay={200}>
+                             <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">2</div>
+                                 <h3 class="text-white font-bold text-xl mb-3">Wash</h3>
+                                 <p class="text-sm text-zinc-400 leading-relaxed">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
+                             </div>
+                         </ScrollReveal>
                          {/* Step 3 */}
-                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-200">
-                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">3</div>
-                             <h3 class="text-white font-bold text-xl mb-3">Polish</h3>
-                             <p class="text-sm text-zinc-400 leading-relaxed">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
-                         </div>
+                         <ScrollReveal client:visible delay={300}>
+                             <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">3</div>
+                                 <h3 class="text-white font-bold text-xl mb-3">Polish</h3>
+                                 <p class="text-sm text-zinc-400 leading-relaxed">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
+                             </div>
+                         </ScrollReveal>
                          {/* Step 4 */}
-                         <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500 delay-300">
-                             <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">4</div>
-                             <h3 class="text-white font-bold text-xl mb-3">Protect</h3>
-                             <p class="text-sm text-zinc-400 leading-relaxed">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
-                         </div>
+                         <ScrollReveal client:visible delay={400}>
+                             <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">4</div>
+                                 <h3 class="text-white font-bold text-xl mb-3">Protect</h3>
+                                 <p class="text-sm text-zinc-400 leading-relaxed">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
+                             </div>
+                         </ScrollReveal>
                      </div>
                  </div>
              </div>
@@ -374,46 +409,50 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                  <div class="grid md:grid-cols-2 gap-8">
                      {/* DAMPFDRACHEN VERTRIEB */}
-                     <div class="glass-panel p-8 md:p-12 border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
-                         <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
-                         <div class="relative z-10">
-                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
-                                 <CheckCircle2 size={12} /> Offizieller Vertrieb
+                     <ScrollReveal client:visible delay={100}>
+                         <div class="glass-panel p-8 md:p-12 border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
+                             <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
+                             <div class="relative z-10">
+                                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                                     <CheckCircle2 size={12} /> Offizieller Vertrieb
+                                 </div>
+                                 <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
+                                 <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
+                                     Holen Sie sich die Kraft des Trockendampfs nach Hause oder in Ihr Unternehmen.
+                                     Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
+                                 </p>
+                                 <div class="flex items-center gap-4">
+                                     <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-900/20">
+                                         Geräte ansehen
+                                     </a>
+                                 </div>
                              </div>
-                             <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
-                             <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
-                                 Holen Sie sich die Kraft des Trockendampfs nach Hause oder in Ihr Unternehmen.
-                                 Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
-                             </p>
-                             <div class="flex items-center gap-4">
-                                 <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-900/20">
-                                     Geräte ansehen
-                                 </a>
-                             </div>
+                             <img src="/images/remo-steam-cleaning.jpg" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
                          </div>
-                         <img src="/images/remo-steam-cleaning.jpg" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
-                     </div>
+                     </ScrollReveal>
 
                      {/* LABOCOSMETICA & GLOSSBOSS */}
-                     <div class="glass-panel p-8 md:p-12 relative overflow-hidden">
-                         <div class="relative z-10">
-                             <div class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-bold uppercase tracking-wider mb-6">
-                                 Car Care Products
+                     <ScrollReveal client:visible delay={200}>
+                         <div class="glass-panel p-8 md:p-12 relative overflow-hidden">
+                             <div class="relative z-10">
+                                 <div class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 text-xs font-bold uppercase tracking-wider mb-6">
+                                     Car Care Products
+                                 </div>
+                                 <h3 class="text-3xl font-bold text-white mb-4">Pflege & Zubehör</h3>
+                                 <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
+                                     Nutzen Sie die Produkte, denen wir vertrauen.
+                                     <strong>Labocosmetica</strong> für High-End Pflege oder <strong>Glossboss</strong> für das beste Zubehör.
+                                 </p>
+                                 <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                                     <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
+                                         Zum Glossboss Shop
+                                     </a>
+                                     <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
+                                 </div>
                              </div>
-                             <h3 class="text-3xl font-bold text-white mb-4">Pflege & Zubehör</h3>
-                             <p class="text-zinc-400 mb-8 leading-relaxed max-w-md">
-                                 Nutzen Sie die Produkte, denen wir vertrauen.
-                                 <strong>Labocosmetica</strong> für High-End Pflege oder <strong>Glossboss</strong> für das beste Zubehör.
-                             </p>
-                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                                 <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
-                                     Zum Glossboss Shop
-                                 </a>
-                                 <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
-                             </div>
+                             <img src="/images/labocosmetica-logo.jpg" loading="lazy" decoding="async" class="absolute bottom-4 right-4 w-40 opacity-20 mix-blend-screen" />
                          </div>
-                         <img src="/images/labocosmetica-logo.jpg" loading="lazy" decoding="async" class="absolute bottom-4 right-4 w-40 opacity-20 mix-blend-screen" />
-                     </div>
+                     </ScrollReveal>
                  </div>
              </div>
         </section>
@@ -421,8 +460,10 @@ const faqSchema = {
         {/* GALLERY GRID */}
         <section id="gallery" class="section-spacing">
              <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                <GalleryLightbox client:visible images={galleryImages} />
+                <ScrollReveal client:visible>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
+                    <GalleryLightbox client:visible images={galleryImages} />
+                </ScrollReveal>
              </div>
         </section>
 

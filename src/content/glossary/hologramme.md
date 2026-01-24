@@ -1,17 +1,16 @@
 ---
 title: "Hologramme"
-description: "Feine Polierspuren oder Kratzer, die im direkten Sonnenlicht wie 3D-Effekte wirken. Sie entstehen oft durch falsches Polieren oder Waschanlagen."
+description: "Feine, dreidimensionale Lichtreflexionen im Lack, die oft nach unsachgemäßem Polieren mit der Rotationsmaschine entstehen. Sie wirken wie schwebende Schleier."
 category: "Lackdefekte"
 ---
 
 ## Was sind Hologramme?
+Hologramme (auch "Polierwolken" oder "Buffer Trails" genannt) sind feinste Kratzermuster, die durch unsachgemäße Maschinenpolitur entstehen. Sie sind besonders im direkten Sonnenlicht sichtbar und erzeugen einen unschönen, billig wirkenden 3D-Effekt auf dem Lack.
 
-Hologramme sind mikroskopisch feine Kratzer im Lack, die durch Lichtbrechung einen schimmernden, wolkigen Effekt erzeugen. Sie sind besonders auf dunklen Lacken im direkten Sonnenlicht oder unter starker LED-Beleuchtung sichtbar.
+### Ursachen
+*   **Rotationspolierer:** Bei falscher Handhabung (zu viel Druck, verkantetes Pad) entstehen diese Spuren.
+*   **Schmutzige Pads:** Verunreinigungen im Polierschwamm wirken wie Schmirgelpapier.
+*   **Nicht auspolierte Politur:** Rückstände, die nicht sauber abgenommen wurden.
 
-## Ursachen
-
-Die häufigste Ursache für Hologramme ist eine **unsachgemäße Maschinenpolitur**. Wenn mit einer Rotationspoliermaschine, verschmutzten Polierpads oder der falschen Politur gearbeitet wird, bleiben diese Spuren zurück. Auch aggressive Bürsten in Waschanlagen können hologrammartige Muster (Swirls) verursachen.
-
-## Beseitigung
-
-Hologramme lassen sich nicht einfach "wegwischen". Sie müssen durch eine **Finish-Politur** (Hochglanzpolitur) mit einer Exzenter-Poliermaschine dauerhaft entfernt werden. Dabei wird die Lackoberfläche so geglättet, dass das Licht wieder gleichmäßig reflektiert wird.
+### Beseitigung
+Hologramme lassen sich nur durch eine fachgerechte **Hochglanzpolitur** (Finish) entfernen, idealerweise mit einer Exzenter-Poliermaschine (Dual Action), die keine neuen Zwangsrotation-Spuren hinterlässt. Bei RG Detailing ist dieser Schritt Standard nach jeder Lackkorrektur ("Anti-Hologramm-Finish").

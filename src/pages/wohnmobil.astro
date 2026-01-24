@@ -7,6 +7,7 @@ import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/wohnmobil-hero.jpg';
 import { Check } from 'lucide-react';
+import FAQ from '../components/FAQ.jsx';
 
 export const prerender = true;
 
@@ -17,9 +18,37 @@ const schema = {
   "description": "Professionelle Wohnmobil-Aufbereitung in Tensfeld. GFK-Pflege, Keramikversiegelung und hygienische Dampfreinigung.",
   "priceRange": "$$$"
 };
+
+const faqItems = [
+    {
+        question: "Können Sie auch große Wohnmobile über 8 Meter waschen?",
+        answer: "Ja, unsere Halle in Tensfeld ist speziell für große Fahrzeuge ausgelegt. Wir haben Platz und Gerüste für Fahrzeuge bis 9 Meter Länge und entsprechende Höhe."
+    },
+    {
+        question: "Wie entfernen Sie Regenstreifen auf GFK?",
+        answer: "Regenstreifen sind oft tief eingebrannt. Wir nutzen spezielle GFK-Polituren, um die Oberfläche zu glätten, und versiegeln sie anschließend, damit neue Streifen sich nicht festsetzen."
+    },
+    {
+        question: "Reinigen Sie auch die Markise?",
+        answer: "Ja, die Markisenreinigung ist Teil unseres Außenpakets. Wir entfernen Stockflecken und Grünspan schonend mit Dampf und Spezialreinigern."
+    }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 ---
 
-<Layout title="Wohnmobil & Caravan Aufbereitung Schleswig-Holstein | RG Detailing" description="Professionelle Wohnmobil-Aufbereitung in Schleswig-Holstein. Spezialisiert auf GFK-Pflege, Keramikversiegelung & hygienische Innenreinigung in Tensfeld." schema={schema} preloadImage={heroImage.src}>
+<Layout title="Wohnmobil & Caravan Aufbereitung Schleswig-Holstein | RG Detailing" description="Professionelle Wohnmobil-Aufbereitung in Schleswig-Holstein. Spezialisiert auf GFK-Pflege, Keramikversiegelung & hygienische Innenreinigung in Tensfeld." schema={[schema, faqSchema]} preloadImage={heroImage.src}>
     <ServiceSchema
         name="Wohnmobil Aufbereitung"
         description="Spezialpflege für Wohnmobile und Caravans. GFK-Politur, Keramikversiegelung und Innenraum-Hygiene in großer Halle."
@@ -115,12 +144,20 @@ const schema = {
                 <a href="tel:+491633845081" class="inline-block bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-red-900/30">
                     Termin zur Besichtigung vereinbaren
                 </a>
-                <a href="/#rechner" class="inline-block bg-zinc-800 hover:bg-zinc-700 text-white px-8 py-4 rounded-full font-bold text-lg transition border border-zinc-700">
+                <a href="/#rechner?preselect=camper" class="inline-block bg-zinc-800 hover:bg-zinc-700 text-white px-8 py-4 rounded-full font-bold text-lg transition border border-zinc-700">
                     Preisrechner starten
                 </a>
             </div>
             <p class="mt-4 text-sm text-zinc-500">Oder rufen Sie direkt an: 0163 38 45 08 1</p>
         </div>
+
+         {/* FAQ Section */}
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zu Wohnmobilen</h2>
+            <div class="max-w-3xl mx-auto">
+                <FAQ client:visible items={faqItems} />
+            </div>
+        </section>
 
     </main>
 </Layout>

@@ -1,17 +1,16 @@
 ---
-title: "Kneten (Lackknete)"
-description: "Ein Prozess zur porentiefen Reinigung des Lacks. Entfernt festsitzende Ablagerungen wie Flugrost, Teer und Baumharz."
+title: "Kneten"
+description: "Ein mechanischer Reinigungsschritt mit spezieller Reinigungsknete (Clay Bar), um fühlbare Ablagerungen wie Teer, Flugrost oder Baumharz vom Lack zu entfernen."
 category: "Reinigung"
 ---
 
-## Wozu Kneten?
+## Was ist "Kneten"?
+Das Kneten ("Claying") ist ein essenzieller Schritt vor jeder Politur. Nach der Wäsche fühlt sich der Lack oft noch rau an. Diese Rauheit stammt von festgesetzten Partikeln, die normale Reiniger nicht lösen können.
 
-Selbst nach einer gründlichen Handwäsche fühlt sich der Autolack oft noch rau an. Der Grund: Festsitzende Partikel wie **Flugrost, Teerspritzer, Insektenreste oder Baumharz**, die in den Lackporen stecken. Diese lassen sich mit Wasser und Schwamm nicht entfernen.
+### Wie funktioniert es?
+Eine spezielle Reinigungsknete wird zusammen mit einem Gleitmittel (Lubricant) über den nassen Lack geschoben. Die Knete "greift" die überstehenden Partikel (Teer, Baumharz, Industrieablagerungen) und zieht sie schonend aus den Lackporen, ohne den Lack selbst abzutragen.
 
-Hier kommt die **Lackknete** (Cleaning Clay) zum Einsatz.
-
-## Anwendung
-
-Zusammen mit einem Gleitmittel (Lubricant) wird die Knete sanft über den nassen Lack geschoben. Sie nimmt die Verschmutzungen auf und schließt sie in sich ein.
-
-Das Ergebnis ist eine **spiegelglatte Oberfläche** ("Po-glatt"), die perfekt für die anschließende Politur vorbereitet ist. Ohne diesen Schritt würden die Schmutzpartikel beim Polieren im Pad hängenbleiben und neue Kratzer verursachen.
+### Warum ist es wichtig?
+*   **Glatte Oberfläche:** Der Lack wird spiegelglatt ("Baby-Popo-Effekt").
+*   **Sicheres Polieren:** Würde man ohne Kneten polieren, würden sich die harten Schmutzpartikel im Polierpad festsetzen und neue Kratzer verursachen.
+*   **Bessere Haftung:** Versiegelungen können sich nur auf einem 100% reinen Lack optimal verbinden.
