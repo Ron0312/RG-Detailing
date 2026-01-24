@@ -1,11 +1,25 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { checkRateLimit } from '../../lib/rate-limit';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
+    const ip = clientAddress || request.headers.get('x-forwarded-for') || 'unknown';
+    if (!checkRateLimit(`log-404:${ip}`, 60, 60000)) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
+    }
+
     const data = await request.json();
-    const { url, referrer, userAgent } = data;
+
+    const sanitize = (str: any) => {
+        if (typeof str !== 'string') return '';
+        return str.replace(/[\r\n]+/g, ' ').substring(0, 500);
+    };
+
+    const url = sanitize(data.url);
+    const referrer = sanitize(data.referrer);
+    const userAgent = sanitize(data.userAgent);
 
     // Log to console (stdout) for container/serverless environments
     console.log(`[404 TRACKING] URL: ${url} | Referrer: ${referrer || 'Direct'} | UA: ${userAgent}`);
