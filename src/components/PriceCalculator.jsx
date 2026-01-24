@@ -34,6 +34,24 @@ export default function PriceCalculator() {
     const containerRef = useRef(null);
 
     useEffect(() => {
+        // Handle Pre-Selection from URL
+        const params = new URLSearchParams(window.location.search);
+        const preselect = params.get('preselect');
+        if (preselect && config.sizes[preselect]) {
+             setSelections(prev => ({ ...prev, size: preselect }));
+             if (preselect === 'camper') {
+                 setStep(STEPS.CAMPER_LENGTH);
+             } else {
+                 setStep(STEPS.CONDITION);
+             }
+             // Scroll to calculator
+             if (containerRef.current) {
+                 containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+             }
+        }
+    }, []);
+
+    useEffect(() => {
         if (containerRef.current && step !== STEPS.SIZE) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -228,7 +246,7 @@ export default function PriceCalculator() {
                     </div>
 
                     <div className="text-center mb-8">
-                        <div className="text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
+                        <div className="text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">Geschätzte Investition (Sparpotenzial)</div>
                         <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-500 align-top ml-1">*</span></div>
                     </div>
 
@@ -246,7 +264,7 @@ export default function PriceCalculator() {
                 <div className="relative z-10">
                     <div className="text-center mb-10">
                         <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6">
-                            Ihre Investition
+                            Geschätzte Investition
                         </span>
                         <div className="flex items-baseline justify-center gap-3 leading-none mb-3">
                              <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
