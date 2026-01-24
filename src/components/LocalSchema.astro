@@ -1,7 +1,7 @@
 ---
+import { services } from '../data/services';
 ---
-<script type="application/ld+json">
-{
+<script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
   "name": "RG Detailing",
@@ -27,15 +27,30 @@
   "email": "kontakt@rg-detailing.de",
   "sameAs": [
     "https://www.instagram.com/rg_detailing",
-    "https://www.facebook.com/rgdetailing"
+    "https://www.facebook.com/rgdetailing",
+    "https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa",
+    "https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg"
   ],
   "hasMap": "https://www.google.com/maps/search/?api=1&query=RG+Detailing+Tensfeld",
+  "paymentAccepted": "Cash, Credit Card, Invoice",
+  "currenciesAccepted": "EUR",
   "areaServed": [
     { "@type": "City", "name": "Tensfeld" },
     { "@type": "City", "name": "Bad Segeberg" },
     { "@type": "City", "name": "Wahlstedt" },
     { "@type": "City", "name": "Neumünster" },
-    { "@type": "City", "name": "Bornhöved" }
+    { "@type": "City", "name": "Bornhöved" },
+    { "@type": "City", "name": "Lübeck" },
+    { "@type": "City", "name": "Kiel" },
+    {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+            "@type": "GeoCoordinates",
+            "latitude": 54.0667,
+            "longitude": 10.3000
+        },
+        "geoRadius": "40000"
+    }
   ],
   "priceRange": "€€-€€€",
   "openingHoursSpecification": [
@@ -62,51 +77,35 @@
       "name": "Dampftec Partner"
     }
   ],
-  "makesOffer": [
-    {
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "47"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "High-End Detailing Services",
+    "itemListElement": services.map((service) => ({
       "@type": "Offer",
       "itemOffered": {
         "@type": "Service",
-        "name": "Interior & Wash",
-        "description": "Gründliche Außenwäsche und intensive Innenraumreinigung."
-      },
-      "priceSpecification": {
-        "@type": "UnitPriceSpecification",
-        "price": 350,
-        "priceCurrency": "EUR",
-        "referenceQuantity": {
-          "@type": "QuantitativeValue",
-          "unitCode": "C62",
-          "value": 1
+        "name": service.title,
+        "description": service.description,
+        "url": `https://rg-detailing.de${service.link}`
+      }
+    }))
+  },
+  "makesOffer": services.map((service) => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.title,
+        "description": service.description,
+        "url": `https://rg-detailing.de${service.link}`,
+        "provider": {
+            "@type": "AutoDetailing",
+            "name": "RG Detailing"
         }
       }
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "All-in-One",
-        "description": "Hochglanzpolitur und Polymerversiegelung."
-      },
-      "priceSpecification": {
-        "@type": "UnitPriceSpecification",
-        "price": 500,
-        "priceCurrency": "EUR"
-      }
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "Full Detailing",
-        "description": "Mehrstufige Politur und High-End Keramikversiegelung."
-      },
-      "priceSpecification": {
-        "@type": "UnitPriceSpecification",
-        "price": 800,
-        "priceCurrency": "EUR"
-      }
-    }
-  ]
-}
-</script>
+  }))
+})} />

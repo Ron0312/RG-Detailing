@@ -54,92 +54,38 @@ const faqItems = [
   }
 ];
 
-const mainSchema = {
+const howToSchema = {
   "@context": "https://schema.org",
-  "@type": "AutoDetailing",
-  "name": "RG Detailing",
-  "image": "https://rg-detailing.de/logo.png",
-  "description": "Exklusive Fahrzeugaufbereitung in Schleswig-Holstein. Zertifizierter Labocosmetica Partner für Keramikversiegelung, Lackveredelung & Leasing-Rückläufer in Tensfeld.",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Dorfstraße 11",
-    "addressLocality": "Tensfeld",
-    "postalCode": "23824",
-    "addressCountry": "DE",
-    "addressRegion": "Schleswig-Holstein"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 54.0667,
-    "longitude": 10.3000
-  },
-  "url": "https://rg-detailing.de",
-  "telephone": "+491633845081",
-  "priceRange": "€€-€€€",
-  "openingHoursSpecification": [
+  "@type": "HowTo",
+  "name": "Fahrzeugaufbereitung Ablauf bei RG Detailing",
+  "description": "Unser 4-Schritte Prozess zur perfekten Lackveredelung und Versiegelung.",
+  "totalTime": "P3D",
+  "step": [
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "18:00"
+      "@type": "HowToStep",
+      "name": "Check & Analyse",
+      "text": "Bestandsaufnahme und Lackanalyse unter Speziallicht in unserer Halle zur Ermittlung der Defekttiefe.",
+      "position": 1
     },
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Saturday"],
-      "opens": "10:00",
-      "closes": "14:00"
+      "@type": "HowToStep",
+      "name": "Wash & Clay",
+      "text": "Schonende Handwäsche, chemische Dekontamination (Flugrost) und Kneten zur porentiefen Reinigung.",
+      "position": 2
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Polish & Correct",
+      "text": "Mehrstufige Defektkorrektur und Hochglanzpolitur zur Entfernung von Kratzern und Grauschleier.",
+      "position": 3
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Protect & Seal",
+      "text": "Applikation der Langzeitversiegelung (Keramik, Graphen oder Wachs) inkl. Aushärtezeit.",
+      "position": 4
     }
-  ],
-  "areaServed": sortedCities.map(city => city.data.name).concat(["Schleswig-Holstein", "Bad Segeberg", "Lübeck", "Neumünster", "Kiel"]),
-  "sameAs": [
-      "https://www.instagram.com/rg_detailing",
-      "https://www.facebook.com/rgdetailing",
-      "https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc",
-      "https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg"
-  ],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "High-End Detailing Services",
-    "itemListElement": services.map((service, index) => ({
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": service.title,
-        "description": service.description,
-        "url": `https://rg-detailing.de${service.link}`
-      }
-    }))
-  },
-  "makesOffer": services.map((service) => ({
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": service.title,
-        "description": service.description,
-        "url": `https://rg-detailing.de${service.link}`,
-        "provider": {
-            "@type": "AutoDetailing",
-            "name": "RG Detailing"
-        }
-      }
-  })),
-  "review": {
-      "@type": "Review",
-      "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-      },
-      "author": {
-          "@type": "Person",
-          "name": "Google User"
-      }
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "47"
-  }
+  ]
 };
 
 const faqSchema = {
@@ -159,7 +105,18 @@ const faqSchema = {
 <Layout
     title="RG Detailing | Premium Fahrzeugaufbereitung Schleswig-Holstein"
     description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld. Jetzt Termin sichern!"
-    schema={[mainSchema, faqSchema]}
+    schema={[
+        howToSchema,
+        faqSchema,
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "RG Detailing Startseite",
+            "dateModified": new Date().toISOString().split('T')[0],
+            "description": "Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung.",
+            "url": "https://rg-detailing.de"
+        }
+    ]}
     preloadImage={heroImage.src}
 >
 
@@ -434,7 +391,7 @@ const faqSchema = {
                                  </a>
                              </div>
                          </div>
-                         <img src="/images/remo-steam-cleaning.jpg" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
+                         <img src="/images/remo-steam-cleaning.jpg" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
                      </div>
 
                      {/* LABOCOSMETICA & GLOSSBOSS */}
@@ -455,7 +412,7 @@ const faqSchema = {
                                  <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
                              </div>
                          </div>
-                         <img src="/images/labocosmetica-logo.jpg" class="absolute bottom-4 right-4 w-40 opacity-20 mix-blend-screen" />
+                         <img src="/images/labocosmetica-logo.jpg" loading="lazy" decoding="async" class="absolute bottom-4 right-4 w-40 opacity-20 mix-blend-screen" />
                      </div>
                  </div>
              </div>
@@ -470,7 +427,7 @@ const faqSchema = {
         </section>
 
         {/* FAQ SECTION FOR SEO */}
-        <section id="faq" class="section-spacing border-t border-white/5 bg-zinc-900/20">
+        <section id="faq" class="section-spacing border-t border-white/5 bg-zinc-900/20 content-auto">
             <div class="container mx-auto px-4">
                 <div class="max-w-3xl mx-auto">
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
