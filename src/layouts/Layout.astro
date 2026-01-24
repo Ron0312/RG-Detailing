@@ -15,6 +15,7 @@ interface Props {
     schema?: object;
     keywords?: string;
     image?: string;
+    preloadImage?: string;
 }
 
 const {
@@ -22,7 +23,8 @@ const {
     description = "RG Detailing: Premium Fahrzeugaufbereitung in Schleswig-Holstein. Zertifizierte Keramikversiegelung & Lackveredelung in Tensfeld. Jetzt Termin vereinbaren!",
     schema,
     keywords = "Fahrzeugaufbereitung, Autoaufbereitung, Autoreinigung, Innenraumreinigung, KFZ Aufbereitung, Keramikversiegelung, Lackaufbereitung, Leasing Rückgabe, Motorwäsche, Schleswig-Holstein, Bad Segeberg, Neumünster, Tensfeld",
-    image = "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
+    image = "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop",
+    preloadImage
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -64,6 +66,9 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
         <meta property="twitter:image" content={socialImageURL} />
+
+        {/* LCP Preload */}
+        {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
 
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />

@@ -28,11 +28,11 @@ const iconMap = {
 };
 
 const galleryImages = [
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png", alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg", alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg", alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg", alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg", alt: "Exklusives Detailing Ergebnis Schleswig-Holstein" }
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png", alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg", alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg", alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg", alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
+  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg", alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" }
 ];
 
 const faqItems = [
@@ -160,6 +160,7 @@ const faqSchema = {
     title="RG Detailing | Premium Fahrzeugaufbereitung Schleswig-Holstein"
     description="Ihr Experte für Lackveredelung, Keramikversiegelung und Leasing-Aufbereitung. Zertifizierter Labocosmetica Partner in Tensfeld. Jetzt Termin sichern!"
     schema={[mainSchema, faqSchema]}
+    preloadImage={heroImage.src}
 >
 
     {/* HERO SECTION */}

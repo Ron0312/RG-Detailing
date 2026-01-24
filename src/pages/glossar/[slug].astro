@@ -2,6 +2,9 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ScrollProgress from '../../components/ScrollProgress.jsx';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const glossaryEntries = await getCollection('glossary');
@@ -16,6 +19,7 @@ const { Content } = await entry.render();
 ---
 
 <Layout title={`${entry.data.title} - Glossar | RG Detailing`} description={entry.data.description}>
+    <ScrollProgress client:load />
     <div class="container mx-auto px-4 py-32">
         <Breadcrumbs crumbs={[
             { label: 'Startseite', href: '/' },
