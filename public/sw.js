@@ -6,8 +6,11 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/favicon.svg',
   '/logo.png',
-  '/fonts/syne.woff2', // Assuming font path, adjust if needed
-  '/fonts/inter.woff2'
+  '/fonts/inter-latin-400-normal.woff2',
+  '/fonts/inter-latin-700-normal.woff2',
+  '/fonts/syne-latin-400-normal.woff2',
+  '/fonts/syne-latin-700-normal.woff2',
+  '/fonts/syne-latin-800-normal.woff2'
 ];
 
 self.addEventListener('install', (event) => {
