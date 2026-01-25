@@ -58,6 +58,33 @@ const schema = {
     }
   ],
   "image": "https://rg-detailing.de/logo.png",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Fahrzeugaufbereitung Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Keramikversiegelung"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Lackkorrektur"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Innenraumreinigung"
+        }
+      }
+    ]
+  },
   "mainEntity": [
     {
       "@type": "Question",
@@ -136,28 +163,35 @@ const schema = {
                 <div class="lg:col-span-3">
                     <h2 class="text-3xl font-bold mb-6 text-white">Lohnt sich der Weg aus {name}?</h2>
                     <p class="text-zinc-400 mb-8 leading-relaxed text-lg">
-                        Definitiv. In {name} finden Sie vielleicht viele Waschanlagen und schnelle Aufbereiter.
-                        Doch RG Detailing in Tensfeld steht für <strong>Detailversessenheit</strong> und <strong>High-End Qualität</strong>.
-                        Für eine Keramikversiegelung, die 3-5 Jahre hält, lohnt sich jeder Kilometer.
+                        Definitiv. In {name} finden Sie vielleicht viele Waschanlagen und Standard-Aufbereiter.
+                        Doch RG Detailing in Tensfeld ist eine <strong>Manufaktur für Fahrzeugpflege</strong>.
+                        Wir nehmen uns die Zeit, die Ihr Fahrzeug verdient – oft 20-30 Stunden für eine Lackkorrektur.
+                        Für kompromisslose <strong>High-End Qualität</strong> und Werterhalt lohnt sich der Weg immer.
                     </p>
                     <ul class="space-y-4">
                         <li class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 border border-red-500/20">
                                 <Check className="w-5 h-5" />
                             </div>
-                            <span class="text-zinc-300">Zertifizierter <strong class="text-white">Labocosmetica Detailer</strong></span>
+                            <span class="text-zinc-300">Zertifizierter <strong class="text-white">Labocosmetica Detailer</strong> (Excellence Center)</span>
                         </li>
                         <li class="flex items-center gap-4">
                              <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 border border-red-500/20">
                                 <Check className="w-5 h-5" />
                              </div>
-                            <span class="text-zinc-300">Spezialist für dunkle Lacke & Leasingrückläufer</span>
+                            <span class="text-zinc-300">Spezialisiert auf <strong class="text-white">Luxusfahrzeuge & Sportwagen</strong></span>
                         </li>
                          <li class="flex items-center gap-4">
                              <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 border border-red-500/20">
                                 <Check className="w-5 h-5" />
                              </div>
                             <span class="text-zinc-300">Hygienische Innenraumreinigung (170°C Dampf)</span>
+                        </li>
+                         <li class="flex items-center gap-4">
+                             <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shrink-0 border border-red-500/20">
+                                <Check className="w-5 h-5" />
+                             </div>
+                            <span class="text-zinc-300">Halle alarmgesichert & videoüberwacht</span>
                         </li>
                     </ul>
                 </div>
@@ -181,6 +215,32 @@ const schema = {
                     </a>
                 </div>
             </div>
+        </div>
+
+        {/* High End Promise Section */}
+        <div class="grid md:grid-cols-2 gap-8 mb-32">
+             <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-950/50 flex flex-col justify-center">
+                 <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center border border-white/10">
+                        <ShieldCheck className="text-white w-6 h-6" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Sicherheit & Diskretion</h3>
+                 </div>
+                 <p class="text-zinc-400 leading-relaxed">
+                    Ihr Fahrzeug ist bei uns in besten Händen. Unsere Halle ist nicht öffentlich einsehbar, voll alarmgesichert und videoüberwacht. Wir behandeln jedes Kundenfahrzeug mit absoluter Diskretion.
+                 </p>
+             </div>
+             <div class="glass-panel p-8 rounded-3xl border border-white/5 bg-zinc-950/50 flex flex-col justify-center">
+                 <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center border border-white/10">
+                        <Key className="text-white w-6 h-6" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Concierge Service</h3>
+                 </div>
+                 <p class="text-zinc-400 leading-relaxed">
+                    Sie haben keine Zeit, Ihr Fahrzeug aus {name} zu bringen? Auf Wunsch organisieren wir einen professionellen Hol- und Bringservice (geschlossener Transport möglich) oder stellen Ihnen einen Werkstattersatzwagen.
+                 </p>
+             </div>
         </div>
 
         {/* Services Grid optimized for Location */}
