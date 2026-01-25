@@ -14,7 +14,7 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 9.  [x] **Wohnmobil Paket:** Im Rechner explizit machen, dass "Politur" nur auf Anfrage berechnet wird (aktuell nur Wäsche kalkuliert).
 10. [x] **Kontakt Konsistenz:** Telefonnummer-Formatierung überall vereinheitlichen (z.B. +49 vs 0163).
 11. [x] **Öffnungszeiten:** Abgleich der Schema.org Daten mit den tatsächlichen Google Maps Zeiten.
-12. **Cookie Banner:** Implementierung einer DSGVO-konformen Consent-Lösung (falls Tracking/Maps genutzt wird).
+12. [x] **Cookie Banner:** Implementierung einer DSGVO-konformen Consent-Lösung (via `CookieBanner.astro` und `localStorage`).
 
 ## 2. SEO & GEO (Traffic & Sichtbarkeit)
 13. [x] **Schema "sameAs":** Hinzufügen von Social Media Links (Spotify, YouTube) zum `Organization` Schema.
@@ -38,7 +38,7 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 29. [x] **404 Seite:** Custom 404 Page mit "Zurück zur Startseite" und Hilfreichen Links (statt Standard Astro 404).
 30. **Touch Targets:** Klickflächen auf Mobile auf mind. 44x44px vergrößern (besonders Footer-Links).
 31. **Kontrast:** Prüfen, ob graue Schrift auf schwarzem Grund (Footer) WCAG AA erfüllt.
-32. **Back-to-Top:** Button auch auf Mobile gut positionieren (nicht überlappend mit WhatsApp Button).
+32. [x] **Back-to-Top:** Button auch auf Mobile gut positionieren (nicht überlappend mit WhatsApp Button - geprüft `bottom-24` vs StickyBar).
 33. **Breadcrumbs Mobile:** Sichtbarkeit der Brotkrumen-Navigation auf kleinen Screens optimieren.
 34. **Rechner Reset:** "Neu berechnen" Button prominenter platzieren nach Erfolg.
 35. **Input Types:** `type="tel"` und `type="email"` in allen Formularen erzwingen (für Mobile Keyboards).
@@ -50,9 +50,9 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 39. **Manifest Icons:** `maskable` Icons im Manifest definieren (Android Standard).
 40. **Bild-Formate:** Konsequente Nutzung von AVIF/WebP für alle Assets (via Astro Image Tools).
 41. **LCP Preload:** Das Hero-Image auf der Startseite und Unterseiten per `<link rel="preload">` laden.
-42. **Font Subsetting:** Google Fonts lokal hosten und ungenutzte Glyphen entfernen (Performance).
+42. [x] **Font Subsetting:** Google Fonts lokal hosten und ungenutzte Glyphen entfernen (`src/styles/fonts.css` nutzt lokale WOFF2).
 43. **Print CSS:** Stylesheet für den Druck optimieren (Navigation ausblenden, schwarz-weiß Text).
-44. **Security Headers:** CSP (Content Security Policy) verfeinern, um XSS zu verhindern.
+44. [x] **Security Headers:** CSP (Content Security Policy) verfeinern, um XSS zu verhindern (implementiert in `middleware.ts`).
 45. **Lazy Loading:** `loading="lazy"` für alle Bilder "below the fold" und besonders für iframes (Maps).
 46. **JS Minification:** Build-Prozess prüfen, ob Console-Logs entfernt werden.
 47. **Cache-Control:** Lange Caching-Zeiten für statische Assets (Fonts, Images) in Vercel/Netlify Config setzen.
@@ -63,11 +63,11 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 50. **Team-Foto:** Aktuelles Bild von Remo im "Über Uns" Bereich (baut persönliches Vertrauen auf).
 51. **Zertifikate:** Verlinkung oder Download-Möglichkeit der Labocosmetica-Zertifikate.
 52. **Garantie-Seite:** Detaillierte Seite für "Werterhalt-Garantie" Bedingungen (Transparenz).
-53. **Video-Einbindung:** Kurzes Vorstellungsvideo (YouTube Short) auf der Startseite einbetten.
+53. **Video-Einbindung:** Kurzes Vorstellungsvideo (YouTube Short) auf der Startseite einbetten (Aktuell nur Link).
 54. **Podcast Transkripte:** Text-Versionen der Podcast-Folgen für SEO nutzen.
 55. **Partner:** "Dampfdrachen" Vertriebs-Seite mit konkreten Produktbildern anreichern.
 56. **Kunden-Stimmen:** Fotos zu den Google-Reviews hinzufügen (falls DSGVO-konform möglich).
 57. [x] **Blog:** Start eines Ratgeber-Blogs ("Lederpflege im Sommer", "Keramik vs Wachs").
 58. **Fallstudien:** "Case Studies" mit detaillierter Story zu besonderen Fahrzeugen (nicht nur Galerie).
 59. **Newsletter:** Optionales Anmeldeformular für Pflege-Tipps (Kundenbindung).
-60. **Saisonale Banner:** Möglichkeit schaffen, saisonale Angebote (Frühjahrs-Check) global einzublenden.
+60. [x] **Saisonale Banner:** Möglichkeit schaffen, saisonale Angebote (Frühjahrs-Check) global einzublenden (`SeasonalBanner.astro` implementiert).
