@@ -17,7 +17,7 @@ export const services = [
         title: "Wohnmobil-Spezial",
         description: "Spezialisierte Wohnmobil Aufbereitung und Keramikversiegelung. Wir schützen GFK und Lack vor Auskreiden und Vergilben.",
         icon: "bus",
-        shortDescription: "Halle für Fahrzeuge bis 8m+. GFK-Pflege und Versiegelung gegen Auskreiden. Individuelles Angebot.",
+        shortDescription: "Halle für Fahrzeuge bis 8m. GFK-Pflege und Versiegelung gegen Auskreiden. Außenwäsche ab 125 €.",
         link: "/wohnmobil"
     },
     {
