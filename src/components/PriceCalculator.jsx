@@ -417,17 +417,17 @@ export default function PriceCalculator() {
                                     <input
                                         type="range"
                                         min="4"
-                                        max="12"
+                                        max="8"
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
                                         className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none"
-                                        style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 8) * 100}%, #27272a ${((selections.camperLength - 4) / 8) * 100}%, #27272a 100%)` }}
+                                        style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
                                     <div className="flex justify-between text-zinc-500 text-xs mt-4 font-bold uppercase tracking-wider">
                                         <span>4m</span>
+                                        <span>6m</span>
                                         <span>8m</span>
-                                        <span>12m</span>
                                     </div>
                                 </div>
 
