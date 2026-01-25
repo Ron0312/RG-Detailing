@@ -42,3 +42,6 @@
   font-display: swap;
   src: url('/fonts/syne-latin-800-normal.woff2') format('woff2');
 }
+
+/* Cedarville Cursive (via npm package) */
+@import "@fontsource/cedarville-cursive";

@@ -45,17 +45,18 @@ To convert visitors into leads, we will leverage the following psychological tri
 
 ### A. Authority (Autorität)
 *   *Current:* "Labocosmetica Certified", "Certified Detailer".
-*   *Improvement:* Add a "Meet the Expert" section with a photo of the owner working. People buy from people. Display certificates prominently near the CTA.
+*   *Improvement:* Add a "Meet the Expert" section with a photo of the owner working. People buy from people. Display certificates prominently near the CTA. (Implemented Phase 1)
 
 ### B. Social Proof (Soziale Bewährtheit)
 *   *Current:* Google Reviews widget.
-*   *Improvement:* Video testimonials (if available). Specific case studies ("Saved this client 2000€ on leasing return"). "Over 500+ satisfied customers in Tensfeld".
+*   *Improvement:* Video testimonials (if available). Specific case studies ("Saved this client 2000€ on leasing return"). "Over 500+ satisfied customers in Tensfeld". (Implemented Phase 1)
 
 ### C. Scarcity & Urgency (Verknappung)
 *   *Current:* None visible.
 *   *Improvement:*
     *   "Only 3 'Full Detailing' slots available for [Current Month]."
     *   "Book now to ensure your car is ready for Spring."
+    *   (Implemented Phase 1: "Termine fast ausgebucht", "Hohe Nachfrage")
 
 ### D. Loss Aversion (Verlustangst)
 *   *Current:* Used in "Leasing-Rettung".
@@ -69,9 +70,9 @@ To convert visitors into leads, we will leverage the following psychological tri
 
 ### Immediate Improvements (Quick Wins)
 1.  **Sticky Mobile CTA:**
-    *   On mobile, the "Call Now" or "Book Appointment" button should be sticky at the bottom of the screen. Users shouldn't have to scroll back up to contact.
+    *   On mobile, the "Call Now" or "Book Appointment" button should be sticky at the bottom of the screen. Users shouldn't have to scroll back up to contact. (Implemented)
 2.  **Trust Signals "Above the Fold":**
-    *   Ensure the "Certified" badges are visible immediately without scrolling on desktop.
+    *   Ensure the "Certified" badges are visible immediately without scrolling on desktop. (Implemented)
 3.  **Contrast & Readability:**
     *   Ensure the "Red" accent color is used *only* for conversion elements (Buttons) to guide the eye.
 4.  **Form Simplification:**
@@ -79,13 +80,15 @@ To convert visitors into leads, we will leverage the following psychological tri
 
 ## 4. Action Plan (Roadmap)
 
-### Phase 1: Foundation & Quick Wins (Days 1-7)
-- [ ] **Audit:** Verify mobile responsiveness of the Price Calculator.
-- [ ] **Design:** Implement a "Sticky Bottom Bar" on mobile with [Call] and [WhatsApp] buttons.
-- [ ] **Content:** Rewrite Hero Headline to focus more on *Result* than *Process* (e.g., "Neuwagen-Gefühl für jeden Tag" vs "Fahrzeugaufbereitung").
-- [ ] **Psychology:** Add a "Scarcity" banner (e.g., "Aktuelle Wartezeit: 2 Wochen - Jetzt Termin sichern").
+### Phase 1: Foundation & Quick Wins (COMPLETED)
+- [x] **Audit:** Verify mobile responsiveness of the Price Calculator.
+- [x] **Design:** Implement a "Sticky Bottom Bar" on mobile with [Call] and [WhatsApp] buttons.
+- [x] **Content:** Rewrite Hero Headline to focus more on *Result* than *Process* (e.g., "Neuwagen-Gefühl für jeden Tag" vs "Fahrzeugaufbereitung").
+- [x] **Psychology:** Add a "Scarcity" banner (e.g., "Aktuelle Wartezeit: 2 Wochen - Jetzt Termin sichern").
+- [x] **Trust:** Add "Owner Signature" and explicit authority titles to About Us.
+- [x] **SEO:** Add LocalBusiness Schema to Footer.
 
-### Phase 2: Audience Expansion (Days 8-30)
+### Phase 2: Audience Expansion (Next Steps)
 - [ ] **New Content:** Create specific landing pages for "Oldtimer" and "Firmenkunden".
 - [ ] **SEO:** Optimize keywords for these new groups.
 - [ ] **Social:** Set up a process to capture "Before/After" content specifically for these niches.
