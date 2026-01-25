@@ -29,7 +29,7 @@ const variants = [
       <p>
         Wir setzen auf absolute Transparenz und High-End-Produkte, unter anderem als zertifizierter Partner von <em>Labocosmetica</em>.
         Wir versprechen keine Wunder, sondern liefern reproduzierbare Spitzenqualität. Ob Sie einen Youngtimer, einen Sportwagen oder Ihr tägliches Familienauto bringen – wir behandeln jedes Fahrzeug mit der gleichen Akribie.
-        Kombiniert mit unserem Hol- und Bringservice (auf Anfrage) oder der unkomplizierten Anbindung ist der Weg von {{City}} zu uns der erste Schritt zu einem Fahrzeug, das wieder aussieht wie am ersten Tag – oder oft sogar besser.
+        Dank der unkomplizierten Anbindung ist der Weg von {{City}} zu uns der erste Schritt zu einem Fahrzeug, das wieder aussieht wie am ersten Tag – oder oft sogar besser.
       </p>
     `
   },
