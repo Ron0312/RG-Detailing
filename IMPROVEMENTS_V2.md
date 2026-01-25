@@ -18,18 +18,18 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 
 ## 2. SEO & GEO (Traffic & Sichtbarkeit)
 13. [x] **Schema "sameAs":** Hinzufügen von Social Media Links (Spotify, YouTube) zum `Organization` Schema.
-14. **Breadcrumbs Schema:** Implementierung von `BreadcrumbList` Structured Data auf allen Unterseiten.
+14. [x] **Breadcrumbs Schema:** Implementierung von `BreadcrumbList` Structured Data auf allen Unterseiten.
 15. [x] **Local SEO Footer:** "Einsatzgebiet" Textblock im Footer lesbarer gestalten (nicht nur als Accordion verstecken).
-16. **Meta Descriptions:** Länge aller Descriptions auf 150-160 Zeichen optimieren (einige wirken zu kurz/generisch).
+16. [x] **Meta Descriptions:** Länge aller Descriptions auf 150-160 Zeichen optimieren (einige wirken zu kurz/generisch).
 17. **Image Alt-Tags:** Audit aller Galerie-Bilder auf beschreibende Keywords (z.B. "Lackaufbereitung Porsche 911 Tensfeld").
 18. **H1 Hierarchie:** Sicherstellen, dass auf jeder Seite genau eine H1 existiert (besonders auf Landingpages).
 19. [x] **Internal Linking:** Verlinkung von `wohnmobil.astro` zurück zum Rechner mit Pre-Selection Parameter.
 20. **Bing Webmaster:** Verifizierung der Seite für Bing Search Console.
 21. [x] **GEO Meta:** Prüfung der `geo.position` Koordinaten auf exakte Werkstatt-Position.
-22. **Service Schema:** "priceRange" in allen Service-Schemas spezifizieren (nicht nur global).
+22. [x] **Service Schema:** "priceRange" in allen Service-Schemas spezifizieren (nicht nur global).
 23. [x] **FAQ Schema:** Auf `wohnmobil.astro` und `leasing.astro` spezifische FAQ-Schemas hinzufügen.
 24. **Sitemap:** Prüfen, ob `sitemap-index.xml` korrekt alle Unterseiten (auch Cities) enthält.
-25. **Canonical Tags:** Selbst-referenzierende Canonicals auf allen parametrisierten Seiten (falls vorhanden) erzwingen.
+25. [x] **Canonical Tags:** Selbst-referenzierende Canonicals auf allen parametrisierten Seiten (falls vorhanden) erzwingen.
 
 ## 3. UX / UI (Nutzererfahrung)
 26. [x] **Skip Link:** "Zum Inhalt springen" Link für Tastatur-Nutzer implementieren (Barrierefreiheit).
