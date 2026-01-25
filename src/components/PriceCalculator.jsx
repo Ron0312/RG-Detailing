@@ -136,11 +136,11 @@ export default function PriceCalculator() {
     };
 
     const StepTitle = ({ children }) => (
-        <h3 className="text-3xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg">{children}</h3>
+        <h3 className="text-2xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg">{children}</h3>
     );
 
     const StepSubtitle = ({ children }) => (
-        <p className="text-zinc-400 text-center mb-10 max-w-lg mx-auto text-lg leading-relaxed">{children}</p>
+        <p className="text-zinc-400 text-center mb-8 md:mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed px-4">{children}</p>
     );
 
     const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Icon }) => (
@@ -455,7 +455,7 @@ export default function PriceCalculator() {
                                     <Card
                                         key={key}
                                         title={cond.name}
-                                        desc={key === 'good' ? 'Wenig Kratzer, regelmäßige Pflege' : key === 'normal' ? 'Typische Waschstraßen-Spuren' : 'Tiefe Kratzer, starke Verschmutzung'}
+                                        desc={key === 'good' ? 'Liebhaber-Fahrzeug. Handwäsche, kaum Defekte.' : key === 'normal' ? 'Alltags-Spuren. Waschstraßen-Kratzer, Grauschleier.' : 'Härtefall. Tierhaare, Baustellen-Staub, starke Kratzer.'}
                                         onClick={() => handleSelect('condition', key)}
                                         active={selections.condition === key}
                                     />
@@ -520,10 +520,16 @@ export default function PriceCalculator() {
                                         {loading ? <Spinner /> : <>Angebot anfordern <ArrowRight className="w-5 h-5" /></>}
                                     </button>
                                 </div>
-                                <p className="text-[10px] text-zinc-500 mt-4 text-center leading-normal">
-                                    Ihre Daten werden vertraulich behandelt und nur zur Angebotserstellung genutzt. <br/>
-                                    Mit dem Absenden stimmen Sie der <a href="/datenschutz" className="text-zinc-400 underline hover:text-white">Datenschutzerklärung</a> zu.
-                                </p>
+                                <div className="mt-4 text-center">
+                                     <div className="inline-flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold px-3 py-1 rounded-full mb-2 animate-pulse">
+                                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                                        Hohe Nachfrage im {new Date().toLocaleString('de-DE', { month: 'long' })}
+                                     </div>
+                                    <p className="text-[10px] text-zinc-500 leading-normal">
+                                        Ihre Daten werden vertraulich behandelt. <br/>
+                                        Mit dem Absenden stimmen Sie der <a href="/datenschutz" className="text-zinc-400 underline hover:text-white">Datenschutzerklärung</a> zu.
+                                    </p>
+                                </div>
                             </form>
                             <div className="mt-12 text-center">
                                 <button onClick={() => {

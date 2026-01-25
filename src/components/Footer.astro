@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import PrivacyMap from './PrivacyMap.astro';
-import { Youtube, Podcast } from 'lucide-react';
+import { Youtube, Podcast, MessageCircle } from 'lucide-react';
 
 const currentYear = new Date().getFullYear();
 const cities = await getCollection('cities');
@@ -45,6 +45,7 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
                 </a>
             </p>
             <p class="mt-4"><a href="tel:+491633845081" class="text-white hover:text-red-500 font-bold py-3 block text-lg">0163 38 45 08 1</a></p>
+            <p><a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="text-green-500 hover:text-green-400 font-bold py-2 block flex items-center gap-2"><MessageCircle size={18} /> WhatsApp Chat</a></p>
             <p><a href="mailto:kontakt@rg-detailing.de" class="hover:text-red-500 py-3 block">kontakt@rg-detailing.de</a></p>
         </div>
         <div class="h-48 rounded-xl overflow-hidden grayscale hover:grayscale-0 transition duration-500 border border-zinc-800">
@@ -77,6 +78,7 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
             <a href="/impressum" class="hover:text-white py-2 px-2">Impressum</a>
             <a href="/datenschutz" class="hover:text-white py-2 px-2">Datenschutz</a>
             <a href="/agb" class="hover:text-white py-2 px-2">AGB</a>
+            <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="hover:text-white py-2 px-2">OS-Plattform</a>
         </div>
         &copy; {currentYear} RG Detailing.
     </div>
