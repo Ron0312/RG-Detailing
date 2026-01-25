@@ -62,9 +62,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         );
 
         // Prepare email content
-        const sizeName = config.sizes[data.size]?.name || data.size;
-        const conditionName = config.conditions[data.condition]?.name || data.condition;
-        const packageName = config.packages[data.package]?.name || data.package;
+        const sizeName = config.sizes[data.size as keyof typeof config.sizes]?.name || data.size;
+        const conditionName = config.conditions[data.condition as keyof typeof config.conditions]?.name || data.condition;
+        const packageName = config.packages[data.package as keyof typeof config.packages]?.name || data.package;
 
         const subject = `Neue Preisanfrage: ${sizeName} - ${packageName}`;
 
