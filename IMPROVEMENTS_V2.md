@@ -3,16 +3,16 @@
 Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, basierend auf einem aktuellen Audit der Codebasis.
 
 ## 1. Korrektheit & Rechtliches (Priorität: Hoch)
-1.  **Impressum Name:** Korrektur von "Robert G." zu "Remo Gerhardt" in `src/pages/impressum.astro` (Konsistenz mit `humans.txt`).
-2.  **Wohnmobil Preis:** Änderung von "Ab 210 €" in `wohnmobil.astro` zu "Individuelles Angebot", um Diskrepanz zum Rechner (Waschen vs. Polieren) zu beheben.
-3.  **Service Preise:** Hinzufügen der "Ab"-Preise (350€, 500€, 800€) in die Service-Karten auf der Startseite (`src/data/services.ts`).
-4.  **Datenschutz Name:** Prüfung und Korrektur des Verantwortlichen in `datenschutz.astro`.
-5.  **MwSt Hinweis:** Expliziter Hinweis im Footer/Rechner, ob Preise inkl. MwSt. sind (z.B. "Alle Preise inkl. gesetzl. MwSt.").
-6.  **ODR-Link:** Sicherstellen, dass der Link zur Online-Streitbeilegung im Impressum klickbar und aktuell ist.
-7.  **AGB:** Falls vorhanden, Link im Footer ergänzen (fehlt aktuell).
-8.  **Rechner "Leasing":** "Geschätzte Investition" klarer als "Startpreis" vs. "Endpreis" kennzeichnen.
-9.  **Wohnmobil Paket:** Im Rechner explizit machen, dass "Politur" nur auf Anfrage berechnet wird (aktuell nur Wäsche kalkuliert).
-10. **Kontakt Konsistenz:** Telefonnummer-Formatierung überall vereinheitlichen (z.B. +49 vs 0163).
+1.  [x] **Impressum Name:** Korrektur von "Robert G." zu "Remo Gerhardt" in `src/pages/impressum.astro` (Konsistenz mit `humans.txt`).
+2.  [x] **Wohnmobil Preis:** Änderung von "Ab 210 €" in `wohnmobil.astro` zu "Individuelles Angebot", um Diskrepanz zum Rechner (Waschen vs. Polieren) zu beheben.
+3.  [x] **Service Preise:** Hinzufügen der "Ab"-Preise (350€, 500€, 800€) in die Service-Karten auf der Startseite (`src/data/services.ts`).
+4.  [x] **Datenschutz Name:** Prüfung und Korrektur des Verantwortlichen in `datenschutz.astro`.
+5.  [x] **MwSt Hinweis:** Expliziter Hinweis im Footer/Rechner, ob Preise inkl. MwSt. sind (z.B. "Alle Preise inkl. gesetzl. MwSt.").
+6.  [x] **ODR-Link:** Sicherstellen, dass der Link zur Online-Streitbeilegung im Impressum klickbar und aktuell ist.
+7.  [x] **AGB:** Falls vorhanden, Link im Footer ergänzen (fehlt aktuell).
+8.  [x] **Rechner "Leasing":** "Geschätzte Investition" klarer als "Startpreis" vs. "Endpreis" kennzeichnen.
+9.  [x] **Wohnmobil Paket:** Im Rechner explizit machen, dass "Politur" nur auf Anfrage berechnet wird (aktuell nur Wäsche kalkuliert).
+10. [x] **Kontakt Konsistenz:** Telefonnummer-Formatierung überall vereinheitlichen (z.B. +49 vs 0163).
 11. **Öffnungszeiten:** Abgleich der Schema.org Daten mit den tatsächlichen Google Maps Zeiten.
 12. **Cookie Banner:** Implementierung einer DSGVO-konformen Consent-Lösung (falls Tracking/Maps genutzt wird).
 
@@ -25,7 +25,7 @@ Dieser Plan priorisiert Fehlerbehebung, Konsistenz und technische Exzellenz, bas
 18. **H1 Hierarchie:** Sicherstellen, dass auf jeder Seite genau eine H1 existiert (besonders auf Landingpages).
 19. **Internal Linking:** Verlinkung von `wohnmobil.astro` zurück zum Rechner mit Pre-Selection Parameter.
 20. **Bing Webmaster:** Verifizierung der Seite für Bing Search Console.
-21. **GEO Meta:** Prüfung der `geo.position` Koordinaten auf exakte Werkstatt-Position.
+21. [x] **GEO Meta:** Prüfung der `geo.position` Koordinaten auf exakte Werkstatt-Position.
 22. **Service Schema:** "priceRange" in allen Service-Schemas spezifizieren (nicht nur global).
 23. **FAQ Schema:** Auf `wohnmobil.astro` und `leasing.astro` spezifische FAQ-Schemas hinzufügen.
 24. **Sitemap:** Prüfen, ob `sitemap-index.xml` korrekt alle Unterseiten (auch Cities) enthält.
