@@ -13,7 +13,8 @@ const schema = {
   "@type": "AutoRepair",
   "name": "RG Detailing - Dampfreinigung",
   "description": "Hygienische Innenreinigung mit 170°C Trockendampf in Tensfeld. Ideal für Allergiker und Familien.",
-  "priceRange": "$$"
+  "priceRange": "$$$",
+  "dateModified": new Date().toISOString().split('T')[0]
 };
 ---
 
@@ -30,7 +31,7 @@ const schema = {
         <div class="absolute inset-0">
              {/* Integrated Logo in Background */}
              <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-                 <img src="/images/dampfdrachen-logo.webp" alt="" class="w-[80%] md:w-[50%] object-contain" />
+                 <img src="/images/dampfdrachen-logo.webp" alt="" width="800" height="400" class="w-[80%] md:w-[50%] object-contain" />
              </div>
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
@@ -73,7 +74,7 @@ const schema = {
 
                  <div class="bg-zinc-900/80 backdrop-blur-md p-8 rounded-2xl border border-zinc-800 shadow-xl">
                     <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-4">Offizieller Partner</p>
-                    <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Logo" class="h-16 w-auto mb-6" />
+                    <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Logo" width="300" height="150" class="h-16 w-auto mb-6" />
                     <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-500">VERTRIEBSPARTNER</span></div>
                     <p class="text-zinc-400 text-sm mb-4">
                         Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.
@@ -157,6 +158,8 @@ const schema = {
                      <img
                         src="/images/remo-steam-cleaning.jpg"
                         alt="Dampfdrachen Gerät"
+                        width="800"
+                        height="800"
                         class="relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-500"
                     />
                 </div>
