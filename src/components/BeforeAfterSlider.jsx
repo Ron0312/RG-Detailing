@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { ChevronsLeftRight } from 'lucide-react';
 
 export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorher Nachher Vergleich" }) {
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -47,8 +48,8 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
         className="absolute inset-y-0 w-1 bg-red-600 cursor-col-resize z-10 shadow-[0_0_10px_rgba(0,0,0,0.5)]"
         style={{ left: `${sliderPosition}%` }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-900 rounded-full p-1 shadow-lg border border-red-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white w-4 h-4"><path d="M8 3v18M16 3v18M3 8l5-5 5 5M3 16l5 5 5-5M21 8l-5-5-5 5M21 16l-5 5-5-5"/></svg>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-900 rounded-full p-2 shadow-lg border border-red-600 flex items-center justify-center">
+            <ChevronsLeftRight className="text-white w-4 h-4" />
         </div>
       </div>
 
