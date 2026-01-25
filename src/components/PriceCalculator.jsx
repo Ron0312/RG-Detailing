@@ -146,7 +146,7 @@ export default function PriceCalculator() {
     const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Icon }) => (
         <button
             onClick={onClick}
-            className={`relative p-8 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[160px] cursor-pointer
+            className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer
                 ${active
                     ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
                     : highlight
@@ -343,11 +343,11 @@ export default function PriceCalculator() {
     };
 
     return (
-        <div className="relative w-full max-w-5xl mx-auto my-12" ref={containerRef}>
+        <div className="relative w-full max-w-5xl mx-auto my-8 md:my-12" ref={containerRef}>
             {/* Ambient Background Glow */}
             <div className="absolute -inset-4 bg-red-600/20 blur-[100px] rounded-full pointer-events-none opacity-50 mix-blend-screen animate-pulse"></div>
 
-            <div className="relative bg-zinc-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/10 p-4 md:p-12 scroll-mt-32 ring-1 ring-black/5">
+            <div className="relative bg-zinc-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/10 p-3 md:p-12 scroll-mt-32 ring-1 ring-black/5">
 
                 {/* Progress Bar */}
                 <div className="mb-12 md:mb-16 relative px-4 max-w-3xl mx-auto mt-6 md:mt-0">
