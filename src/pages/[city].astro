@@ -31,6 +31,7 @@ const schema = {
   "name": "RG Detailing",
   "url": `https://rg-detailing.de/${cityEntry.data.slug}`,
   "description": metaDescription,
+  "dateModified": new Date().toISOString().split('T')[0],
   "areaServed": {
     "@type": "City",
     "name": name,

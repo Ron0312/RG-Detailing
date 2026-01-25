@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ServiceSchema from '../components/ServiceSchema.astro';
 import { ShieldCheck, CalendarClock, Gem, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
@@ -10,7 +12,21 @@ export const prerender = true;
 <Layout
     title="Werterhalt-Garantie | Abo & Pflege für Keramik-Kunden | RG Detailing"
     description="Exklusives Pflege-Abo für Keramik-Kunden: Sichern Sie den perfekten Zustand Ihres Fahrzeugs mit regelmäßigen Maintenance-Wäschen und sparen Sie bis zu 20%."
+    schema={{
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Werterhalt-Garantie",
+        "description": "Exklusives Pflege-Abo für Keramik-Kunden.",
+        "dateModified": new Date().toISOString().split('T')[0]
+    }}
 >
+    <ServiceSchema
+        name="Werterhalt-Garantie (Pflege-Abo)"
+        description="Exklusives Pflege-Abo für Keramik-Kunden zur Erhaltung des Lackzustands. Regelmäßige Maintenance-Wäschen mit bis zu 20% Rabatt."
+        price="100"
+        priceRange="$$"
+    />
+
     {/* HERO SECTION */}
     <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-zinc-950">
         <div class="absolute inset-0">
@@ -38,6 +54,13 @@ export const prerender = true;
     </div>
 
     <main class="bg-zinc-950 relative z-20 -mt-20">
+
+        <div class="container mx-auto px-4 py-8">
+            <Breadcrumbs crumbs={[
+                { label: 'Startseite', href: '/' },
+                { label: 'Werterhalt Garantie', href: '/werterhalt-garantie' }
+            ]} />
+        </div>
 
         {/* EXPLAINER SECTION */}
         <section class="py-12">

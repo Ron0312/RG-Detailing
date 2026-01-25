@@ -218,7 +218,7 @@ const faqSchema = {
                         return (
                         <ScrollReveal client:visible delay={index * 100}>
                             <div class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
-                                 <a href={service.link} class="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`}></a>
+                                 <a href={service.link} class="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`} data-astro-prefetch></a>
                                  <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
                                  <div class="relative z-20 flex-grow pointer-events-none">
@@ -440,7 +440,7 @@ const faqSchema = {
         {/* CALCULATOR */}
         <section id="rechner" class="section-spacing relative overflow-hidden">
              <div class="absolute inset-0 bg-red-900/5 z-0"></div>
-             <div class="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
+             <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
 
              <div class="container mx-auto px-4 relative z-10">
                  <div class="max-w-5xl mx-auto glass-panel p-4 md:p-16 rounded-3xl md:rounded-[3rem] shadow-2xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-2xl">
