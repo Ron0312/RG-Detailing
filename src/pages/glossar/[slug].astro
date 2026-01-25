@@ -16,9 +16,21 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "name": entry.data.title,
+  "description": entry.data.description,
+  "inDefinedTermSet": {
+    "@type": "DefinedTermSet",
+    "name": "Fahrzeugpflege Lexikon",
+    "url": "https://rg-detailing.de/glossar"
+  }
+};
 ---
 
-<Layout title={`${entry.data.title} - Glossar | RG Detailing`} description={entry.data.description}>
+<Layout title={`${entry.data.title} - Glossar | RG Detailing`} description={entry.data.description} schema={schema}>
     <ScrollProgress client:load />
     <div class="container mx-auto px-4 py-32">
         <Breadcrumbs crumbs={[
