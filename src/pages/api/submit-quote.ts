@@ -13,7 +13,8 @@ const QuoteSchema = z.object({
     package: PackageEnum,
     size: SizeEnum,
     condition: ConditionEnum,
-    camperLength: z.number().optional()
+    camperLength: z.number().optional(),
+    botcheck: z.boolean().optional()
 });
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -31,7 +32,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             package: body.package, // client sends 'package', 'size', 'condition'
             size: body.size,
             condition: body.condition,
-            camperLength: body.camperLength
+            camperLength: body.camperLength,
+            botcheck: body.botcheck
         });
 
         if (!result.success) {
@@ -43,6 +45,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
         const data = result.data;
 
+        // Honeypot check: If botcheck is true, it's a bot.
+        if (data.botcheck) {
+            // Return fake success to mislead bot
+            return new Response(JSON.stringify({
+                success: true,
+                message: "Anfrage erhalten"
+            }), { status: 200 });
+        }
+
         // Recalculate price server-side
         const priceQuote = calculatePrice(
             data.package as PackageId,
@@ -51,9 +62,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         );
 
         // Prepare email content
-        const sizeName = config.sizes[data.size]?.name || data.size;
-        const conditionName = config.conditions[data.condition]?.name || data.condition;
-        const packageName = config.packages[data.package]?.name || data.package;
+        const sizeName = config.sizes[data.size as keyof typeof config.sizes]?.name || data.size;
+        const conditionName = config.conditions[data.condition as keyof typeof config.conditions]?.name || data.condition;
+        const packageName = config.packages[data.package as keyof typeof config.packages]?.name || data.package;
 
         const subject = `Neue Preisanfrage: ${sizeName} - ${packageName}`;
 
@@ -91,7 +102,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         `;
 
         // Send via Web3Forms if Key is present
-        const apiKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+        const apiKey = import.meta.env.WEB3FORMS_ACCESS_KEY || "51d8133f-baec-4504-ab1e-ea740b15dc8b";
 
         if (apiKey) {
             try {
@@ -133,7 +144,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
         return new Response(JSON.stringify({
             success: true,
-            message: "Quote received",
+            message: "Anfrage erhalten",
             quote: priceQuote
         }), { status: 200 });
 

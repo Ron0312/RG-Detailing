@@ -28,6 +28,7 @@ export default function PriceCalculator() {
     });
     const [quote, setQuote] = useState(null);
     const [email, setEmail] = useState('');
+    const [botcheck, setBotcheck] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -111,7 +112,7 @@ export default function PriceCalculator() {
             // await new Promise(resolve => setTimeout(resolve, 1500)); // Remove artificial delay for better UX? Keep it for "processing" feel.
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            const payload = { ...selections, quote, email };
+            const payload = { ...selections, quote, email, botcheck };
             await fetch('/api/submit-quote', {
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -131,6 +132,7 @@ export default function PriceCalculator() {
         setQuote(null);
         setSubmitted(false);
         setEmail('');
+        setBotcheck(false);
         // Clear URL param?
         window.history.replaceState({}, '', window.location.pathname);
     };
@@ -501,6 +503,14 @@ export default function PriceCalculator() {
                             {renderResult()}
 
                             <form onSubmit={submitQuote} className="max-w-lg mx-auto bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
+                                <input
+                                    type="checkbox"
+                                    name="botcheck"
+                                    className="hidden"
+                                    style={{ display: 'none' }}
+                                    checked={botcheck}
+                                    onChange={(e) => setBotcheck(e.target.checked)}
+                                />
                                  <h4 className="text-white font-bold mb-6 text-center text-xl">Angebot sichern</h4>
                                 <div className="flex gap-3 flex-col">
                                     <input
