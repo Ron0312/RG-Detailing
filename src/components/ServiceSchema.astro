@@ -5,9 +5,10 @@ interface Props {
   image?: string;
   price?: string;
   priceCurrency?: string;
+  priceRange?: string;
 }
 
-const { name, description, image, price, priceCurrency = "EUR" } = Astro.props;
+const { name, description, image, price, priceCurrency = "EUR", priceRange = "$$$" } = Astro.props;
 
 const schema = {
   "@context": "https://schema.org",
@@ -26,7 +27,7 @@ const schema = {
       "addressCountry": "DE"
     },
     "telephone": "+491633845081",
-    "priceRange": "$$$"
+    "priceRange": priceRange
   },
   "areaServed": {
     "@type": "State",

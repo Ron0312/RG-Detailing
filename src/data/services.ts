@@ -10,7 +10,7 @@ export const services = [
         title: "All-in-One (Verkauf)",
         description: "Maximieren Sie den Wiederverkaufswert Ihres Fahrzeugs. Innenreinigung, Hochglanzpolitur und Polymer-Versiegelung. Investition, die sich sofort auszahlt.",
         icon: "sparkles",
-        shortDescription: "Steigern Sie den Verkaufspreis um bis zu 20%. Die lohnende Investition vor dem Verkauf.",
+        shortDescription: "Steigern Sie den Verkaufspreis um bis zu 20%. Die lohnende Investition vor dem Verkauf. Ab 500 €.",
         link: "#rechner"
     },
     {

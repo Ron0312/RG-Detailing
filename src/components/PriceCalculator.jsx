@@ -292,7 +292,7 @@ export default function PriceCalculator() {
                              <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
                              <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
                         </div>
-                        <div className="text-zinc-500 text-xs font-medium tracking-wide">*Endgültiger Preis nach Fahrzeugbesichtigung</div>
+                        <div className="text-zinc-500 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
                     </div>
 
                     <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
