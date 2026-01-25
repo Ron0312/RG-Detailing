@@ -7,10 +7,10 @@ export const services = [
         link: "#rechner"
     },
     {
-        title: "All-in-One",
-        description: "Die perfekte KFZ-Aufbereitung für den Verkauf oder Frühjahrsputz. Innenreinigung, Hochglanzpolitur und Polymer Versiegelung (9-12 Monate Standzeit).",
+        title: "All-in-One (Verkauf)",
+        description: "Maximieren Sie den Wiederverkaufswert Ihres Fahrzeugs. Innenreinigung, Hochglanzpolitur und Polymer-Versiegelung. Investition, die sich sofort auszahlt.",
         icon: "sparkles",
-        shortDescription: "Die smarte Lösung: Innenreinigung + Hochglanzpolitur + Polymerversiegelung. Ab 500 €.",
+        shortDescription: "Steigern Sie den Verkaufspreis um bis zu 20%. Die lohnende Investition vor dem Verkauf.",
         link: "#rechner"
     },
     {
@@ -22,9 +22,9 @@ export const services = [
     },
     {
         title: "Leasing-Rettung",
-        description: "Professionelle Leasing Rückgabe Aufbereitung. Wir beseitigen Gebrauchsspuren und Dellen, um hohe Nachzahlungen zu vermeiden.",
+        description: "Vermeiden Sie teure Nachzahlungen bei der Rückgabe. Wir beseitigen Kratzer und Dellen kostengünstig vor dem Gutachter-Termin.",
         icon: "file-check",
-        shortDescription: "Smart-Repair & Aufbereitung vor Rückgabe. Vermeiden Sie hohe Nachzahlungen. Ab 400 €.",
+        shortDescription: "Sparen Sie durchschnittlich 40-60% gegenüber den Autohaus-Gebühren. Stressfreie Rückgabe.",
         link: "/leasing"
     },
     {
