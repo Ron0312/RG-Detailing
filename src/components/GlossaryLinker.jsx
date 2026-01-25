@@ -31,7 +31,7 @@ export default function GlossaryLinker({ text }) {
                         <a
                             key={i}
                             href={TERMS[matchedTerm]}
-                            className="text-white border-b border-red-500/50 hover:text-red-500 hover:border-red-500 transition-colors cursor-help decoration-dotted"
+                            className="text-white border-b border-red-500/50 hover:text-red-500 hover:border-red-500 transition-colors cursor-help decoration-dotted pointer-events-auto relative z-20"
                             title={`Definition: ${matchedTerm}`}
                         >
                             {part}
