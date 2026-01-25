@@ -15,6 +15,7 @@
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.0",
+    "@fontsource/cedarville-cursive": "^5.2.7",
     "@fontsource/hind": "^5.2.8",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/roboto": "^5.2.9",

@@ -37,7 +37,12 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
         </div>
         <div>
             <h3 class="text-white font-bold text-lg mb-4">Kontakt</h3>
-            <p>Dorfstraße 11<br/>23824 Tensfeld</p>
+            <div itemscope itemtype="https://schema.org/LocalBusiness">
+                <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">Dorfstraße 11</span><br/>
+                    <span itemprop="postalCode">23824</span> <span itemprop="addressLocality">Tensfeld</span>
+                </div>
+            </div>
             <p class="mt-2 mb-4">
                 <a href="https://www.google.com/maps/search/?api=1&query=28RC%2BCP+Tensfeld%2C+Deutschland" target="_blank" rel="noopener noreferrer" aria-label="Standort auf Google Maps anzeigen" class="text-xs text-zinc-500 hover:text-red-500 transition flex items-center gap-1 p-2 -ml-2 rounded-lg hover:bg-white/5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
