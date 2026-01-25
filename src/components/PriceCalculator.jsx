@@ -205,7 +205,7 @@ export default function PriceCalculator() {
         );
 
         if (quote.isRequestOnly) {
-            const meterPrice = 18;
+            const meterPrice = 25;
             const washPrice = Math.round(selections.camperLength * meterPrice);
             const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
 
