@@ -102,7 +102,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         `;
 
         // Send via Web3Forms if Key is present
-        const apiKey = import.meta.env.WEB3FORMS_ACCESS_KEY || "51d8133f-baec-4504-ab1e-ea740b15dc8b";
+        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env) -> Fallback
+        const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
+        const buildKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+        const fallbackKey = "51d8133f-baec-4504-ab1e-ea740b15dc8b";
+
+        const apiKey = runtimeKey || buildKey || fallbackKey;
+        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "Fallback");
+
+        // Log key source (masked) for debugging
+        const maskedKey = apiKey ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}` : "NONE";
+        console.log(`>>> Sending email using Web3Forms Key from: ${keySource} (${maskedKey})`);
 
         if (apiKey) {
             try {
