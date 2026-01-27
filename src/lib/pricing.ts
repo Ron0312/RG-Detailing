@@ -4,6 +4,26 @@ export type PackageId = keyof typeof config.packages;
 export type SizeId = keyof typeof config.sizes;
 export type ConditionId = keyof typeof config.conditions;
 
+interface SizeConfig {
+    name: string;
+    multiplier: number | null;
+    isRequestOnly?: boolean;
+}
+
+interface ConditionConfig {
+    name: string;
+    multiplier: number;
+}
+
+interface PackageConfig {
+    name: string;
+    basePrice: number;
+    description: string;
+    badge?: string;
+    highlight?: boolean;
+    hasClubAbo?: boolean;
+}
+
 export interface PriceQuote {
     minPrice: number;
     maxPrice: number;
@@ -23,12 +43,11 @@ export function calculatePrice(
          throw new Error("Invalid selection parameters");
     }
 
-    const pkg = config.packages[packageId];
-    const size = config.sizes[sizeId];
-    const cond = config.conditions[conditionId];
+    const pkg = config.packages[packageId] as PackageConfig;
+    const size = config.sizes[sizeId] as SizeConfig;
+    const cond = config.conditions[conditionId] as ConditionConfig;
 
     // Check for "Request Only" logic (e.g. Camper)
-    // @ts-ignore - JSON types are loose here
     if (size.isRequestOnly) {
         return {
             minPrice: 0,

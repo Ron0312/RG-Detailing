@@ -20,6 +20,13 @@ describe('Price Calculator Logic', () => {
         expect(result.minPrice).toBe(1460);
     });
 
+    it('returns request only for camper', () => {
+        const result = calculatePrice('wash_interior', 'camper', 'good');
+        expect(result.isRequestOnly).toBe(true);
+        expect(result.minPrice).toBe(0);
+        expect(result.maxPrice).toBe(0);
+    });
+
     it('throws error for invalid parameters', () => {
         // @ts-ignore
         expect(() => calculatePrice('invalid', 'small', 'good')).toThrow();
