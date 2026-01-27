@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 export default function ScrollProgress() {
   const [width, setWidth] = useState(0);
+  const ticking = useRef(false);
 
   const scrollHeight = () => {
-    const el = document.documentElement;
-    const scrollTop = el.scrollTop || document.body.scrollTop;
-    const scrollHeight = el.scrollHeight || document.body.scrollHeight;
-    const height = (scrollTop / (scrollHeight - el.clientHeight)) * 100;
-    setWidth(height);
+    if (!ticking.current) {
+      window.requestAnimationFrame(() => {
+        const el = document.documentElement;
+        const scrollTop = el.scrollTop || document.body.scrollTop;
+        const scrollHeight = el.scrollHeight || document.body.scrollHeight;
+        const height = (scrollTop / (scrollHeight - el.clientHeight)) * 100;
+        setWidth(height);
+        ticking.current = false;
+      });
+      ticking.current = true;
+    }
   };
 
   useEffect(() => {
