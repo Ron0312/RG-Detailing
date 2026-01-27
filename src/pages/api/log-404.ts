@@ -29,12 +29,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const logFile = path.join(logDir, '404.log');
 
     // Attempt to write to file, but don't crash if it fails (e.g. read-only FS)
-    try {
-        await fs.mkdir(logDir, { recursive: true });
-        await fs.appendFile(logFile, logEntry);
-    } catch (fsError) {
-        console.warn('Could not write to local log file (likely read-only filesystem):', fsError);
-    }
+    // Non-blocking fire-and-forget to avoid delaying the response
+    fs.mkdir(logDir, { recursive: true })
+        .then(() => fs.appendFile(logFile, logEntry))
+        .catch((fsError) => {
+            console.warn('Could not write to local log file (likely read-only filesystem):', fsError);
+        });
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
