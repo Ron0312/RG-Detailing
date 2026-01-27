@@ -109,8 +109,6 @@ export default function PriceCalculator() {
         e.preventDefault();
         setLoading(true);
         try {
-            // await new Promise(resolve => setTimeout(resolve, 1500)); // Remove artificial delay for better UX? Keep it for "processing" feel.
-            await new Promise(resolve => setTimeout(resolve, 1000));
 
             const payload = { ...selections, quote, email, botcheck };
             await fetch('/api/submit-quote', {
