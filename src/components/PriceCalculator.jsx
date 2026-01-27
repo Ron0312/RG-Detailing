@@ -473,6 +473,18 @@ export default function PriceCalculator() {
                         <div className="animate-fade-in">
                             <StepTitle>Paketwahl</StepTitle>
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
+
+                            <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
+                                <Sparkles className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
+                                <div>
+                                    <h4 className="text-red-400 font-bold text-sm uppercase tracking-wide mb-1">Alles Inklusive Philosophie</h4>
+                                    <p className="text-zinc-300 text-sm leading-relaxed">
+                                        Wir verzichten auf komplizierte Baukästen. In allen Paketen sind Lederpflege, Textilreinigung und Fleckenentfernung bereits inklusive.
+                                        Der Preis deckt alles ab, was Ihr Fahrzeug benötigt.
+                                    </p>
+                                </div>
+                            </div>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                 {Object.entries(config.packages).map(([key, pkg]) => (
                                     <Card

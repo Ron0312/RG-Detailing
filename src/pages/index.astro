@@ -463,9 +463,21 @@ const faqSchema = {
 
              <div class="container mx-auto px-4 relative z-10">
                  <div class="max-w-5xl mx-auto glass-panel p-4 md:p-16 rounded-3xl md:rounded-[3rem] shadow-2xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-2xl">
-                    <div class="text-center mb-8 md:mb-12">
-                        <h2 class="text-3xl md:text-5xl font-bold mb-4 md:mb-6 text-white">Kostenrechner Aufbereitung</h2>
-                        <p class="text-zinc-400 text-lg">Konfigurieren Sie Ihr Paket. Fair, transparent und ohne versteckte Kosten.</p>
+                    <div class="text-center mb-8 md:mb-12 max-w-4xl mx-auto">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8 text-white">Kostenrechner Aufbereitung</h2>
+                        <div class="space-y-4 text-zinc-400 text-lg leading-relaxed text-left md:text-center">
+                            <p>
+                                <strong class="text-white">Premium-Aufbereitung beginnt bei Transparenz.</strong> Bei unserer Preiskalkulation erhalten Sie keine reduzierte Basisleistung, sondern von Anfang an das Maximum an Pflege und Qualität.
+                                Wir verzichten bewusst auf ein kompliziertes Baukastensystem – denn echte Premium-Aufbereitung bedeutet, dass alle essenziellen Leistungen bereits enthalten sind.
+                            </p>
+                            <p>
+                                Der angezeigte Preisrahmen („ab–bis“) umfasst unter anderem eine gründliche Fahrzeugwäsche, intensive Innenraum- und Lederreinigung sowie hochwertige Pflegeleistungen.
+                                Sie müssen keine einzelnen Extras auswählen und erleben keine unerwarteten Zusatzkosten. Abweichungen gibt es ausschließlich bei außergewöhnlichen Verschmutzungen – transparent und nur nach vorheriger Absprache.
+                            </p>
+                            <p class="text-white font-medium">
+                                Unser Anspruch ist einfach: Wir passen unsere Leistung dem Fahrzeug an – nicht umgekehrt.
+                            </p>
+                        </div>
                     </div>
                     <PriceCalculator client:visible />
                  </div>
@@ -521,7 +533,7 @@ const faqSchema = {
                                      <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
                                  </div>
                              </div>
-                             <img src="/images/glossboss-logo.jpg" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-contain opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity -mr-4 -mb-4" />
+                             <img src="/images/glossboss-logo.jpg" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity -mr-4 -mb-4" />
                          </div>
                      </ScrollReveal>
                  </div>
