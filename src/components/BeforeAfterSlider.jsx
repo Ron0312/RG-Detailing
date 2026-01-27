@@ -4,12 +4,26 @@ import { ChevronsLeftRight } from 'lucide-react';
 export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorher Nachher Vergleich" }) {
   const [sliderPosition, setSliderPosition] = useState(50);
   const containerRef = useRef(null);
+  const ticking = useRef(false);
+  const latestClientX = useRef(0);
+
+  const updatePosition = () => {
+    if (!containerRef.current) {
+        ticking.current = false;
+        return;
+    }
+    const rect = containerRef.current.getBoundingClientRect();
+    const pos = ((latestClientX.current - rect.left) / rect.width) * 100;
+    setSliderPosition(Math.min(100, Math.max(0, pos)));
+    ticking.current = false;
+  };
 
   const handleMove = (clientX) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const pos = ((clientX - rect.left) / rect.width) * 100;
-    setSliderPosition(Math.min(100, Math.max(0, pos)));
+    latestClientX.current = clientX;
+    if (!ticking.current) {
+      window.requestAnimationFrame(updatePosition);
+      ticking.current = true;
+    }
   };
 
   const onMouseMove = (e) => handleMove(e.clientX);
