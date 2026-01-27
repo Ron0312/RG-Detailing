@@ -13,28 +13,28 @@
   },
   "packages": {
     "wash_interior": {
-      "name": "Interior & Wash",
+      "name": "Basis Aufbereitung",
       "basePrice": 350,
-      "description": "Hygienische Tiefenreinigung (Trockendampf) & schonende Außenwäsche. Der perfekte Einstieg.",
-      "badge": "Trust Builder"
+      "description": "Hygienische Tiefenreinigung (Trockendampf) & Außenwäsche. Inklusive Polster- & Lederreinigung.",
+      "badge": "Einstieg"
     },
     "leasing": {
         "name": "Leasing Rückgabe",
         "basePrice": 400,
-        "description": "Minimierung von Nachzahlungen durch Smart-Repair & Aufbereitung. Investition statt Strafe.",
+        "description": "Minimierung von Nachzahlungen. Komplette Aufbereitung innen & außen nach Rückgabe-Standards.",
         "badge": "Spar-Tipp"
     },
     "all_in_one": {
-      "name": "All-in-One",
-      "basePrice": 500,
-      "description": "Innenraum + Hochglanzpolitur + Versiegelung. Das 'Neuwagen-Gefühl' für Verkauf oder Genuss.",
+      "name": "Premium Aufbereitung",
+      "basePrice": 450,
+      "description": "Das Rundum-Sorglos-Paket: Tiefenreinigung, Lederpflege, Hochglanzpolitur & Versiegelung.",
       "badge": "Bestseller",
       "highlight": true
     },
     "full_detailing": {
-      "name": "Full Detailing",
+      "name": "High-End Detailing",
       "basePrice": 800,
-      "description": "Mehrstufige Defektkorrektur & Labocosmetica Keramikversiegelung. High-End Schutz.",
+      "description": "Mehrstufige Defektkorrektur & Keramikversiegelung. Maximale Perfektion & Langzeitschutz.",
       "badge": "Königsklasse",
       "hasClubAbo": true
     }
