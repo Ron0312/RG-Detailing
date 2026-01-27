@@ -35,8 +35,8 @@ describe('PriceCalculator Performance', () => {
     // Step 2: Condition - Select "Gepflegt"
     await user.click(screen.getByText('Gepflegt'));
 
-    // Step 3: Package - Select "All-in-One"
-    await user.click(screen.getByText('All-in-One'));
+    // Step 3: Package - Select "Premium Aufbereitung"
+    await user.click(screen.getByText('Premium Aufbereitung'));
 
     // Step 4: Result - Fill Email
     const emailInput = await screen.findByPlaceholderText('Ihre E-Mail Adresse');
