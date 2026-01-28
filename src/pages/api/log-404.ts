@@ -5,7 +5,7 @@ import { checkRateLimit } from '../../lib/rate-limit';
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
-    const ip = clientAddress || request.headers.get('x-forwarded-for') || 'unknown';
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
     if (!checkRateLimit(`log-404:${ip}`, 60, 60000)) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }

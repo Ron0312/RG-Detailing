@@ -37,13 +37,39 @@ describe('API submit-quote', () => {
         });
         const clientAddress = '10.0.0.1';
 
-        // Burn through limit (5)
-        for (let i = 0; i < 5; i++) {
+        // Burn through limit (10)
+        for (let i = 0; i < 10; i++) {
             await POST({ request: createRequest(), clientAddress } as any);
         }
 
-        // 6th request should fail
+        // 11th request should fail
         const res = await POST({ request: createRequest(), clientAddress } as any);
         expect(res.status).toBe(429);
+    });
+
+    it('prioritizes x-forwarded-for header for rate limiting', async () => {
+        const createRequest = (ipHeader?: string) => new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({}),
+            headers: ipHeader ? { 'x-forwarded-for': ipHeader } : {}
+        });
+
+        // This IP will be rate limited
+        const forwardedIp = '203.0.113.1';
+        // This IP is the direct client (e.g. proxy) and should NOT be limited
+        const clientAddress = '127.0.0.1';
+
+        // Burn through limit (10) for forwardedIp
+        for (let i = 0; i < 10; i++) {
+            await POST({ request: createRequest(forwardedIp), clientAddress } as any);
+        }
+
+        // 11th request from forwardedIp should fail with 429
+        const resBlocked = await POST({ request: createRequest(forwardedIp), clientAddress } as any);
+        expect(resBlocked.status).toBe(429);
+
+        // Request from SAME clientAddress but DIFFERENT forwarded-for should succeed
+        const resAllowed = await POST({ request: createRequest('203.0.113.2'), clientAddress } as any);
+        expect(resAllowed.status).not.toBe(429);
     });
 });

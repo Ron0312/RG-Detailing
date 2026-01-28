@@ -19,8 +19,8 @@ const QuoteSchema = z.object({
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
-        const ip = clientAddress || request.headers.get('x-forwarded-for') || 'unknown';
-        if (!checkRateLimit(`submit-quote:${ip}`, 5, 60 * 60 * 1000)) { // 5 requests per hour
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
+        if (!checkRateLimit(`submit-quote:${ip}`, 10, 60 * 60 * 1000)) { // 10 requests per hour
             return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
         }
 
