@@ -2,7 +2,6 @@ import { getCollection } from 'astro:content';
 
 export async function GET({ site }) {
   const cities = await getCollection('cities');
-  const blogEntries = await getCollection('blog');
   const glossaryEntries = await getCollection('glossary');
 
   // Automatically find all static pages in src/pages
@@ -37,11 +36,6 @@ export async function GET({ site }) {
     lastmod: new Date().toISOString()
   }));
 
-  const blogUrls = blogEntries.map((entry) => ({
-    loc: new URL(`blog/${entry.slug}`, site).href,
-    lastmod: entry.data.date ? new Date(entry.data.date).toISOString() : new Date().toISOString()
-  }));
-
    const glossaryUrls = glossaryEntries.map((entry) => ({
     loc: new URL(`glossar/${entry.slug}`, site).href,
     lastmod: new Date().toISOString()
@@ -52,7 +46,7 @@ export async function GET({ site }) {
     lastmod: new Date().toISOString()
   }));
 
-  const allUrls = [...staticUrls, ...cityUrls, ...blogUrls, ...glossaryUrls];
+  const allUrls = [...staticUrls, ...cityUrls, ...glossaryUrls];
 
   return new Response(
     `<?xml version="1.0" encoding="UTF-8"?>
