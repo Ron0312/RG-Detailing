@@ -35,7 +35,7 @@ export default function ScrollReveal({ children, animation = 'fade-up', delay = 
     return (
         <div
             ref={ref}
-            className={`transition-all duration-1000 ease-out ${getAnimationClass()}`}
+            className={`w-full transition-all duration-1000 ease-out ${getAnimationClass()}`}
             style={{ transitionDelay: `${delay}ms` }}
         >
             {children}
