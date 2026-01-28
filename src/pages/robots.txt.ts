@@ -1,5 +1,5 @@
 export const GET = ({ site }) => {
-  const sitemapURL = new URL('sitemap-index.xml', site);
+  const sitemapURL = new URL('sitemap.xml', site);
   return new Response(
     `
 User-agent: *
