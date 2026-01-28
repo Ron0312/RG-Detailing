@@ -38,21 +38,8 @@ const glossaryCollection = defineCollection({
   }),
 });
 
-const blogCollection = defineCollection({
-  type: 'content',
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.date(),
-    category: z.string(),
-    image: z.string().optional(),
-    author: z.string().default('Remo Gerhardt'),
-  }),
-});
-
 export const collections = {
   'cities': citiesCollection,
   'services': servicesCollection,
   'glossary': glossaryCollection,
-  'blog': blogCollection,
 };
