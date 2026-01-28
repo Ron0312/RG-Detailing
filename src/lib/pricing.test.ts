@@ -31,4 +31,10 @@ describe('Price Calculator Logic', () => {
         // @ts-ignore
         expect(() => calculatePrice('invalid', 'small', 'good')).toThrow();
     });
+
+    it('calculates 500 base price for Premium Aufbereitung (all_in_one) with small car', () => {
+        // 500 * 1.0 * 1.0 = 500
+        const result = calculatePrice('all_in_one', 'small', 'good');
+        expect(result.minPrice).toBe(500);
+    });
 });
