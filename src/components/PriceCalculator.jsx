@@ -143,7 +143,7 @@ export default function PriceCalculator() {
         <p className="text-zinc-400 text-center mb-8 md:mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed px-4">{children}</p>
     );
 
-    const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Icon }) => (
+    const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
         <button
             onClick={onClick}
             className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer
@@ -172,7 +172,6 @@ export default function PriceCalculator() {
                 <div className={`font-bold text-xl tracking-tight transition-colors ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
                     {title}
                 </div>
-                {Icon && <Icon className={`w-8 h-8 md:w-6 md:h-6 transition-colors duration-300 ${active ? 'text-red-500' : 'text-zinc-600 group-hover:text-red-400'}`} />}
             </div>
 
             <div className="text-zinc-400 text-base md:text-sm leading-relaxed mb-6 flex-grow relative z-10 font-medium">{desc}</div>
@@ -226,7 +225,6 @@ export default function PriceCalculator() {
 
                     <div className="space-y-3 mb-8">
                         <div className="flex gap-4 items-center p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <Shield className="w-6 h-6 text-red-500 shrink-0" />
                             <div className="text-sm">
                                 <span className="font-bold text-white block mb-0.5">GFK & Gelcoat Schutz</span>
                                 <span className="text-zinc-400">Werterhalt gegen UV-Schäden.</span>
@@ -244,10 +242,6 @@ export default function PriceCalculator() {
              const message = `Hallo RG-Detailing, ich brauche Hilfe bei der Leasing-Rückgabe (${sizeName}). Bitte um Termin zur Vorab-Inspektion.`;
              return (
                 <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 rotate-12 pointer-events-none">
-                        <Shield className="w-48 h-48 text-red-500" />
-                    </div>
-
                     <div className="text-center mb-8 relative z-10">
                          <span className="inline-block py-1.5 px-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                             Investition statt Strafe
@@ -257,7 +251,6 @@ export default function PriceCalculator() {
                     </div>
 
                     <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
-                        <Lightbulb className="w-8 h-8 text-yellow-500 shrink-0" />
                         <div>
                             <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
                             <div className="text-sm text-zinc-300 leading-relaxed">
@@ -297,29 +290,26 @@ export default function PriceCalculator() {
 
                     <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold"><Truck className="w-4 h-4 text-zinc-600"/> Fahrzeug</span>
+                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Fahrzeug</span>
                             <span className="text-white font-medium">{sizeName}</span>
                         </div>
                         <div className="h-px bg-white/5 mx-4"></div>
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold"><Sparkles className="w-4 h-4 text-zinc-600"/> Zustand</span>
+                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Zustand</span>
                             <span className="text-white font-medium">{conditionName}</span>
                         </div>
                         <div className="h-px bg-white/5 mx-4"></div>
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold"><Star className="w-4 h-4 text-zinc-600"/> Paket</span>
+                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
                             <span className="text-red-400 font-bold">{packageName}</span>
                         </div>
                     </div>
 
                     {pkg?.hasClubAbo && (
                          <div className="mb-8 bg-gradient-to-br from-yellow-900/20 to-zinc-900 border border-yellow-600/20 p-5 rounded-2xl relative overflow-hidden group/abo">
-                            <div className="absolute -right-6 -top-6 text-yellow-500/5 rotate-12 group-hover/abo:rotate-45 transition-transform duration-700">
-                                <Star className="w-32 h-32" />
-                            </div>
                             <div className="relative z-10">
                                 <div className="text-yellow-500 font-bold mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">
-                                    <Star className="w-4 h-4 fill-yellow-500 animate-pulse" /> Werterhalt-Garantie
+                                    Werterhalt-Garantie
                                 </div>
                                 <p className="text-zinc-300 text-sm leading-relaxed mb-3">
                                     Mit diesem Paket qualifizieren Sie sich für unser exklusives <span className="text-white font-bold border-b border-yellow-500/50">Maintenance-Abo</span>.
@@ -475,7 +465,6 @@ export default function PriceCalculator() {
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
 
                             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
-                                <Sparkles className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
                                 <div>
                                     <h4 className="text-red-400 font-bold text-sm uppercase tracking-wide mb-1">Alles Inklusive Philosophie</h4>
                                     <p className="text-zinc-300 text-sm leading-relaxed">
@@ -496,7 +485,6 @@ export default function PriceCalculator() {
                                         highlight={pkg.highlight}
                                         onClick={() => handleSelect('package', key)}
                                         active={selections.package === key}
-                                        icon={pkg.hasClubAbo ? Star : pkg.name.includes('Leasing') ? Shield : Sparkles}
                                     />
                                 ))}
                             </div>
