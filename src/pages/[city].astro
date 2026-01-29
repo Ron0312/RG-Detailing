@@ -25,7 +25,7 @@ const { cityEntry } = Astro.props;
 const { name, metaDescription, introText, geo, distance } = cityEntry.data;
 const seoContent = getSeoContent(name, distance);
 
-const schema = {
+const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
   "name": "RG Detailing",
@@ -85,7 +85,12 @@ const schema = {
         }
       }
     ]
-  },
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
@@ -113,6 +118,8 @@ const schema = {
     }
   ]
 };
+
+const schema = [localBusinessSchema, faqSchema];
 ---
 
 <Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema}>
