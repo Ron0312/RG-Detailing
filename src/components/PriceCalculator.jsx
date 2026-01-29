@@ -178,7 +178,7 @@ export default function PriceCalculator() {
 
             {price && (
                 <div className={`mt-auto pt-4 border-t transition-colors ${active ? 'border-red-500/20' : 'border-white/5 group-hover:border-white/10'} flex justify-between items-center relative z-10`}>
-                    <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Ab</span>
+                    <span className="text-xs text-zinc-400 uppercase tracking-wider font-bold">Ab</span>
                     <span className={`font-bold text-xl tracking-tighter ${highlight ? 'text-yellow-500' : 'text-red-500'}`}>{price}€</span>
                 </div>
             )}
@@ -213,9 +213,9 @@ export default function PriceCalculator() {
                     <div className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Wohnmobil Spezial</div>
 
                     <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
-                        <div className="text-zinc-500 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
+                        <div className="text-zinc-400 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
                         <div className="text-5xl font-bold text-white mb-2 tracking-tight">{washPrice}€</div>
-                         <div className="text-xs text-zinc-500 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
+                         <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
                          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
                          <div className="text-zinc-300 text-sm font-medium">
                             <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
@@ -261,8 +261,8 @@ export default function PriceCalculator() {
                     </div>
 
                     <div className="text-center mb-8">
-                        <div className="text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
-                        <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-500 align-top ml-1">*</span></div>
+                        <div className="text-xs text-zinc-400 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
+                        <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-400 align-top ml-1">*</span></div>
                     </div>
 
                     <WhatsAppButton message={message} />
@@ -285,22 +285,22 @@ export default function PriceCalculator() {
                              <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
                              <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
                         </div>
-                        <div className="text-zinc-500 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
+                        <div className="text-zinc-400 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
                     </div>
 
                     <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Fahrzeug</span>
+                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Fahrzeug</span>
                             <span className="text-white font-medium">{sizeName}</span>
                         </div>
                         <div className="h-px bg-white/5 mx-4"></div>
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Zustand</span>
+                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Zustand</span>
                             <span className="text-white font-medium">{conditionName}</span>
                         </div>
                         <div className="h-px bg-white/5 mx-4"></div>
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-500 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
+                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
                             <span className="text-red-400 font-bold">{packageName}</span>
                         </div>
                     </div>
@@ -400,7 +400,7 @@ export default function PriceCalculator() {
                             <div className="max-w-xl mx-auto bg-black/40 p-6 md:p-10 rounded-3xl border border-white/10 shadow-xl backdrop-blur-md">
                                 <div className="text-center mb-10">
                                     <div className="text-7xl font-bold text-white mb-2 tracking-tighter tabular-nums">{selections.camperLength}m</div>
-                                    <div className="text-zinc-500 font-medium">Gesamtlänge</div>
+                                    <div className="text-zinc-400 font-medium">Gesamtlänge</div>
                                 </div>
 
                                 <div className="relative mb-12 px-2">
@@ -414,7 +414,7 @@ export default function PriceCalculator() {
                                         className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
-                                    <div className="flex justify-between text-zinc-500 text-xs mt-4 font-bold uppercase tracking-wider">
+                                    <div className="flex justify-between text-zinc-400 text-xs mt-4 font-bold uppercase tracking-wider">
                                         <span>4m</span>
                                         <span>6m</span>
                                         <span>8m</span>
@@ -429,7 +429,7 @@ export default function PriceCalculator() {
                                 </button>
                             </div>
                              <div className="mt-10 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
@@ -452,7 +452,7 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
@@ -489,7 +489,7 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
@@ -533,7 +533,7 @@ export default function PriceCalculator() {
                                         <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                                         Hohe Nachfrage im {new Date().toLocaleString('de-DE', { month: 'long' })}
                                      </div>
-                                    <p className="text-[10px] text-zinc-500 leading-normal">
+                                    <p className="text-[10px] text-zinc-400 leading-normal">
                                         Ihre Daten werden vertraulich behandelt. <br/>
                                         Mit dem Absenden stimmen Sie der <a href="/datenschutz" className="text-zinc-400 underline hover:text-white">Datenschutzerklärung</a> zu.
                                     </p>
@@ -543,7 +543,7 @@ export default function PriceCalculator() {
                                 <button onClick={() => {
                                     if (selections.size === 'camper') setStep(STEPS.CAMPER_LENGTH);
                                     else setStep(STEPS.PACKAGE);
-                                }} className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                }} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Korrigieren
                                 </button>
                             </div>

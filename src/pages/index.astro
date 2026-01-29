@@ -13,10 +13,15 @@ import GlossaryLinker from '../components/GlossaryLinker.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
 import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Bike, ArrowRight, CheckCircle2, MessageCircle, Instagram } from 'lucide-react';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
+import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
+import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 
 export const prerender = true;
+
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'webp'});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'webp'});
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -175,7 +180,7 @@ const faqSchema = {
                 </a>
             </div>
 
-            <div class="mt-12 flex flex-col md:flex-row items-center justify-center gap-4 text-xs text-zinc-500 animate-fade-in-up delay-500">
+            <div class="mt-12 flex flex-col md:flex-row items-center justify-center gap-4 text-xs text-zinc-400 animate-fade-in-up delay-500">
                  <div class="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-zinc-600" />
                     <span>Termine für {new Date().toLocaleString('de-DE', { month: 'long' })} fast ausgebucht</span>
@@ -259,11 +264,11 @@ const faqSchema = {
                              <div class="flex gap-8">
                                  <div class="text-center">
                                      <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">85%</div>
-                                     <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
+                                     <div class="text-xs text-zinc-400 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
                                  </div>
                                  <div class="text-center">
                                      <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">100%</div>
-                                     <div class="text-xs text-zinc-500 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
+                                     <div class="text-xs text-zinc-400 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
                                  </div>
                              </div>
                          </ScrollReveal>
@@ -274,8 +279,8 @@ const faqSchema = {
                                 <div class="absolute inset-0 z-10 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none"></div>
                                  <BeforeAfterSlider
                                     client:visible
-                                    beforeImage="/images/wohnmobil-before.jpg"
-                                    afterImage="/images/wohnmobil-after.jpg"
+                                    beforeImage={optimizedBefore.src}
+                                    afterImage={optimizedAfter.src}
                                     alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
                                 />
                             </div>
@@ -527,7 +532,7 @@ const faqSchema = {
                                      <a href="https://glossboss.de/" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition-colors">
                                          Zum Glossboss Shop
                                      </a>
-                                     <span class="text-zinc-500 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
+                                     <span class="text-zinc-400 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
                                  </div>
                              </div>
                              <img src="/images/glossboss-logo.jpg" alt="Glossboss Logo" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-contain opacity-50 rounded-tl-3xl group-hover:opacity-100 transition-opacity" />

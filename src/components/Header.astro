@@ -1,9 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import logoImage from '../assets/logo.png';
 ---
 <header class="bg-zinc-950/80 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <a href="/" class="flex items-center gap-3 group">
-            <img src="/logo.png" alt="RG Detailing Logo" class="h-14 w-auto group-hover:scale-105 transition-transform duration-300" width="56" height="56" />
+            <Image src={logoImage} alt="RG Detailing Logo" width={56} height={56} class="h-14 w-auto group-hover:scale-105 transition-transform duration-300" loading="eager" />
             <div class="hidden sm:block leading-tight">
                 <span class="text-xl font-bold text-white tracking-tighter block group-hover:text-red-500 transition-colors">RG Detailing</span>
                 <span class="text-xs font-bold text-red-600 uppercase tracking-widest block group-hover:text-white transition-colors">Car Processing</span>
@@ -64,7 +66,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         </div>
                     </div>
-                    <span class="text-[10px] text-zinc-500 font-medium group-hover:text-zinc-300 transition-colors uppercase tracking-wider">Google Rezensionen</span>
+                    <span class="text-[10px] text-zinc-400 font-medium group-hover:text-zinc-300 transition-colors uppercase tracking-wider">Google Rezensionen</span>
                 </div>
             </a>
 

@@ -3,14 +3,10 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
-const images = [
-  { src: "/images/remo-gerhardt-zertifikat.jpg", alt: "Remo Gerhardt Zertifikat" },
-  { src: "/images/remo-gerhardt-labocosmetica-zertifikat.jpg", alt: "Labocosmetica Zertifikat" },
-  { src: "/images/remo-steam-cleaning.jpg", alt: "Remo Gerhardt Dampfdrachen Vertriebspartner" }
-];
-
-export default function Certificates() {
+export default function Certificates({ images }) {
   const [index, setIndex] = useState(-1);
+
+  if (!images || images.length < 3) return null;
 
   return (
     <>
@@ -19,20 +15,24 @@ export default function Certificates() {
         <img
             src={images[0].src}
             alt={images[0].alt}
+            width={images[0].width}
+            height={images[0].height}
             loading="lazy"
             decoding="async"
             onClick={() => setIndex(0)}
-            className="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900 cursor-pointer"
+            className="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900 cursor-pointer w-full h-auto"
         />
 
         {/* Image 2 */}
         <img
             src={images[1].src}
             alt={images[1].alt}
+            width={images[1].width}
+            height={images[1].height}
             loading="lazy"
             decoding="async"
             onClick={() => setIndex(1)}
-            className="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900 cursor-pointer"
+            className="rounded-xl border border-white/10 hover:scale-105 transition-transform duration-500 hover:border-red-500/30 hover:shadow-lg bg-zinc-900 cursor-pointer w-full h-auto"
         />
 
         {/* Image 3 - Wrapped Div */}
@@ -43,6 +43,8 @@ export default function Certificates() {
             <img
                 src={images[2].src}
                 alt={images[2].alt}
+                width={images[2].width}
+                height={images[2].height}
                 loading="lazy"
                 decoding="async"
                 className="h-full w-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-110 transform"

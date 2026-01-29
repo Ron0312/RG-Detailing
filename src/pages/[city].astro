@@ -7,8 +7,10 @@ import Reviews from '../components/Reviews.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PrivacyMap from '../components/PrivacyMap.astro';
 import { getSeoContent } from '../lib/seoContent';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
+import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
+import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 import { Sparkles, ShieldCheck, Droplets, Map, Check, Calendar, Car, Key, Star, ArrowRight, HelpCircle } from 'lucide-react';
 
 export const prerender = true;
@@ -24,6 +26,9 @@ export async function getStaticPaths() {
 const { cityEntry } = Astro.props;
 const { name, metaDescription, introText, geo, distance } = cityEntry.data;
 const seoContent = getSeoContent(name, distance);
+
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'webp'});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'webp'});
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -335,8 +340,8 @@ const schema = [localBusinessSchema, faqSchema];
              <div class="max-w-5xl mx-auto border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                  <BeforeAfterSlider
                     client:visible
-                    beforeImage="/images/wohnmobil-before.jpg"
-                    afterImage="/images/wohnmobil-after.jpg"
+                    beforeImage={optimizedBefore.src}
+                    afterImage={optimizedAfter.src}
                     alt="Aufbereitung Vorher Nachher Vergleich"
                 />
              </div>
