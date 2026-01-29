@@ -7,9 +7,9 @@ import remoImage from '../assets/certificates/remo-steam-cleaning.jpg';
 import cert1 from '../assets/certificates/remo-gerhardt-zertifikat.jpg';
 import cert2 from '../assets/certificates/remo-gerhardt-labocosmetica-zertifikat.jpg';
 
-const optimizedCert1 = await getImage({src: cert1, format: 'webp'});
-const optimizedCert2 = await getImage({src: cert2, format: 'webp'});
-const optimizedCert3 = await getImage({src: remoImage, format: 'webp'});
+const optimizedCert1 = await getImage({src: cert1, format: 'avif'});
+const optimizedCert2 = await getImage({src: cert2, format: 'avif'});
+const optimizedCert3 = await getImage({src: remoImage, format: 'avif'});
 
 const certificateImages = [
   { src: optimizedCert1.src, alt: "Remo Gerhardt Zertifikat", width: optimizedCert1.attributes.width, height: optimizedCert1.attributes.height },

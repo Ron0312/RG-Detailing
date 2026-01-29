@@ -34,6 +34,16 @@ const schema = {
              <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
                  <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Hintergrund" width="800" height="400" class="w-[80%] md:w-[50%] object-contain" />
              </div>
+             <Image
+                src={heroImage}
+                alt="Dampfreinigung Hintergrund"
+                class="absolute inset-0 w-full h-full object-cover opacity-60"
+                fetchpriority="high"
+                loading="eager"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
+             />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
         </div>
@@ -161,6 +171,7 @@ const schema = {
                         alt="Dampfdrachen Gerät"
                         width={800}
                         height={800}
+                        format="avif"
                         class="relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-500"
                     />
                 </div>

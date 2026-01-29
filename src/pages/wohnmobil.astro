@@ -13,8 +13,8 @@ import FAQ from '../components/FAQ.jsx';
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'webp'});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'webp'});
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
 
 const schema = {
   "@context": "https://schema.org",
@@ -70,6 +70,9 @@ const faqSchema = {
                 class="w-full h-full object-cover opacity-60"
                 fetchpriority="high"
                 loading="eager"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
