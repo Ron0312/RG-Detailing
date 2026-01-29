@@ -4,16 +4,21 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/wohnmobil-hero.jpg';
+import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
+import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 import { Check } from 'lucide-react';
 import FAQ from '../components/FAQ.jsx';
 
 export const prerender = true;
 
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
+
 const schema = {
   "@context": "https://schema.org",
-  "@type": "AutoRepair",
+  "@type": "AutoDetailing",
   "name": "RG Detailing - Wohnmobil Aufbereitung",
   "description": "Professionelle Wohnmobil-Aufbereitung in Tensfeld. GFK-Pflege, Keramikversiegelung und hygienische Dampfreinigung.",
   "priceRange": "$$$",
@@ -65,6 +70,9 @@ const faqSchema = {
                 class="w-full h-full object-cover opacity-60"
                 fetchpriority="high"
                 loading="eager"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
@@ -118,8 +126,8 @@ const faqSchema = {
                  <div class="mb-6 rounded-2xl overflow-hidden shadow-2xl border border-zinc-800">
                     <BeforeAfterSlider
                         client:visible
-                        beforeImage="/images/wohnmobil-before.jpg"
-                        afterImage="/images/wohnmobil-after.jpg"
+                        beforeImage={optimizedBefore.src}
+                        afterImage={optimizedAfter.src}
                         alt="Wohnmobil Aufbereitung Vorher Nachher"
                     />
                  </div>
@@ -150,7 +158,7 @@ const faqSchema = {
                     Preisrechner starten
                 </a>
             </div>
-            <p class="mt-4 text-sm text-zinc-500">Oder rufen Sie direkt an: 0163 38 45 08 1</p>
+            <p class="mt-4 text-sm text-zinc-400">Oder rufen Sie direkt an: 0163 38 45 08 1</p>
         </div>
 
          {/* FAQ Section */}

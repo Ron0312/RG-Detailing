@@ -2,6 +2,20 @@
 import { Youtube, Podcast, Instagram } from 'lucide-react';
 import ExpandableText from './ExpandableText.jsx';
 import Certificates from './Certificates.jsx';
+import { Image, getImage } from 'astro:assets';
+import remoImage from '../assets/certificates/remo-steam-cleaning.jpg';
+import cert1 from '../assets/certificates/remo-gerhardt-zertifikat.jpg';
+import cert2 from '../assets/certificates/remo-gerhardt-labocosmetica-zertifikat.jpg';
+
+const optimizedCert1 = await getImage({src: cert1, format: 'avif'});
+const optimizedCert2 = await getImage({src: cert2, format: 'avif'});
+const optimizedCert3 = await getImage({src: remoImage, format: 'avif'});
+
+const certificateImages = [
+  { src: optimizedCert1.src, alt: "Remo Gerhardt Zertifikat", width: optimizedCert1.attributes.width, height: optimizedCert1.attributes.height },
+  { src: optimizedCert2.src, alt: "Labocosmetica Zertifikat", width: optimizedCert2.attributes.width, height: optimizedCert2.attributes.height },
+  { src: optimizedCert3.src, alt: "Remo Gerhardt Dampfdrachen Vertriebspartner", width: optimizedCert3.attributes.width, height: optimizedCert3.attributes.height }
+];
 ---
 <section class="section-spacing bg-black relative overflow-hidden" id="about">
     {/* Background Gradient */}
@@ -12,13 +26,11 @@ import Certificates from './Certificates.jsx';
             {/* Image Side */}
             <div class="relative order-2 md:order-1">
                 <div class="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent rounded-[2rem] rotate-3 transform translate-x-4 translate-y-4 blur-sm"></div>
-                <img
-                    src="/images/remo-steam-cleaning.jpg"
+                <Image
+                    src={remoImage}
                     alt="Remo Gerhardt - RG Detailing"
-                    width="957"
-                    height="1024"
-                    loading="lazy"
-                    decoding="async"
+                    width={957}
+                    height={1024}
                     class="relative rounded-[2rem] shadow-2xl w-full max-w-md mx-auto object-cover border border-white/10"
                 />
 
@@ -32,7 +44,7 @@ import Certificates from './Certificates.jsx';
             {/* Content Side */}
             <div class="order-1 md:order-2">
                 <h2 class="text-red-500 font-bold tracking-widest uppercase mb-4 text-sm">Über mich</h2>
-                <h3 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Remo Gerhardt <br/><span class="text-zinc-500">Vom Hobby zur Perfektion</span></h3>
+                <h3 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Remo Gerhardt <br/><span class="text-zinc-400">Vom Hobby zur Perfektion</span></h3>
 
                 <div class="text-zinc-400 leading-relaxed text-lg">
                     <ExpandableText client:visible initialHeight={240}>
@@ -76,7 +88,7 @@ import Certificates from './Certificates.jsx';
 
                 <div class="mt-12 pt-12 border-t border-white/5">
                     <h4 class="text-white font-bold mb-6 text-sm tracking-widest uppercase">Zertifizierte Kompetenz</h4>
-                    <Certificates client:visible />
+                    <Certificates client:visible images={certificateImages} />
                 </div>
             </div>
         </div>

@@ -7,8 +7,10 @@ import Reviews from '../components/Reviews.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PrivacyMap from '../components/PrivacyMap.astro';
 import { getSeoContent } from '../lib/seoContent';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
+import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
+import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 import { Sparkles, ShieldCheck, Droplets, Map, Check, Calendar, Car, Key, Star, ArrowRight, HelpCircle } from 'lucide-react';
 
 export const prerender = true;
@@ -25,7 +27,10 @@ const { cityEntry } = Astro.props;
 const { name, metaDescription, introText, geo, distance } = cityEntry.data;
 const seoContent = getSeoContent(name, distance);
 
-const schema = {
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
+
+const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
   "name": "RG Detailing",
@@ -85,7 +90,12 @@ const schema = {
         }
       }
     ]
-  },
+  }
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
@@ -113,6 +123,8 @@ const schema = {
     }
   ]
 };
+
+const schema = [localBusinessSchema, faqSchema];
 ---
 
 <Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema}>
@@ -134,6 +146,9 @@ const schema = {
                 class="w-full h-full object-cover opacity-40"
                 loading="eager"
                 fetchpriority="high"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
              />
         </div>
         <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black z-10"></div>
@@ -328,8 +343,8 @@ const schema = {
              <div class="max-w-5xl mx-auto border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                  <BeforeAfterSlider
                     client:visible
-                    beforeImage="/images/wohnmobil-before.jpg"
-                    afterImage="/images/wohnmobil-after.jpg"
+                    beforeImage={optimizedBefore.src}
+                    afterImage={optimizedAfter.src}
                     alt="Aufbereitung Vorher Nachher Vergleich"
                 />
              </div>

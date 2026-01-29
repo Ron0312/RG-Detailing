@@ -6,11 +6,12 @@ import ServiceSchema from '../components/ServiceSchema.astro';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
 import remoImage from '../assets/remo-dampfdrachen-full.jpg';
+import remoSteamCleaning from '../assets/certificates/remo-steam-cleaning.jpg';
 import { Check, Flame, Droplets, Wind, ShoppingBag } from 'lucide-react';
 
 const schema = {
   "@context": "https://schema.org",
-  "@type": "AutoRepair",
+  "@type": "AutoDetailing",
   "name": "RG Detailing - Dampfreinigung",
   "description": "Hygienische Innenreinigung mit 170°C Trockendampf in Tensfeld. Ideal für Allergiker und Familien.",
   "priceRange": "$$$",
@@ -33,6 +34,16 @@ const schema = {
              <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
                  <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Hintergrund" width="800" height="400" class="w-[80%] md:w-[50%] object-contain" />
              </div>
+             <Image
+                src={heroImage}
+                alt="Dampfreinigung Hintergrund"
+                class="absolute inset-0 w-full h-full object-cover opacity-60"
+                fetchpriority="high"
+                loading="eager"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
+             />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
              <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
         </div>
@@ -75,7 +86,7 @@ const schema = {
                  <div class="bg-zinc-900/80 backdrop-blur-md p-8 rounded-2xl border border-zinc-800 shadow-xl">
                     <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-4">Offizieller Partner</p>
                     <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Logo" width="300" height="150" class="h-16 w-auto mb-6" />
-                    <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-500">VERTRIEBSPARTNER</span></div>
+                    <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-400">VERTRIEBSPARTNER</span></div>
                     <p class="text-zinc-400 text-sm mb-4">
                         Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.
                     </p>
@@ -155,11 +166,12 @@ const schema = {
                     </div>
                 </div>
                 <div class="relative min-h-[400px] bg-zinc-950 flex items-center justify-center p-8">
-                     <img
-                        src="/images/remo-steam-cleaning.jpg"
+                     <Image
+                        src={remoSteamCleaning}
                         alt="Dampfdrachen Gerät"
-                        width="800"
-                        height="800"
+                        width={800}
+                        height={800}
+                        format="avif"
                         class="relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-500"
                     />
                 </div>
