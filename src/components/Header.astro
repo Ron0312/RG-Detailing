@@ -154,15 +154,38 @@ import logoImage from '../assets/logo.png';
     // ScrollSpy
     const sections = ['leistungen', 'gallery', 'rechner', 'about', 'faq'];
     const navLinks = document.querySelectorAll('nav a');
+    let cachedSections = [];
+
+    function cacheSections() {
+        cachedSections = sections.map(id => {
+            const el = document.getElementById(id);
+            return el ? { id, offsetTop: el.offsetTop } : null;
+        }).filter(Boolean);
+    }
+
+    // Update cache on load and resize
+    cacheSections();
+    window.addEventListener('resize', cacheSections, { passive: true });
+
+    let isScrolling = false;
 
     function onScroll() {
+        if (!isScrolling) {
+            requestAnimationFrame(() => {
+                updateActiveLink();
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    }
+
+    function updateActiveLink() {
         let currentSection = '';
         const scrollPosition = window.scrollY + 200; // Offset for header height
 
-        sections.forEach(sectionId => {
-            const section = document.getElementById(sectionId);
-            if (section && section.offsetTop <= scrollPosition) {
-                currentSection = sectionId;
+        cachedSections.forEach(section => {
+            if (section.offsetTop <= scrollPosition) {
+                currentSection = section.id;
             }
         });
 
@@ -201,7 +224,7 @@ import logoImage from '../assets/logo.png';
         });
     }
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     // Initial call
-    onScroll();
+    updateActiveLink();
 </script>
