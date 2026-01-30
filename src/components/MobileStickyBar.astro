@@ -37,8 +37,19 @@ import { Phone, Calculator, MessageCircle } from 'lucide-react';
 
 <script>
     const stickyBar = document.getElementById('mobile-sticky-bar');
+    let isTicking = false;
 
-    function handleScroll() {
+    function onScroll() {
+        if (!isTicking) {
+            requestAnimationFrame(() => {
+                updateStickyBar();
+                isTicking = false;
+            });
+            isTicking = true;
+        }
+    }
+
+    function updateStickyBar() {
         if (!stickyBar) return;
 
         // Show bar after scrolling past 500px (approx Hero height)
@@ -49,7 +60,7 @@ import { Phone, Calculator, MessageCircle } from 'lucide-react';
         }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     // Initial check
-    handleScroll();
+    updateStickyBar();
 </script>
