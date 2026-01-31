@@ -20,8 +20,8 @@ import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
