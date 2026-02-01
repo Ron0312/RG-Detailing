@@ -7,6 +7,7 @@ import { Image } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
 import remoImage from '../assets/remo-dampfdrachen-full.jpg';
 import remoSteamCleaning from '../assets/certificates/remo-steam-cleaning.jpg';
+import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
 import { Check, Flame, Droplets, Wind, ShoppingBag } from 'lucide-react';
 
 const schema = {
@@ -32,7 +33,7 @@ const schema = {
         <div class="absolute inset-0">
              {/* Integrated Logo in Background */}
              <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-                 <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Hintergrund" width="800" height="400" class="w-[80%] md:w-[50%] object-contain" />
+                 <Image src={dampfdrachenLogo} alt="Dampfdrachen Hintergrund" class="w-[80%] md:w-[50%] object-contain" />
              </div>
              <Image
                 src={heroImage}
@@ -85,7 +86,7 @@ const schema = {
 
                  <div class="bg-zinc-900/80 backdrop-blur-md p-8 rounded-2xl border border-zinc-800 shadow-xl">
                     <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-4">Offizieller Partner</p>
-                    <img src="/images/dampfdrachen-logo.webp" alt="Dampfdrachen Logo" width="300" height="150" class="h-16 w-auto mb-6" />
+                    <Image src={dampfdrachenLogo} alt="Dampfdrachen Logo" class="h-16 w-auto mb-6 object-contain object-left" />
                     <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-400">VERTRIEBSPARTNER</span></div>
                     <p class="text-zinc-400 text-sm mb-4">
                         Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.

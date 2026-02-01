@@ -381,7 +381,7 @@ const faqSchema = {
                         <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
                             {/* Background Placeholder / Effect */}
                             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-zinc-950 to-zinc-950 z-0"></div>
-                            <div class="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-500 bg-[url('/images/wohnmobil-after.jpg')] bg-cover bg-center mix-blend-overlay"></div>
+                            <div class="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-500 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${optimizedAfter.src})` }}></div>
 
                             {/* Play Button */}
                             <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
