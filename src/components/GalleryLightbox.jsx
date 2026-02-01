@@ -48,13 +48,13 @@ export default function GalleryLightbox({ images }) {
             onClick={() => handleImageClick(i)}
           >
             <img
-              src={image.src}
+              src={image.thumbnail || image.src}
               alt={image.alt}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
               loading="lazy"
               decoding="async"
-              width="800"
-              height="800"
+              width="600"
+              height="600"
             />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
           </div>
