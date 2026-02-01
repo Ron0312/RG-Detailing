@@ -18,6 +18,19 @@ import heroImage from '../assets/hero-workshop.jpg';
 import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
 import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 
+// Gallery Images Imports
+import imgLack from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png';
+import imgInnen2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg';
+import imgKeramik3 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg';
+import imgVorherNachher4 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg';
+import imgDetailing5 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg';
+import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg';
+import imgCockpit7 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-cockpit-07.jpg';
+
+// Other Assets
+import dampfdrachenEinsatz from '../assets/dampfdrachen-einsatz.png';
+import glossbossLogo from '../assets/glossboss-logo.jpg';
+
 export const prerender = true;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
@@ -35,15 +48,26 @@ const iconMap = {
   5: Bike         // Spezial
 };
 
-const galleryImages = [
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png", alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg", alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg", alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg", alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg", alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg", alt: "Professionelles Coating / Keramikversiegelung Anwendung", category: "Keramik" },
-  { src: "/images/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-cockpit-07.jpg", alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" }
+const galleryRawImages = [
+  { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
+  { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
+  { src: imgKeramik3, alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
+  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
+  { src: imgDetailing5, alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" },
+  { src: imgCoating6, alt: "Professionelles Coating / Keramikversiegelung Anwendung", category: "Keramik" },
+  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" }
 ];
+
+const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
+    const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
+    const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+    return {
+        src: full.src,
+        thumbnail: thumb.src,
+        alt: img.alt,
+        category: img.category
+    };
+}));
 
 const faqItems = [
   {
@@ -515,7 +539,12 @@ const faqSchema = {
                                      </a>
                                  </div>
                              </div>
-                             <img src="/images/remo-steam-cleaning.jpg" alt="Dampfdrachen Reinigungsgerät" width="192" height="192" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity" />
+                             <Image
+                                src={dampfdrachenEinsatz}
+                                alt="Dampfdrachen Reinigungsgerät"
+                                width={192}
+                                class="absolute bottom-0 right-0 w-48 h-48 object-cover opacity-20 rounded-tl-3xl group-hover:opacity-40 transition-opacity mix-blend-luminosity"
+                             />
                          </div>
                      </ScrollReveal>
 
@@ -538,7 +567,12 @@ const faqSchema = {
                                      <span class="text-zinc-400 text-sm">Code: <span class="text-white font-bold">Remo10</span> (10% Rabatt)</span>
                                  </div>
                              </div>
-                             <img src="/images/glossboss-logo.jpg" alt="Glossboss Logo" width="192" height="192" loading="lazy" decoding="async" class="absolute bottom-0 right-0 w-48 h-48 object-contain opacity-50 rounded-tl-3xl group-hover:opacity-100 transition-opacity" />
+                             <Image
+                                src={glossbossLogo}
+                                alt="Glossboss Logo"
+                                width={192}
+                                class="absolute bottom-0 right-0 w-48 h-48 object-contain opacity-50 rounded-tl-3xl group-hover:opacity-100 transition-opacity"
+                             />
                          </div>
                      </ScrollReveal>
                  </div>
