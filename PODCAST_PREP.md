@@ -66,7 +66,32 @@ Wir nutzen **Astro** statt WordPress-Baukästen. Warum?
 
 ---
 
-## 5. Spannende Fakten & Psychologie (Bonus-Material)
+## 5. Technik Deep-Dive: Was unter der Haube steckt
+*Warum wir technologisch "Over-Engineering" betreiben.*
+
+### 🏝️ Islands Architecture (Die Geheimwaffe)
+Normale Websites laden einen riesigen JavaScript-Block ("Hydration"), bevor der Nutzer interagieren kann. Wir nutzen **Astro Islands**:
+*   **Das Prinzip:** 90% der Seite sind pures HTML (statisch, superschnell).
+*   **Der Trick:** Nur die interaktiven Teile (der Slider, der Rechner) werden als "Inseln" geladen – und zwar erst, wenn sie sichtbar sind (`client:visible`).
+*   **Der Vorteil:** Die Seite ist sofort bedienbar ("Time to Interactive" < 100ms), selbst auf schlechtem Handy-Netz.
+
+### 🔍 Strukturiertes Daten-Schema (JSON-LD)
+Wir verlassen uns nicht darauf, dass Google unseren Text "versteht". Wir füttern Google direkt mit Code (`LocalSchema.astro`).
+*   **Was wir senden:** Wir sagen Google explizit: "Das hier ist ein *Service*, das kostet *500€*, das sind *47 Bewertungen* mit *5.0 Sternen*".
+*   **Warum?** Das erhöht die Chance auf **Rich Snippets** (die Sterne, die man direkt in den Suchergebnissen sieht). Das steigert die Klickrate massiv.
+
+### 🖼️ Next-Gen Bildformate
+Wir laden keine JPGs. Unser Build-Prozess (`astro:assets`) konvertiert alle Bilder automatisch in **AVIF**.
+*   **Vorteil:** AVIF ist 50% kleiner als JPG bei besserer Qualität.
+*   **LCP-Optimierung:** Das Hero-Bild wird "preloaded", damit es schon da ist, bevor der Browser überhaupt weiß, dass er es braucht. Das eliminiert das "Aufploppen" der Seite.
+
+### 🛡️ Sicherheit durch Statik
+*   **Keine Datenbank:** Da wir (fast) alles statisch generieren, gibt es keine Datenbank, die gehackt werden kann.
+*   **Kein Plugin-Chaos:** Im Gegensatz zu WordPress, wo ein veraltetes Plugin die ganze Seite lahmlegen kann, ist unser Code "frozen". Er geht nicht kaputt, nur weil es ein Update gibt.
+
+---
+
+## 6. Spannende Fakten & Psychologie (Bonus-Material)
 *Nutze diese Fakten, um Experte zu wirken.*
 
 ### 🧠 Verkaufspsychologie
@@ -83,7 +108,7 @@ Wir nutzen **Astro** statt WordPress-Baukästen. Warum?
 
 ---
 
-## 6. Talking Points / Soundbites für den Podcast
+## 7. Talking Points / Soundbites für den Podcast
 *   *"Wenn deine Website nicht verkauft, während du schläfst, ist es nur eine Broschüre."*
 *   *"Transparenz ist das neue Premium. Versteckte Kosten töten Conversion."*
 *   *"Wir bauen Websites nicht für den Kunden, sondern für **deren** Kunden."* (Design folgt Funktion).
