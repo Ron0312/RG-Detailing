@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rg-detailing-v2';
+const CACHE_NAME = 'rg-detailing-v3';
 
 // Assets to cache immediately on install
 const PRECACHE_URLS = [
@@ -48,7 +48,8 @@ self.addEventListener('fetch', (event) => {
   // Network First, fallback to Cache for HTML (pages)
   if (event.request.headers.get('Accept').includes('text/html')) {
      event.respondWith(
-        fetch(event.request)
+        // Use { cache: 'reload' } to force browser to ignore HTTP cache and go to network
+        fetch(event.request, { cache: 'reload' })
            .then((response) => {
               const responseClone = response.clone();
               caches.open(CACHE_NAME).then((cache) => {
