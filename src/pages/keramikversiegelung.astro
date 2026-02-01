@@ -156,9 +156,9 @@ const schema = {
         </div>
     </div>
 
-    <main class="bg-zinc-950">
+    <main class="w-full overflow-x-hidden">
         {/* BENEFITS GRID */}
-        <section id="vorteile" class="py-24 relative overflow-hidden">
+        <section id="vorteile" class="section-spacing relative overflow-hidden">
             <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
             <div class="container mx-auto px-4 relative z-10">
@@ -181,7 +181,7 @@ const schema = {
         </section>
 
         {/* LABOCOSMETICA SECTION */}
-        <section class="py-24 border-y border-white/5 bg-zinc-900/20">
+        <section class="section-spacing border-y border-white/5 bg-zinc-900/20">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col lg:flex-row items-center gap-16">
                     <div class="lg:w-1/2">
@@ -224,7 +224,7 @@ const schema = {
         </section>
 
         {/* PROCESS STEPS */}
-        <section class="py-24 bg-zinc-950">
+        <section class="section-spacing bg-zinc-950">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-20">
                     <span class="text-red-500 font-bold uppercase tracking-widest text-sm">Transparenz</span>
@@ -259,7 +259,7 @@ const schema = {
         </section>
 
         {/* FAQ */}
-        <section class="py-24 bg-zinc-900/30 border-y border-white/5">
+        <section class="section-spacing bg-zinc-900/30 border-y border-white/5">
             <div class="container mx-auto px-4 max-w-3xl">
                 <h2 class="text-3xl font-bold text-white text-center mb-12">Häufige Fragen zur Versiegelung</h2>
                 <FAQ client:visible items={faqItems} />
@@ -270,7 +270,7 @@ const schema = {
         <Reviews limit={3} />
 
         {/* CTA */}
-        <section id="rechner" class="py-24 relative overflow-hidden">
+        <section id="rechner" class="section-spacing relative overflow-hidden">
             <div class="container mx-auto px-4">
                 <div class="max-w-5xl mx-auto glass-panel p-8 md:p-12 rounded-3xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-96 h-96 bg-red-600/10 blur-[150px] rounded-full pointer-events-none"></div>
