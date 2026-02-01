@@ -91,7 +91,24 @@ Wir laden keine JPGs. Unser Build-Prozess (`astro:assets`) konvertiert alle Bild
 
 ---
 
-## 6. Spannende Fakten & Psychologie (Bonus-Material)
+## 6. Nachteile & Herausforderungen (Ehrlichkeit schafft Vertrauen)
+*Wo Licht ist, ist auch Schatten. Ein ehrlicher Podcast-Gast nennt auch die Nachteile.*
+
+### ⚠️ Hohe Einstiegshürde (Initialer Aufwand)
+*   **Kosten:** Eine solche "Maßanfertigung" kostet initial deutlich mehr als ein 20€/Monat Wix-Baukasten oder ein Wordpress-Theme.
+*   **Entwickler-Abhängigkeit:** Man kann nicht mal eben per "Drag & Drop" das ganze Design ändern. Für strukturelle Änderungen braucht man einen Coder.
+    *   *Lösung:* Wir nutzen "Content Collections", damit Texte/Preise trotzdem leicht änderbar sind. Aber das Grundgerüst ist fest.
+
+### 📉 Der "Over-Optimization" Fluch
+*   Man verliert sich schnell in der Jagd nach "100/100" Punkten, statt guten Content zu schreiben.
+*   Manchmal ist eine "hässliche" Seite, die sofort live geht, besser als eine perfekte Seite, die nie fertig wird.
+
+### 🔧 Komplexität
+*   Features wie der Preiskalkulator müssen gewartet werden. Wenn sich die Geschäftslogik ändert (z.B. neue Berechnungsgrundlage), muss Code angepasst werden, nicht nur ein Preisschild.
+
+---
+
+## 7. Spannende Fakten & Psychologie (Bonus-Material)
 *Nutze diese Fakten, um Experte zu wirken.*
 
 ### 🧠 Verkaufspsychologie
@@ -108,7 +125,7 @@ Wir laden keine JPGs. Unser Build-Prozess (`astro:assets`) konvertiert alle Bild
 
 ---
 
-## 7. Talking Points / Soundbites für den Podcast
+## 8. Talking Points / Soundbites für den Podcast
 *   *"Wenn deine Website nicht verkauft, während du schläfst, ist es nur eine Broschüre."*
 *   *"Transparenz ist das neue Premium. Versteckte Kosten töten Conversion."*
 *   *"Wir bauen Websites nicht für den Kunden, sondern für **deren** Kunden."* (Design folgt Funktion).
