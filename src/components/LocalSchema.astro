@@ -1,5 +1,12 @@
 ---
 import { services } from '../data/services';
+import { getImage } from 'astro:assets';
+import remoImage from '../assets/certificates/remo-steam-cleaning.jpg';
+import projectImage from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg';
+
+const optimizedRemo = await getImage({src: remoImage, format: 'jpg', width: 800});
+const optimizedProject = await getImage({src: projectImage, format: 'jpg', width: 1200});
+const domain = "https://rg-detailing.de";
 ---
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
@@ -13,7 +20,7 @@ import { services } from '../data/services';
         "@type": "Person",
         "name": "Remo Gerhardt",
         "jobTitle": "Inhaber & Detailer",
-        "image": "https://rg-detailing.de/images/remo-steam-cleaning.jpg",
+        "image": `${domain}${optimizedRemo.src}`,
         "sameAs": [
             "https://www.instagram.com/rg_detailing",
             "https://www.facebook.com/rgdetailing"
@@ -91,7 +98,7 @@ import { services } from '../data/services';
       "@type": "Service",
       "name": "Premium Fahrzeugaufbereitung & Keramikversiegelung",
       "description": "High-End Lackveredelung und zertifizierte Keramikversiegelung in Schleswig-Holstein. Professionelle Aufbereitung für Enthusiasten.",
-      "image": "https://rg-detailing.de/images/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg",
+      "image": `${domain}${optimizedProject.src}`,
       "provider": {
         "@id": "https://rg-detailing.de/#localBusiness"
       },
