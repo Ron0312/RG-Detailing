@@ -4,7 +4,7 @@ export const services = [
         description: "Das ultimative Upgrade für Liebhaber. Mehrstufige Lackkorrektur entfernt Swirls & Kratzer für einen Zustand 'Besser als Neu'. Veredelt mit zertifizierter Labocosmetica Keramikversiegelung (bis zu 6 Jahre Schutz).",
         icon: "shield",
         shortDescription: "High-End Lackkorrektur + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 800 €.",
-        link: "#rechner"
+        link: "/keramikversiegelung"
     },
     {
         title: "All-in-One (Werterhalt)",
