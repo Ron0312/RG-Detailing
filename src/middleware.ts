@@ -3,6 +3,13 @@ import { defineMiddleware } from 'astro:middleware';
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
 
+  // HTML Caching Strategy: Ensure users always get the latest version
+  if (response.headers.get('Content-Type')?.includes('text/html')) {
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+  }
+
   // Security Headers
   response.headers.delete('X-Powered-By');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
