@@ -95,26 +95,20 @@ const domain = "https://rg-detailing.de";
       ]
     },
     {
-      "@type": "Service",
+      "@type": "Product",
       "name": "Premium Fahrzeugaufbereitung & Keramikversiegelung",
       "description": "High-End Lackveredelung und zertifizierte Keramikversiegelung in Schleswig-Holstein. Professionelle Aufbereitung für Enthusiasten.",
       "image": `${domain}${optimizedProject.src}`,
-      "provider": {
+      "brand": {
         "@id": "https://rg-detailing.de/#localBusiness"
       },
-      "areaServed": {
-        "@type": "GeoCircle",
-        "geoMidpoint": {
-            "@type": "GeoCoordinates",
-            "latitude": 54.04500,
-            "longitude": 10.31917
-        },
-        "geoRadius": "40000"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "High-End Detailing Services",
-        "itemListElement": services.map((service) => ({
+      "offers": {
+        "@type": "AggregateOffer",
+        "url": "https://rg-detailing.de/#prices",
+        "priceCurrency": "EUR",
+        "lowPrice": "125",
+        "offerCount": services.length,
+        "offers": services.map((service) => ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
