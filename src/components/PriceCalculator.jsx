@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import config from '../lib/pricingConfig.json';
+import { siteConfig } from '../config/site';
 import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb } from 'lucide-react';
 
 const STEPS = {
@@ -42,14 +43,7 @@ export default function PriceCalculator() {
         if (preselect === 'camper') {
             handleSelect('size', 'camper');
         } else if (preselect === 'leasing') {
-             // For leasing we need a size first, but we can preset the intent
-             // Actually, we can just preset the package if size is chosen later?
-             // Or better: Simulate a "medium" car selection then go to leasing package logic?
-             // Let's just preset size=medium (common) and package=leasing to show result?
-             // No, let's keep it simple: Select size first, but highlight leasing package later.
-             // Or: Start with size selection but automatically select leasing package when we get there?
-             // Let's try: If leasing, user still needs to pick size.
-             // Let's just set a flag or just handle 'camper' for now as it skips steps.
+             // Logic kept as original
         }
     }, []);
 
@@ -68,20 +62,15 @@ export default function PriceCalculator() {
                 setStep(STEPS.CAMPER_LENGTH);
                 return;
             }
-            // Check for preselect leasing intent if passed (not implemented fully above, keeping simple)
             const params = new URLSearchParams(window.location.search);
             if (params.get('preselect') === 'leasing') {
-                 // Skip condition step for leasing?
-                 // Leasing usually needs "All-in-One" or "Politur".
-                 // Let's just go standard flow.
+                 // Logic kept as original
             }
             setStep(STEPS.CONDITION);
         } else if (key === 'condition') {
-             // If preselect=leasing, maybe auto-select leasing package?
              const params = new URLSearchParams(window.location.search);
              if (params.get('preselect') === 'leasing') {
-                  // Auto-select leasing package
-                  const result = calculatePrice('leasing', newSelections.size, value); // Leasing package ID
+                  const result = calculatePrice('leasing', newSelections.size, value);
                   setQuote(result);
                   setSelections({...newSelections, package: 'leasing'});
                   setStep(STEPS.RESULT);
@@ -109,7 +98,6 @@ export default function PriceCalculator() {
         e.preventDefault();
         setLoading(true);
         try {
-
             const payload = { ...selections, quote, email, botcheck };
             await fetch('/api/submit-quote', {
                 method: 'POST',
@@ -131,7 +119,6 @@ export default function PriceCalculator() {
         setSubmitted(false);
         setEmail('');
         setBotcheck(false);
-        // Clear URL param?
         window.history.replaceState({}, '', window.location.pathname);
     };
 
@@ -148,28 +135,28 @@ export default function PriceCalculator() {
             onClick={onClick}
             className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer
                 ${active
-                    ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
+                    ? 'border-primary-500 bg-primary-900/20 shadow-[0_0_30px_color-mix(in_srgb,var(--color-primary),transparent_85%)] ring-1 ring-primary-500/50 scale-[1.02]'
                     : highlight
                         ? 'border-yellow-600/30 bg-gradient-to-br from-zinc-900/80 to-yellow-900/10 hover:border-yellow-500/50 hover:bg-zinc-800 hover:scale-[1.02]'
-                        : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-red-500/30 hover:scale-[1.02]'
+                        : 'border-white/5 bg-white/5 hover:bg-white/10 hover:border-primary-500/30 hover:scale-[1.02]'
                 }
             `}
         >
             {/* Background Glow for Hover */}
             <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none
-                ${active ? 'bg-gradient-to-tr from-red-600/10 to-transparent' : 'bg-gradient-to-tr from-white/5 to-transparent'}
+                ${active ? 'bg-gradient-to-tr from-primary-600/10 to-transparent' : 'bg-gradient-to-tr from-white/5 to-transparent'}
             `} />
 
             {badge && (
                 <div className={`absolute top-0 right-0 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-bl-xl shadow-lg z-10
-                    ${highlight ? 'bg-gradient-to-r from-yellow-600 to-yellow-500 text-black' : 'bg-gradient-to-r from-red-700 to-red-600 text-white'}
+                    ${highlight ? 'bg-gradient-to-r from-yellow-600 to-yellow-500 text-black' : 'bg-gradient-to-r from-primary-700 to-primary-600 text-white'}
                 `}>
                     {badge}
                 </div>
             )}
 
             <div className="flex items-start justify-between mb-4 relative z-10">
-                <div className={`font-bold text-xl tracking-tight transition-colors ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
+                <div className={`font-bold text-xl tracking-tight transition-colors ${active ? 'text-primary-400' : 'text-white group-hover:text-primary-400'}`}>
                     {title}
                 </div>
             </div>
@@ -177,9 +164,9 @@ export default function PriceCalculator() {
             <div className="text-zinc-400 text-base md:text-sm leading-relaxed mb-6 flex-grow relative z-10 font-medium">{desc}</div>
 
             {price && (
-                <div className={`mt-auto pt-4 border-t transition-colors ${active ? 'border-red-500/20' : 'border-white/5 group-hover:border-white/10'} flex justify-between items-center relative z-10`}>
+                <div className={`mt-auto pt-4 border-t transition-colors ${active ? 'border-primary-500/20' : 'border-white/5 group-hover:border-white/10'} flex justify-between items-center relative z-10`}>
                     <span className="text-xs text-zinc-400 uppercase tracking-wider font-bold">Ab</span>
-                    <span className={`font-bold text-xl tracking-tighter ${highlight ? 'text-yellow-500' : 'text-red-500'}`}>{price}€</span>
+                    <span className={`font-bold text-xl tracking-tighter ${highlight ? 'text-yellow-500' : 'text-primary-500'}`}>{price}€</span>
                 </div>
             )}
         </button>
@@ -191,9 +178,14 @@ export default function PriceCalculator() {
         const pkg = config.packages[selections.package];
         const packageName = pkg?.name;
 
+        // Use siteConfig for WhatsApp Link
+        // Need to extract number from phone if needed, but whatsapp property usually has full link or number.
+        // siteConfig.company.contact.whatsapp is "https://wa.me/..."
+        const waBase = siteConfig.company.contact.whatsapp.split('?')[0];
+
         const WhatsAppButton = ({ message }) => (
             <a
-                href={`https://wa.me/491633845081?text=${encodeURIComponent(message)}`}
+                href={`${waBase}?text=${encodeURIComponent(message)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_20px_rgba(37,211,102,0.2)] hover:shadow-[0_0_40px_rgba(37,211,102,0.4)] hover:-translate-y-1 w-full mb-6 group border border-white/10 text-lg active:scale-95"
@@ -206,10 +198,10 @@ export default function PriceCalculator() {
         if (quote.isRequestOnly) {
             const meterPrice = 25;
             const washPrice = Math.round(selections.camperLength * meterPrice);
-            const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
+            const message = `Hallo ${siteConfig.company.name}, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
 
             return (
-                 <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/30 transition-colors duration-500">
+                 <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-primary-500/30 transition-colors duration-500">
                     <div className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Wohnmobil Spezial</div>
 
                     <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
@@ -218,7 +210,7 @@ export default function PriceCalculator() {
                          <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
                          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
                          <div className="text-zinc-300 text-sm font-medium">
-                            <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
+                            <span className="text-primary-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
                             Individuelles Angebot nach Besichtigung
                          </div>
                     </div>
@@ -239,23 +231,23 @@ export default function PriceCalculator() {
         }
 
         if (selections.package === 'leasing') {
-             const message = `Hallo RG-Detailing, ich brauche Hilfe bei der Leasing-Rückgabe (${sizeName}). Bitte um Termin zur Vorab-Inspektion.`;
+             const message = `Hallo ${siteConfig.company.name}, ich brauche Hilfe bei der Leasing-Rückgabe (${sizeName}). Bitte um Termin zur Vorab-Inspektion.`;
              return (
                 <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl">
                     <div className="text-center mb-8 relative z-10">
-                         <span className="inline-block py-1.5 px-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                         <span className="inline-block py-1.5 px-4 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_color-mix(in_srgb,var(--color-primary),transparent_80%)]">
                             Investition statt Strafe
                         </span>
                         <div className="text-3xl md:text-4xl font-bold text-white mb-3">Leasing Rettung</div>
                         <p className="text-zinc-400">Vermeiden Sie teure Nachzahlungen.</p>
                     </div>
 
-                    <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
+                    <div className="bg-gradient-to-r from-primary-900/20 to-transparent border-l-4 border-primary-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
                         <div>
                             <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
                             <div className="text-sm text-zinc-300 leading-relaxed">
                                 Ein Kratzer im Protokoll kostet oft 300-600€. Wir entfernen ihn für einen Bruchteil.
-                                <br/><span className="text-red-400 font-bold mt-1 block">Sparpotenzial: bis zu 70%</span>
+                                <br/><span className="text-primary-400 font-bold mt-1 block">Sparpotenzial: bis zu 70%</span>
                             </div>
                         </div>
                     </div>
@@ -270,11 +262,11 @@ export default function PriceCalculator() {
              );
         }
 
-        const message = `Hallo RG-Detailing, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}. Schätzung: ${quote.minPrice}-${quote.maxPrice}EUR.`;
+        const message = `Hallo ${siteConfig.company.name}, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}. Schätzung: ${quote.minPrice}-${quote.maxPrice}EUR.`;
 
         return (
-            <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/20 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none"></div>
+            <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-primary-500/20 transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none"></div>
 
                 <div className="relative z-10">
                     <div className="text-center mb-10">
@@ -301,7 +293,7 @@ export default function PriceCalculator() {
                         <div className="h-px bg-white/5 mx-4"></div>
                         <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
                             <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
-                            <span className="text-red-400 font-bold">{packageName}</span>
+                            <span className="text-primary-400 font-bold">{packageName}</span>
                         </div>
                     </div>
 
@@ -335,7 +327,7 @@ export default function PriceCalculator() {
     return (
         <div className="relative w-full max-w-5xl mx-auto my-8 md:my-12" ref={containerRef}>
             {/* Ambient Background Glow */}
-            <div className="absolute -inset-4 bg-red-600/20 blur-[100px] rounded-full pointer-events-none opacity-50 mix-blend-screen animate-pulse"></div>
+            <div className="absolute -inset-4 bg-primary-600/20 blur-[100px] rounded-full pointer-events-none opacity-50 mix-blend-screen animate-pulse"></div>
 
             <div className="relative bg-zinc-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/10 p-3 md:p-12 scroll-mt-32 ring-1 ring-black/5">
 
@@ -345,9 +337,9 @@ export default function PriceCalculator() {
                         {/* Track Wrapper - Positioned between centers of first and last circle */}
                         <div className="absolute top-1/2 left-5 right-5 md:left-6 md:right-6 -translate-y-1/2 h-1 bg-white/5 -z-10 rounded-full">
                             {/* Active Track */}
-                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-800 to-red-500 rounded-full transition-all duration-700 ease-out"
+                            <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-800 to-primary-500 rounded-full transition-all duration-700 ease-out"
                                 style={{ width: `${(step >= STEPS.RESULT ? 1 : step / 3) * 100}%` }}>
-                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-400 rounded-full blur-[4px] shadow-[0_0_10px_rgba(248,113,113,0.8)]"></div>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-primary-400 rounded-full blur-[4px] shadow-[0_0_10px_color-mix(in_srgb,var(--color-primary),transparent_20%)]"></div>
                             </div>
                         </div>
 
@@ -355,7 +347,7 @@ export default function PriceCalculator() {
                             <div key={i} className="flex flex-col items-center gap-1 md:gap-3 z-10">
                                 <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-all duration-500 border-4
                                     ${step >= i
-                                        ? 'bg-zinc-900 text-white border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.4)] scale-110'
+                                        ? 'bg-zinc-900 text-white border-primary-500 shadow-[0_0_20px_color-mix(in_srgb,var(--color-primary),transparent_60%)] scale-110'
                                         : 'bg-zinc-900 text-zinc-600 border-zinc-800'
                                     }
                                 `}>
@@ -411,8 +403,8 @@ export default function PriceCalculator() {
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
-                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none"
-                                        style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
+                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-primary-600 hover:accent-primary-500 transition-all touch-none"
+                                        style={{ backgroundImage: `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
                                     <div className="flex justify-between text-zinc-400 text-xs mt-4 font-bold uppercase tracking-wider">
                                         <span>4m</span>
@@ -423,7 +415,7 @@ export default function PriceCalculator() {
 
                                 <button
                                     onClick={handleCamperConfirm}
-                                    className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:shadow-[0_15px_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 transform hover:-translate-y-1 active:scale-95"
+                                    className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_color-mix(in_srgb,var(--color-primary),transparent_70%)] hover:shadow-[0_15px_40px_color-mix(in_srgb,var(--color-primary),transparent_60%)] flex items-center justify-center gap-3 transform hover:-translate-y-1 active:scale-95"
                                 >
                                     Weiter zur Berechnung <ChevronRight className="w-5 h-5" />
                                 </button>
@@ -464,9 +456,9 @@ export default function PriceCalculator() {
                             <StepTitle>Paketwahl</StepTitle>
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
 
-                            <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
+                            <div className="bg-primary-500/10 border border-primary-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
                                 <div>
-                                    <h4 className="text-red-400 font-bold text-sm uppercase tracking-wide mb-1">Alles Inklusive Philosophie</h4>
+                                    <h4 className="text-primary-400 font-bold text-sm uppercase tracking-wide mb-1">Alles Inklusive Philosophie</h4>
                                     <p className="text-zinc-300 text-sm leading-relaxed">
                                         Wir verzichten auf komplizierte Baukästen. In allen Paketen sind Lederpflege, Textilreinigung und Fleckenentfernung bereits inklusive.
                                         Der Preis deckt alles ab, was Ihr Fahrzeug benötigt.
@@ -515,7 +507,7 @@ export default function PriceCalculator() {
                                         type="email"
                                         required
                                         placeholder="Ihre E-Mail Adresse"
-                                        className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
+                                        className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         disabled={loading}
@@ -529,8 +521,8 @@ export default function PriceCalculator() {
                                     </button>
                                 </div>
                                 <div className="mt-4 text-center">
-                                     <div className="inline-flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold px-3 py-1 rounded-full mb-2 animate-pulse">
-                                        <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                                     <div className="inline-flex items-center gap-1.5 bg-primary-500/10 border border-primary-500/20 text-primary-400 text-[10px] font-bold px-3 py-1 rounded-full mb-2 animate-pulse">
+                                        <span className="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
                                         Hohe Nachfrage im {new Date().toLocaleString('de-DE', { month: 'long' })}
                                      </div>
                                     <p className="text-[10px] text-zinc-400 leading-normal">
@@ -569,7 +561,7 @@ export default function PriceCalculator() {
                                     Da E-Mails manchmal im Spam landen können, melden Sie sich gerne direkt per WhatsApp oder Anruf bei uns, falls Sie innerhalb von 24h keine Antwort erhalten.
                                 </p>
                                 <a
-                                    href="https://wa.me/491633845081"
+                                    href={waBase}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 text-[#25D366] font-bold hover:underline"
