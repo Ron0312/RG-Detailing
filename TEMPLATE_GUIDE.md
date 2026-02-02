@@ -34,34 +34,36 @@ Colors are not hardcoded. They are defined as **Semantic Variables** in **`src/s
 ### How to change the Color Scheme:
 1.  Open `src/styles/global.css`.
 2.  Find the `@theme` block.
-3.  Change the `--color-primary-*` values.
+3.  Change the Hex codes for the `--color-primary-*` variables.
 
 **Example (Blue Theme for Lawyer):**
 ```css
 /* src/styles/global.css */
 @theme {
   /* ... */
-  --color-primary-500: #0000FF; /* Change Red to Blue */
-  /* Update other shades accordingly */
+  /* Change the Brand Red to Blue */
+  --color-primary-500: #0000FF;
+  /* It is recommended to generate a full palette (50-950) for best results. */
+  /* Tools like https://uicolors.app/create can help generate these values. */
 }
 ```
-All buttons, highlights, and accents will instantly turn blue.
+All buttons, highlights, and accents will instantly reflect your new color choice.
 
 ## 3. Logos & Images
 
-*   **Logo:** Replace `public/logo.png`. The site automatically uses this file.
+*   **Logo:** The logo path is configured in `src/config/site.ts` (default: `/logo.png`). Replace the file in the `public/` folder or update the config to point to a new file.
 *   **Favicon:** Replace `public/favicon.png`.
-*   **Hero Image:** Replace `src/assets/hero-workshop.jpg` (or update the import in `src/pages/index.astro`).
+*   **Hero Image:** Currently located at `src/assets/hero-workshop.jpg`. You can replace this file or update the import in `src/pages/index.astro`.
 
 ## 4. Content & Layout
 
 The main landing page is **`src/pages/index.astro`**.
 It is built using modular sections.
 
-*   **To remove a section:** Delete the component or wrap it in a feature flag in `siteConfig`.
+*   **To remove a section:** Delete the component import or wrap it in a feature flag in `siteConfig`.
 *   **To change text:** Most headlines are currently in `src/pages/index.astro`. You can edit them there.
 *   **Services:** Edit `src/data/services.ts`.
-*   **Reviews:** Edit `src/data/reviews.json` (or `reviews.ts`).
+*   **Reviews:** Edit `src/data/reviews.json`.
 
 ## 5. Deployment
 
