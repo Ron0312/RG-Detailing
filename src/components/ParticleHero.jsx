@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { debounce } from '../lib/utils';
 
 export default function ParticleHero() {
     const canvasRef = useRef(null);
@@ -11,13 +12,15 @@ export default function ParticleHero() {
         let animationFrameId;
         let particles = [];
 
-        const resize = () => {
+        const updateDimensions = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
 
-        window.addEventListener('resize', resize);
-        resize();
+        const handleResize = debounce(updateDimensions, 100);
+
+        window.addEventListener('resize', handleResize);
+        updateDimensions();
 
         class Particle {
             constructor() {
@@ -68,7 +71,8 @@ export default function ParticleHero() {
         animate();
 
         return () => {
-            window.removeEventListener('resize', resize);
+            window.removeEventListener('resize', handleResize);
+            handleResize.cancel();
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
