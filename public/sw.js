@@ -4,7 +4,7 @@ const CACHE_NAME = 'rg-detailing-v3';
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
-  '/favicon.svg',
+  '/favicon.png',
   '/logo.png',
   '/fonts/inter-latin-400-normal.woff2',
   '/fonts/inter-latin-700-normal.woff2',
