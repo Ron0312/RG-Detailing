@@ -511,15 +511,21 @@ export default function PriceCalculator() {
                                 />
                                  <h4 className="text-white font-bold mb-6 text-center text-xl">Angebot sichern</h4>
                                 <div className="flex gap-3 flex-col">
-                                    <input
-                                        type="email"
-                                        required
-                                        placeholder="Ihre E-Mail Adresse"
-                                        className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled={loading}
-                                    />
+                                    <div>
+                                        <label htmlFor="email-input" className="block text-sm font-medium text-zinc-400 mb-2 pl-1">
+                                            Ihre E-Mail Adresse <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            id="email-input"
+                                            type="email"
+                                            required
+                                            placeholder="z.B. max@mustermann.de"
+                                            className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            disabled={loading}
+                                        />
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={loading}
