@@ -44,6 +44,11 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta name="keywords" content={keywords} />
         <link rel="canonical" href={canonicalURL} />
 
+        <!-- Force No-Cache for Deployment Issues -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+
         <!-- GEO & Local -->
         <meta name="geo.region" content="DE-SH" />
         <meta name="geo.placename" content="Tensfeld" />
@@ -73,6 +78,9 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
+            // VERSION CHECK - TIMESTAMP 2026-02-04 20:45
+            console.log("RG Detailing Version: 2026-02-04 20:45 - Cache Fix Applied");
+
             // Service Worker temporarily disabled to force cache clearing
             /*
             if ('serviceWorker' in navigator) {
@@ -85,6 +93,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(function(registrations) {
                     for(let registration of registrations) {
+                        console.log("Unregistering SW:", registration);
                         registration.unregister();
                     }
                 });
