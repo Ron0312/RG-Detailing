@@ -1,0 +1,75 @@
+import { c as createComponent, e as renderComponent, r as renderTemplate, am as maybeRenderHead } from './astro/server_BFEvG0-X.mjs';
+import 'piccolore';
+import { $ as $$Layout, r as remoImage$1 } from './Layout_Bl4oGuow.mjs';
+import { $ as $$Breadcrumbs } from './Breadcrumbs_B8mLItpZ.mjs';
+import { $ as $$ServiceSchema } from './ServiceSchema_CT86Lw4C.mjs';
+import { $ as $$Image } from './_astro_assets_C42mOPnA.mjs';
+import { h as heroImage, d as dampfdrachenLogo } from './dampfdrachen-logo_DZc42pH_.mjs';
+import { Flame, Check, Wind, Droplets, ShoppingBag } from 'lucide-react';
+
+const remoImage = new Proxy({"src":"/_astro/remo-dampfdrachen-full.BQY5BQg4.jpg","width":588,"height":826,"format":"jpg"}, {
+						get(target, name, receiver) {
+							if (name === 'clone') {
+								return structuredClone(target);
+							}
+							if (name === 'fsPath') {
+								return "/app/src/assets/remo-dampfdrachen-full.jpg";
+							}
+
+							return target[name];
+						}
+					});
+
+const $$Dampfreinigung = createComponent(($$result, $$props, $$slots) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "RG Detailing - Dampfreinigung",
+    "description": "Hygienische Innenreinigung mit 170\xB0C Trockendampf in Tensfeld. Ideal f\xFCr Allergiker und Familien.",
+    "priceRange": "$$$",
+    "dateModified": (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+  };
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Hygienische Dampfreinigung Fahrzeug Innenraum | RG Detailing", "description": "Hygienische Innenreinigung mit 170\xB0C Trockendampf in Schleswig-Holstein. Chemiefrei gegen Bakterien & Ger\xFCche. Offizieller Dampfdrachen Partner.", "schema": schema, "preloadImage": heroImage.src }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ServiceSchema", $$ServiceSchema, { "name": "Dampfreinigung Innenraum", "description": "Hygienische Tiefenreinigung des Fahrzeug-Innenraums mit 170\xB0C Trockendampf. Entfernt Bakterien, Keime und Ger\xFCche ohne Chemie.", "price": "350", "priceRange": "$$" })} ${maybeRenderHead()}<div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black"> <div class="absolute inset-0">  <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none"> ${renderComponent($$result2, "Image", $$Image, { "src": dampfdrachenLogo, "alt": "Dampfdrachen Hintergrund", "class": "w-[80%] md:w-[50%] object-contain" })} </div> ${renderComponent($$result2, "Image", $$Image, { "src": heroImage, "alt": "Dampfreinigung Hintergrund", "class": "absolute inset-0 w-full h-full object-cover opacity-60", "fetchpriority": "high", "loading": "eager", "format": "avif", "widths": [640, 768, 1024, 1280, 1536, 1920], "sizes": "100vw" })} <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div> <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div>  </div> <div class="container mx-auto px-4 z-10 text-center pt-20"> <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-bold tracking-wider mb-6 uppercase backdrop-blur-md">
+Der Dampfdrache
+</span> <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white leading-tight">
+Reine Physik. <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">0% Chemie. 100% Hygiene.</span> </h1> <p class="text-xl md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+Tiefenreinigung mit 170°C Trockendampf. Ideal für Familien, Tierbesitzer und Allergiker.
+</p> </div> </div> <main class="container mx-auto px-4 py-12 -mt-20 relative z-20"> ${renderComponent($$result2, "Breadcrumbs", $$Breadcrumbs, { "crumbs": [
+    { label: "Startseite", href: "/" },
+    { label: "Dampfreinigung", href: "/dampfreinigung" }
+  ] })}  <div class="grid md:grid-cols-3 gap-12 items-start mb-24 mt-12"> <div class="md:col-span-1"> <div class="relative group rounded-2xl overflow-hidden shadow-2xl border border-zinc-800 mb-8"> ${renderComponent($$result2, "Image", $$Image, { "src": remoImage, "alt": "Dampfreinigung Innenraum RG Detailing", "class": "w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105" })} <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div> <div class="absolute bottom-6 left-6 text-white font-bold text-xl">
+Dampfdrachen im Einsatz
+</div> </div> <div class="bg-zinc-900/80 backdrop-blur-md p-8 rounded-2xl border border-zinc-800 shadow-xl"> <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-4">Offizieller Partner</p> ${renderComponent($$result2, "Image", $$Image, { "src": dampfdrachenLogo, "alt": "Dampfdrachen Logo", "class": "h-16 w-auto mb-6 object-contain object-left" })} <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-400">VERTRIEBSPARTNER</span></div> <p class="text-zinc-400 text-sm mb-4">
+Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.
+</p> </div> </div> <div class="prose prose-invert prose-lg md:col-span-2"> <h2 class="text-3xl font-bold text-white mb-6">Warum Dampf besser ist als Chemie</h2> <p class="text-zinc-400 leading-relaxed mb-6">
+Klassische Innenreiniger arbeiten oft mit Tensiden und Duftstoffen. Sie überdecken Gerüche und hinterlassen chemische Rückstände auf den Polstern. Wenn im Sommer die Sonne draufscheint, dünsten diese Stoffe aus – Gift für Allergiker und kleine Kinder.
+</p> <div class="bg-red-900/10 border-l-4 border-red-600 p-6 my-8 rounded-r-xl"> <h4 class="text-red-500 font-bold mb-2 flex items-center gap-2">${renderComponent($$result2, "Flame", Flame, { "size": 20 })} 170°C Hitze überlebt nichts</h4> <ul class="space-y-2 text-zinc-300 text-sm"> <li class="flex items-center gap-2">${renderComponent($$result2, "Check", Check, { "size": 16, "className": "text-red-500" })} <strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</li> <li class="flex items-center gap-2">${renderComponent($$result2, "Check", Check, { "size": 16, "className": "text-red-500" })} <strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</li> <li class="flex items-center gap-2">${renderComponent($$result2, "Check", Check, { "size": 16, "className": "text-red-500" })} <strong>Schimmelsporen:</strong> Werden in der Tiefe neutralisiert.</li> </ul> </div> <h3 class="text-2xl font-bold text-white mb-4">Keine Nässe, kein Schimmelrisiko</h3> <p class="text-zinc-400 leading-relaxed mb-4">
+Viele scheuen die Polsterreinigung aus Angst vor Nässe ("Das trocknet doch nie!"). Bei billigen Nasssaugern stimmt das. Aber wir nutzen <strong>Trockendampf</strong>.
+</p> <p class="text-zinc-400 leading-relaxed">
+Der Dampf hat nur einen minimalen Wasseranteil. Er löst den Schmutz in Sekundenbruchteilen, und wird sofort wieder abgesaugt. Das Ergebnis: Die Polster sind porentief rein und nach kürzester Zeit wieder komplett trocken. Schokoflecken vom Rücksitz? Verschwunden. Hundegeruch? Neutralisiert.
+</p> </div> </div>  <div class="grid md:grid-cols-3 gap-6 mb-24"> <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50"> ${renderComponent($$result2, "Wind", Wind, { "className": "w-10 h-10 text-red-500 mb-4" })} <h3 class="text-xl font-bold text-white mb-2">Geruchsneutralisierung</h3> <p class="text-zinc-400 text-sm">Rauch, Tiergeruch oder Lebensmittel – wir entfernen die Ursache, statt sie nur zu überdecken.</p> </div> <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50"> ${renderComponent($$result2, "Droplets", Droplets, { "className": "w-10 h-10 text-red-500 mb-4" })} <h3 class="text-xl font-bold text-white mb-2">Keine Wasserschäden</h3> <p class="text-zinc-400 text-sm">Dank Trockendampf gelangt keine Feuchtigkeit in die Elektronik oder tief in den Schaumstoff.</p> </div> <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50"> ${renderComponent($$result2, "Check", Check, { "className": "w-10 h-10 text-red-500 mb-4" })} <h3 class="text-xl font-bold text-white mb-2">Allergikerfreundlich</h3> <p class="text-zinc-400 text-sm">Ohne aggressive Chemie. Sie steigen in ein gesundes, reines Fahrzeugklima ein.</p> </div> </div>  <div id="vertrieb" class="mb-24 relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/50"> <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/10 blur-[100px] rounded-full"></div> <div class="grid md:grid-cols-2 gap-0"> <div class="p-12 flex flex-col justify-center"> <span class="text-red-500 font-bold tracking-widest text-sm uppercase mb-2">Für Gewerbe & Privat</span> <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Dampfdrachen <br> kaufen</h2> <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
+Wir sind offizieller Vertriebspartner für <strong>Dampfdrachen</strong>.
+                        Die wohl besten Trockendampfreiniger der Welt - Deutsches Ingenieur Know-how, gefertigt in Italien.
+                        Nutzen Sie die gleiche Profi-Technik wie wir für Ihr Unternehmen oder Ihr Zuhause.
+</p> <ul class="space-y-4 mb-8"> <li class="flex items-center gap-3 text-zinc-300"> <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500">${renderComponent($$result2, "Check", Check, { "size": 16 })}</div> <span>Individuelle Vorführung vor Ort</span> </li> <li class="flex items-center gap-3 text-zinc-300"> <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500">${renderComponent($$result2, "Check", Check, { "size": 16 })}</div> <span>Verkauf, Schulung & Support</span> </li> </ul> <div> <a href="tel:+491633845081" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-colors"> ${renderComponent($$result2, "ShoppingBag", ShoppingBag, { "className": "w-5 h-5 mr-2" })}
+Jetzt Beratung anfordern
+</a> </div> </div> <div class="relative min-h-[400px] bg-zinc-950 flex items-center justify-center p-8"> ${renderComponent($$result2, "Image", $$Image, { "src": remoImage$1, "alt": "Dampfdrachen Ger\xE4t", "width": 800, "height": 800, "format": "avif", "class": "relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-500" })} </div> </div> </div>  <div class="glass-panel p-12 rounded-[3rem] border border-red-900/30 text-center relative overflow-hidden"> <div class="absolute inset-0 bg-gradient-to-b from-red-900/10 to-transparent pointer-events-none"></div> <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Gönnen Sie sich ein gesundes Auto</h2> <p class="text-zinc-400 max-w-2xl mx-auto mb-8 relative z-10">
+Perfekt integrierbar in unser "All in One" oder "Full Detailing" Paket.
+</p> <div class="relative z-10 flex flex-col md:flex-row justify-center gap-4"> <a href="/#rechner" class="bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-red-900/30 hover:scale-105">
+Preis jetzt berechnen
+</a> <a href="tel:+491633845081" class="px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
+Beratung: 0163 38 45 08 1
+</a> </div> </div> </main> ` })}`;
+}, "/app/src/pages/dampfreinigung.astro", void 0);
+
+const $$file = "/app/src/pages/dampfreinigung.astro";
+const $$url = "/dampfreinigung";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+	__proto__: null,
+	default: $$Dampfreinigung,
+	file: $$file,
+	url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+export { _page as _ };

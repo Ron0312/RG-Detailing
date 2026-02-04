@@ -1,0 +1,54 @@
+import { c as createComponent, e as renderComponent, r as renderTemplate, am as maybeRenderHead } from './astro/server_BFEvG0-X.mjs';
+import 'piccolore';
+import { $ as $$Layout } from './Layout_Bl4oGuow.mjs';
+import { $ as $$Breadcrumbs } from './Breadcrumbs_B8mLItpZ.mjs';
+import { $ as $$ServiceSchema } from './ServiceSchema_CT86Lw4C.mjs';
+import { Gem, ShieldCheck, CalendarClock, CheckCircle2 } from 'lucide-react';
+import { $ as $$Image } from './_astro_assets_C42mOPnA.mjs';
+import { h as heroImage } from './rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero_BLBImNMb.mjs';
+
+const prerender = true;
+const $$WerterhaltGarantie = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Werterhalt-Garantie | Abo & Pflege f\xFCr Keramik-Kunden | RG Detailing", "description": "Exklusives Pflege-Abo f\xFCr Keramik-Kunden: Sichern Sie den perfekten Zustand Ihres Fahrzeugs mit regelm\xE4\xDFigen Maintenance-W\xE4schen und sparen Sie bis zu 20%.", "schema": {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Werterhalt-Garantie",
+    "description": "Exklusives Pflege-Abo f\xFCr Keramik-Kunden.",
+    "dateModified": (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+  } }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ServiceSchema", $$ServiceSchema, { "name": "Werterhalt-Garantie (Pflege-Abo)", "description": "Exklusives Pflege-Abo f\xFCr Keramik-Kunden zur Erhaltung des Lackzustands. Regelm\xE4\xDFige Maintenance-W\xE4schen mit bis zu 20% Rabatt.", "price": "100", "priceRange": "$$" })} ${maybeRenderHead()}<div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-zinc-950"> <div class="absolute inset-0"> ${renderComponent($$result2, "Image", $$Image, { "src": heroImage, "alt": "RG Detailing Werterhalt Garantie", "class": "w-full h-full object-cover opacity-30", "loading": "eager" })} <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-950/60 to-zinc-950"></div> <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div> </div> <div class="container mx-auto px-4 z-10 text-center pt-20"> <span class="inline-block py-1 px-3 rounded-full bg-red-900/20 border border-red-500/30 text-red-500 text-xs font-bold tracking-[0.2em] mb-6 uppercase backdrop-blur-md">
+Exklusiv für Bestandskunden
+</span> <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white tracking-tight leading-tight">
+Die RG <span class="text-red-600">Werterhalt</span>-Garantie
+</h1> <p class="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+Damit "Perfekt" auch perfekt bleibt. Sichern Sie sich exklusive Vorteile für die regelmäßige Pflege Ihrer Keramikversiegelung.
+</p> </div> </div> <main class="bg-zinc-950 relative z-20 -mt-20"> <div class="container mx-auto px-4 py-8"> ${renderComponent($$result2, "Breadcrumbs", $$Breadcrumbs, { "crumbs": [
+    { label: "Startseite", href: "/" },
+    { label: "Werterhalt Garantie", href: "/werterhalt-garantie" }
+  ] })} </div>  <section class="py-12"> <div class="container mx-auto px-4"> <div class="glass-panel p-8 md:p-12 rounded-3xl border border-white/10 bg-zinc-900/80 shadow-2xl max-w-5xl mx-auto backdrop-blur-xl"> <div class="grid md:grid-cols-2 gap-12 items-center"> <div> <h2 class="text-3xl font-bold text-white mb-6">Warum ein Pflege-Abo?</h2> <p class="text-zinc-400 mb-6 leading-relaxed">
+Eine Keramikversiegelung ist ein technisches Meisterwerk, aber keine "Wunderwaffe", die nie wieder Pflege benötigt. Um den extremen Glanz, den hydrophoben Effekt und den Schutz über Jahre zu erhalten, ist eine fachgerechte Wäsche essenziell.
+</p> <p class="text-zinc-400 mb-6 leading-relaxed">
+Viele Waschanlagen oder falsche Handwäsche können die Versiegelung "zusetzen" oder mechanisch belasten.
+                                Mit unserer <strong>Werterhalt-Garantie</strong> übernehmen wir diese Sorge für Sie – und belohnen Ihre Treue.
+</p> <div class="flex flex-col gap-4 mt-8"> <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5 hover:border-red-500/20 transition-colors"> ${renderComponent($$result2, "Gem", Gem, { "className": "text-red-500 shrink-0" })} <span class="text-zinc-200 font-bold">Nur für Full Detailing Kunden</span> </div> <div class="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-white/5 hover:border-red-500/20 transition-colors"> ${renderComponent($$result2, "ShieldCheck", ShieldCheck, { "className": "text-red-500 shrink-0" })} <span class="text-zinc-200 font-bold">Maximale Standzeit Ihrer Versiegelung</span> </div> </div> </div> <div class="relative flex justify-center"> <div class="absolute inset-0 bg-red-600/20 blur-[100px] rounded-full"></div> <div class="relative glass-card p-10 rounded-2xl border border-red-500/20 bg-gradient-to-br from-zinc-900 to-black text-center shadow-2xl transform hover:scale-105 transition-transform duration-500"> <span class="text-7xl font-bold text-white block mb-2 leading-none">20<span class="text-red-600">%</span></span> <span class="text-xl text-zinc-400 uppercase tracking-widest block mb-6">Rabatt</span> <p class="text-sm text-zinc-400 font-medium">auf jede Maintenance-Wäsche <br>im 2-Monats-Intervall</p> </div> </div> </div> </div> </div> </section>  <section class="py-20"> <div class="container mx-auto px-4"> <div class="text-center mb-16"> <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ihr Abo-Vorteil</h2> <p class="text-zinc-400">Wählen Sie Ihren Rhythmus. Je öfter Sie kommen, desto mehr sparen Sie.</p> </div> <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">  <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-2"> <div class="absolute top-0 right-0 p-6"> ${renderComponent($$result2, "CalendarClock", CalendarClock, { "className": "text-zinc-600 group-hover:text-red-500 transition-colors", "size": 32 })} </div> <h3 class="text-2xl font-bold text-white mb-2">Der Perfektionist</h3> <div class="text-red-500 font-bold text-sm uppercase tracking-widest mb-6">Alle 2 Monate</div> <div class="flex items-baseline gap-2 mb-6"> <span class="text-5xl font-bold text-white">-20%</span> <span class="text-zinc-400">auf die Wäsche</span> </div> <ul class="space-y-4 mb-8 text-zinc-400"> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-red-500 shrink-0" })} <span>Schonende Handwäsche</span> </li> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-red-500 shrink-0" })} <span>Kontrolle der Versiegelung</span> </li> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-red-500 shrink-0" })} <span>Innenraum-Quick-Check</span> </li> </ul> </div>  <div class="group relative bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-2"> <div class="absolute top-0 right-0 p-6"> ${renderComponent($$result2, "CalendarClock", CalendarClock, { "className": "text-zinc-600 group-hover:text-red-500 transition-colors", "size": 32 })} </div> <h3 class="text-2xl font-bold text-white mb-2">Der Werterhalter</h3> <div class="text-zinc-400 font-bold text-sm uppercase tracking-widest mb-6">Alle 3 Monate</div> <div class="flex items-baseline gap-2 mb-6"> <span class="text-5xl font-bold text-white">-10%</span> <span class="text-zinc-400">auf die Wäsche</span> </div> <ul class="space-y-4 mb-8 text-zinc-400"> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-zinc-400 group-hover:text-red-500 transition-colors shrink-0" })} <span>Schonende Handwäsche</span> </li> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-zinc-400 group-hover:text-red-500 transition-colors shrink-0" })} <span>Kontrolle der Versiegelung</span> </li> <li class="flex items-center gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "size": 18, "className": "text-zinc-400 group-hover:text-red-500 transition-colors shrink-0" })} <span>Innenraum-Quick-Check</span> </li> </ul> </div> </div> <div class="mt-12 text-center bg-red-900/10 border border-red-500/20 rounded-2xl p-6 max-w-2xl mx-auto"> <p class="text-zinc-300"> <strong>Hinweis:</strong> Dieses Angebot gilt exklusiv für Fahrzeuge, die bei uns ein
+<span class="text-white font-bold">Full Detailing (ab 800€)</span> mit Keramik- oder Graphenversiegelung erhalten haben.
+</p> </div> </div> </section>  <section class="py-20 border-t border-white/5 bg-zinc-900/50"> <div class="container mx-auto px-4 text-center"> <h2 class="text-3xl font-bold text-white mb-6">Noch kein Kunde?</h2> <p class="text-zinc-400 max-w-2xl mx-auto mb-10">
+Buchen Sie jetzt Ihr Full Detailing Paket und qualifizieren Sie sich automatisch für unser Werterhalt-Programm.
+</p> <div class="flex flex-col sm:flex-row justify-center gap-6"> <a href="/#rechner" class="px-8 py-4 bg-red-700 rounded-full font-bold text-white hover:bg-red-600 transition-all shadow-[0_0_30px_-10px_rgba(220,38,38,0.5)]">
+Jetzt Preis berechnen
+</a> <a href="tel:+491633845081" class="px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
+Beratung anfordern
+</a> </div> </div> </section> </main> ` })}`;
+}, "/app/src/pages/werterhalt-garantie.astro", void 0);
+
+const $$file = "/app/src/pages/werterhalt-garantie.astro";
+const $$url = "/werterhalt-garantie";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    default: $$WerterhaltGarantie,
+    file: $$file,
+    prerender,
+    url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+export { _page as _ };

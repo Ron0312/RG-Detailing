@@ -1,0 +1,54 @@
+import { c as createComponent, e as renderComponent, r as renderTemplate, am as maybeRenderHead } from './astro/server_BFEvG0-X.mjs';
+import 'piccolore';
+import { $ as $$Layout } from './Layout_Bl4oGuow.mjs';
+import { $ as $$Breadcrumbs } from './Breadcrumbs_B8mLItpZ.mjs';
+import { $ as $$ServiceSchema } from './ServiceSchema_CT86Lw4C.mjs';
+import { $ as $$Image } from './_astro_assets_C42mOPnA.mjs';
+import { h as heroImage } from './rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero_BLBImNMb.mjs';
+import { AlertTriangle, CheckCircle2, Calculator } from 'lucide-react';
+
+const prerender = true;
+const $$Leasing = createComponent(($$result, $$props, $$slots) => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "RG Detailing - Leasing Aufbereitung",
+    "description": "Leasingr\xFCckgabe ohne Nachzahlung. Professionelle Aufbereitung und Smart-Repair in Tensfeld.",
+    "priceRange": "$$$",
+    "dateModified": (/* @__PURE__ */ new Date()).toISOString().split("T")[0]
+  };
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Leasing R\xFCckgabe & Aufbereitung Schleswig-Holstein | RG Detailing", "description": "Leasingr\xFCckgabe ohne hohe Nachzahlung? Wir entfernen Kratzer, Dellen & Flecken professionell vor dem Gutachten. Jetzt Geld sparen in Schleswig-Holstein!", "schema": schema, "preloadImage": heroImage.src }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ServiceSchema", $$ServiceSchema, { "name": "Leasing R\xFCckgabe Aufbereitung", "description": "Professionelle Aufbereitung vor Leasingr\xFCckgabe zur Vermeidung von Nachzahlungen. Smart-Repair und Lackaufbereitung.", "price": "450", "priceRange": "$$" })} ${maybeRenderHead()}<div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black"> <div class="absolute inset-0"> ${renderComponent($$result2, "Image", $$Image, { "src": heroImage, "alt": "Leasingr\xFCckgabe Aufbereitung", "class": "w-full h-full object-cover opacity-50", "fetchpriority": "high", "loading": "eager" })} <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>  <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div> </div> <div class="container mx-auto px-4 z-10 text-center pt-20"> <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-bold tracking-wider mb-6 uppercase backdrop-blur-md">
+Rückgabe ohne Risiko
+</span> <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white leading-tight">
+Leasing Rückgabe <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">Entspannt zum Gutachter.</span> </h1> <p class="text-xl md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+Das Autohaus sucht nach Fehlern. Wir lassen sie vorher verschwinden.
+</p> </div> </div> <main class="container mx-auto px-4 py-12 -mt-20 relative z-20"> ${renderComponent($$result2, "Breadcrumbs", $$Breadcrumbs, { "crumbs": [
+    { label: "Startseite", href: "/" },
+    { label: "Leasing Aufbereitung", href: "/leasing" }
+  ] })}  <div class="grid md:grid-cols-2 gap-16 items-start mb-24 mt-12"> <div class="prose prose-invert prose-lg"> <h2 class="text-3xl font-bold text-white mb-6">Die teure Falle: Der Rückgabe-Tag</h2> <div class="bg-red-900/10 border-l-4 border-red-600 p-6 mb-8 rounded-r-xl"> <p class="text-zinc-300 m-0"> <strong class="text-red-500 block mb-2 flex items-center gap-2">${renderComponent($$result2, "AlertTriangle", AlertTriangle, { "size": 20 })} Achtung:</strong>
+Gutachter notieren jeden Kratzer, jede Delle und jeden Fleck. Die "Instandsetzungspauschalen" der Autohäuser sind oft extrem hoch angesetzt.
+</p> </div> <p class="text-zinc-400 leading-relaxed">
+Das böse Erwachen folgt mit der Endabrechnung. Ein Kratzer an der Stoßstange? "Muss lackiert werden – 500€". Ein Fleck im Sitz? "Spezialreinigung – 150€".
+</p> <h3 class="text-2xl font-bold text-white mt-8 mb-4">Die einfache Rechnung</h3> <p class="text-zinc-400 leading-relaxed"> <strong>Investieren Sie lieber vorher einen Bruchteil der Summe in eine professionelle Aufbereitung.</strong> </p> <p class="text-zinc-400 leading-relaxed">
+Bei RG Detailing entfernen wir genau die Spuren, auf die Prüfer achten. Wir polieren Kratzer aus, die sonst als "Lackschaden" berechnet würden. Wir entfernen Flecken, die sonst als "Wertminderung" gelten.
+</p> <ul class="space-y-4 mt-6"> <li class="flex items-start gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "className": "text-red-500 shrink-0 mt-1" })} <span class="text-zinc-300"><strong>Lack:</strong> Entfernung von Waschstraßenkratzern und Schrammen.</span> </li> <li class="flex items-start gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "className": "text-red-500 shrink-0 mt-1" })} <span class="text-zinc-300"><strong>Innenraum:</strong> Tiefenreinigung für Neuwagen-Optik.</span> </li> <li class="flex items-start gap-3"> ${renderComponent($$result2, "CheckCircle2", CheckCircle2, { "className": "text-red-500 shrink-0 mt-1" })} <span class="text-zinc-300"><strong>Smart Repair:</strong> Beulen und Dellen beheben wir über unser Partnernetzwerk – ohne teure Lackierung.</span> </li> </ul> </div> <div class="sticky top-24"> <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-zinc-950/80 shadow-2xl relative overflow-hidden group"> <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-600/20 blur-[60px] rounded-full"></div> <div class="flex items-center gap-4 mb-8"> <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white border border-white/10"> ${renderComponent($$result2, "Calculator", Calculator, { "size": 24 })} </div> <div> <h3 class="text-2xl font-bold text-white">Beispielrechnung</h3> <p class="text-xs text-zinc-400 uppercase tracking-widest">Geld sparen durch Aufbereitung</p> </div> </div> <div class="space-y-6 relative z-10"> <div class="flex justify-between items-center pb-4 border-b border-white/5"> <span class="text-zinc-400">Kosten Autohaus (Schätzung)</span> <span class="text-red-500 font-bold text-xl decoration-red-500/30 line-through decoration-2">2.500 €</span> </div> <div class="flex justify-between items-center pb-4 border-b border-white/5"> <span class="text-green-400 font-bold">Kosten RG Detailing</span> <span class="text-green-400 font-bold text-xl">ca. 450 €</span> </div> <div class="flex justify-between items-center pt-2"> <span class="text-white font-bold text-lg">Ihre Ersparnis</span> <span class="text-white font-bold text-3xl drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">2.050 €</span> </div> </div> <div class="mt-8"> <p class="text-xs text-zinc-400 mb-6 text-center">*Beispielwerte. Abhängig vom Fahrzeugzustand.</p> <a href="tel:+491633845081" class="block w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-zinc-200 transition-all text-center group-hover:scale-[1.02]">
+Kostenlosen Vorab-Check vereinbaren
+</a>  <a href="/#rechner?preselect=leasing" class="block w-full text-zinc-400 text-sm mt-4 hover:text-white transition-colors text-center underline">
+Oder direkt online kalkulieren
+</a> </div> </div> </div> </div>  <div class="glass-panel p-12 rounded-3xl border border-white/5 bg-zinc-900/50 mb-24"> <div class="items-center"> <div class="w-full"> <h2 class="text-2xl font-bold text-white mb-4">Der psychologische Vorteil</h2> <p class="text-zinc-400 leading-relaxed text-lg">
+Ein sauberes, glänzendes und wohlriechendes Auto signalisiert dem Prüfer sofort: <em class="text-white">"Mit diesem Wagen wurde pfleglich umgegangen."</em> Das beeinflusst die Bewertung oft positiv. Wer ein "Wrack" abgibt, muss damit rechnen, dass der Prüfer jeden Millimeter doppelt prüft.
+</p> </div> </div> </div> </main> ` })}`;
+}, "/app/src/pages/leasing.astro", void 0);
+
+const $$file = "/app/src/pages/leasing.astro";
+const $$url = "/leasing";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Leasing,
+  file: $$file,
+  prerender,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+export { _page as _ };
