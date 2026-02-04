@@ -1,4 +1,4 @@
-// SELF-DESTRUCTING SERVICE WORKER
+// SELF-DESTRUCTING SERVICE WORKER - v2
 // This script replaces the old cache-holding worker to force a reset.
 
 self.addEventListener('install', (event) => {
