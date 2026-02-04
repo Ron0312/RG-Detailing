@@ -1,5 +1,8 @@
 
-const hits = new Map<string, { count: number; expiry: number }>();
+// Exported for testing purposes to verify memory limits
+export const hits = new Map<string, { count: number; expiry: number }>();
+
+const MAX_HITS = 10000;
 
 /**
  * Checks if an identifier (IP + Action) has exceeded the rate limit.
@@ -16,6 +19,16 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 
   // If no record or expired, reset
   if (!record || now > record.expiry) {
+    // Memory Protection: Prevent map from growing indefinitely (DoS protection)
+    if (hits.size >= MAX_HITS) {
+        // Simple LRU-like eviction: Remove the oldest inserted entry
+        // Map keys are iterated in insertion order
+        const oldestKey = hits.keys().next().value;
+        if (oldestKey) {
+            hits.delete(oldestKey);
+        }
+    }
+
     hits.set(identifier, { count: 1, expiry: now + windowMs });
     return true;
   }
