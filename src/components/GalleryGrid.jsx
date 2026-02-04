@@ -3,7 +3,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
-export default function GalleryLightbox({ images }) {
+export default function GalleryGrid({ images }) {
   const [index, setIndex] = useState(-1);
   const [filter, setFilter] = useState('Alle');
 
