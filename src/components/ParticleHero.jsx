@@ -58,7 +58,11 @@ export default function ParticleHero() {
             }
         };
 
+        let isAnimating = false;
+
         const animate = () => {
+            if (!isAnimating) return;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(particle => {
                 particle.update();
@@ -68,12 +72,30 @@ export default function ParticleHero() {
         };
 
         init();
-        animate();
+
+        // Optimization: Pause animation loop when canvas is off-screen
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    if (!isAnimating) {
+                        isAnimating = true;
+                        animate();
+                    }
+                } else {
+                    isAnimating = false;
+                    cancelAnimationFrame(animationFrameId);
+                }
+            },
+            { threshold: 0 }
+        );
+
+        observer.observe(canvas);
 
         return () => {
             window.removeEventListener('resize', handleResize);
             handleResize.cancel();
             cancelAnimationFrame(animationFrameId);
+            observer.disconnect();
         };
     }, []);
 
