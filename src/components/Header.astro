@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import logoImage from '../assets/logo.png';
 ---
-<header class="bg-zinc-950/80 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl">
+<header class="bg-zinc-950/80 border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl transition-transform duration-300">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
         <a href="/" class="flex items-center gap-3 group">
             <Image src={logoImage} alt="RG Detailing Logo" width={56} height={56} class="h-14 w-auto group-hover:scale-105 transition-transform duration-300" loading="eager" format="avif" />
@@ -173,10 +173,26 @@ import logoImage from '../assets/logo.png';
     window.addEventListener('resize', cacheSections, { passive: true });
 
     let isScrolling = false;
+    let lastScrollY = window.scrollY;
+    const header = document.querySelector('header');
 
     function onScroll() {
         if (!isScrolling) {
             requestAnimationFrame(() => {
+                const currentScrollY = window.scrollY;
+
+                // Smart Sticky Header Logic
+                if (header) {
+                    // Hide when scrolling down and not at top
+                    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                        header.classList.add('-translate-y-full');
+                    } else {
+                        // Show when scrolling up or at top
+                        header.classList.remove('-translate-y-full');
+                    }
+                }
+                lastScrollY = currentScrollY;
+
                 updateActiveLink();
                 isScrolling = false;
             });

@@ -72,9 +72,14 @@ const galleryRawImages = [
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
     const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
     const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+
+    // Fix: Properly append version parameter handling existing query strings (dev mode vs build)
+    const joinCharFull = full.src.includes('?') ? '&' : '?';
+    const joinCharThumb = thumb.src.includes('?') ? '&' : '?';
+
     return {
-        src: `${full.src}?v=9`,
-        thumbnail: `${thumb.src}?v=9`,
+        src: `${full.src}${joinCharFull}v=9`,
+        thumbnail: `${thumb.src}${joinCharThumb}v=9`,
         alt: img.alt,
         category: img.category
     };
