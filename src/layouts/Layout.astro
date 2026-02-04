@@ -73,9 +73,20 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
+            // Service Worker temporarily disabled to force cache clearing
+            /*
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js?v=11').catch(err => console.error('SW registration failed:', err));
+                });
+            }
+            */
+            // Force unregister existing SW
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister();
+                    }
                 });
             }
         </script>
