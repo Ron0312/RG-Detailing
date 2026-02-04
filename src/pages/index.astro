@@ -5,7 +5,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
-import GalleryLightbox from '../components/GalleryLightbox.jsx';
+import GalleryGrid from '../components/GalleryGrid.jsx';
 import FAQ from '../components/FAQ.jsx';
 import ParticleHero from '../components/ParticleHero.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -73,8 +73,8 @@ const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
     const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
     const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
     return {
-        src: full.src,
-        thumbnail: thumb.src,
+        src: `${full.src}?v=9`,
+        thumbnail: `${thumb.src}?v=9`,
         alt: img.alt,
         category: img.category
     };
@@ -595,7 +595,7 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                    <GalleryLightbox client:visible images={galleryImages} />
+                    <GalleryGrid client:visible images={galleryImages} />
                 </ScrollReveal>
              </div>
         </section>
