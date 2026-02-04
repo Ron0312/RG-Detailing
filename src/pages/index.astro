@@ -36,8 +36,8 @@ import imgHochglanzV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-hoch
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
 import glossbossLogo from '../assets/glossboss-logo.jpg';
 
-// Force cache invalidation v9 - timestamp 2026-02-04
-export const prerender = true;
+// Force cache invalidation v10 - timestamp 2026-02-04 - SSR Mode
+// export const prerender = true; // Disabled to force dynamic update
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
@@ -594,7 +594,7 @@ const faqSchema = {
         <section id="gallery" class="section-spacing">
              <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Unsere Ergebnisse</h2>
                     <GalleryGrid client:visible images={galleryImages} />
                 </ScrollReveal>
              </div>
