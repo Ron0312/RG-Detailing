@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rg-detailing-v7';
+const CACHE_NAME = 'rg-detailing-v8';
 
 // Assets to cache immediately on install
 const PRECACHE_URLS = [
