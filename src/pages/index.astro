@@ -5,7 +5,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
-import GalleryGrid from '../components/GalleryGrid.jsx';
+import GalleryLightbox from '../components/GalleryLightbox.jsx';
 import FAQ from '../components/FAQ.jsx';
 import ParticleHero from '../components/ParticleHero.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -26,18 +26,14 @@ import imgVorherNachher4 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-v
 import imgDetailing5 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg';
 import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg';
 import imgCockpit7 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-cockpit-07.jpg';
-import imgLackDefektV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackdefekt-korrektur-v2.jpg';
-import imgKratzerV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-kratzer-entfernen-v2.jpg';
-import imgLackPoliturV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackpolitur-detail-v2.jpg';
-import imgLackVorherNachherV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-vorher-nachher-v2.jpg';
-import imgHochglanzV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-hochglanz-politur-v2.jpg';
 
 // Other Assets
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
 import glossbossLogo from '../assets/glossboss-logo.jpg';
 
-// Force cache invalidation v18 - timestamp 2026-02-05 15:30 (Static Build)
-// export const prerender = true; // Default in static mode
+import { siteConfig } from '../config/site';
+
+export const prerender = true;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
@@ -58,33 +54,24 @@ const galleryRawImages = [
   { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
   { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
   { src: imgKeramik3, alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
-  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Keramik" },
+  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
   { src: imgDetailing5, alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" },
   { src: imgCoating6, alt: "Professionelles Coating / Keramikversiegelung Anwendung", category: "Keramik" },
-  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" },
-  { src: imgLackDefektV2, alt: "Lackdefekt Korrektur und Kratzerentfernung Tensfeld", category: "Lack" },
-  { src: imgKratzerV2, alt: "Tiefe Kratzer im Lack entfernen vorher nachher", category: "Lack" },
-  { src: imgLackPoliturV2, alt: "Professionelle Lackpolitur Detailaufnahme RG Detailing", category: "Lack" },
-  { src: imgLackVorherNachherV2, alt: "Starke Lackdefekte und Swirls unter Speziallicht", category: "Lack" },
-  { src: imgHochglanzV2, alt: "Hochglanz nach mehrstufiger Lackveredelung", category: "Lack" }
+  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" }
 ];
 
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
     const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
     const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
-
-    // Fix: Properly append version parameter handling existing query strings (dev mode vs build)
-    const joinCharFull = full.src.includes('?') ? '&' : '?';
-    const joinCharThumb = thumb.src.includes('?') ? '&' : '?';
-
     return {
-        src: `${full.src}${joinCharFull}v=9`,
-        thumbnail: `${thumb.src}${joinCharThumb}v=9`,
+        src: full.src,
+        thumbnail: thumb.src,
         alt: img.alt,
         category: img.category
     };
 }));
 
+// Consider moving this to src/data/faq.ts in future
 const faqItems = [
   {
     question: "Bieten Sie auch eine reine Innenraumreinigung an?",
@@ -92,7 +79,7 @@ const faqItems = [
   },
   {
     question: "Was kostet eine Fahrzeugaufbereitung?",
-    answer: 'Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.'
+    answer: 'Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-primary hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.'
   },
   {
     question: "Machen Sie auch Motorwäsche?",
@@ -107,7 +94,7 @@ const faqItems = [
 const howToSchema = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Fahrzeugaufbereitung Ablauf bei RG Detailing",
+  "name": `Fahrzeugaufbereitung Ablauf bei ${siteConfig.company.name}`,
   "description": "Unser 4-Schritte Prozess zur perfekten Lackveredelung und Versiegelung.",
   "totalTime": "P3D",
   "step": [
@@ -153,35 +140,37 @@ const faqSchema = {
 ---
 
 <Layout
-    title="RG Detailing | Keramikversiegelung & Lackveredelung Schleswig-Holstein"
-    description="Ihr Experte für High-End Fahrzeugaufbereitung & Keramikversiegelung. Wir machen Ihren Wagen besser als neu. Labocosmetica zertifiziert. Jetzt Glanz sichern!"
+    title="Premium Fahrzeugaufbereitung & Keramikversiegelung"
+    description={siteConfig.metadata.description}
     schema={[
         howToSchema,
         faqSchema,
         {
             "@context": "https://schema.org",
             "@type": "WebPage",
-            "name": "RG Detailing Startseite",
+            "name": `${siteConfig.company.name} Startseite`,
             "dateModified": new Date().toISOString().split('T')[0],
-            "description": "High-End Detailing, Lackkorrektur und Keramikversiegelung für Enthusiasten.",
-            "url": "https://rg-detailing.de"
+            "description": siteConfig.company.description,
+            "url": Astro.site
         }
     ]}
     preloadImage={heroImage.src}
 >
 
     {/* HERO SECTION */}
-    <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+    <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
         {/* Particle Canvas Layer */}
-        <div class="absolute inset-0 z-10 pointer-events-none">
-            <ParticleHero client:load />
-        </div>
+        {siteConfig.features.enableParticles && (
+            <div class="absolute inset-0 z-10 pointer-events-none">
+                <ParticleHero client:load />
+            </div>
+        )}
 
         {/* High-End Hero Image */}
         <div class="absolute inset-0 z-0">
              <Image
                 src={heroImage}
-                alt="Premium Fahrzeugaufbereitung in der Werkstatt Tensfeld - RG Detailing"
+                alt={`Premium Fahrzeugaufbereitung ${siteConfig.company.name}`}
                 class="w-full h-full object-cover object-bottom opacity-60"
                 loading="eager"
                 fetchpriority="high"
@@ -190,12 +179,13 @@ const faqSchema = {
                 sizes="100vw"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
-             <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
+             {/* Replaced red-900 with primary-900 */}
+             <div class="absolute inset-0 bg-primary-900/10 mix-blend-overlay"></div>
         </div>
 
-        {/* Red Accents */}
-        <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-red-600/10 blur-[150px] rounded-full animate-pulse z-0"></div>
-        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-red-900/10 blur-[100px] rounded-full z-0"></div>
+        {/* Semantic Color Accents */}
+        <div class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-primary-600/10 blur-[150px] rounded-full animate-pulse z-0"></div>
+        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-primary-900/10 blur-[100px] rounded-full z-0"></div>
 
         <div class="container mx-auto px-4 z-20 text-center pt-20">
             <div class="flex flex-wrap justify-center gap-3 mb-8 animate-fade-in-up">
@@ -209,17 +199,17 @@ const faqSchema = {
 
             <h1 class="text-5xl md:text-8xl font-bold mb-6 text-white tracking-tighter leading-[1.1] animate-fade-in-up delay-100">
                 Täglich <br class="md:hidden" />
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">Neuwagen-Gefühl</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-primary-600 to-primary-800">Neuwagen-Gefühl</span>
             </h1>
             <p class="text-lg md:text-2xl text-zinc-300 max-w-2xl mx-auto mb-10 font-normal leading-relaxed animate-fade-in-up delay-200">
                 Mehr als nur Sauberkeit. Wir teilen Ihre Leidenschaft für Perfektion. Ihr Experte für <strong class="text-white">Lackveredelung</strong> und zertifizierte <strong class="text-white">Keramikversiegelung</strong>.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300 px-4">
-                <a href="#rechner" class="group relative px-8 py-5 bg-red-700 rounded-2xl font-bold text-white overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_50px_-10px_rgba(220,38,38,0.6)] w-full sm:w-auto">
+                <a href="#rechner" class="group relative px-8 py-5 bg-primary-700 rounded-2xl font-bold text-white overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_50px_-10px_color-mix(in_srgb,var(--color-primary),transparent_40%)] w-full sm:w-auto">
                     <span class="relative z-10 flex items-center justify-center gap-2">Kostenlos Preis berechnen <ArrowRight className="w-5 h-5" /></span>
-                    <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </a>
-                <a href="https://wa.me/491633845081" target="_blank" class="px-8 py-5 rounded-2xl border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors backdrop-blur-sm w-full sm:w-auto flex items-center justify-center gap-2">
+                <a href={siteConfig.company.contact.whatsapp} target="_blank" class="px-8 py-5 rounded-2xl border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors backdrop-blur-sm w-full sm:w-auto flex items-center justify-center gap-2">
                     <MessageCircle className="w-5 h-5 text-green-500" /> WhatsApp Anfrage
                 </a>
             </div>
@@ -246,7 +236,7 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
                     <div class="text-center mb-20">
-                        <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
+                        <span class="text-primary font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
                         <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
                         <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
                             Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
@@ -267,13 +257,13 @@ const faqSchema = {
                         <ScrollReveal client:visible delay={index * 100}>
                             <div class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
                                  <a href={service.link} class="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`} data-astro-prefetch></a>
-                                 <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
+                                 <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-primary-600/20 pointer-events-none"></div>
 
                                  <div class="relative z-20 flex-grow pointer-events-none">
-                                    <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
+                                    <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-primary-500/50 transition-colors shadow-lg group-hover:text-primary group-hover:scale-110 duration-500">
                                         <IconComponent size={28} strokeWidth={1.5} />
                                     </div>
-                                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
+                                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">{service.title}</h3>
                                     <p class="text-zinc-400 leading-relaxed mb-6">
                                         <GlossaryLinker text={service.shortDescription} />
                                     </p>
@@ -298,7 +288,7 @@ const faqSchema = {
                  <div class="flex flex-col md:flex-row items-center gap-16">
                      <div class="md:w-1/3">
                          <ScrollReveal client:visible>
-                             <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Das Ergebnis</span>
+                             <span class="text-primary font-bold tracking-widest text-sm uppercase">Das Ergebnis</span>
                              <h2 class="text-4xl font-bold mb-6 text-white mt-2">Glanz <br/> ohne Kompromisse</h2>
                              <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
                                  Perfektion bis ins Detail. Sehen Sie selbst, wie wir selbst verwitterte Oberflächen wieder in einen Spiegel verwandeln.
@@ -306,11 +296,11 @@ const faqSchema = {
                              </p>
                              <div class="flex gap-8">
                                  <div class="text-center">
-                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">85%</div>
+                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700">85%</div>
                                      <div class="text-xs text-zinc-400 uppercase tracking-wider font-bold mt-2">Defekt-Korrektur</div>
                                  </div>
                                  <div class="text-center">
-                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-700">100%</div>
+                                     <div class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700">100%</div>
                                      <div class="text-xs text-zinc-400 uppercase tracking-wider font-bold mt-2">Tiefenglanz</div>
                                  </div>
                              </div>
@@ -338,16 +328,16 @@ const faqSchema = {
             <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
                     <div class="text-center mb-16">
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
-                         <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Warum RG Detailing?</h2>
+                         <span class="text-primary font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
+                         <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Warum {siteConfig.company.name}?</h2>
                     </div>
                 </ScrollReveal>
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <ScrollReveal client:visible delay={100}>
                         <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                                <Gem size={32} className="text-red-500" strokeWidth={1.5} />
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-primary-500/50 shadow-lg">
+                                <Gem size={32} className="text-primary" strokeWidth={1.5} />
                             </div>
                             <h3 class="text-xl font-bold text-white mb-4">Zertifizierte Keramikversiegelung</h3>
                             <p class="text-zinc-400 leading-relaxed">Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit.</p>
@@ -355,8 +345,8 @@ const faqSchema = {
                     </ScrollReveal>
                     <ScrollReveal client:visible delay={200}>
                         <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                                <FlaskConical size={32} className="text-red-500" strokeWidth={1.5} />
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-primary-500/50 shadow-lg">
+                                <FlaskConical size={32} className="text-primary" strokeWidth={1.5} />
                             </div>
                             <h3 class="text-xl font-bold text-white mb-4">High-End Pflegeprodukte</h3>
                             <p class="text-zinc-400 leading-relaxed">Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet.</p>
@@ -364,8 +354,8 @@ const faqSchema = {
                     </ScrollReveal>
                     <ScrollReveal client:visible delay={300}>
                         <div class="glass-panel p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group">
-                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
-                                <Handshake size={32} className="text-red-500" strokeWidth={1.5} />
+                            <div class="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-8 border border-white/10 group-hover:border-primary-500/50 shadow-lg">
+                                <Handshake size={32} className="text-primary" strokeWidth={1.5} />
                             </div>
                             <h3 class="text-xl font-bold text-white mb-4">Leidenschaft & Präzision</h3>
                             <p class="text-zinc-400 leading-relaxed">Wir behandeln jedes Fahrzeug, als wäre es unser eigenes. Kompromisslose Qualität für Enthusiasten.</p>
@@ -376,14 +366,14 @@ const faqSchema = {
         </section>
 
         {/* SOCIAL PROOF / REVIEWS */}
-        <Reviews limit={4} />
+        {siteConfig.features.showReviews && <Reviews limit={4} />}
 
         {/* MEDIA & INSIGHTS (Strategic Goal: Trust & Authority) */}
         <section class="section-spacing bg-zinc-950/50 border-y border-white/5 overflow-hidden">
             <div class="container mx-auto px-4">
                  <ScrollReveal client:visible>
                     <div class="text-center mb-16">
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Einblicke</span>
+                         <span class="text-primary font-bold tracking-widest text-sm uppercase">Einblicke</span>
                          <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Transparenz schafft Vertrauen</h2>
                          <p class="text-zinc-400 max-w-2xl mx-auto mt-4 text-lg">
                              Schauen Sie uns über die Schulter. Auf YouTube und in unserem Podcast erklären wir, wie High-End Aufbereitung wirklich funktioniert.
@@ -393,60 +383,66 @@ const faqSchema = {
 
                 <div class="grid md:grid-cols-3 gap-4 md:gap-8">
                     {/* YouTube Channel Teaser */}
-                    <ScrollReveal client:visible delay={100}>
-                        <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
-                            {/* Background Placeholder / Effect */}
-                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-zinc-950 to-zinc-950 z-0"></div>
-                            <div class="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-500 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${optimizedAfter.src})` }}></div>
+                    {siteConfig.company.social.youtube && (
+                        <ScrollReveal client:visible delay={100}>
+                            <a href={siteConfig.company.social.youtube} target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
+                                {/* Background Placeholder / Effect */}
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-900/20 via-zinc-950 to-zinc-950 z-0"></div>
+                                <div class="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-500 bg-cover bg-center mix-blend-overlay" style={{ backgroundImage: `url(${optimizedAfter.src})` }}></div>
 
-                            {/* Play Button */}
-                            <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
-                                <div class="w-14 h-14 bg-red-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_rgba(220,38,38,0.5)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="none" class="w-8 h-8"><path d="M6 4l15 8-15 8z"/></svg>
+                                {/* Play Button */}
+                                <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
+                                    <div class="w-14 h-14 bg-primary-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_color-mix(in_srgb,var(--color-primary),transparent_50%)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="none" class="w-8 h-8"><path d="M6 4l15 8-15 8z"/></svg>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="text-lg font-bold text-white mb-1">YouTube</h3>
+                                        <p class="text-zinc-300 text-xs">Lackanalyse & Tutorials</p>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                    <h3 class="text-lg font-bold text-white mb-1">YouTube</h3>
-                                    <p class="text-zinc-300 text-xs">Lackanalyse & Tutorials</p>
-                                </div>
-                            </div>
-                        </a>
-                    </ScrollReveal>
+                            </a>
+                        </ScrollReveal>
+                    )}
 
                     {/* Podcast Teaser */}
-                    <ScrollReveal client:visible delay={200}>
-                        <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa" target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
-                             {/* Background Placeholder / Effect */}
-                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-900/20 via-zinc-950 to-zinc-950 z-0"></div>
+                    {siteConfig.company.social.spotify && (
+                        <ScrollReveal client:visible delay={200}>
+                            <a href={siteConfig.company.social.spotify} target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
+                                 {/* Background Placeholder / Effect */}
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-900/20 via-zinc-950 to-zinc-950 z-0"></div>
 
-                            <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
-                                <div class="w-14 h-14 bg-green-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_rgba(34,197,94,0.5)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19.1"/></svg>
+                                <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
+                                    <div class="w-14 h-14 bg-green-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_rgba(34,197,94,0.5)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19.1"/></svg>
+                                    </div>
+                                    <div class="text-center">
+                                         <h3 class="text-lg font-bold text-white mb-1">Podcast</h3>
+                                         <span class="inline-block px-3 py-1 bg-green-900/30 border border-green-500/30 rounded-full text-green-400 text-[10px] font-bold uppercase tracking-wider">Jetzt hören</span>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                     <h3 class="text-lg font-bold text-white mb-1">Podcast</h3>
-                                     <span class="inline-block px-3 py-1 bg-green-900/30 border border-green-500/30 rounded-full text-green-400 text-[10px] font-bold uppercase tracking-wider">Jetzt hören</span>
-                                </div>
-                            </div>
-                        </a>
-                    </ScrollReveal>
+                            </a>
+                        </ScrollReveal>
+                    )}
 
                     {/* Instagram Teaser */}
-                    <ScrollReveal client:visible delay={300}>
-                        <a href="https://www.instagram.com/r.g.detailing/" target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
-                             {/* Background Placeholder / Effect */}
-                            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/20 via-zinc-950 to-zinc-950 z-0"></div>
+                    {siteConfig.company.social.instagram && (
+                        <ScrollReveal client:visible delay={300}>
+                            <a href={siteConfig.company.social.instagram} target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden rounded-3xl border border-white/10 aspect-video md:aspect-auto h-64 md:h-64 w-full flex items-center justify-center bg-zinc-900">
+                                 {/* Background Placeholder / Effect */}
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/20 via-zinc-950 to-zinc-950 z-0"></div>
 
-                            <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
-                                <div class="w-14 h-14 bg-pink-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_rgba(219,39,119,0.5)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
-                                    <Instagram size={28} className="text-white" />
+                                <div class="relative z-10 flex flex-col items-center gap-3 md:gap-6">
+                                    <div class="w-14 h-14 bg-pink-600/90 rounded-full flex items-center justify-center shadow-[0_0_30px_-5px_rgba(219,39,119,0.5)] group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                                        <Instagram size={28} className="text-white" />
+                                    </div>
+                                    <div class="text-center">
+                                         <h3 class="text-lg font-bold text-white mb-1">Instagram</h3>
+                                         <span class="inline-block px-3 py-1 bg-pink-900/30 border border-pink-500/30 rounded-full text-pink-400 text-[10px] font-bold uppercase tracking-wider">Folgen</span>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                     <h3 class="text-lg font-bold text-white mb-1">Instagram</h3>
-                                     <span class="inline-block px-3 py-1 bg-pink-900/30 border border-pink-500/30 rounded-full text-pink-400 text-[10px] font-bold uppercase tracking-wider">Folgen</span>
-                                </div>
-                            </div>
-                        </a>
-                    </ScrollReveal>
+                            </a>
+                        </ScrollReveal>
+                    )}
                 </div>
             </div>
         </section>
@@ -456,7 +452,7 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                  <ScrollReveal client:visible>
                      <div class="text-center mb-20">
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Transparenz</span>
+                         <span class="text-primary font-bold tracking-widest text-sm uppercase">Transparenz</span>
                          <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Ablauf der Fahrzeugaufbereitung</h2>
                      </div>
                  </ScrollReveal>
@@ -469,7 +465,7 @@ const faqSchema = {
                          {/* Step 1 */}
                          <ScrollReveal client:visible delay={100}>
                              <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">1</div>
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-primary-500/50 group-hover:text-primary transition-colors">1</div>
                                  <h3 class="text-white font-bold text-xl mb-3">Check</h3>
                                  <p class="text-sm text-zinc-400 leading-relaxed">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
                              </div>
@@ -477,7 +473,7 @@ const faqSchema = {
                          {/* Step 2 */}
                          <ScrollReveal client:visible delay={200}>
                              <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">2</div>
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-primary-500/50 group-hover:text-primary transition-colors">2</div>
                                  <h3 class="text-white font-bold text-xl mb-3">Wash</h3>
                                  <p class="text-sm text-zinc-400 leading-relaxed">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
                              </div>
@@ -485,7 +481,7 @@ const faqSchema = {
                          {/* Step 3 */}
                          <ScrollReveal client:visible delay={300}>
                              <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">3</div>
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-primary-500/50 group-hover:text-primary transition-colors">3</div>
                                  <h3 class="text-white font-bold text-xl mb-3">Polish</h3>
                                  <p class="text-sm text-zinc-400 leading-relaxed">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
                              </div>
@@ -493,7 +489,7 @@ const faqSchema = {
                          {/* Step 4 */}
                          <ScrollReveal client:visible delay={400}>
                              <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">4</div>
+                                 <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-primary-500/50 group-hover:text-primary transition-colors">4</div>
                                  <h3 class="text-white font-bold text-xl mb-3">Protect</h3>
                                  <p class="text-sm text-zinc-400 leading-relaxed">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
                              </div>
@@ -504,44 +500,46 @@ const faqSchema = {
         </section>
 
         {/* CALCULATOR */}
-        <section id="rechner" class="section-spacing relative overflow-hidden">
-             <div class="absolute inset-0 bg-red-900/5 z-0"></div>
-             <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
+        {siteConfig.features.showCalculator && (
+            <section id="rechner" class="section-spacing relative overflow-hidden">
+                 <div class="absolute inset-0 bg-primary-900/5 z-0"></div>
+                 <div class="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
 
-             <div class="container mx-auto px-4 relative z-10">
-                 <div class="max-w-5xl mx-auto glass-panel p-4 md:p-16 rounded-3xl md:rounded-[3rem] shadow-2xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-2xl">
-                    <div class="text-center mb-8 md:mb-12 max-w-4xl mx-auto">
-                        <h2 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8 text-white">Kostenrechner Fahrzeugaufbereitung</h2>
-                        <div class="space-y-4 text-zinc-400 text-lg leading-relaxed text-left md:text-center">
-                            <p>
-                                <strong class="text-white">Premium-Aufbereitung bedeutet Transparenz.</strong> Wir verzichten auf komplexe Baukästen: Von der Tiefenreinigung bis zur Lederpflege ist bereits alles für ein perfektes Ergebnis inklusive.
-                            </p>
-                            <p>
-                                Der angezeigte Preisrahmen deckt alle essenziellen Leistungen ab – ohne versteckte Kosten. Aufpreise fallen nur bei extremen Härtefällen an (nach Absprache).
-                            </p>
-                            <p class="text-white font-medium">
-                                Wir passen die Leistung dem Fahrzeug an – nicht umgekehrt.
-                            </p>
+                 <div class="container mx-auto px-4 relative z-10">
+                     <div class="max-w-5xl mx-auto glass-panel p-4 md:p-16 rounded-3xl md:rounded-[3rem] shadow-2xl border border-primary-500/20 bg-zinc-900/80 backdrop-blur-2xl">
+                        <div class="text-center mb-8 md:mb-12 max-w-4xl mx-auto">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8 text-white">Kostenrechner Fahrzeugaufbereitung</h2>
+                            <div class="space-y-4 text-zinc-400 text-lg leading-relaxed text-left md:text-center">
+                                <p>
+                                    <strong class="text-white">Premium-Aufbereitung bedeutet Transparenz.</strong> Wir verzichten auf komplexe Baukästen: Von der Tiefenreinigung bis zur Lederpflege ist bereits alles für ein perfektes Ergebnis inklusive.
+                                </p>
+                                <p>
+                                    Der angezeigte Preisrahmen deckt alle essenziellen Leistungen ab – ohne versteckte Kosten. Aufpreise fallen nur bei extremen Härtefällen an (nach Absprache).
+                                </p>
+                                <p class="text-white font-medium">
+                                    Wir passen die Leistung dem Fahrzeug an – nicht umgekehrt.
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <PriceCalculator client:visible />
+                        <PriceCalculator client:visible />
+                     </div>
                  </div>
-             </div>
-        </section>
+            </section>
+        )}
 
         {/* ABOUT (Moved down) */}
         <About />
 
-        {/* PARTNER & SHOP SECTION (Moved here to avoid early exit) */}
+        {/* PARTNER & SHOP SECTION */}
         <section class="section-spacing pt-0 pb-20 border-b border-white/5 bg-gradient-to-b from-black to-zinc-900/20 overflow-hidden">
              <div class="container mx-auto px-4">
                  <div class="grid md:grid-cols-2 gap-8">
                      {/* DAMPFDRACHEN VERTRIEB */}
                      <ScrollReveal client:visible delay={100}>
-                         <div class="glass-panel p-8 md:p-12 border-red-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
-                             <div class="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full transition group-hover:bg-red-600/20"></div>
+                         <div class="glass-panel p-8 md:p-12 border-primary-900/30 bg-gradient-to-br from-zinc-900 to-black relative overflow-hidden group">
+                             <div class="absolute top-0 right-0 w-64 h-64 bg-primary-600/10 blur-[80px] rounded-full transition group-hover:bg-primary-600/20"></div>
                              <div class="relative z-10">
-                                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-500 text-xs font-bold uppercase tracking-wider mb-6">
+                                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-500/30 bg-primary-500/10 text-primary-500 text-xs font-bold uppercase tracking-wider mb-6">
                                      <CheckCircle2 size={12} /> Offizieller Vertrieb
                                  </div>
                                  <h3 class="text-3xl font-bold text-white mb-4">Dampfdrachen</h3>
@@ -550,7 +548,7 @@ const faqSchema = {
                                      Als zertifizierter Partner beraten wir Sie zu den besten Geräten – Made in Germany.
                                  </p>
                                  <div class="flex items-center gap-4">
-                                     <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-900/20">
+                                     <a href="/dampfreinigung#vertrieb" class="px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-primary-900/20">
                                          Geräte ansehen
                                      </a>
                                  </div>
@@ -596,14 +594,16 @@ const faqSchema = {
         </section>
 
         {/* GALLERY GRID */}
-        <section id="gallery" class="section-spacing">
-             <div class="container mx-auto px-4">
-                <ScrollReveal client:visible>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                    <GalleryGrid client:visible images={galleryImages} />
-                </ScrollReveal>
-             </div>
-        </section>
+        {siteConfig.features.showGallery && (
+            <section id="gallery" class="section-spacing">
+                 <div class="container mx-auto px-4">
+                    <ScrollReveal client:visible>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
+                        <GalleryLightbox client:visible images={galleryImages} />
+                    </ScrollReveal>
+                 </div>
+            </section>
+        )}
 
         {/* FAQ SECTION FOR SEO */}
         <section id="faq" class="section-spacing border-t border-white/5 bg-zinc-900/20 content-auto">

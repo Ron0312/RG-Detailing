@@ -1,6 +1,7 @@
 ---
 import { reviews } from '../data/reviews';
 import { Star } from 'lucide-react';
+import { siteConfig } from '../config/site';
 
 interface Props {
   limit?: number;
@@ -13,7 +14,7 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
 <section class="py-20 bg-zinc-950 border-t border-zinc-900">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <span class="text-red-500 font-bold tracking-widest text-sm uppercase block mb-4">Echte Ergebnisse</span>
+            <span class="text-primary font-bold tracking-widest text-sm uppercase block mb-4">Echte Ergebnisse</span>
             <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Vertraut von über 100 Kunden</h2>
             <div class="flex justify-center items-center gap-2 mb-4">
                 <div class="flex text-yellow-500 gap-1">
@@ -32,7 +33,7 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
             {displayedReviews.map((review) => (
                 <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 bg-red-700 rounded-full flex items-center justify-center text-white font-bold">
+                        <div class="w-10 h-10 bg-primary-700 rounded-full flex items-center justify-center text-white font-bold">
                             {review.name.charAt(0)}
                         </div>
                         <div>
@@ -53,7 +54,7 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
         </div>
 
         <div class="text-center mt-12">
-             <a href="https://www.google.com/search?q=RG+Detailing+Tensfeld#lrd=0x47b2299999999999:0x9999999999999999,1,,," target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition">
+             <a href={siteConfig.company.address.mapsLink} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 transition">
                 <span>Alle Bewertungen auf Google lesen</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
              </a>

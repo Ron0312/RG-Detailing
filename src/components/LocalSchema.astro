@@ -107,7 +107,16 @@ const domain = "https://rg-detailing.de";
         "url": "https://rg-detailing.de/#prices",
         "priceCurrency": "EUR",
         "lowPrice": "125",
-        "offerCount": services.length
+        "offerCount": services.length,
+        "offers": services.map((service) => ({
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": service.title,
+            "description": service.description,
+            "url": `https://rg-detailing.de${service.link}`
+          }
+        }))
       },
       "aggregateRating": {
         "@type": "AggregateRating",

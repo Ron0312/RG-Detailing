@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { debounce } from '../lib/utils';
 
 export default function ParticleHero() {
     const canvasRef = useRef(null);
@@ -12,15 +11,13 @@ export default function ParticleHero() {
         let animationFrameId;
         let particles = [];
 
-        const updateDimensions = () => {
+        const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
 
-        const handleResize = debounce(updateDimensions, 100);
-
-        window.addEventListener('resize', handleResize);
-        updateDimensions();
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
             constructor() {
@@ -58,11 +55,7 @@ export default function ParticleHero() {
             }
         };
 
-        let isAnimating = false;
-
         const animate = () => {
-            if (!isAnimating) return;
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(particle => {
                 particle.update();
@@ -72,30 +65,11 @@ export default function ParticleHero() {
         };
 
         init();
-
-        // Optimization: Pause animation loop when canvas is off-screen
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    if (!isAnimating) {
-                        isAnimating = true;
-                        animate();
-                    }
-                } else {
-                    isAnimating = false;
-                    cancelAnimationFrame(animationFrameId);
-                }
-            },
-            { threshold: 0 }
-        );
-
-        observer.observe(canvas);
+        animate();
 
         return () => {
-            window.removeEventListener('resize', handleResize);
-            handleResize.cancel();
+            window.removeEventListener('resize', resize);
             cancelAnimationFrame(animationFrameId);
-            observer.disconnect();
         };
     }, []);
 

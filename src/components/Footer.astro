@@ -1,78 +1,87 @@
 ---
 import { getCollection } from 'astro:content';
 import PrivacyMap from './PrivacyMap.astro';
-import { Youtube, Podcast, MessageCircle } from 'lucide-react';
-import { Image } from 'astro:assets';
-import logoImage from '../assets/logo.png';
+import { Youtube, Podcast, MessageCircle, Instagram } from 'lucide-react';
+// import { Image } from 'astro:assets'; // Switched to config path
+// import logoImage from '../assets/logo.png';
+import { siteConfig } from '../config/site';
 
 const currentYear = new Date().getFullYear();
-const cities = await getCollection('cities');
-const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
+const cities = await getCollection('cities'); // Keeping this if it's used elsewhere or for future dynamic city links, though currently not strictly used in the cleaned footer below if we use config.
+// Wait, the original footer iterated over cities? No, it had hardcoded city links.
+// I will use siteConfig.navigation.footer.service instead.
+
+const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(siteConfig.company.name + ' ' + siteConfig.company.address.city)}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 ---
 <footer id="kontakt" class="bg-zinc-950 text-zinc-400 py-12 mt-20 border-t border-zinc-900 content-auto">
     <div class="container mx-auto px-4 grid md:grid-cols-4 gap-8 mb-12">
         <div class="md:col-span-1">
             <div class="flex items-center gap-3 mb-4">
-                 <Image src={logoImage} alt="RG Detailing Logo" width={40} height={40} class="h-10 w-auto" />
-                 <span class="text-white font-bold text-xl">RG Detailing</span>
+                 <img src={siteConfig.company.logo} alt={`${siteConfig.company.name} Logo`} width="40" height="40" class="h-10 w-auto" />
+                 <span class="text-white font-bold text-xl">{siteConfig.company.name}</span>
             </div>
-            <p class="max-w-xs mb-4 text-sm leading-relaxed">Premium Fahrzeugaufbereitung, Keramikversiegelung und Lackveredelung für Schleswig-Holstein. Wir bringen den Neuwagen-Glanz zurück.</p>
+            <p class="max-w-xs mb-4 text-sm leading-relaxed">{siteConfig.company.description}</p>
             <div class="flex gap-4 mt-6">
-                <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc" target="_blank" rel="noopener noreferrer" class="p-3 bg-zinc-900 rounded-full hover:bg-green-600 hover:text-white transition-colors border border-zinc-800" aria-label="Podcast auf Spotify">
-                    <Podcast className="w-5 h-5" />
-                </a>
-                <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="p-3 bg-zinc-900 rounded-full hover:bg-red-600 hover:text-white transition-colors border border-zinc-800" aria-label="YouTube Kanal">
-                    <Youtube className="w-5 h-5" />
-                </a>
+                {siteConfig.company.social.spotify && (
+                    <a href={siteConfig.company.social.spotify} target="_blank" rel="noopener noreferrer" class="p-3 bg-zinc-900 rounded-full hover:bg-green-600 hover:text-white transition-colors border border-zinc-800" aria-label="Podcast auf Spotify">
+                        <Podcast className="w-5 h-5" />
+                    </a>
+                )}
+                {siteConfig.company.social.youtube && (
+                    <a href={siteConfig.company.social.youtube} target="_blank" rel="noopener noreferrer" class="p-3 bg-zinc-900 rounded-full hover:bg-primary hover:text-white transition-colors border border-zinc-800" aria-label="YouTube Kanal">
+                        <Youtube className="w-5 h-5" />
+                    </a>
+                )}
+                 {siteConfig.company.social.instagram && (
+                    <a href={siteConfig.company.social.instagram} target="_blank" rel="noopener noreferrer" class="p-3 bg-zinc-900 rounded-full hover:bg-pink-600 hover:text-white transition-colors border border-zinc-800" aria-label="Instagram">
+                        <Instagram className="w-5 h-5" />
+                    </a>
+                )}
             </div>
         </div>
         <div>
             <h3 class="text-white font-bold text-lg mb-4">Service</h3>
             <ul class="space-y-3">
-                <li><a href="/keramikversiegelung" class="hover:text-red-500 transition py-3 md:py-1 block font-bold text-white" data-astro-prefetch>Keramikversiegelung</a></li>
-                <li><a href="/fahrzeugaufbereitung-bad-segeberg" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Bad Segeberg</a></li>
-                <li><a href="/fahrzeugaufbereitung-kiel" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Kiel</a></li>
-                <li><a href="/fahrzeugaufbereitung-luebeck" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Lübeck</a></li>
-                <li><a href="/fahrzeugaufbereitung-neumuenster" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Neumünster</a></li>
-                <li><a href="/werterhalt-garantie" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Werterhalt-Garantie</a></li>
-                <li><a href="/#rechner" class="hover:text-red-500 transition py-3 md:py-1 block" data-astro-prefetch>Preisrechner</a></li>
+                {siteConfig.navigation.footer.service.map(item => (
+                    <li><a href={item.href} class="hover:text-primary transition py-3 md:py-1 block" data-astro-prefetch>{item.name}</a></li>
+                ))}
             </ul>
         </div>
         <div>
             <h3 class="text-white font-bold text-lg mb-4">Kontakt</h3>
             <div>
                 <div>
-                    <span>Dorfstraße 11</span><br/>
-                    <span>23824</span> <span>Tensfeld</span>
+                    <span>{siteConfig.company.address.street}</span><br/>
+                    <span>{siteConfig.company.address.zip}</span> <span>{siteConfig.company.address.city}</span>
                 </div>
             </div>
             <p class="mt-2 mb-4">
-                <a href="https://www.google.com/maps/search/?api=1&query=28RC%2BCP+Tensfeld%2C+Deutschland" target="_blank" rel="noopener noreferrer" aria-label="Standort auf Google Maps anzeigen" class="text-xs text-zinc-400 hover:text-red-500 transition flex items-center gap-1 p-2 -ml-2 rounded-lg hover:bg-white/5">
+                <a href={siteConfig.company.address.mapsLink} target="_blank" rel="noopener noreferrer" aria-label="Standort auf Google Maps anzeigen" class="text-xs text-zinc-400 hover:text-primary transition flex items-center gap-1 p-2 -ml-2 rounded-lg hover:bg-white/5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    28RC+CP Tensfeld, Deutschland
+                    Anfahrt planen
                 </a>
             </p>
-            <p class="mt-4"><a href="tel:+491633845081" class="text-white hover:text-red-500 font-bold py-3 block text-lg">0163 38 45 08 1</a></p>
-            <p><a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="text-green-500 hover:text-green-400 font-bold py-2 block flex items-center gap-2"><MessageCircle size={18} /> WhatsApp Chat</a></p>
-            <p><a href="mailto:kontakt@rg-detailing.de" class="hover:text-red-500 py-3 block">kontakt@rg-detailing.de</a></p>
+            <p class="mt-4"><a href={`tel:${siteConfig.company.contact.phone}`} class="text-white hover:text-primary font-bold py-3 block text-lg">{siteConfig.company.contact.phoneFormatted}</a></p>
+            {siteConfig.company.contact.whatsapp && (
+                <p><a href={siteConfig.company.contact.whatsapp} target="_blank" rel="noopener noreferrer" class="text-green-500 hover:text-green-400 font-bold py-2 block flex items-center gap-2"><MessageCircle size={18} /> WhatsApp Chat</a></p>
+            )}
+            <p><a href={`mailto:${siteConfig.company.contact.email}`} class="hover:text-primary py-3 block">{siteConfig.company.contact.email}</a></p>
         </div>
         <div class="h-48 rounded-xl overflow-hidden grayscale hover:grayscale-0 transition duration-500 border border-zinc-800">
              <PrivacyMap
-                src="https://maps.google.com/maps?q=RG+Detailing+Tensfeld&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                title="RG Detailing Standort Tensfeld"
+                src={mapEmbedUrl}
+                title={`${siteConfig.company.name} Standort ${siteConfig.company.address.city}`}
              />
         </div>
     </div>
 
     <div class="text-center mt-8 pt-8 border-t border-zinc-900 text-sm">
-        <p class="text-zinc-400 mb-4 text-xs">Alle Preise inkl. gesetzl. MwSt. <span class="text-zinc-800 ml-2">v2.1</span></p>
+        <p class="text-zinc-400 mb-4 text-xs">Alle Preise inkl. gesetzl. MwSt.</p>
         <div class="flex justify-center gap-6 mb-4 flex-wrap items-center">
-            <a href="/impressum" class="hover:text-white py-2 px-2">Impressum</a>
-            <a href="/datenschutz" class="hover:text-white py-2 px-2">Datenschutz</a>
-            <a href="/agb" class="hover:text-white py-2 px-2">AGB</a>
-            <a href="/sitemap" class="hover:text-white py-2 px-2">Sitemap</a>
-            <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="hover:text-white py-2 px-2">OS-Plattform</a>
+            {siteConfig.navigation.footer.legal.map(item => (
+                <a href={item.href} target={item.external ? "_blank" : "_self"} rel={item.external ? "noopener noreferrer" : ""} class="hover:text-white py-2 px-2">{item.name}</a>
+            ))}
         </div>
-        &copy; {currentYear} RG Detailing. <span class="mx-2 text-zinc-600">|</span> <a href="https://webaion.de" target="_blank" rel="noopener noreferrer" class="hover:text-red-500 transition-colors text-zinc-400 hover:text-red-500 hover:opacity-100">Made by webaion.de</a>
+        &copy; {currentYear} {siteConfig.company.name}. <span class="mx-2 text-zinc-600">|</span> <a href="https://webaion.de" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors text-zinc-400 hover:text-primary hover:opacity-100">Made by webaion.de</a>
     </div>
 </footer>

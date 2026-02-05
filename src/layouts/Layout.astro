@@ -8,6 +8,7 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
 import MobileStickyBar from '../components/MobileStickyBar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import CookieBanner from '../components/CookieBanner.astro';
+import { siteConfig } from '../config/site';
 
 interface Props {
 	title: string;
@@ -20,9 +21,9 @@ interface Props {
 
 const {
     title,
-    description = "RG Detailing: Premium Fahrzeugaufbereitung in Schleswig-Holstein. Zertifizierte Keramikversiegelung & Lackveredelung in Tensfeld. Jetzt Termin vereinbaren!",
+    description = siteConfig.metadata.description,
     schema,
-    keywords = "Fahrzeugaufbereitung, Autoaufbereitung, Autoreinigung, Innenraumreinigung, KFZ Aufbereitung, Keramikversiegelung, Lackaufbereitung, Leasing Rückgabe, Motorwäsche, Schleswig-Holstein, Bad Segeberg, Neumünster, Tensfeld",
+    keywords = siteConfig.metadata.keywords,
     image = "/images/logo-og.png",
     preloadImage
 } = Astro.props;
@@ -32,28 +33,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.site);
 ---
 <!doctype html>
-<html lang="de" class="scroll-smooth">
+<html lang={siteConfig.metadata.locale.split('_')[0]} class={siteConfig.features.enableSmoothScroll ? "scroll-smooth" : ""}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
 
-        <title>{title} | RG Detailing</title>
+        <title>{title} | {siteConfig.metadata.siteName}</title>
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
         <link rel="canonical" href={canonicalURL} />
 
-        <!-- Force No-Cache for Deployment Issues -->
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
-
         <!-- GEO & Local -->
-        <meta name="geo.region" content="DE-SH" />
-        <meta name="geo.placename" content="Tensfeld" />
-        <meta name="geo.position" content="54.04500;10.31917" />
-        <meta name="ICBM" content="54.04500, 10.31917" />
+        <meta name="geo.region" content={siteConfig.metadata.geo.region} />
+        <meta name="geo.placename" content={siteConfig.metadata.geo.placename} />
+        <meta name="geo.position" content={siteConfig.metadata.geo.position} />
+        <meta name="ICBM" content={siteConfig.metadata.geo.icbm} />
         <link rel="manifest" href="/manifest.json" />
 
         <!-- Open Graph / Facebook -->
@@ -62,8 +58,8 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={socialImageURL} />
-        <meta property="og:locale" content="de_DE" />
-        <meta property="og:site_name" content="RG Detailing" />
+        <meta property="og:locale" content={siteConfig.metadata.locale} />
+        <meta property="og:site_name" content={siteConfig.metadata.siteName} />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
@@ -78,45 +74,15 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
-            // VERSION CHECK - TIMESTAMP 2026-02-05 10:20
-            console.log("RG Detailing Version: 2026-02-05 10:20 - New SW Filename v5");
-
             if ('serviceWorker' in navigator) {
-                // 1. Unregister any old 'sw.js'
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        // Check if it's the old one
-                        if (registration.active && registration.active.scriptURL.includes('sw.js')) {
-                            console.log("Found OLD sw.js registration. Unregistering...", registration);
-                            registration.unregister();
-                        }
-                    }
-                });
-
-                // 2. Register the NEW v5 worker
-                // This new filename bypasses the server-side cache that is holding 'sw.js'
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw-v5.js').then(registration => {
-                        console.log('SW v5 registered:', registration);
-                    }).catch(err => {
-                        console.error('SW v5 registration failed:', err);
-                    });
+                    navigator.serviceWorker.register('/sw.js?v=3').catch(err => console.error('SW registration failed:', err));
                 });
-
-                // 3. Clear Caches
-                if ('caches' in window) {
-                    caches.keys().then(function(names) {
-                        for (let name of names) {
-                            console.log("Deleting cache:", name);
-                            caches.delete(name);
-                        }
-                    });
-                }
             }
         </script>
 	</head>
-	<body class="bg-black text-zinc-100 antialiased min-h-screen flex flex-col selection:bg-red-600 selection:text-white overflow-x-hidden">
-        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-white text-black font-bold rounded shadow-lg ring-2 ring-red-500">
+	<body class="bg-background text-zinc-100 antialiased min-h-screen flex flex-col selection:bg-primary-600 selection:text-white overflow-x-hidden">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-4 py-2 bg-white text-black font-bold rounded shadow-lg ring-2 ring-primary-500">
             Zum Inhalt springen
         </a>
         <Header />
@@ -127,6 +93,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <div class="hidden md:block">
             <WhatsAppButton />
         </div>
+        {/* Mobile Sticky Bar should ideally check config too, but for now we leave it */}
         <MobileStickyBar />
         <ScrollToTop />
         <CookieBanner />
