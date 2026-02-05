@@ -1,3 +1,3 @@
-## 2024-05-23 - Testing React Components in Vitest
-**Learning:** `vitest` runs in Node environment by default. React component tests needing DOM require `// @vitest-environment jsdom` at the top of the file. Also, `jest-dom` matchers (like `toBeInTheDocument`, `toHaveAttribute`) are not globally available; use standard `expect` with DOM properties (e.g., `getAttribute`).
-**Action:** Always add the environment comment and use standard assertions for new component tests unless config is updated.
+## 2024-05-22 - Accessible Focus States on Custom Cards
+**Learning:** Custom interactive cards (acting as radio buttons) often lack visible focus indicators. Standard `outline` is often hidden by `overflow-hidden` or looks ugly on rounded corners.
+**Action:** Always add `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2` (with appropriate color and offset color) to custom interactive elements to ensure keyboard accessibility. Also add `type="button"` and `aria-pressed` for semantics.

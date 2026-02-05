@@ -28,8 +28,10 @@ const StepSubtitle = ({ children }) => (
 
 const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
     <button
+        type="button"
         onClick={onClick}
-        className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer
+        aria-pressed={active}
+        className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900
             ${active
                 ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
                 : highlight
@@ -412,7 +414,7 @@ export default function PriceCalculator() {
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
-                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none"
+                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
                                     <div className="flex justify-between text-zinc-400 text-xs mt-4 font-bold uppercase tracking-wider">
@@ -424,13 +426,13 @@ export default function PriceCalculator() {
 
                                 <button
                                     onClick={handleCamperConfirm}
-                                    className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:shadow-[0_15px_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 transform hover:-translate-y-1 active:scale-95"
+                                    className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:shadow-[0_15px_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 transform hover:-translate-y-1 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
                                 >
                                     Weiter zur Berechnung <ChevronRight className="w-5 h-5" />
                                 </button>
                             </div>
                              <div className="mt-10 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:rounded-lg px-2 py-1">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
@@ -453,7 +455,7 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:rounded-lg px-2 py-1">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
@@ -490,7 +492,7 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
+                                <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:rounded-lg px-2 py-1">
                                     <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
                                 </button>
                             </div>
