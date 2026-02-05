@@ -1,4 +1,4 @@
-import { POST } from '../../pages/api/submit-quote';
+import { POST } from './submit-quote';
 import { describe, it, expect } from 'vitest';
 
 describe('API submit-quote', () => {

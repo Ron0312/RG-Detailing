@@ -44,11 +44,6 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <meta name="keywords" content={keywords} />
         <link rel="canonical" href={canonicalURL} />
 
-        <!-- Force No-Cache for Deployment Issues -->
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
-
         <!-- GEO & Local -->
         <meta name="geo.region" content="DE-SH" />
         <meta name="geo.placename" content="Tensfeld" />
@@ -78,40 +73,10 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
-            // VERSION CHECK - TIMESTAMP 2026-02-05 10:20
-            console.log("RG Detailing Version: 2026-02-05 10:20 - New SW Filename v5");
-
             if ('serviceWorker' in navigator) {
-                // 1. Unregister any old 'sw.js'
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        // Check if it's the old one
-                        if (registration.active && registration.active.scriptURL.includes('sw.js')) {
-                            console.log("Found OLD sw.js registration. Unregistering...", registration);
-                            registration.unregister();
-                        }
-                    }
-                });
-
-                // 2. Register the NEW v5 worker
-                // This new filename bypasses the server-side cache that is holding 'sw.js'
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw-v5.js').then(registration => {
-                        console.log('SW v5 registered:', registration);
-                    }).catch(err => {
-                        console.error('SW v5 registration failed:', err);
-                    });
+                    navigator.serviceWorker.register('/sw.js?v=3').catch(err => console.error('SW registration failed:', err));
                 });
-
-                // 3. Clear Caches
-                if ('caches' in window) {
-                    caches.keys().then(function(names) {
-                        for (let name of names) {
-                            console.log("Deleting cache:", name);
-                            caches.delete(name);
-                        }
-                    });
-                }
             }
         </script>
 	</head>
