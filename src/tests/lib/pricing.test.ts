@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculatePrice } from './pricing';
+import { calculatePrice } from '../../lib/pricing';
 
 describe('Price Calculator Logic', () => {
     it('calculates the base price for a small, good condition car with wash_interior package', () => {
