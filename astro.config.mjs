@@ -8,14 +8,10 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://rg-detailing.de',
-  output: 'server',
+  output: 'static',
   integrations: [react()],
 
   vite: {
     plugins: [tailwindcss()]
-  },
-
-  adapter: node({
-    mode: 'standalone'
-  })
+  }
 });
