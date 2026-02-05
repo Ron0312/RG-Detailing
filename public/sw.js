@@ -1,16 +1,16 @@
 /**
- * KILLER SERVICE WORKER v6 (The Overwriter)
+ * KILLER SERVICE WORKER v7 (The Overwriter)
  * This script exists solely to overwrite any lingering 'sw.js' on the server.
  * It immediately unregisters itself, deletes all caches, and reloads the page.
  */
 
 self.addEventListener('install', function(e) {
-    console.log('Killer SW v6 (Overwriter): Installing...');
+    console.log('Killer SW v7 (Overwriter): Installing...');
     self.skipWaiting();
 });
 
 self.addEventListener('activate', function(e) {
-    console.log('Killer SW v6 (Overwriter): Activating...');
+    console.log('Killer SW v7 (Overwriter): Activating...');
 
     e.waitUntil(
         self.clients.claim().then(function() {
@@ -21,7 +21,7 @@ self.addEventListener('activate', function(e) {
             return caches.keys().then(function(cacheNames) {
                 return Promise.all(
                     cacheNames.map(function(cacheName) {
-                        console.log('Killer SW v6: Deleting cache', cacheName);
+                        console.log('Killer SW v7: Deleting cache', cacheName);
                         return caches.delete(cacheName);
                     })
                 );
@@ -32,7 +32,7 @@ self.addEventListener('activate', function(e) {
         }).then(function(clients) {
             clients.forEach(function(client) {
                 if (client.url && 'navigate' in client) {
-                    console.log('Killer SW v6: Reloading client', client.url);
+                    console.log('Killer SW v7: Reloading client', client.url);
                     client.navigate(client.url);
                 }
             });
