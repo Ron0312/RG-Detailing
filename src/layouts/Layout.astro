@@ -78,28 +78,32 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
-            // VERSION CHECK - TIMESTAMP 2026-02-04 21:30
-            console.log("RG Detailing Version: 2026-02-04 21:30 - SW Nuked");
+            // VERSION CHECK - TIMESTAMP 2026-02-05 10:20
+            console.log("RG Detailing Version: 2026-02-05 10:20 - New SW Filename v5");
 
             if ('serviceWorker' in navigator) {
+                // 1. Unregister any old 'sw.js'
                 navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    if (registrations.length > 0) {
-                        console.log("Found " + registrations.length + " SW registrations. Nuking...");
-                        const promises = registrations.map(r => r.unregister());
-                        Promise.all(promises).then(() => {
-                            console.log("All SWs unregistered. Reloading for fresh content...");
-                            // Only reload if we actually removed something to avoid loops
-                            // Use setTimeout to allow the console log to be seen
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 500);
-                        });
-                    } else {
-                        console.log("No Service Workers found. Clean.");
+                    for(let registration of registrations) {
+                        // Check if it's the old one
+                        if (registration.active && registration.active.scriptURL.includes('sw.js')) {
+                            console.log("Found OLD sw.js registration. Unregistering...", registration);
+                            registration.unregister();
+                        }
                     }
                 });
 
-                // Extra safety: Try to clear caches directly if possible (though SW usually owns them)
+                // 2. Register the NEW v5 worker
+                // This new filename bypasses the server-side cache that is holding 'sw.js'
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw-v5.js').then(registration => {
+                        console.log('SW v5 registered:', registration);
+                    }).catch(err => {
+                        console.error('SW v5 registration failed:', err);
+                    });
+                });
+
+                // 3. Clear Caches
                 if ('caches' in window) {
                     caches.keys().then(function(names) {
                         for (let name of names) {
