@@ -119,133 +119,135 @@ import logoImage from '../assets/logo.png';
 </div>
 
 <script>
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const closeBtn = document.getElementById('close-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
 
-    function toggleMenu() {
-        if (mobileMenu && document.body) {
-            const isClosed = mobileMenu.classList.contains('translate-x-full');
+        function toggleMenu() {
+            if (mobileMenu && document.body) {
+                const isClosed = mobileMenu.classList.contains('translate-x-full');
 
-            if (isClosed) {
-                // Open menu
-                mobileMenu.classList.remove('invisible');
-                // Small delay to ensure invisible class removal is registered before transform
-                requestAnimationFrame(() => {
-                    mobileMenu.classList.remove('translate-x-full');
-                });
-                document.body.classList.add('overflow-hidden');
-            } else {
-                // Close menu
-                mobileMenu.classList.add('translate-x-full');
-                document.body.classList.remove('overflow-hidden');
+                if (isClosed) {
+                    // Open menu
+                    mobileMenu.classList.remove('invisible');
+                    // Small delay to ensure invisible class removal is registered before transform
+                    requestAnimationFrame(() => {
+                        mobileMenu.classList.remove('translate-x-full');
+                    });
+                    document.body.classList.add('overflow-hidden');
+                } else {
+                    // Close menu
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.classList.remove('overflow-hidden');
 
-                // Wait for transition to finish before hiding
-                setTimeout(() => {
-                    mobileMenu.classList.add('invisible');
-                }, 300);
+                    // Wait for transition to finish before hiding
+                    setTimeout(() => {
+                        mobileMenu.classList.add('invisible');
+                    }, 300);
+                }
             }
         }
-    }
 
-    menuBtn?.addEventListener('click', toggleMenu);
-    closeBtn?.addEventListener('click', toggleMenu);
+        menuBtn?.addEventListener('click', toggleMenu);
+        closeBtn?.addEventListener('click', toggleMenu);
 
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', toggleMenu);
-    });
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
 
-    // ScrollSpy
-    const sections = ['leistungen', 'gallery', 'rechner', 'about', 'faq'];
-    const navLinks = document.querySelectorAll('nav a');
-    let cachedSections = [];
+        // ScrollSpy
+        const sections = ['leistungen', 'gallery', 'rechner', 'about', 'faq'];
+        const navLinks = document.querySelectorAll('nav a');
+        let cachedSections = [];
 
-    function cacheSections() {
-        cachedSections = sections.map(id => {
-            const el = document.getElementById(id);
-            return el ? { id, offsetTop: el.offsetTop } : null;
-        }).filter(Boolean);
-    }
+        function cacheSections() {
+            cachedSections = sections.map(id => {
+                const el = document.getElementById(id);
+                return el ? { id, offsetTop: el.offsetTop } : null;
+            }).filter(Boolean);
+        }
 
-    // Update cache on load and resize
-    cacheSections();
-    window.addEventListener('resize', cacheSections, { passive: true });
+        // Update cache on load and resize
+        cacheSections();
+        window.addEventListener('resize', cacheSections, { passive: true });
 
-    let isScrolling = false;
-    let lastScrollY = window.scrollY;
-    const header = document.querySelector('header');
+        let isScrolling = false;
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('header');
 
-    function onScroll() {
-        if (!isScrolling) {
-            requestAnimationFrame(() => {
-                const currentScrollY = window.scrollY;
+        function onScroll() {
+            if (!isScrolling) {
+                requestAnimationFrame(() => {
+                    const currentScrollY = window.scrollY;
 
-                // Smart Sticky Header Logic
-                if (header) {
-                    // Hide when scrolling down and not at top
-                    if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                        header.classList.add('-translate-y-full');
+                    // Smart Sticky Header Logic
+                    if (header) {
+                        // Hide when scrolling down and not at top
+                        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                            header.classList.add('-translate-y-full');
+                        } else {
+                            // Show when scrolling up or at top
+                            header.classList.remove('-translate-y-full');
+                        }
+                    }
+                    lastScrollY = currentScrollY;
+
+                    updateActiveLink();
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        }
+
+        function updateActiveLink() {
+            let currentSection = '';
+            const scrollPosition = window.scrollY + 200; // Offset for header height
+
+            cachedSections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                // Skip the calculator button for span animation, but we can highlight it
+                if (href.includes('#rechner')) {
+                    if (currentSection === 'rechner') {
+                        link.classList.add('bg-red-500', 'text-white');
+                        link.classList.remove('bg-red-900/20', 'text-red-500');
                     } else {
-                        // Show when scrolling up or at top
-                        header.classList.remove('-translate-y-full');
+                        link.classList.remove('bg-red-500', 'text-white');
+                        link.classList.add('bg-red-900/20', 'text-red-500');
+                    }
+                    return;
+                }
+
+                const span = link.querySelector('span');
+                if (!span) return;
+
+                link.classList.remove('text-white');
+                span.style.width = '0';
+
+                if (currentSection) {
+                    if (href.includes('#' + currentSection)) {
+                        link.classList.add('text-white');
+                        span.style.width = '100%';
+                    }
+                } else {
+                    // If no section matches and we are near top, it's Startseite
+                    if ((href === '/' || href === '/#') && window.scrollY < 300) {
+                        link.classList.add('text-white');
+                        span.style.width = '100%';
                     }
                 }
-                lastScrollY = currentScrollY;
-
-                updateActiveLink();
-                isScrolling = false;
             });
-            isScrolling = true;
         }
-    }
 
-    function updateActiveLink() {
-        let currentSection = '';
-        const scrollPosition = window.scrollY + 200; // Offset for header height
-
-        cachedSections.forEach(section => {
-            if (section.offsetTop <= scrollPosition) {
-                currentSection = section.id;
-            }
-        });
-
-        navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            // Skip the calculator button for span animation, but we can highlight it
-            if (href.includes('#rechner')) {
-                 if (currentSection === 'rechner') {
-                     link.classList.add('bg-red-500', 'text-white');
-                     link.classList.remove('bg-red-900/20', 'text-red-500');
-                 } else {
-                     link.classList.remove('bg-red-500', 'text-white');
-                     link.classList.add('bg-red-900/20', 'text-red-500');
-                 }
-                 return;
-            }
-
-            const span = link.querySelector('span');
-            if (!span) return;
-
-            link.classList.remove('text-white');
-            span.style.width = '0';
-
-            if (currentSection) {
-                 if (href.includes('#' + currentSection)) {
-                     link.classList.add('text-white');
-                     span.style.width = '100%';
-                 }
-            } else {
-                // If no section matches and we are near top, it's Startseite
-                if ((href === '/' || href === '/#') && window.scrollY < 300) {
-                     link.classList.add('text-white');
-                     span.style.width = '100%';
-                }
-            }
-        });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // Initial call
-    updateActiveLink();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // Initial call
+        updateActiveLink();
+    });
 </script>
