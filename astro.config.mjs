@@ -9,6 +9,7 @@ import node from '@astrojs/node';
 export default defineConfig({
   site: 'https://rg-detailing.de',
   output: 'static',
+  outDir: './dist/client', // Force build output to match Plesk document root
   integrations: [react()],
 
   vite: {
