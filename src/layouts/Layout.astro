@@ -78,25 +78,36 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
         <script is:inline>
-            // VERSION CHECK - TIMESTAMP 2026-02-04 20:45
-            console.log("RG Detailing Version: 2026-02-04 20:45 - Cache Fix Applied");
+            // VERSION CHECK - TIMESTAMP 2026-02-04 21:30
+            console.log("RG Detailing Version: 2026-02-04 21:30 - SW Nuked");
 
-            // Service Worker temporarily disabled to force cache clearing
-            /*
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js?v=11').catch(err => console.error('SW registration failed:', err));
-                });
-            }
-            */
-            // Force unregister existing SW
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        console.log("Unregistering SW:", registration);
-                        registration.unregister();
+                    if (registrations.length > 0) {
+                        console.log("Found " + registrations.length + " SW registrations. Nuking...");
+                        const promises = registrations.map(r => r.unregister());
+                        Promise.all(promises).then(() => {
+                            console.log("All SWs unregistered. Reloading for fresh content...");
+                            // Only reload if we actually removed something to avoid loops
+                            // Use setTimeout to allow the console log to be seen
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500);
+                        });
+                    } else {
+                        console.log("No Service Workers found. Clean.");
                     }
                 });
+
+                // Extra safety: Try to clear caches directly if possible (though SW usually owns them)
+                if ('caches' in window) {
+                    caches.keys().then(function(names) {
+                        for (let name of names) {
+                            console.log("Deleting cache:", name);
+                            caches.delete(name);
+                        }
+                    });
+                }
             }
         </script>
 	</head>
