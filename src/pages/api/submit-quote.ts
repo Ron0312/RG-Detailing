@@ -102,7 +102,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         `;
 
         // Send via Web3Forms if Key is present
-        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env) -> Fallback
+        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env)
         const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
         const buildKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
 

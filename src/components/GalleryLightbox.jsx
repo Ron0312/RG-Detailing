@@ -1,22 +1,18 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 
-export default function GalleryGrid({ images }) {
+export default function GalleryLightbox({ images }) {
   const [index, setIndex] = useState(-1);
   const [filter, setFilter] = useState('Alle');
 
   // Extract unique categories (if available) or default to "Alle"
-  const categories = useMemo(() => {
-    return ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))];
-  }, [images]);
+  const categories = ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))];
 
-  const filteredImages = useMemo(() => {
-    return filter === 'Alle'
-      ? images
-      : images.filter(img => img.category === filter);
-  }, [images, filter]);
+  const filteredImages = filter === 'Alle'
+    ? images
+    : images.filter(img => img.category === filter);
 
   // Map the filtered index back to the original index for the Lightbox
   const handleImageClick = (filteredIndex) => {

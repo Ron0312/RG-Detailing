@@ -5,7 +5,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
-import GalleryGrid from '../components/GalleryGrid.jsx';
+import GalleryLightbox from '../components/GalleryLightbox.jsx';
 import FAQ from '../components/FAQ.jsx';
 import ParticleHero from '../components/ParticleHero.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -26,18 +26,12 @@ import imgVorherNachher4 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-v
 import imgDetailing5 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg';
 import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg';
 import imgCockpit7 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-cockpit-07.jpg';
-import imgLackDefektV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackdefekt-korrektur-v2.jpg';
-import imgKratzerV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-kratzer-entfernen-v2.jpg';
-import imgLackPoliturV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackpolitur-detail-v2.jpg';
-import imgLackVorherNachherV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-vorher-nachher-v2.jpg';
-import imgHochglanzV2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-hochglanz-politur-v2.jpg';
 
 // Other Assets
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
 import glossbossLogo from '../assets/glossboss-logo.jpg';
 
-// Force cache invalidation v18 - timestamp 2026-02-05 15:30 (Static Build)
-// export const prerender = true; // Default in static mode
+export const prerender = true;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
@@ -58,28 +52,18 @@ const galleryRawImages = [
   { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
   { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
   { src: imgKeramik3, alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
-  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Keramik" },
+  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
   { src: imgDetailing5, alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" },
   { src: imgCoating6, alt: "Professionelles Coating / Keramikversiegelung Anwendung", category: "Keramik" },
-  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" },
-  { src: imgLackDefektV2, alt: "Lackdefekt Korrektur und Kratzerentfernung Tensfeld", category: "Lack" },
-  { src: imgKratzerV2, alt: "Tiefe Kratzer im Lack entfernen vorher nachher", category: "Lack" },
-  { src: imgLackPoliturV2, alt: "Professionelle Lackpolitur Detailaufnahme RG Detailing", category: "Lack" },
-  { src: imgLackVorherNachherV2, alt: "Starke Lackdefekte und Swirls unter Speziallicht", category: "Lack" },
-  { src: imgHochglanzV2, alt: "Hochglanz nach mehrstufiger Lackveredelung", category: "Lack" }
+  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" }
 ];
 
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
     const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
     const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
-
-    // Fix: Properly append version parameter handling existing query strings (dev mode vs build)
-    const joinCharFull = full.src.includes('?') ? '&' : '?';
-    const joinCharThumb = thumb.src.includes('?') ? '&' : '?';
-
     return {
-        src: `${full.src}${joinCharFull}v=9`,
-        thumbnail: `${thumb.src}${joinCharThumb}v=9`,
+        src: full.src,
+        thumbnail: thumb.src,
         alt: img.alt,
         category: img.category
     };
@@ -600,7 +584,7 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                    <GalleryGrid client:visible images={galleryImages} />
+                    <GalleryLightbox client:visible images={galleryImages} />
                 </ScrollReveal>
              </div>
         </section>

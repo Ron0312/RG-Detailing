@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import PriceCalculator from '../../components/PriceCalculator';
+import PriceCalculator from './PriceCalculator';
 
 // Mock scrollIntoView since jsdom doesn't support it
 if (typeof window !== 'undefined' && !window.HTMLElement.prototype.scrollIntoView) {
@@ -39,7 +39,7 @@ describe('PriceCalculator Performance', () => {
     await user.click(screen.getByText('Premium Aufbereitung'));
 
     // Step 4: Result - Fill Email
-    const emailInput = await screen.findByLabelText(/Ihre E-Mail Adresse/i);
+    const emailInput = await screen.findByPlaceholderText('Ihre E-Mail Adresse');
     await user.type(emailInput, 'test@example.com');
 
     const submitButton = screen.getByText('Angebot anfordern');

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { POST } from '../../pages/api/log-404';
+import { POST } from './log-404';
 import * as fs from 'node:fs/promises';
 
 // Mock fs.appendFile to be slow
