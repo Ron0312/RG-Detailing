@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { debounce } from '../../lib/utils';
+import { debounce, sanitizeForLog } from '../../lib/utils';
 
 describe('debounce', () => {
     beforeEach(() => {
@@ -57,5 +57,31 @@ describe('debounce', () => {
 
         vi.advanceTimersByTime(150);
         expect(func).not.toHaveBeenCalled();
+    });
+});
+
+describe('sanitizeForLog', () => {
+    it('should return empty string for non-string inputs', () => {
+        expect(sanitizeForLog(null)).toBe('');
+        expect(sanitizeForLog(undefined)).toBe('');
+        expect(sanitizeForLog(123)).toBe('');
+    });
+
+    it('should replace newlines and tabs with space', () => {
+        expect(sanitizeForLog('Line1\nLine2')).toBe('Line1 Line2');
+        expect(sanitizeForLog('Line1\r\nLine2')).toBe('Line1 Line2');
+        expect(sanitizeForLog('Col1\tCol2')).toBe('Col1 Col2');
+    });
+
+    it('should remove control characters', () => {
+        // \x1b is ESC. Stripping it breaks ANSI codes like \x1b[31m
+        const input = 'Hello\x00World\x1b[31mError\x1b[0m';
+        expect(sanitizeForLog(input)).toBe('HelloWorld[31mError[0m');
+    });
+
+    it('should truncate to maxLength', () => {
+        const longStr = 'a'.repeat(600);
+        expect(sanitizeForLog(longStr, 10)).toBe('aaaaaaaaaa');
+        expect(sanitizeForLog(longStr)).toHaveLength(500);
     });
 });

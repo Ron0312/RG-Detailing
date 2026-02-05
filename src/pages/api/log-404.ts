@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { checkRateLimit } from '../../lib/rate-limit';
+import { sanitizeForLog } from '../../lib/utils';
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
@@ -12,14 +13,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     const data = await request.json();
 
-    const sanitize = (str: any) => {
-        if (typeof str !== 'string') return '';
-        return str.replace(/[\r\n]+/g, ' ').substring(0, 500);
-    };
-
-    const url = sanitize(data.url);
-    const referrer = sanitize(data.referrer);
-    const userAgent = sanitize(data.userAgent);
+    const url = sanitizeForLog(data.url);
+    const referrer = sanitizeForLog(data.referrer);
+    const userAgent = sanitizeForLog(data.userAgent);
 
     // Log to console (stdout) for container/serverless environments
     console.log(`[404 TRACKING] URL: ${url} | Referrer: ${referrer || 'Direct'} | UA: ${userAgent}`);
