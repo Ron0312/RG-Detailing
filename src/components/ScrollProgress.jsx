@@ -1,33 +1,45 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function ScrollProgress() {
-  const [width, setWidth] = useState(0);
+  const progressBarRef = useRef(null);
   const ticking = useRef(false);
 
-  const scrollHeight = () => {
+  const updateProgress = () => {
     if (!ticking.current) {
+      ticking.current = true;
       window.requestAnimationFrame(() => {
-        const el = document.documentElement;
-        const scrollTop = el.scrollTop || document.body.scrollTop;
-        const scrollHeight = el.scrollHeight || document.body.scrollHeight;
-        const height = (scrollTop / (scrollHeight - el.clientHeight)) * 100;
-        setWidth(height);
+        if (progressBarRef.current) {
+          const el = document.documentElement;
+          const scrollTop = el.scrollTop || document.body.scrollTop;
+          const scrollHeight = el.scrollHeight || document.body.scrollHeight;
+          const clientHeight = el.clientHeight;
+
+          // Avoid division by zero
+          const scrollableHeight = scrollHeight - clientHeight;
+          const progress = scrollableHeight > 0 ? scrollTop / scrollableHeight : 0;
+
+          progressBarRef.current.style.transform = `scaleX(${progress})`;
+        }
         ticking.current = false;
       });
-      ticking.current = true;
     }
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', scrollHeight);
-    return () => window.removeEventListener('scroll', scrollHeight);
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress); // Recalculate on resize too
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    };
   }, []);
 
   return (
     <div className="fixed top-0 left-0 h-1 z-[1000] bg-zinc-800 w-full">
       <div
-        className="h-full bg-red-600 transition-all duration-100 ease-out"
-        style={{ width: `${width}%` }}
+        ref={progressBarRef}
+        className="h-full bg-red-600 origin-left"
+        style={{ transform: 'scaleX(0)' }}
       ></div>
     </div>
   );
