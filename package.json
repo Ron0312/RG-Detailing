@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "prebuild": "ls -F && cat astro.config.mjs",
-    "build": "rm -rf dist node_modules/.vite && astro build",
+    "build": "rm -rf dist node_modules/.vite && astro build && cp -r dist/client/* .",
     "postbuild": "cp public/version.txt dist/client/version.txt || true",
     "start": "node app.js",
     "preview": "astro preview",
