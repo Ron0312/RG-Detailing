@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "rm -rf dist && astro build",
+    "postbuild": "cp public/version.txt dist/client/version.txt || true",
     "start": "node app.js",
     "preview": "astro preview",
     "test": "vitest run",
