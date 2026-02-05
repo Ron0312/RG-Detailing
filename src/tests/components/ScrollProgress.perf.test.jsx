@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import React from 'react';
-import ScrollProgress from './ScrollProgress';
+import ScrollProgress from '../../components/ScrollProgress';
 
 describe('ScrollProgress Performance', () => {
   let requestAnimationFrameSpy;

@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import React from 'react';
-import BeforeAfterSlider from './BeforeAfterSlider';
+import BeforeAfterSlider from '../../components/BeforeAfterSlider';
 
 describe('BeforeAfterSlider Performance', () => {
   let requestAnimationFrameSpy;

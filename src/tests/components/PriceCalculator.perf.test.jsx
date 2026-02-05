@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import PriceCalculator from './PriceCalculator';
+import PriceCalculator from '../../components/PriceCalculator';
 
 // Mock scrollIntoView since jsdom doesn't support it
 if (typeof window !== 'undefined' && !window.HTMLElement.prototype.scrollIntoView) {
