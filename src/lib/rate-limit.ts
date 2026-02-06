@@ -1,9 +1,10 @@
 
-const hits = new Map<string, { count: number; expiry: number }>();
+export const hits = new Map<string, { count: number; expiry: number }>();
+const MAX_HITS = 10000;
 
 /**
  * Checks if an identifier (IP + Action) has exceeded the rate limit.
- * Implements a fixed window counter.
+ * Implements a fixed window counter with memory protection.
  *
  * @param identifier Unique key (e.g., "127.0.0.1:submit-quote")
  * @param limit Max requests allowed in the window
@@ -16,6 +17,13 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 
   // If no record or expired, reset
   if (!record || now > record.expiry) {
+    // Memory protection: Evict oldest entry if limit reached
+    if (!record && hits.size >= MAX_HITS) {
+      const oldestKey = hits.keys().next().value;
+      if (oldestKey !== undefined) {
+        hits.delete(oldestKey);
+      }
+    }
     hits.set(identifier, { count: 1, expiry: now + windowMs });
     return true;
   }

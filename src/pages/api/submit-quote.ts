@@ -109,9 +109,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         const apiKey = runtimeKey || buildKey;
         const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "None");
 
-        // Log key source (masked) for debugging
-        const maskedKey = apiKey ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}` : "NONE";
-        console.log(`>>> Sending email using Web3Forms Key from: ${keySource} (${maskedKey})`);
+        console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
 
         if (apiKey) {
             try {
