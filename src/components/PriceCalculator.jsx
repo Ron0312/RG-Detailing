@@ -145,8 +145,10 @@ export default function PriceCalculator() {
 
     const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
         <button
+            type="button"
             onClick={onClick}
-            className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer
+            aria-pressed={active}
+            className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900
                 ${active
                     ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
                     : highlight
@@ -406,12 +408,13 @@ export default function PriceCalculator() {
                                 <div className="relative mb-12 px-2">
                                     <input
                                         type="range"
+                                        aria-label="Fahrzeuglänge"
                                         min="4"
                                         max="8"
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
-                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none"
+                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
                                     <div className="flex justify-between text-zinc-400 text-xs mt-4 font-bold uppercase tracking-wider">
