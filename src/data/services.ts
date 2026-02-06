@@ -35,6 +35,13 @@ export const services = [
         link: "/dampfreinigung"
     },
     {
+        title: "Smart Repair",
+        description: "Professionelle Entfernung von Kratzern, Dellen und Felgenschäden über unser zertifiziertes Partnernetzwerk. Kostengünstige Alternative zur Lackierung.",
+        icon: "hammer",
+        shortDescription: "Kratzer, Dellen & Felgen Reparatur via Partnernetzwerk. Bis zu 60% günstiger als Lackieren.",
+        link: "/smart-repair"
+    },
+    {
         title: "Spezial-Leistungen",
         description: "Schonende Motorwäsche mit Trockendampf und Cabrioverdeck-Imprägnierung. Schonend für Material und Umwelt.",
         icon: "sparkles",

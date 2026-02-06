@@ -12,7 +12,7 @@ import ScrollReveal from '../components/ScrollReveal.jsx';
 import GlossaryLinker from '../components/GlossaryLinker.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
-import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Star, ArrowRight, CheckCircle2, MessageCircle, Instagram } from 'lucide-react';
+import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Star, ArrowRight, CheckCircle2, MessageCircle, Instagram, Hammer } from 'lucide-react';
 import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
 import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
@@ -50,7 +50,8 @@ const iconMap = {
   2: Caravan,     // Wohnmobil
   3: RefreshCw,   // Leasing
   4: Droplets,    // Innen & Hygiene
-  5: Star         // Spezial
+  5: Hammer,      // Smart Repair
+  6: Star         // Spezial
 };
 
 const galleryRawImages = [
@@ -85,8 +86,8 @@ const faqItems = [
     answer: 'Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege, damit Ihr Fahrzeug nicht "halbfertig" aussieht.'
   },
   {
-    question: "Was kostet eine Fahrzeugaufbereitung?",
-    answer: 'Die Kosten hängen vom Zustand und der Größe Ihres Fahrzeugs ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Autoreinigung bis zum Full Detailing.'
+    question: "Was kostet eine Fahrzeugaufbereitung / Auto polieren lassen?",
+    answer: 'Wenn Sie Ihr Auto polieren lassen wollen, hängt der Preis vom Zustand ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Auto Komplettreinigung bis zum Full Detailing.'
   },
   {
     question: "Machen Sie auch Motorwäsche?",
@@ -147,8 +148,8 @@ const faqSchema = {
 ---
 
 <Layout
-    title="RG Detailing | Keramikversiegelung & Lackveredelung Schleswig-Holstein"
-    description="Ihr Experte für High-End Fahrzeugaufbereitung & Keramikversiegelung. Wir machen Ihren Wagen besser als neu. Labocosmetica zertifiziert. Jetzt Glanz sichern!"
+    title="Fahrzeugaufbereitung & Keramikversiegelung Schleswig-Holstein"
+    description="High-End Fahrzeugaufbereitung & Autoaufbereitung in Schleswig-Holstein. Profi für Innenraumreinigung, Keramikversiegelung & Auto polieren lassen. Jetzt Preis berechnen!"
     schema={[
         howToSchema,
         faqSchema,
@@ -243,8 +244,8 @@ const faqSchema = {
                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihr Fahrzeug in besten Händen</span>
                         <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Das High-End Portfolio</h2>
                         <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
-                            Von der hygienischen <strong>Innenreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong>.
-                            Wir sind Ihr Ansprechpartner für Werterhalt in der Region Segeberg.
+                            Von der hygienischen <strong>Auto Innenraumreinigung</strong> mit Dampf bis zur mehrstufigen <strong>Lackpolitur</strong> (Auto polieren lassen).
+                            Wir sind Ihr Ansprechpartner für professionelle <strong>Fahrzeugaufbereitung</strong> in der Region Segeberg.
                         </p>
                     </div>
                 </ScrollReveal>
