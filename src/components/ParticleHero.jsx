@@ -1,5 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 
+// Simple debounce utility
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
 export default function ParticleHero() {
     const canvasRef = useRef(null);
 
@@ -10,14 +19,19 @@ export default function ParticleHero() {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let particles = [];
+        let isAnimating = false;
 
         const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
 
-        window.addEventListener('resize', resize);
+        // Initial setup
         resize();
+
+        // Handle resize with debounce
+        const debouncedResize = debounce(resize, 200);
+        window.addEventListener('resize', debouncedResize);
 
         class Particle {
             constructor() {
@@ -56,6 +70,8 @@ export default function ParticleHero() {
         };
 
         const animate = () => {
+            if (!isAnimating) return;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(particle => {
                 particle.update();
@@ -65,11 +81,31 @@ export default function ParticleHero() {
         };
 
         init();
-        animate();
+
+        // Intersection Observer to pause animation when off-screen
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    animate();
+                }
+            } else {
+                isAnimating = false;
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            }
+        });
+
+        observer.observe(canvas);
 
         return () => {
-            window.removeEventListener('resize', resize);
-            cancelAnimationFrame(animationFrameId);
+            window.removeEventListener('resize', debouncedResize);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            observer.disconnect();
+            isAnimating = false;
         };
     }, []);
 
