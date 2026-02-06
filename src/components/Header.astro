@@ -187,8 +187,8 @@ import logoImage from '../assets/logo.png';
                     // 1. If scrolling DOWN (> lastScrollTop) AND scrolled past threshold (> 100px) -> HIDE
                     // 2. If scrolling UP (< lastScrollTop) -> SHOW
 
-                    // Only act if change is significant (delta > 5px) or we are at top
-                    if (Math.abs(scrollTop - lastScrollTop) > 5 || scrollTop <= 0) {
+                    // Only act if change is significant (delta > 2px) or we are at top
+                    if (Math.abs(scrollTop - lastScrollTop) > 2 || scrollTop <= 0) {
                          if (header) {
                             if (scrollTop > lastScrollTop && scrollTop > 100) {
                                 header.classList.add('-translate-y-full');
