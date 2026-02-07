@@ -31,6 +31,7 @@ export default function PriceCalculator() {
     const [botcheck, setBotcheck] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const containerRef = useRef(null);
 
@@ -108,18 +109,24 @@ export default function PriceCalculator() {
     const submitQuote = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError(null);
         try {
 
             const payload = { ...selections, quote, email, botcheck };
-            await fetch('/api/submit-quote', {
+            const response = await fetch('/api/submit-quote', {
                 method: 'POST',
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'application/json' }
             });
+
+            if (!response.ok) {
+                throw new Error('Submission failed');
+            }
+
             setSubmitted(true);
         } catch (err) {
             console.error(err);
-            setSubmitted(true);
+            setError("Es gab ein Problem beim Senden Ihrer Anfrage. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.");
         }
         setLoading(false);
     };
@@ -131,6 +138,7 @@ export default function PriceCalculator() {
         setSubmitted(false);
         setEmail('');
         setBotcheck(false);
+        setError(null);
         // Clear URL param?
         window.history.replaceState({}, '', window.location.pathname);
     };
@@ -513,6 +521,11 @@ export default function PriceCalculator() {
                                     onChange={(e) => setBotcheck(e.target.checked)}
                                 />
                                  <h4 className="text-white font-bold mb-6 text-center text-xl">Angebot sichern</h4>
+                                {error && (
+                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-sm text-center">
+                                        {error}
+                                    </div>
+                                )}
                                 <div className="flex gap-3 flex-col">
                                     <input
                                         type="email"

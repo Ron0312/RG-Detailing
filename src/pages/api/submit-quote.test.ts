@@ -1,7 +1,12 @@
 import { POST } from './submit-quote';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('API submit-quote', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+        delete process.env.WEB3FORMS_ACCESS_KEY;
+    });
+
     it('returns 200 for valid data', async () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
@@ -71,5 +76,54 @@ describe('API submit-quote', () => {
         // Request from SAME clientAddress but DIFFERENT forwarded-for should succeed
         const resAllowed = await POST({ request: createRequest('203.0.113.2'), clientAddress } as any);
         expect(resAllowed.status).not.toBe(429);
+    });
+
+    it('returns 500 when Web3Forms API fails', async () => {
+        // Set API key to trigger Web3Forms logic
+        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+
+        // Mock fetch to return success: false
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({ success: false, message: 'Invalid key' }),
+            ok: true
+        })) as any;
+
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            })
+        });
+
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(500);
+        const data = await res.json();
+        expect(data.error).toContain('Fehler');
+    });
+
+    it('returns 500 when Web3Forms fetch throws', async () => {
+        // Set API key to trigger Web3Forms logic
+        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+
+        // Mock fetch to throw error
+        global.fetch = vi.fn(() => Promise.reject(new Error('Network Error'))) as any;
+
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            })
+        });
+
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(500);
+        const data = await res.json();
+        expect(data.error).toContain('Fehler');
     });
 });
