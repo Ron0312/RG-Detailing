@@ -260,7 +260,7 @@ const faqSchema = {
                         const IconComponent = iconMap[index] || Sparkles;
                         return (
                         <ScrollReveal client:visible delay={index * 100}>
-                            <div class="group glass-card p-10 relative overflow-hidden block h-full flex flex-col">
+                            <div class="group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col">
                                  <a href={service.link} class="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`} data-astro-prefetch></a>
                                  <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
