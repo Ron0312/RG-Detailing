@@ -25,7 +25,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https://rg-detailing.de https://*.rg-detailing.de https://maps.gstatic.com https://maps.googleapis.com https://*.googleusercontent.com",
     "font-src 'self' data:",
-    "connect-src 'self' https://maps.googleapis.com",
+    "connect-src 'self' https://maps.googleapis.com https://api.web3forms.com",
     "frame-src 'self' https://www.google.com https://maps.google.com",
     "object-src 'none'",
     "base-uri 'self'",
