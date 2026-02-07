@@ -139,11 +139,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                     console.log(`>>> Email sent successfully to owner via Web3Forms (Ref: ${data.email})`);
                 } else {
                     console.error(">>> Web3Forms API Error:", apiResult);
-                    return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail.", details: apiResult }), { status: 500 });
+                    // SECURITY: Do not leak internal API details to client
+                    return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail." }), { status: 500 });
                 }
             } catch (err) {
                 console.error(">>> Failed to send email via Web3Forms:", err);
-                return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail.", details: String(err) }), { status: 500 });
+                // SECURITY: Do not leak stack traces or internal errors to client
+                return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail." }), { status: 500 });
             }
         } else {
             // In Production, missing key is a critical error

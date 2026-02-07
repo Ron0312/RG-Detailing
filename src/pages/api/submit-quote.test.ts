@@ -149,4 +149,26 @@ describe('API submit-quote', () => {
         // (it's a simple if statement).
         // OR, we can use vi.mock on the module if we exported a helper for getting env.
     });
+
+    it('does not leak sensitive details in error response', async () => {
+        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+        global.fetch = vi.fn(() => Promise.reject(new Error('Sensitive Internal Error'))) as any;
+
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            })
+        });
+
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        const data = await res.json();
+
+        expect(res.status).toBe(500);
+        // This assertion confirms the fix (we expect details to be undefined)
+        expect(data.details).toBeUndefined();
+    });
 });
