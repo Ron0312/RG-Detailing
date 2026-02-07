@@ -31,6 +31,7 @@ export default function PriceCalculator() {
     const [botcheck, setBotcheck] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const containerRef = useRef(null);
 
@@ -108,20 +109,93 @@ export default function PriceCalculator() {
     const submitQuote = async (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
+        setError(null);
 
-            const payload = { ...selections, quote, email, botcheck };
-            await fetch('/api/submit-quote', {
+        const payload = { ...selections, quote, email, botcheck };
+
+        try {
+            const response = await fetch('/api/submit-quote', {
                 method: 'POST',
                 body: JSON.stringify(payload),
                 headers: { 'Content-Type': 'application/json' }
             });
+
+            if (!response.ok) {
+                throw new Error('API Submission failed');
+            }
+
             setSubmitted(true);
         } catch (err) {
-            console.error(err);
-            setSubmitted(true);
+            console.error("Primary submission failed, attempting fallback...", err);
+
+            // Fallback: Client-side submission to Web3Forms
+            try {
+                await sendFallbackEmail(payload);
+                setSubmitted(true);
+            } catch (fallbackErr) {
+                console.error("Fallback submission failed:", fallbackErr);
+                setError("Es gab ein Problem beim Senden Ihrer Anfrage. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.");
+            }
         }
         setLoading(false);
+    };
+
+    const sendFallbackEmail = async (data) => {
+        const sizeName = config.sizes[data.size]?.name || data.size;
+        const conditionName = config.conditions[data.condition]?.name || data.condition;
+        const packageName = config.packages[data.package]?.name || data.package;
+        const subject = `Neue Preisanfrage: ${sizeName} - ${packageName}`;
+
+        const htmlContent = `
+            <div style="font-family: sans-serif; color: #333;">
+                <h2 style="color: #D80000;">Neue Anfrage über Preisrechner (Fallback)</h2>
+                <p>Ein Kunde hat eine Kalkulation durchgeführt und um Kontaktaufnahme gebeten.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <h3>Kunde</h3>
+                <p><strong>E-Mail:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+                <h3>Fahrzeug & Zustand</h3>
+                <ul>
+                    <li><strong>Fahrzeuggröße:</strong> ${sizeName}</li>
+                    <li><strong>Zustand:</strong> ${conditionName}</li>
+                    <li><strong>Camper Länge:</strong> ${data.camperLength ? data.camperLength + 'm' : 'N/A'}</li>
+                </ul>
+                <h3>Gewähltes Paket</h3>
+                <p><strong>${packageName}</strong></p>
+                <h3>Kalkulation</h3>
+                <p style="font-size: 1.2em; font-weight: bold;">
+                    Geschätzter Preis: ${data.quote.minPrice}€ - ${data.quote.maxPrice}€
+                </p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p style="font-size: 0.8em; color: #888;">
+                    Diese E-Mail wurde automatisch von rg-detailing.de gesendet via Web3Forms (Client-Side).
+                </p>
+            </div>
+        `;
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                access_key: "51d8133f-baec-4504-ab1e-ea740b15dc8b",
+                subject: subject,
+                email: data.email,
+                from_name: "RG Detailing Rechner",
+                message: htmlContent,
+                botcheck: data.botcheck,
+                "Fahrzeug": sizeName,
+                "Paket": packageName,
+                "Preis_Min": data.quote.minPrice,
+                "Preis_Max": data.quote.maxPrice
+            })
+        });
+
+        const result = await response.json();
+        if (!result.success) {
+            throw new Error(result.message || "Web3Forms Error");
+        }
     };
 
     const reset = () => {
@@ -131,6 +205,7 @@ export default function PriceCalculator() {
         setSubmitted(false);
         setEmail('');
         setBotcheck(false);
+        setError(null);
         // Clear URL param?
         window.history.replaceState({}, '', window.location.pathname);
     };
@@ -513,6 +588,11 @@ export default function PriceCalculator() {
                                     onChange={(e) => setBotcheck(e.target.checked)}
                                 />
                                  <h4 className="text-white font-bold mb-6 text-center text-xl">Angebot sichern</h4>
+                                {error && (
+                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-sm text-center">
+                                        {error}
+                                    </div>
+                                )}
                                 <div className="flex gap-3 flex-col">
                                     <input
                                         type="email"
