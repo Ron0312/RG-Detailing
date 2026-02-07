@@ -6,13 +6,13 @@ import Reviews from '../components/Reviews.astro';
 import About from '../components/About.astro';
 import CeramicComparison from '../components/CeramicComparison.astro';
 import GalleryLightbox from '../components/GalleryLightbox.jsx';
+import ServiceGrid from '../components/ServiceGrid.jsx';
 import FAQ from '../components/FAQ.jsx';
 import ParticleHero from '../components/ParticleHero.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
-import GlossaryLinker from '../components/GlossaryLinker.jsx';
 import { getCollection } from 'astro:content';
 import { services } from '../data/services';
-import { Gem, FlaskConical, Handshake, Droplets, Sparkles, ShieldCheck, Caravan, RefreshCw, Star, ArrowRight, CheckCircle2, MessageCircle, Instagram, Hammer } from 'lucide-react';
+import { Gem, FlaskConical, Handshake, ArrowRight, CheckCircle2, MessageCircle, Instagram } from 'lucide-react';
 import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
 import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
@@ -43,16 +43,6 @@ const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', widt
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
-
-const iconMap = {
-  0: ShieldCheck, // Full Detailing
-  1: Sparkles,    // All-in-One
-  2: Caravan,     // Wohnmobil
-  3: RefreshCw,   // Leasing
-  4: Droplets,    // Innen & Hygiene
-  5: Hammer,      // Smart Repair
-  6: Star         // Spezial
-};
 
 const galleryRawImages = [
   { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
@@ -287,35 +277,8 @@ const faqSchema = {
                     <CeramicComparison />
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {services.map((service, index) => {
-                        const IconComponent = iconMap[index] || Sparkles;
-                        return (
-                        <ScrollReveal client:visible delay={index * 100}>
-                            <div class="group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col">
-                                 <a href={service.link} class="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`} data-astro-prefetch></a>
-                                 <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
+                <ServiceGrid client:visible services={services} />
 
-                                 <div class="relative z-20 flex-grow pointer-events-none">
-                                    <div class="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
-                                        <IconComponent size={28} strokeWidth={1.5} />
-                                    </div>
-                                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
-                                    <p class="text-zinc-400 leading-relaxed mb-6">
-                                        <GlossaryLinker text={service.shortDescription} />
-                                    </p>
-                                 </div>
-
-                                 <div class="relative z-20 mt-auto pt-6 border-t border-white/5 pointer-events-none">
-                                    <div class="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
-                                        Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                                    </div>
-                                 </div>
-                            </div>
-                        </ScrollReveal>
-                        );
-                    })}
-                </div>
             </div>
         </section>
 
@@ -627,7 +590,7 @@ const faqSchema = {
              <div class="container mx-auto px-4">
                 <ScrollReveal client:visible>
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
-                    <GalleryLightbox client:visible images={galleryImages} />
+                    <GalleryLightbox client:visible images={galleryImages} limit={8} />
                 </ScrollReveal>
              </div>
         </section>

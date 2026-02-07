@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Captions from "yet-another-react-lightbox/plugins/captions";
+import { ArrowDown } from "lucide-react";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
-export default function GalleryLightbox({ images }) {
+export default function GalleryLightbox({ images, limit = 10 }) {
   const [index, setIndex] = useState(-1);
   const [filter, setFilter] = useState('Alle');
+  const [visibleCount, setVisibleCount] = useState(limit);
 
   // Extract unique categories (if available) or default to "Alle"
   const categories = ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))];
@@ -16,10 +18,23 @@ export default function GalleryLightbox({ images }) {
     ? images
     : images.filter(img => img.category === filter);
 
+  const visibleImages = filteredImages.slice(0, visibleCount);
+  const hasMore = filteredImages.length > visibleCount;
+
+  const handleFilterChange = (cat) => {
+      setFilter(cat);
+      setVisibleCount(limit);
+  };
+
   // Map the filtered index back to the original index for the Lightbox
-  const handleImageClick = (filteredIndex) => {
-      const originalIndex = images.findIndex(img => img === filteredImages[filteredIndex]);
+  const handleImageClick = (clickedIndex) => {
+      const clickedImage = visibleImages[clickedIndex];
+      const originalIndex = images.findIndex(img => img === clickedImage);
       setIndex(originalIndex);
+  };
+
+  const showMore = () => {
+      setVisibleCount(prev => prev + limit);
   };
 
   return (
@@ -29,7 +44,7 @@ export default function GalleryLightbox({ images }) {
           {categories.map(cat => (
             <button
               key={cat}
-              onClick={() => setFilter(cat)}
+              onClick={() => handleFilterChange(cat)}
               className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${
                 filter === cat
                   ? 'bg-red-700 border-red-700 text-white shadow-lg'
@@ -43,10 +58,10 @@ export default function GalleryLightbox({ images }) {
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {filteredImages.map((image, i) => (
+        {visibleImages.map((image, i) => (
           <div
-            key={image.src} // Use src as key since index changes with filter
-            className="aspect-square bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer relative"
+            key={image.src}
+            className="aspect-square bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer relative animate-fade-in-up"
             onClick={() => handleImageClick(i)}
           >
             <img
@@ -62,6 +77,17 @@ export default function GalleryLightbox({ images }) {
           </div>
         ))}
       </div>
+
+      {hasMore && (
+          <div className="mt-8 text-center">
+              <button
+                onClick={showMore}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900/80 border border-white/10 text-white font-bold hover:bg-zinc-800 transition-colors shadow-lg"
+              >
+                  Mehr anzeigen <ArrowDown size={18} />
+              </button>
+          </div>
+      )}
 
       <Lightbox
         open={index >= 0}
