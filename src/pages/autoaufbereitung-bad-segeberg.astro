@@ -1,0 +1,273 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+import Reviews from '../components/Reviews.astro';
+import About from '../components/About.astro';
+import CeramicComparison from '../components/CeramicComparison.astro';
+import GalleryLightbox from '../components/GalleryLightbox.jsx';
+import ServiceGrid from '../components/ServiceGrid.jsx';
+import FAQ from '../components/FAQ.jsx';
+import ParticleHero from '../components/ParticleHero.jsx';
+import ScrollReveal from '../components/ScrollReveal.jsx';
+import { services } from '../data/services';
+import { Gem, FlaskConical, Handshake, ArrowRight, CheckCircle2, MessageCircle, Calendar, Car, Sparkles, Star, MapPin } from 'lucide-react';
+import { Image, getImage } from 'astro:assets';
+import heroImage from '../assets/hero-workshop.jpg';
+import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
+import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
+
+// Gallery Images Imports
+import imgLack from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png';
+import imgInnen2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg';
+import imgKeramik3 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg';
+import imgVorherNachher4 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg';
+import imgDetailing5 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg';
+import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg';
+
+export const prerender = true;
+
+const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
+const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
+
+const galleryRawImages = [
+  { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis für Kunden aus Bad Segeberg", category: "Lack" },
+  { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
+  {
+    src: imgKeramik3,
+    alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica",
+    category: "Keramik",
+    title: "Labocosmetica Keramikversiegelung",
+    description: "Extremer Tiefenglanz und langanhaltender Schutz durch zertifizierte Labocosmetica Keramikversiegelung."
+  },
+  {
+    src: imgVorherNachher4,
+    alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis",
+    category: "Keramik",
+    title: "Lackveredelung vor Versiegelung",
+    description: "Perfekte Vorbereitung des Lacks durch mehrstufige Politur als Basis für die Keramikversiegelung."
+  },
+  {
+    src: imgDetailing5,
+    alt: "Exklusives Detailing Ergebnis Schleswig-Holstein",
+    category: "Keramik",
+    title: "High-End Detailing Schleswig-Holstein",
+    description: "Perfektes Finish und Lackveredelung für höchste Ansprüche in Schleswig-Holstein."
+  },
+  {
+    src: imgCoating6,
+    alt: "Professionelles Coating / Keramikversiegelung Anwendung",
+    category: "Keramik",
+    title: "Professionelle Coating Anwendung",
+    description: "Fachgerechte Applikation der Keramikversiegelung für maximalen Schutz und Abperleffekt."
+  }
+];
+
+const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
+    const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
+    const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+    return {
+        src: full.src,
+        thumbnail: thumb.src,
+        alt: img.alt,
+        category: img.category,
+        title: img.title,
+        description: img.description
+    };
+}));
+
+const faqItems = [
+  {
+    question: "Wie weit ist es von Bad Segeberg zu Ihnen?",
+    answer: "Wir sind direkt 'nebenan' in Tensfeld. Die Fahrtzeit beträgt in der Regel weniger als 15 Minuten. Die kurze Anfahrt lohnt sich für Premium-Qualität."
+  },
+  {
+    question: "Was kostet eine Fahrzeugaufbereitung für Kunden aus Bad Segeberg?",
+    answer: 'Die Preise sind transparent und fair. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung.'
+  },
+  {
+    question: "Bieten Sie auch Leasing-Rückgabe-Aufbereitung für Segeberger Firmen an?",
+    answer: "Ja, wir sind spezialisiert auf Leasingrückläufer. Wir helfen Ihnen, hohe Nachzahlungen im Autohaus zu vermeiden."
+  }
+];
+
+const localSchema = {
+  "@context": "https://schema.org",
+  "@type": "AutoDetailing",
+  "name": "RG Detailing - Fahrzeugaufbereitung für Bad Segeberg",
+  "url": "https://rg-detailing.de/autoaufbereitung-bad-segeberg",
+  "description": "Premium Fahrzeugaufbereitung & Keramikversiegelung für Bad Segeberg. Zertifizierte Lackveredelung nur 15 Min. entfernt.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Dorfstraße 11",
+    "addressLocality": "Tensfeld",
+    "postalCode": "23824",
+    "addressCountry": "DE"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Bad Segeberg"
+  }
+};
+---
+
+<Layout
+    title="Fahrzeugaufbereitung Bad Segeberg | Keramikversiegelung & Politur"
+    description="Top-Fahrzeugaufbereitung für Bad Segeberg. RG Detailing bietet High-End Lackveredelung & Keramikversiegelung in direkter Nachbarschaft (Tensfeld)."
+    schema={[localSchema]}
+    preloadImage={heroImage.src}
+>
+
+    {/* HERO SECTION */}
+    <div class="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+        {/* Particle Canvas Layer */}
+        <div class="absolute inset-0 z-10 pointer-events-none">
+            <ParticleHero client:load />
+        </div>
+
+        {/* Hero Image */}
+        <div class="absolute inset-0 z-0">
+             <Image
+                src={heroImage}
+                alt="Fahrzeugaufbereitung Werkstatt Nähe Bad Segeberg"
+                class="w-full h-full object-cover object-bottom opacity-50"
+                loading="eager"
+                fetchpriority="high"
+                format="avif"
+                widths={[640, 768, 1024, 1280, 1536, 1920]}
+                sizes="100vw"
+             />
+             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+        </div>
+
+        <div class="container mx-auto px-4 z-20 text-center pt-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-900/30 border border-red-500/30 backdrop-blur-md mb-6 animate-fade-in-up">
+                 <MapPin size={16} class="text-red-500" />
+                 <span class="text-xs font-bold text-white uppercase tracking-wider">Nur 15 Min. von Bad Segeberg</span>
+            </div>
+
+            <h1 class="text-4xl md:text-7xl font-bold mb-6 text-white tracking-tighter leading-[1.1] animate-fade-in-up delay-100">
+                Premium Aufbereitung <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-800">für Bad Segeberg</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-zinc-300 max-w-2xl mx-auto mb-10 font-normal leading-relaxed animate-fade-in-up delay-200">
+                Direkt in Ihrer Nachbarschaft: Wir sind Ihre Experten für <strong class="text-white">Lackveredelung</strong> und zertifizierte <strong class="text-white">Keramikversiegelung</strong> in Tensfeld.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300 px-4">
+                <a href="#rechner" class="group relative px-8 py-5 bg-red-700 rounded-2xl font-bold text-white overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_50px_-10px_rgba(220,38,38,0.6)] w-full sm:w-auto">
+                    <span class="relative z-10 flex items-center justify-center gap-2">Preis für mein Auto berechnen <ArrowRight className="w-5 h-5" /></span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full overflow-x-hidden">
+
+        {/* USP / LOCATION INFO */}
+        <section class="section-spacing relative bg-zinc-900/20 border-b border-white/5">
+            <div class="container mx-auto px-4">
+                 <div class="max-w-4xl mx-auto text-center">
+                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ihr Partner aus der Region</h2>
+                     <p class="text-zinc-400 text-lg leading-relaxed mb-12">
+                         Als direkter Nachbar von Bad Segeberg sind wir die erste Anlaufstelle für Fahrzeugliebhaber, die mehr erwarten als eine Standard-Reinigung.
+                         Wir kombinieren handwerkliche Präzision mit modernster Technologie.
+                     </p>
+
+                     <div class="grid md:grid-cols-3 gap-8 text-left">
+                         <div class="glass-panel p-6 rounded-2xl">
+                             <CheckCircle2 class="text-red-500 w-8 h-8 mb-4" />
+                             <h3 class="text-white font-bold mb-2">Regional</h3>
+                             <p class="text-sm text-zinc-400">Kurze Wege, persönlicher Kontakt, ehrliche Beratung.</p>
+                         </div>
+                         <div class="glass-panel p-6 rounded-2xl">
+                             <CheckCircle2 class="text-red-500 w-8 h-8 mb-4" />
+                             <h3 class="text-white font-bold mb-2">Qualität</h3>
+                             <p class="text-sm text-zinc-400">Zertifizierte Labocosmetica Keramikversiegelungen.</p>
+                         </div>
+                         <div class="glass-panel p-6 rounded-2xl">
+                             <CheckCircle2 class="text-red-500 w-8 h-8 mb-4" />
+                             <h3 class="text-white font-bold mb-2">Werterhalt</h3>
+                             <p class="text-sm text-zinc-400">Ideal für Leasingrückläufer oder Verkaufsvorbereitung.</p>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        {/* SERVICES */}
+        <section id="leistungen" class="section-spacing">
+             <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unser Angebot</span>
+                    <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Full Service Detailing</h2>
+                </div>
+                <ServiceGrid client:visible services={services} />
+            </div>
+        </section>
+
+        {/* COMPARISON SLIDER */}
+        <section class="section-spacing bg-zinc-900/20 border-y border-white/5">
+            <div class="container mx-auto px-4">
+                 <div class="flex flex-col md:flex-row items-center gap-16">
+                     <div class="md:w-1/3">
+                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Das Ergebnis</span>
+                         <h2 class="text-4xl font-bold mb-6 text-white mt-2">Der Unterschied</h2>
+                         <p class="text-zinc-400 mb-8 text-lg leading-relaxed">
+                             Wir kaschieren keine Kratzer – wir entfernen sie. Erleben Sie echten Tiefenglanz.
+                         </p>
+                     </div>
+                     <div class="md:w-2/3 w-full">
+                        <div class="rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative group">
+                             <BeforeAfterSlider
+                                client:visible
+                                beforeImage={optimizedBefore.src}
+                                afterImage={optimizedAfter.src}
+                                alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
+                            />
+                        </div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        {/* REVIEWS */}
+        <Reviews limit={4} />
+
+        {/* CALCULATOR */}
+        <section id="rechner" class="section-spacing relative overflow-hidden">
+             <div class="absolute inset-0 bg-red-900/5 z-0"></div>
+             <div class="container mx-auto px-4 relative z-10">
+                 <div class="max-w-5xl mx-auto glass-panel p-4 md:p-16 rounded-3xl md:rounded-[3rem] shadow-2xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-2xl">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Angebot für Bad Segeberg anfordern</h2>
+                        <p class="text-zinc-400">Erhalten Sie in 2 Minuten einen unverbindlichen Richtpreis.</p>
+                    </div>
+                    <PriceCalculator client:visible />
+                 </div>
+             </div>
+        </section>
+
+        {/* ABOUT */}
+        <About />
+
+        {/* GALLERY */}
+        <section id="gallery" class="section-spacing bg-zinc-900/20 border-y border-white/5">
+             <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center">Galerie</h2>
+                <GalleryLightbox client:visible images={galleryImages} limit={8} />
+             </div>
+        </section>
+
+        {/* FAQ */}
+        <section id="faq" class="section-spacing content-auto">
+            <div class="container mx-auto px-4">
+                <div class="max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen</h2>
+                    <FAQ client:visible items={faqItems} />
+                </div>
+            </div>
+        </section>
+
+    </main>
+</Layout>
