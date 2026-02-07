@@ -146,6 +146,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail.", details: String(err) }), { status: 500 });
             }
         } else {
+            // In Production, missing key is a critical error
+            if (import.meta.env.PROD) {
+                console.error(">>> CRITICAL: WEB3FORMS_ACCESS_KEY is missing in production environment!");
+                return new Response(JSON.stringify({ error: "Server Configuration Error: Email service not configured." }), { status: 500 });
+            }
+
             console.log(">>> [MOCK EMAIL] WEB3FORMS_ACCESS_KEY missing. Printing to console:");
             console.log(`To: owner@rg-detailing.de | Subject: ${subject}`);
             console.log(`Data: ${JSON.stringify(data)}`);
