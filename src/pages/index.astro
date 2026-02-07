@@ -57,16 +57,46 @@ const iconMap = {
 const galleryRawImages = [
   { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis in Tensfeld", category: "Lack" },
   { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher RG Detailing", category: "Innenraum" },
-  { src: imgKeramik3, alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik" },
-  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Lack" },
-  { src: imgDetailing5, alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik" },
-  { src: imgCoating6, alt: "Professionelles Coating / Keramikversiegelung Anwendung", category: "Keramik" },
+  {
+    src: imgKeramik3,
+    alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica",
+    category: "Keramik",
+    title: "Labocosmetica Keramikversiegelung",
+    description: "Extremer Tiefenglanz und langanhaltender Schutz durch zertifizierte Labocosmetica Keramikversiegelung."
+  },
+  {
+    src: imgVorherNachher4,
+    alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis",
+    category: "Keramik",
+    title: "Lackveredelung vor Versiegelung",
+    description: "Perfekte Vorbereitung des Lacks durch mehrstufige Politur als Basis für die Keramikversiegelung."
+  },
+  {
+    src: imgDetailing5,
+    alt: "Exklusives Detailing Ergebnis Schleswig-Holstein",
+    category: "Keramik",
+    title: "High-End Detailing Schleswig-Holstein",
+    description: "Perfektes Finish und Lackveredelung für höchste Ansprüche in Schleswig-Holstein."
+  },
+  {
+    src: imgCoating6,
+    alt: "Professionelles Coating / Keramikversiegelung Anwendung",
+    category: "Keramik",
+    title: "Professionelle Coating Anwendung",
+    description: "Fachgerechte Applikation der Keramikversiegelung für maximalen Schutz und Abperleffekt."
+  },
   { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung und Pflege Detail", category: "Innenraum" },
   { src: imgLack8, alt: "Lackaufbereitung Detailaufnahme Glanz Tensfeld", category: "Lack" },
   { src: imgLack9, alt: "Hochglanz Politur Ergebnis Lackkorrektur", category: "Lack" },
   { src: imgLack10, alt: "Fahrzeugaufbereitung Tensfeld Lackversiegelung", category: "Lack" },
   { src: imgLack11, alt: "Professionelle Lackpflege Vorher-Nachher Effekt", category: "Lack" },
-  { src: imgKeramikBremssattel12, alt: "Keramikversiegelung Bremssattel Detail", category: "Keramik" }
+  {
+    src: imgKeramikBremssattel12,
+    alt: "Keramikversiegelung Bremssattel Detail",
+    category: "Keramik",
+    title: "Bremssattel Keramikversiegelung",
+    description: "Hitzebeständige Versiegelung für Bremssättel – erleichtert die Reinigung und schützt vor Bremsstaub."
+  }
 ];
 
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
@@ -76,7 +106,9 @@ const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
         src: full.src,
         thumbnail: thumb.src,
         alt: img.alt,
-        category: img.category
+        category: img.category,
+        title: img.title,
+        description: img.description
     };
 }));
 

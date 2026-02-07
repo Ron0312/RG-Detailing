@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
 
 export default function GalleryLightbox({ images }) {
   const [index, setIndex] = useState(-1);
@@ -66,7 +68,7 @@ export default function GalleryLightbox({ images }) {
         index={index}
         close={() => setIndex(-1)}
         slides={images}
-        plugins={[Zoom]}
+        plugins={[Zoom, Captions]}
         zoom={{ maxZoomPixelRatio: 3 }}
       />
     </>
