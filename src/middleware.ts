@@ -21,7 +21,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Content Security Policy
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://maps.googleapis.com",
+    "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://maps.googleapis.com",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https://rg-detailing.de https://*.rg-detailing.de https://maps.gstatic.com https://maps.googleapis.com https://*.googleusercontent.com",
     "font-src 'self' data:",
