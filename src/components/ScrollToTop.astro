@@ -3,7 +3,9 @@
 <button
     id="scrollToTopBtn"
     aria-label="Nach oben scrollen"
-    class="fixed bottom-24 right-6 z-40 bg-zinc-800 text-white p-3 rounded-full shadow-lg border border-zinc-700 opacity-0 translate-y-10 transition-all duration-300 hover:bg-red-600 hover:border-red-500"
+    class="fixed bottom-24 right-6 z-40 bg-zinc-800 text-white p-3 rounded-full shadow-lg border border-zinc-700 opacity-0 translate-y-10 pointer-events-none transition-all duration-300 hover:bg-red-600 hover:border-red-500"
+    tabindex="-1"
+    aria-hidden="true"
 >
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
 </button>
@@ -13,9 +15,13 @@
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 500) {
-            btn.classList.remove('opacity-0', 'translate-y-10');
+            btn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            btn.removeAttribute('tabindex');
+            btn.removeAttribute('aria-hidden');
         } else {
-            btn.classList.add('opacity-0', 'translate-y-10');
+            btn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            btn.setAttribute('tabindex', '-1');
+            btn.setAttribute('aria-hidden', 'true');
         }
     });
 
