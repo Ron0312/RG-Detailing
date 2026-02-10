@@ -17,9 +17,21 @@ const QuoteSchema = z.object({
     botcheck: z.boolean().optional()
 });
 
+export const escapeHtml = (unsafe: string): string => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
-        const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
+        const rawIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
+        // Validate IP to prevent key bloating / memory exhaustion
+        const ip = z.string().ip().safeParse(rawIp).success ? rawIp : 'unknown';
+
         if (!checkRateLimit(`submit-quote:${ip}`, 10, 60 * 60 * 1000)) { // 10 requests per hour
             return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
         }
@@ -77,13 +89,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
 
                 <h3>Kunde</h3>
-                <p><strong>E-Mail:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+                <p><strong>E-Mail:</strong> <a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></p>
 
                 <h3>Fahrzeug & Zustand</h3>
                 <ul>
                     <li><strong>Fahrzeuggröße:</strong> ${sizeName}</li>
                     <li><strong>Zustand:</strong> ${conditionName}</li>
-                    <li><strong>Camper Länge:</strong> ${data.camperLength ? data.camperLength + 'm' : 'N/A'}</li>
+                    <li><strong>Camper Länge:</strong> ${data.camperLength ? escapeHtml(data.camperLength.toString()) + 'm' : 'N/A'}</li>
                 </ul>
 
                 <h3>Gewähltes Paket</h3>

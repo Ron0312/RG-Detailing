@@ -1,10 +1,38 @@
-import { POST } from './submit-quote';
+import { POST, escapeHtml } from './submit-quote';
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { hits } from '../../lib/rate-limit';
 
 describe('API submit-quote', () => {
     afterEach(() => {
         vi.restoreAllMocks();
         delete process.env.WEB3FORMS_ACCESS_KEY;
+        hits.clear();
+    });
+
+    it('escapes HTML special characters correctly', () => {
+        const input = '<script>alert("XSS")</script> & \'quote\'';
+        const expected = '&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt; &amp; &#039;quote&#039;';
+        expect(escapeHtml(input)).toBe(expected);
+    });
+
+    it('falls back to "unknown" for invalid IPs to share rate limit', async () => {
+        const createRequest = (ipHeader: string) => new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({}),
+            headers: { 'x-forwarded-for': ipHeader }
+        });
+        const clientAddress = '127.0.0.1';
+
+        // 1. Send 10 requests with an INVALID IP "bad-ip-1"
+        // This should map to "unknown"
+        for (let i = 0; i < 10; i++) {
+            await POST({ request: createRequest('bad-ip-1'), clientAddress } as any);
+        }
+
+        // 2. Send 11th request with DIFFERENT INVALID IP "bad-ip-2"
+        // If logic is correct, this also maps to "unknown" and hits the limit (10)
+        const resBlocked = await POST({ request: createRequest('bad-ip-2'), clientAddress } as any);
+        expect(resBlocked.status).toBe(429);
     });
 
     it('returns 200 for valid data', async () => {
