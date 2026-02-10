@@ -26,11 +26,8 @@ export default function GalleryLightbox({ images, limit = 10 }) {
       setVisibleCount(limit);
   };
 
-  // Map the filtered index back to the original index for the Lightbox
   const handleImageClick = (clickedIndex) => {
-      const clickedImage = visibleImages[clickedIndex];
-      const originalIndex = images.findIndex(img => img === clickedImage);
-      setIndex(originalIndex);
+      setIndex(clickedIndex);
   };
 
   const showMore = () => {
@@ -95,7 +92,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
         open={index >= 0}
         index={index}
         close={() => setIndex(-1)}
-        slides={images}
+        slides={filteredImages}
         plugins={[Zoom, Captions]}
         zoom={{ maxZoomPixelRatio: 3 }}
       />
