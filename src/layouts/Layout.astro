@@ -37,7 +37,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
 
         <title>{title} | RG Detailing</title>
         <meta name="description" content={description} />
@@ -75,7 +75,7 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <script is:inline>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js?v=3').catch(err => console.error('SW registration failed:', err));
+                    navigator.serviceWorker.register('/sw.js?v=5').catch(err => console.error('SW registration failed:', err));
                 });
             }
         </script>

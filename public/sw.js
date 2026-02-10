@@ -1,10 +1,12 @@
-const CACHE_NAME = 'rg-detailing-v3';
+const CACHE_NAME = 'rg-detailing-v5';
 
 // Assets to cache immediately on install
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
-  '/favicon.svg',
+  '/favicon.png',
+  '/icon-192.png',
+  '/icon-512.png',
   '/logo.png',
   '/fonts/inter-latin-400-normal.woff2',
   '/fonts/inter-latin-700-normal.woff2',
