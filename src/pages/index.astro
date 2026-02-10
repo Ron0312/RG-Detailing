@@ -242,14 +242,13 @@ const faqSchema = {
             "url": "https://rg-detailing.de"
         }
     ]}
-    preloadImage={heroImage.src}
 >
 
     {/* HERO SECTION */}
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Particle Canvas Layer */}
         <div class="absolute inset-0 z-10 pointer-events-none">
-            <ParticleHero client:load />
+            <ParticleHero client:idle />
         </div>
 
         {/* High-End Hero Image */}
