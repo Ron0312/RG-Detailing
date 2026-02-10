@@ -15,7 +15,7 @@ const domain = "https://rg-detailing.de";
       "@type": "AutoDetailing",
       "@id": "https://rg-detailing.de/#localBusiness",
       "name": "RG Detailing",
-      "image": "https://rg-detailing.de/logo.png",
+      "image": ["https://rg-detailing.de/logo.png", `${domain}${optimizedProject.src}`],
       "founder": {
         "@type": "Person",
         "name": "Remo Gerhardt",
@@ -92,23 +92,16 @@ const domain = "https://rg-detailing.de";
           "@type": "EducationalOccupationalCredential",
           "name": "Dampftec Partner"
         }
-      ]
-    },
-    {
-      "@type": "Product",
-      "name": "Premium Fahrzeugaufbereitung & Keramikversiegelung",
-      "description": "High-End Lackveredelung und zertifizierte Keramikversiegelung in Schleswig-Holstein. Professionelle Aufbereitung für Enthusiasten.",
-      "image": `${domain}${optimizedProject.src}`,
-      "brand": {
-        "@id": "https://rg-detailing.de/#localBusiness"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": 5.0,
+        "reviewCount": 47
       },
-      "offers": {
-        "@type": "AggregateOffer",
-        "url": "https://rg-detailing.de/#prices",
-        "priceCurrency": "EUR",
-        "lowPrice": "125",
-        "offerCount": services.length,
-        "offers": services.map((service) => ({
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Fahrzeugaufbereitung Services",
+        "itemListElement": services.map((service) => ({
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
@@ -117,11 +110,6 @@ const domain = "https://rg-detailing.de";
             "url": `https://rg-detailing.de${service.link}`
           }
         }))
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": 5.0,
-        "reviewCount": 47
       }
     }
   ]
