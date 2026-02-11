@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+
 import { ChevronsLeftRight } from 'lucide-react';
 
 export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorher Nachher Vergleich" }) {
@@ -7,7 +7,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
   const handleRef = useRef(null);
   const ticking = useRef(false);
   const latestClientX = useRef(0);
-  const positionRef = useRef(50); // Store position for re-renders
+
 
   const updatePosition = () => {
     if (!containerRef.current) {
@@ -18,17 +18,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
     const pos = ((latestClientX.current - rect.left) / rect.width) * 100;
     const clampedPos = Math.min(100, Math.max(0, pos));
 
-    // Update ref so that if component re-renders (e.g. from parent),
-    // it picks up the current position instead of resetting to initial.
-    positionRef.current = clampedPos;
 
-    // Direct DOM manipulation to avoid re-renders during drag
-    if (beforeImageRef.current) {
-        beforeImageRef.current.style.clipPath = `inset(0 ${100 - clampedPos}% 0 0)`;
-    }
-    if (handleRef.current) {
-        handleRef.current.style.left = `${clampedPos}%`;
-    }
 
     ticking.current = false;
   };
@@ -45,11 +35,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
   const onTouchMove = (e) => handleMove(e.touches[0].clientX);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') {
-      setSliderPosition((prev) => Math.max(0, prev - 5));
-    } else if (e.key === 'ArrowRight') {
-      setSliderPosition((prev) => Math.min(100, prev + 5));
-    }
+
   };
 
   return (
