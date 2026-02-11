@@ -4,7 +4,7 @@ const MAX_HITS = 10000;
 
 /**
  * Checks if an identifier (IP + Action) has exceeded the rate limit.
- * Implements a fixed window counter with memory protection.
+ * Implements a fixed window counter with memory protection and LRU eviction.
  *
  * @param identifier Unique key (e.g., "127.0.0.1:submit-quote")
  * @param limit Max requests allowed in the window
@@ -17,8 +17,14 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 
   // If no record or expired, reset
   if (!record || now > record.expiry) {
-    // Memory protection: Evict oldest entry if limit reached
-    if (!record && hits.size >= MAX_HITS) {
+    // If it was an expired record, remove it first so we can re-insert at the end (LRU)
+    // and to ensure size check is accurate.
+    if (record) {
+        hits.delete(identifier);
+    }
+
+    // Memory protection: Evict oldest entry (LRU) if limit reached
+    if (hits.size >= MAX_HITS) {
       const oldestKey = hits.keys().next().value;
       if (oldestKey !== undefined) {
         hits.delete(oldestKey);
@@ -32,7 +38,11 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
     return false;
   }
 
+  // Update record and move to end of Map (LRU)
+  hits.delete(identifier);
   record.count++;
+  hits.set(identifier, record);
+
   return true;
 }
 
