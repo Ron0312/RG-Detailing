@@ -44,12 +44,27 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
   const onMouseMove = (e) => handleMove(e.clientX);
   const onTouchMove = (e) => handleMove(e.touches[0].clientX);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      setSliderPosition((prev) => Math.max(0, prev - 5));
+    } else if (e.key === 'ArrowRight') {
+      setSliderPosition((prev) => Math.min(100, prev + 5));
+    }
+  };
+
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-video overflow-hidden rounded-xl shadow-2xl cursor-col-resize select-none touch-none"
+      className="relative w-full aspect-video overflow-hidden rounded-xl shadow-2xl cursor-col-resize select-none touch-none focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 outline-none"
       onMouseMove={onMouseMove}
       onTouchMove={onTouchMove}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="slider"
+      aria-label={alt}
+      aria-valuenow={Math.round(sliderPosition)}
+      aria-valuemin={0}
+      aria-valuemax={100}
     >
       {/* After Image (Background) */}
       <img
