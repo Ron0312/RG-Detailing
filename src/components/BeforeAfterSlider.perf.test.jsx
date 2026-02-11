@@ -21,14 +21,15 @@ describe('BeforeAfterSlider Performance', () => {
       toJSON: () => {},
     }));
 
-    requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame');
+    // We want to execute the callback immediately to see effects
+    requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => cb());
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('optimizes move events using requestAnimationFrame', async () => {
+  it('optimizes move events using requestAnimationFrame and updates DOM', async () => {
     render(
       <BeforeAfterSlider
         beforeImage="/before.jpg"
@@ -38,24 +39,33 @@ describe('BeforeAfterSlider Performance', () => {
 
     const container = screen.getByText('VORHER').parentElement;
 
-    // Simulate rapid mouse movements
-    fireEvent.mouseMove(container, { clientX: 100 });
-    fireEvent.mouseMove(container, { clientX: 200 });
-    fireEvent.mouseMove(container, { clientX: 300 });
+    // Initial state: 50%
+    const handle = container.querySelector('.bg-red-600.cursor-col-resize');
+    expect(handle).not.toBeNull();
+    // In JSDOM, style.left might be empty if set via CSS class, but here it is set via inline style.
+    // Initial render sets it to 50%
+    expect(handle.style.left).toBe('50%');
 
-    // In the unoptimized version, requestAnimationFrame is NOT called.
-    // In the optimized version, it SHOULD be called.
+    // Simulate mouse move to 75% (750px)
+    fireEvent.mouseMove(container, { clientX: 750 });
 
-    // We expect this to fail initially (or we can assert logic based on current state).
-    // For the purpose of the task, I will check if it was called, and if not, we know we need to optimize.
-
-    // This assertion serves as our "measurement".
-    // If count is 0, we are unoptimized (synchronous updates).
-    // If count > 0, we are using RAF.
-    console.log(`requestAnimationFrame calls: ${requestAnimationFrameSpy.mock.calls.length}`);
-
-    // Verify optimization is active
+    // Since we mocked RAF to run immediately, the update should be applied.
     expect(requestAnimationFrameSpy).toHaveBeenCalled();
-    expect(requestAnimationFrameSpy.mock.calls.length).toBeGreaterThan(0);
+
+    // Verify new position
+    // (750 - 0) / 1000 * 100 = 75%
+    expect(handle.style.left).toBe('75%');
+
+    // Verify clipping path of the before image container
+    // The before image container is the one with clipPath
+    // We can find it by finding the image inside it?
+    // The structure is:
+    // div (relative) -> img (after)
+    //                -> div (absolute, clipPath) -> img (before)
+
+    const beforeImage = screen.getByAltText('Vorher: Vorher Nachher Vergleich');
+    const beforeContainer = beforeImage.parentElement;
+
+    expect(beforeContainer.style.clipPath).toBe('inset(0 25% 0 0)'); // 100 - 75 = 25
   });
 });

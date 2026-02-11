@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Captions from "yet-another-react-lightbox/plugins/captions";
@@ -12,13 +12,13 @@ export default function GalleryLightbox({ images, limit = 10 }) {
   const [visibleCount, setVisibleCount] = useState(limit);
 
   // Extract unique categories (if available) or default to "Alle"
-  const categories = ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))];
+  const categories = useMemo(() => ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))], [images]);
 
-  const filteredImages = filter === 'Alle'
+  const filteredImages = useMemo(() => filter === 'Alle'
     ? images
-    : images.filter(img => img.category === filter);
+    : images.filter(img => img.category === filter), [filter, images]);
 
-  const visibleImages = filteredImages.slice(0, visibleCount);
+  const visibleImages = useMemo(() => filteredImages.slice(0, visibleCount), [filteredImages, visibleCount]);
   const hasMore = filteredImages.length > visibleCount;
 
   const handleFilterChange = (cat) => {
@@ -26,11 +26,8 @@ export default function GalleryLightbox({ images, limit = 10 }) {
       setVisibleCount(limit);
   };
 
-  // Map the filtered index back to the original index for the Lightbox
   const handleImageClick = (clickedIndex) => {
-      const clickedImage = visibleImages[clickedIndex];
-      const originalIndex = images.findIndex(img => img === clickedImage);
-      setIndex(originalIndex);
+      setIndex(clickedIndex);
   };
 
   const showMore = () => {
@@ -95,7 +92,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
         open={index >= 0}
         index={index}
         close={() => setIndex(-1)}
-        slides={images}
+        slides={filteredImages}
         plugins={[Zoom, Captions]}
         zoom={{ maxZoomPixelRatio: 3 }}
       />
