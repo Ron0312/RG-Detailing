@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { ChevronsLeftRight } from 'lucide-react';
 
 export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorher Nachher Vergleich" }) {
-  const [sliderPosition, setSliderPosition] = useState(50);
+  const [position, setPosition] = useState(50);
   const containerRef = useRef(null);
   const ticking = useRef(false);
   const latestClientX = useRef(0);
@@ -14,7 +14,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
     }
     const rect = containerRef.current.getBoundingClientRect();
     const pos = ((latestClientX.current - rect.left) / rect.width) * 100;
-    setSliderPosition(Math.min(100, Math.max(0, pos)));
+    setPosition(Math.min(100, Math.max(0, pos)));
     ticking.current = false;
   };
 
@@ -28,6 +28,9 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
 
   const onMouseMove = (e) => handleMove(e.clientX);
   const onTouchMove = (e) => handleMove(e.touches[0].clientX);
+
+  const clipPathStyle = { clipPath: `inset(0 ${100 - position}% 0 0)` };
+  const handleStyle = { left: `${position}%` };
 
   return (
     <div
@@ -47,7 +50,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
       {/* Before Image (Foreground) - Clipped */}
       <div
         className="absolute inset-0 w-full h-full"
-        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+        style={clipPathStyle}
       >
         <img
           src={beforeImage}
@@ -60,7 +63,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
       {/* Slider Handle */}
       <div
         className="absolute inset-y-0 w-1 bg-red-600 cursor-col-resize z-10 shadow-[0_0_10px_rgba(0,0,0,0.5)]"
-        style={{ left: `${sliderPosition}%` }}
+        style={handleStyle}
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-900 rounded-full p-2 shadow-lg border border-red-600 flex items-center justify-center">
             <ChevronsLeftRight className="text-white w-4 h-4" />
