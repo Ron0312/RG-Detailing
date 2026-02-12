@@ -42,11 +42,11 @@ export default function ServiceGrid({ services }) {
             </div>
 
             {/* Service Grid */}
-            <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar px-4 md:px-0">
+            <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
                 {filteredServices.map((service) => {
                     const IconComponent = iconMap[service.icon] || Sparkles;
                     return (
-                        <div key={service.title} className="min-w-[280px] md:min-w-0 snap-center shrink-0 group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col animate-fade-in-up first:ml-0 last:mr-4 md:last:mr-0">
+                        <div key={service.title} className="min-w-[85vw] md:min-w-0 snap-center shrink-0 group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col animate-fade-in-up first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
                              <a href={service.link} className="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`}></a>
                              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
@@ -68,6 +68,13 @@ export default function ServiceGrid({ services }) {
                         </div>
                     );
                 })}
+            </div>
+
+            {/* Mobile Pagination Dots */}
+            <div className="flex md:hidden justify-center gap-2 mt-4">
+                {filteredServices.map((_, index) => (
+                    <div key={index} className="w-2 h-2 rounded-full bg-white/20" />
+                ))}
             </div>
 
             {/* Price Calculator Teaser */}
