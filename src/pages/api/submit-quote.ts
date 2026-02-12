@@ -9,7 +9,7 @@ const SizeEnum = z.enum(Object.keys(config.sizes) as [string, ...string[]]);
 const ConditionEnum = z.enum(Object.keys(config.conditions) as [string, ...string[]]);
 
 const QuoteSchema = z.object({
-    email: z.string().email(),
+    email: z.string().email().max(100),
     package: PackageEnum,
     size: SizeEnum,
     condition: ConditionEnum,
@@ -36,7 +36,18 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
         }
 
-        const body = await request.json();
+        // Check Content-Length to prevent large payloads (DoS protection)
+        const contentLength = request.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) > 10240) { // 10KB limit
+            return new Response(JSON.stringify({ error: "Payload too large" }), { status: 413 });
+        }
+
+        let body;
+        try {
+            body = await request.json();
+        } catch (e) {
+            return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
+        }
 
         // Validate input
         const result = QuoteSchema.safeParse({

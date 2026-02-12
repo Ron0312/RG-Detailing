@@ -155,29 +155,6 @@ describe('API submit-quote', () => {
         expect(data.error).toContain('Fehler');
     });
 
-    it('returns 500 when API key is missing in production', async () => {
-        // Ensure key is missing
-        delete process.env.WEB3FORMS_ACCESS_KEY;
-
-        // Mock import.meta.env.PROD = true
-        // This is tricky in ESM, so we might need to rely on how Vitest handles it.
-        // If import.meta is read-only, we might skip this test or restructure code.
-        // Assuming we can spy on it or modify global 'import.meta' is not standard.
-        // However, if we can't change it, we can't test this branch easily without refactoring.
-        // Let's try to mock the module or rely on logic extraction.
-        // For now, let's just add a comment if we can't easily mock it.
-        // BUT, we can try to rely on process.env.NODE_ENV if the code used it.
-        // The code uses import.meta.env.PROD.
-
-        // Let's try to stub it via vi.stubGlobal if supported, or skip if not.
-        // Vitest supports vi.stubEnv('PROD', 'true') maybe? No, that's process.env.
-
-        // Since this is hard to mock in ESM without loader hooks, let's just skip
-        // comprehensive testing of this specific production flag here and trust the logic
-        // (it's a simple if statement).
-        // OR, we can use vi.mock on the module if we exported a helper for getting env.
-    });
-
     it('does not leak sensitive details in error response', async () => {
         process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
         global.fetch = vi.fn(() => Promise.reject(new Error('Sensitive Internal Error'))) as any;
@@ -198,5 +175,36 @@ describe('API submit-quote', () => {
         expect(res.status).toBe(500);
         // This assertion confirms the fix (we expect details to be undefined)
         expect(data.details).toBeUndefined();
+    });
+
+    // NEW SECURITY TESTS
+
+    it('returns 413 Payload Too Large if Content-Length exceeds limit', async () => {
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({ email: 'test@example.com' }),
+            headers: {
+                'content-length': '10241' // 10KB + 1 byte
+            }
+        });
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(413);
+        const data = await res.json();
+        expect(data.error).toBe("Payload too large");
+    });
+
+    it('returns 400 Bad Request if email is too long', async () => {
+        const longEmail = 'a'.repeat(101) + '@example.com';
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: longEmail,
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            })
+        });
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(400);
     });
 });
