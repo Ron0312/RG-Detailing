@@ -1,29 +1,58 @@
 import React, { useRef, useEffect, useState } from 'react';
 
+// Shared observer state
+const callbacks = new WeakMap();
+let observer;
+
+function getObserver() {
+    if (typeof IntersectionObserver === 'undefined') return null;
+
+    if (!observer) {
+        observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const callback = callbacks.get(entry.target);
+                    if (callback) {
+                        callback();
+                        // Once visible, we don't need to observe anymore for this one-time animation
+                        observer.unobserve(entry.target);
+                        callbacks.delete(entry.target);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+    }
+    return observer;
+}
+
 export default function ScrollReveal({ children, animation = 'fade-up', delay = 0 }) {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
-            {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            }
-        );
+        if (!ref.current) return;
 
-        if (ref.current) {
-            observer.observe(ref.current);
+        const obs = getObserver();
+        if (!obs) {
+            // Fallback for environments without IntersectionObserver (e.g. old browsers or some test setups)
+            setIsVisible(true);
+            return;
         }
 
+        // Register callback
+        callbacks.set(ref.current, () => setIsVisible(true));
+
+        // Start observing
+        obs.observe(ref.current);
+
         return () => {
-            if (ref.current) observer.unobserve(ref.current);
+            if (ref.current) {
+                obs.unobserve(ref.current);
+                callbacks.delete(ref.current);
+            }
         };
     }, []);
 
