@@ -37,8 +37,10 @@ describe('PriceCalculator Accessibility', () => {
         await user.click(cardButton);
 
         // Step advances to Condition (Size cards gone), check for "Zurück" button
-        const backButton = screen.getByText('Zurück');
-        expect(backButton).not.toBeNull();
+        // Since we now have two buttons (top and bottom), we select all and pick the first one
+        const backButtons = screen.getAllByRole('button', { name: /zurück/i });
+        expect(backButtons.length).toBeGreaterThan(0);
+        const backButton = backButtons[0];
 
         // Click Back button
         await user.click(backButton);
