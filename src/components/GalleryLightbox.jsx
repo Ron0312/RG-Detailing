@@ -10,6 +10,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
   const [index, setIndex] = useState(-1);
   const [filter, setFilter] = useState('Alle');
   const [visibleCount, setVisibleCount] = useState(limit);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Extract unique categories (if available) or default to "Alle"
   const categories = useMemo(() => ['Alle', ...new Set(images.map(img => img.category).filter(Boolean))], [images]);
@@ -19,11 +20,17 @@ export default function GalleryLightbox({ images, limit = 10 }) {
     : images.filter(img => img.category === filter), [filter, images]);
 
   const visibleImages = useMemo(() => filteredImages.slice(0, visibleCount), [filteredImages, visibleCount]);
-  const hasMore = filteredImages.length > visibleCount;
+
+  // Adjusted logic: hasMore is true if not all images are shown OR if we are collapsed on mobile (index >= 4 hidden)
+  // But strictly speaking, "Mehr anzeigen" usually expands the list.
+  // We want "Mehr anzeigen" to trigger expansion on mobile too.
+  const hasHiddenMobileItems = !isExpanded && visibleImages.length > 4;
+  const hasMore = filteredImages.length > visibleCount || hasHiddenMobileItems;
 
   const handleFilterChange = (cat) => {
       setFilter(cat);
       setVisibleCount(limit);
+      setIsExpanded(false);
   };
 
   const handleImageClick = (clickedIndex) => {
@@ -31,7 +38,12 @@ export default function GalleryLightbox({ images, limit = 10 }) {
   };
 
   const showMore = () => {
-      setVisibleCount(prev => prev + limit);
+      if (hasHiddenMobileItems && visibleCount <= limit) {
+          setIsExpanded(true);
+      } else {
+          setVisibleCount(prev => prev + limit);
+          setIsExpanded(true);
+      }
   };
 
   return (
@@ -55,26 +67,31 @@ export default function GalleryLightbox({ images, limit = 10 }) {
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {visibleImages.map((image, i) => (
-          <button
-            type="button"
-            key={image.src}
-            className="aspect-square bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer relative animate-fade-in-up w-full p-0 border-0 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
-            onClick={() => handleImageClick(i)}
-            aria-label={`Bild vergrößern: ${image.alt || 'Galeriebild'}`}
-          >
-            <img
-              src={image.thumbnail || image.src}
-              alt={image.alt}
-              className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-              loading="lazy"
-              decoding="async"
-              width="600"
-              height="600"
-            />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-          </button>
-        ))}
+        {visibleImages.map((image, i) => {
+          // Hide items index 4 and above on mobile unless expanded
+          const isHiddenOnMobile = !isExpanded && i >= 4;
+
+          return (
+            <button
+              type="button"
+              key={image.src}
+              className={`aspect-square bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer relative animate-fade-in-up w-full p-0 border-0 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none ${isHiddenOnMobile ? 'hidden md:block' : ''}`}
+              onClick={() => handleImageClick(i)}
+              aria-label={`Bild vergrößern: ${image.alt || 'Galeriebild'}`}
+            >
+              <img
+                src={image.thumbnail || image.src}
+                alt={image.alt}
+                className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                loading="lazy"
+                decoding="async"
+                width="600"
+                height="600"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+            </button>
+          );
+        })}
       </div>
 
       {hasMore && (
