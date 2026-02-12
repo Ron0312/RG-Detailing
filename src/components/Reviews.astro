@@ -28,7 +28,7 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
             <p class="text-zinc-400 max-w-2xl mx-auto">Echte Meinungen von Kunden aus Tensfeld, Bad Segeberg und Umgebung.</p>
         </div>
 
-        <div class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-6 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
+        <div id="reviews-slider" class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-6 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right">
             {displayedReviews.map((review) => (
                 <div class="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0">
                     <div class="flex items-center gap-3 mb-4">
@@ -52,6 +52,13 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
             ))}
         </div>
 
+        {/* Mobile Pagination Dots */}
+        <div class="flex md:hidden justify-center gap-2 mt-4" id="reviews-dots">
+            {displayedReviews.map((_, index) => (
+                <div class={`w-2 h-2 rounded-full transition-colors duration-300 ${index === 0 ? 'bg-red-600 scale-125' : 'bg-zinc-700'}`} data-index={index} />
+            ))}
+        </div>
+
         <div class="text-center mt-12">
              <a href="https://www.google.com/search?q=RG+Detailing+Tensfeld#lrd=0x47b2299999999999:0x9999999999999999,1,,," target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition">
                 <span>Alle Bewertungen auf Google lesen</span>
@@ -60,3 +67,30 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
         </div>
     </div>
 </section>
+
+<script>
+    const slider = document.getElementById('reviews-slider');
+    const dotsContainer = document.getElementById('reviews-dots');
+
+    if (slider && dotsContainer) {
+        const dots = dotsContainer.querySelectorAll('div');
+
+        const updateDots = () => {
+            const scrollLeft = slider.scrollLeft;
+            const width = slider.offsetWidth;
+            const index = Math.round(scrollLeft / width);
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-zinc-700');
+                    dot.classList.add('bg-red-600', 'scale-125');
+                } else {
+                    dot.classList.remove('bg-red-600', 'scale-125');
+                    dot.classList.add('bg-zinc-700');
+                }
+            });
+        };
+
+        slider.addEventListener('scroll', updateDots);
+    }
+</script>

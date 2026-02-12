@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator } from 'lucide-react';
 import GlossaryLinker from './GlossaryLinker';
 
@@ -14,6 +14,8 @@ const iconMap = {
 
 export default function ServiceGrid({ services }) {
     const [activeCategory, setActiveCategory] = useState("Lack & Keramik");
+    const [activeIndex, setActiveIndex] = useState(0);
+    const scrollRef = useRef(null);
 
     // Get unique categories, ensuring 'Lack & Keramik' is first if present
     const categories = ["Lack & Keramik", "Spezial & Reparatur", "Innen & Sonstiges"];
@@ -21,6 +23,32 @@ export default function ServiceGrid({ services }) {
     const filteredServices = services.filter(service =>
         activeCategory === "Alle" ? true : service.category === activeCategory
     );
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (scrollRef.current) {
+                const scrollLeft = scrollRef.current.scrollLeft;
+                const width = scrollRef.current.offsetWidth;
+                const newIndex = Math.round(scrollLeft / width);
+                setActiveIndex(newIndex);
+            }
+        };
+
+        const ref = scrollRef.current;
+        if (ref) {
+            ref.addEventListener('scroll', handleScroll);
+            return () => ref.removeEventListener('scroll', handleScroll);
+        }
+    }, [filteredServices]); // Re-attach when list changes
+
+    // Reset index on category change
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        }
+        setActiveIndex(0);
+    }, [activeCategory]);
+
 
     return (
         <div>
@@ -42,7 +70,10 @@ export default function ServiceGrid({ services }) {
             </div>
 
             {/* Service Grid */}
-            <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
+            <div
+                ref={scrollRef}
+                className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right"
+            >
                 {filteredServices.map((service) => {
                     const IconComponent = iconMap[service.icon] || Sparkles;
                     return (
@@ -73,7 +104,10 @@ export default function ServiceGrid({ services }) {
             {/* Mobile Pagination Dots */}
             <div className="flex md:hidden justify-center gap-2 mt-4">
                 {filteredServices.map((_, index) => (
-                    <div key={index} className="w-2 h-2 rounded-full bg-white/20" />
+                    <div
+                        key={index}
+                        className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700'}`}
+                    />
                 ))}
             </div>
 
