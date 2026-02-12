@@ -106,6 +106,19 @@ const Teaser = ({ onStart }) => (
     </div>
 );
 
+const BackButton = ({ onClick, className = '', children }) => (
+    <button
+        onClick={onClick}
+        type="button"
+        className={`group flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold uppercase tracking-widest transition-all
+            bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/5 hover:border-white/20 hover:shadow-lg active:scale-95
+            ${className}`}
+    >
+        <ArrowRight className="w-4 h-4 rotate-180 transition-transform group-hover:-translate-x-1" />
+        <span>{children || 'Zurück'}</span>
+    </button>
+);
+
 export default function PriceCalculator() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [step, setStep] = useState(STEPS.SIZE);
@@ -378,7 +391,7 @@ export default function PriceCalculator() {
             {/* Ambient Background Glow */}
             <div className="absolute -inset-4 bg-red-600/20 blur-[100px] rounded-full pointer-events-none opacity-50 mix-blend-screen animate-pulse"></div>
 
-            <div className="relative bg-zinc-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/10 p-3 md:p-12 scroll-mt-32 ring-1 ring-black/5">
+            <div className="relative bg-zinc-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/10 p-3 pb-32 md:p-12 scroll-mt-32 ring-1 ring-black/5">
 
                 {/* Progress Bar */}
                 <div className="mb-12 md:mb-16 relative px-4 max-w-3xl mx-auto mt-6 md:mt-0">
@@ -435,6 +448,7 @@ export default function PriceCalculator() {
 
                     {step === STEPS.CAMPER_LENGTH && (
                          <div className="animate-fade-in">
+                            <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
                             <StepTitle>Fahrzeuglänge</StepTitle>
                             <StepSubtitle>Bitte geben Sie die Länge in Metern an (inkl. Deichsel/Aufbau).</StepSubtitle>
 
@@ -471,15 +485,14 @@ export default function PriceCalculator() {
                                 </button>
                             </div>
                              <div className="mt-10 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
-                                    <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
-                                </button>
+                                <BackButton onClick={() => setStep(STEPS.SIZE)} className="mx-auto" />
                             </div>
                          </div>
                     )}
 
                     {step === STEPS.CONDITION && (
                         <div className="animate-fade-in">
+                            <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
                             <StepTitle>Lackzustand</StepTitle>
                             <StepSubtitle>Wie würden Sie den aktuellen Zustand beschreiben?</StepSubtitle>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
@@ -494,15 +507,14 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.SIZE)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
-                                    <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
-                                </button>
+                                <BackButton onClick={() => setStep(STEPS.SIZE)} className="mx-auto" />
                             </div>
                         </div>
                     )}
 
                     {step === STEPS.PACKAGE && (
                         <div className="animate-fade-in">
+                            <div className="mb-6"><BackButton onClick={() => setStep(STEPS.CONDITION)} /></div>
                             <StepTitle>Paketwahl</StepTitle>
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
 
@@ -531,15 +543,17 @@ export default function PriceCalculator() {
                                 ))}
                             </div>
                             <div className="mt-12 text-center">
-                                <button onClick={() => setStep(STEPS.CONDITION)} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
-                                    <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Zurück
-                                </button>
+                                <BackButton onClick={() => setStep(STEPS.CONDITION)} className="mx-auto" />
                             </div>
                         </div>
                     )}
 
                     {step === STEPS.RESULT && !submitted && quote && (
                         <div className="animate-fade-in">
+                            <div className="mb-6"><BackButton onClick={() => {
+                                if (selections.size === 'camper') setStep(STEPS.CAMPER_LENGTH);
+                                else setStep(STEPS.PACKAGE);
+                            }}>Korrigieren</BackButton></div>
                             {renderResult()}
 
                             <form onSubmit={submitQuote} className="max-w-lg mx-auto bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
@@ -587,12 +601,10 @@ export default function PriceCalculator() {
                                 </div>
                             </form>
                             <div className="mt-12 text-center">
-                                <button onClick={() => {
+                                <BackButton onClick={() => {
                                     if (selections.size === 'camper') setStep(STEPS.CAMPER_LENGTH);
                                     else setStep(STEPS.PACKAGE);
-                                }} className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2 mx-auto text-sm font-medium uppercase tracking-widest group">
-                                    <ArrowRight className="rotate-180 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Korrigieren
-                                </button>
+                                }} className="mx-auto">Korrigieren</BackButton>
                             </div>
                         </div>
                     )}
