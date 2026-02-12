@@ -1,0 +1,9 @@
+
+@keyframes pulseRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(10px); }
+}
+
+.animate-pulse-right {
+    animation: pulseRight 2s ease-in-out 3; /* Run 3 times then stop */
+}
