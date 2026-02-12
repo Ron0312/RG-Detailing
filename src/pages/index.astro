@@ -383,66 +383,6 @@ const faqSchema = {
         {/* SOCIAL PROOF / REVIEWS - MOVED UP */}
         <Reviews limit={4} />
 
-        {/* PROCESS SECTION - MOVED UP */}
-        <section class="section-spacing relative overflow-hidden bg-zinc-900/10">
-             <div class="container mx-auto px-4">
-                 <ScrollReveal client:visible>
-                     <div class="text-center mb-20">
-                         <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Transparenz</span>
-                         <h2 class="text-3xl md:text-5xl font-bold mt-4 text-white">Ablauf der Fahrzeugaufbereitung</h2>
-                     </div>
-                 </ScrollReveal>
-
-                 <div class="relative">
-                     {/* Connector Line (Desktop) */}
-                     <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-zinc-700 to-transparent -translate-y-1/2 z-0"></div>
-
-                     <div class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-4 gap-4 md:gap-8 pb-4 md:pb-0 relative z-10 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
-                         {/* Step 1 */}
-                         <div class="min-w-[85vw] md:min-w-0 snap-center shrink-0 first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
-                             <ScrollReveal client:visible delay={100}>
-                                 <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                     <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">1</div>
-                                     <h3 class="text-white font-bold text-xl mb-3">Check</h3>
-                                     <p class="text-sm text-zinc-400 leading-relaxed">Bestandsaufnahme & Lackanalyse unter Speziallicht in unserer Halle.</p>
-                                 </div>
-                             </ScrollReveal>
-                         </div>
-                         {/* Step 2 */}
-                         <div class="min-w-[85vw] md:min-w-0 snap-center shrink-0 first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
-                             <ScrollReveal client:visible delay={200}>
-                                 <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                     <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">2</div>
-                                     <h3 class="text-white font-bold text-xl mb-3">Wash</h3>
-                                     <p class="text-sm text-zinc-400 leading-relaxed">Schonende Handwäsche, Flugrostentfernung & Kneten.</p>
-                                 </div>
-                             </ScrollReveal>
-                         </div>
-                         {/* Step 3 */}
-                         <div class="min-w-[85vw] md:min-w-0 snap-center shrink-0 first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
-                             <ScrollReveal client:visible delay={300}>
-                                 <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                     <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">3</div>
-                                     <h3 class="text-white font-bold text-xl mb-3">Polish</h3>
-                                     <p class="text-sm text-zinc-400 leading-relaxed">Defektkorrektur: Kratzer entfernen für ultimativen Tiefenglanz.</p>
-                                 </div>
-                             </ScrollReveal>
-                         </div>
-                         {/* Step 4 */}
-                         <div class="min-w-[85vw] md:min-w-0 snap-center shrink-0 first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
-                             <ScrollReveal client:visible delay={400}>
-                                 <div class="group relative bg-zinc-950 p-8 rounded-3xl border border-white/10 text-center hover:-translate-y-2 transition-transform duration-500">
-                                     <div class="w-16 h-16 bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center text-white font-bold text-xl mx-auto mb-6 shadow-xl relative z-10 group-hover:border-red-500/50 group-hover:text-red-500 transition-colors">4</div>
-                                     <h3 class="text-white font-bold text-xl mb-3">Protect</h3>
-                                     <p class="text-sm text-zinc-400 leading-relaxed">Langzeitversiegelung mit Keramik, Graphen oder Wachs.</p>
-                                 </div>
-                             </ScrollReveal>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-        </section>
-
         {/* WHY US SECTION */}
         <section class="section-spacing">
             <div class="container mx-auto px-4">

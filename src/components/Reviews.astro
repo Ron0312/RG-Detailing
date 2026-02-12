@@ -28,9 +28,9 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
             <p class="text-zinc-400 max-w-2xl mx-auto">Echte Meinungen von Kunden aus Tensfeld, Bad Segeberg und Umgebung.</p>
         </div>
 
-        <div class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
+        <div class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-6 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4">
             {displayedReviews.map((review) => (
-                <div class="min-w-[85vw] md:min-w-0 snap-center shrink-0 bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition first:pl-4 md:first:pl-0 last:pr-4 md:last:pr-0">
+                <div class="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-red-700 rounded-full flex items-center justify-center text-white font-bold">
                             {review.name.charAt(0)}
