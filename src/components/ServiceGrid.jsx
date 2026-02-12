@@ -42,11 +42,11 @@ export default function ServiceGrid({ services }) {
             </div>
 
             {/* Service Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+            <div className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar">
                 {filteredServices.map((service) => {
                     const IconComponent = iconMap[service.icon] || Sparkles;
                     return (
-                        <div key={service.title} className="group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col animate-fade-in-up">
+                        <div key={service.title} className="min-w-[85vw] md:min-w-0 snap-center shrink-0 group glass-card p-6 md:p-10 relative overflow-hidden block h-full flex flex-col animate-fade-in-up">
                              <a href={service.link} className="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`}></a>
                              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 

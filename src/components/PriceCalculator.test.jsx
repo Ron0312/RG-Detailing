@@ -20,6 +20,10 @@ describe('PriceCalculator Accessibility', () => {
         const user = userEvent.setup();
         render(<PriceCalculator />);
 
+        // Expand calculator
+        const startButton = screen.getByText('Jetzt Preis berechnen');
+        await user.click(startButton);
+
         // Initial state: Not selected
         let cardButton = screen.getByText('Kleinwagen').closest('button');
         expect(cardButton).not.toBeNull();
@@ -48,6 +52,10 @@ describe('PriceCalculator Accessibility', () => {
     it('renders camper length range with aria-label', async () => {
         const user = userEvent.setup();
         render(<PriceCalculator />);
+
+        // Expand calculator
+        const startButton = screen.getByText('Jetzt Preis berechnen');
+        await user.click(startButton);
 
         // Click "Wohnmobil / Caravan" to go to camper length step
         const camperButton = screen.getByText('Wohnmobil / Caravan').closest('button');

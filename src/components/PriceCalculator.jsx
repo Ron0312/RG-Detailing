@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import config from '../lib/pricingConfig.json';
-import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb } from 'lucide-react';
+import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator } from 'lucide-react';
 
 const STEPS = {
     SIZE: 0,
@@ -82,7 +82,32 @@ const WhatsAppButton = ({ message }) => (
     </a>
 );
 
+// New Teaser Component
+const Teaser = ({ onStart }) => (
+    <div className="relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up" onClick={onStart}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-50"></div>
+
+        <div className="relative z-10 max-w-2xl mx-auto">
+             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/20 text-red-500 mb-6 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(220,38,38,0.3)]">
+                <Calculator size={32} />
+            </div>
+            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Dein individueller Preis</h3>
+            <p className="text-zinc-400 mb-10 text-lg md:text-xl leading-relaxed">
+                Jedes Fahrzeug ist einzigartig. Nutzen Sie unseren intelligenten Rechner, um in wenigen Klicks ein unverbindliches Angebot zu erhalten.
+            </p>
+            <button
+                type="button"
+                className="inline-flex items-center gap-3 px-10 py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-900/40 hover:scale-105 text-lg"
+            >
+                <Sparkles size={24} />
+                Jetzt Preis berechnen
+            </button>
+        </div>
+    </div>
+);
+
 export default function PriceCalculator() {
+    const [isExpanded, setIsExpanded] = useState(false);
     const [step, setStep] = useState(STEPS.SIZE);
     const [selections, setSelections] = useState({
         size: null,
@@ -104,25 +129,26 @@ export default function PriceCalculator() {
         const params = new URLSearchParams(window.location.search);
         const preselect = params.get('preselect');
 
+        // Check hash
+        if (window.location.hash === '#rechner') {
+            setIsExpanded(true);
+        }
+
         if (preselect === 'camper') {
+            setIsExpanded(true);
             handleSelect('size', 'camper');
         } else if (preselect === 'leasing') {
-             // For leasing we need a size first, but we can preset the intent
-             // Actually, we can just preset the package if size is chosen later?
-             // Or better: Simulate a "medium" car selection then go to leasing package logic?
-             // Let's just preset size=medium (common) and package=leasing to show result?
-             // No, let's keep it simple: Select size first, but highlight leasing package later.
-             // Or: Start with size selection but automatically select leasing package when we get there?
-             // Let's try: If leasing, user still needs to pick size.
-             // Let's just set a flag or just handle 'camper' for now as it skips steps.
+             setIsExpanded(true);
+             // handleSelect logic would require knowing size or just setting mode.
+             // We'll leave it as expanding for now.
         }
     }, []);
 
     useEffect(() => {
-        if (containerRef.current && step !== STEPS.SIZE) {
+        if (containerRef.current && step !== STEPS.SIZE && isExpanded) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, [step]);
+    }, [step, isExpanded]);
 
     const handleSelect = (key, value) => {
         let newSelections = { ...selections, [key]: value };
@@ -342,6 +368,10 @@ export default function PriceCalculator() {
             </div>
         );
     };
+
+    if (!isExpanded) {
+        return <Teaser onStart={() => setIsExpanded(true)} />;
+    }
 
     return (
         <div className="relative w-full max-w-5xl mx-auto my-8 md:my-12" ref={containerRef}>
