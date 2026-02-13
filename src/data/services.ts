@@ -1,15 +1,15 @@
 export const services = [
     {
         title: "Full Detailing",
-        description: "Das ultimative Upgrade für Liebhaber. Mehrstufige Lackkorrektur entfernt Swirls & Kratzer für einen Zustand 'Besser als Neu'. Veredelt mit zertifizierter Labocosmetica Keramikversiegelung (bis zu 6 Jahre Schutz).",
+        description: "Das ultimative Upgrade für Liebhaber. Wenn Sie Ihr Auto polieren lassen wollen für einen Zustand 'Besser als Neu': Unsere mehrstufige Lackkorrektur entfernt Swirls & Kratzer. Veredelt mit zertifizierter Labocosmetica Keramikversiegelung.",
         icon: "shield",
-        shortDescription: "High-End Lackkorrektur + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 800 €.",
+        shortDescription: "High-End Lackkorrektur (Auto polieren) + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 800 €.",
         link: "/keramikversiegelung",
         category: "Lack & Keramik"
     },
     {
         title: "All-in-One (Werterhalt)",
-        description: "Der perfekte Einstieg in die Welt des Detailings. Innenraum-Pflege, Hochglanzpolitur und Lackschutz sichern den Wert Ihres Fahrzeugs langfristig.",
+        description: "Der perfekte Einstieg in die Welt des Detailings. Innenraum-Pflege, Hochglanzpolitur (Auto polieren) und Lackschutz sichern den Wert Ihres Fahrzeugs langfristig.",
         icon: "sparkles",
         shortDescription: "Werterhalt und Glanz in einem Paket. Ideal für gepflegte Daily Driver. Ab 500 €.",
         link: "#rechner",
