@@ -9,6 +9,9 @@ import node from '@astrojs/node';
 export default defineConfig({
   site: 'https://rg-detailing.de',
   output: 'server',
+  build: {
+    inlineStylesheets: 'auto',
+  },
   integrations: [react()],
 
   vite: {

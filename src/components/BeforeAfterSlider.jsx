@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronsLeftRight } from 'lucide-react';
 
-export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorher Nachher Vergleich" }) {
+export default function BeforeAfterSlider({ beforeImage, afterImage, beforeSrcSet, afterSrcSet, alt = "Vorher Nachher Vergleich" }) {
   const [sliderPosition, setSliderPosition] = React.useState(50);
   const containerRef = React.useRef(null);
   const beforeImageRef = React.useRef(null);
@@ -82,6 +82,8 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
       {/* After Image (Background) */}
       <img
         src={afterImage}
+        srcSet={afterSrcSet}
+        sizes="(max-width: 768px) 100vw, 1024px"
         alt={`Nachher: ${alt}`}
         className="absolute inset-0 w-full h-full object-cover"
         draggable="false"
@@ -95,6 +97,8 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, alt = "Vorh
       >
         <img
           src={beforeImage}
+          srcSet={beforeSrcSet}
+          sizes="(max-width: 768px) 100vw, 1024px"
           alt={`Vorher: ${alt}`}
           className="w-full h-full object-cover"
           draggable="false"
