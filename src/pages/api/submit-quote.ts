@@ -36,6 +36,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
         }
 
+        // Check Content-Type to prevent CSRF via Simple Requests (text/plain, etc.)
+        const contentType = request.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            return new Response(JSON.stringify({ error: "Unsupported Media Type" }), { status: 415 });
+        }
+
         // Check Content-Length to prevent large payloads (DoS protection)
         const contentLength = request.headers.get('content-length');
         if (contentLength && parseInt(contentLength) > 10240) { // 10KB limit

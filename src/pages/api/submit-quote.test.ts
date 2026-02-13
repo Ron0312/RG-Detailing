@@ -19,7 +19,10 @@ describe('API submit-quote', () => {
         const createRequest = (ipHeader: string) => new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({}),
-            headers: { 'x-forwarded-for': ipHeader }
+            headers: {
+                'x-forwarded-for': ipHeader,
+                'Content-Type': 'application/json'
+            }
         });
         const clientAddress = '127.0.0.1';
 
@@ -43,7 +46,10 @@ describe('API submit-quote', () => {
                 size: 'small',
                 condition: 'good',
                 package: 'wash_interior'
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(200);
@@ -57,7 +63,10 @@ describe('API submit-quote', () => {
             body: JSON.stringify({
                 email: 'not-an-email',
                 size: 'invalid',
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(400);
@@ -66,7 +75,10 @@ describe('API submit-quote', () => {
     it('returns 429 when rate limit exceeded', async () => {
         const createRequest = () => new Request('http://localhost/api/submit-quote', {
             method: 'POST',
-            body: JSON.stringify({})
+            body: JSON.stringify({}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         const clientAddress = '10.0.0.1';
 
@@ -84,7 +96,10 @@ describe('API submit-quote', () => {
         const createRequest = (ipHeader?: string) => new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({}),
-            headers: ipHeader ? { 'x-forwarded-for': ipHeader } : {}
+            headers: {
+                ...(ipHeader ? { 'x-forwarded-for': ipHeader } : {}),
+                'Content-Type': 'application/json'
+            }
         });
 
         // This IP will be rate limited
@@ -123,7 +138,10 @@ describe('API submit-quote', () => {
                 size: 'small',
                 condition: 'good',
                 package: 'wash_interior'
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
@@ -146,7 +164,10 @@ describe('API submit-quote', () => {
                 size: 'small',
                 condition: 'good',
                 package: 'wash_interior'
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
@@ -166,7 +187,10 @@ describe('API submit-quote', () => {
                 size: 'small',
                 condition: 'good',
                 package: 'wash_interior'
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
@@ -184,7 +208,8 @@ describe('API submit-quote', () => {
             method: 'POST',
             body: JSON.stringify({ email: 'test@example.com' }),
             headers: {
-                'content-length': '10241' // 10KB + 1 byte
+                'content-length': '10241', // 10KB + 1 byte
+                'Content-Type': 'application/json'
             }
         });
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
@@ -202,9 +227,31 @@ describe('API submit-quote', () => {
                 size: 'small',
                 condition: 'good',
                 package: 'wash_interior'
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(400);
+    });
+
+    it('returns 415 Unsupported Media Type if Content-Type is not application/json', async () => {
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            }),
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(415);
+        const data = await res.json();
+        expect(data.error).toBe("Unsupported Media Type");
     });
 });
