@@ -67,4 +67,16 @@ describe('PriceCalculator Accessibility', () => {
         // This assertion will fail initially
         expect(rangeInput.getAttribute('aria-label')).toBe('Fahrzeuglänge');
     });
+
+    it('renders teaser as an accessible button', () => {
+        render(<PriceCalculator />);
+
+        const teaserButton = screen.getByText('Jetzt Preis berechnen').closest('button');
+
+        expect(teaserButton).not.toBeNull();
+        expect(teaserButton.getAttribute('type')).toBe('button');
+        // Check for focus styles
+        expect(teaserButton.className).toContain('focus-visible:ring-4');
+        expect(teaserButton.className).toContain('focus-visible:ring-red-500');
+    });
 });

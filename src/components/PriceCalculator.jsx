@@ -84,7 +84,7 @@ const WhatsAppButton = ({ message }) => (
 
 // New Teaser Component
 const Teaser = ({ onStart }) => (
-    <div className="relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up" onClick={onStart}>
+    <button type="button" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-50"></div>
 
         <div className="relative z-10 max-w-2xl mx-auto">
@@ -95,15 +95,14 @@ const Teaser = ({ onStart }) => (
             <p className="text-zinc-400 mb-10 text-lg md:text-xl leading-relaxed">
                 Jedes Fahrzeug ist einzigartig. Nutzen Sie unseren intelligenten Rechner, um in wenigen Klicks ein unverbindliches Angebot zu erhalten.
             </p>
-            <button
-                type="button"
-                className="inline-flex items-center gap-3 px-10 py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-900/40 hover:scale-105 text-lg"
+            <div
+                className="inline-flex items-center gap-3 px-10 py-5 bg-red-600 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-900/40 text-lg group-hover:bg-red-500 group-hover:scale-105 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
             >
                 <Sparkles size={24} />
                 Jetzt Preis berechnen
-            </button>
+            </div>
         </div>
-    </div>
+    </button>
 );
 
 const BackButton = ({ onClick, className = '', children }) => (
