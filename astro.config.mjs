@@ -10,7 +10,7 @@ export default defineConfig({
   site: 'https://rg-detailing.de',
   output: 'server',
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   integrations: [react()],
 
