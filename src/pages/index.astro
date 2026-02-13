@@ -43,6 +43,11 @@ export const prerender = true;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
+const beforeMobile = await getImage({src: wohnmobilBefore, format: 'avif', width: 600});
+const afterMobile = await getImage({src: wohnmobilAfter, format: 'avif', width: 600});
+
+const beforeSrcSet = `${beforeMobile.src} 600w, ${optimizedBefore.src} 1024w`;
+const afterSrcSet = `${afterMobile.src} 600w, ${optimizedAfter.src} 1024w`;
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
@@ -151,9 +156,12 @@ const galleryRawImages = [
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
     const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
     const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+    const thumbSmall = await getImage({ src: img.src, format: 'webp', width: 400 });
+    const thumbLarge = await getImage({ src: img.src, format: 'webp', width: 800 });
     return {
         src: full.src,
         thumbnail: thumb.src,
+        srcSet: `${thumbSmall.src} 400w, ${thumb.src} 600w, ${thumbLarge.src} 800w`,
         alt: img.alt,
         category: img.category,
         title: img.title,
@@ -249,7 +257,7 @@ const faqSchema = {
     <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Particle Canvas Layer */}
         <div class="absolute inset-0 z-10 pointer-events-none">
-            <ParticleHero client:idle />
+            <ParticleHero client:media="(min-width: 768px)" />
         </div>
 
         {/* High-End Hero Image */}
@@ -372,6 +380,8 @@ const faqSchema = {
                                     client:visible
                                     beforeImage={optimizedBefore.src}
                                     afterImage={optimizedAfter.src}
+                                    beforeSrcSet={beforeSrcSet}
+                                    afterSrcSet={afterSrcSet}
                                     alt="Fahrzeugaufbereitung Vorher Nachher Vergleich"
                                 />
                             </div>

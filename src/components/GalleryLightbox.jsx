@@ -81,6 +81,8 @@ export default function GalleryLightbox({ images, limit = 10 }) {
             >
               <img
                 src={image.thumbnail || image.src}
+                srcSet={image.srcSet}
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
                 alt={image.alt}
                 className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                 loading="lazy"
