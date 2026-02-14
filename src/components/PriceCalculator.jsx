@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import config from '../lib/pricingConfig.json';
 import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator } from 'lucide-react';
@@ -18,9 +18,10 @@ const Spinner = () => (
     </svg>
 );
 
-const StepTitle = ({ children }) => (
-    <h3 className="text-2xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg">{children}</h3>
-);
+const StepTitle = forwardRef(({ children }, ref) => (
+    <h3 ref={ref} tabIndex={-1} className="text-2xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg focus:outline-none">{children}</h3>
+));
+StepTitle.displayName = 'StepTitle';
 
 const StepSubtitle = ({ children }) => (
     <p className="text-zinc-400 text-center mb-8 md:mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed px-4">{children}</p>
@@ -135,6 +136,7 @@ export default function PriceCalculator() {
     const [error, setError] = useState(null);
 
     const containerRef = useRef(null);
+    const stepTitleRef = useRef(null);
 
     // Initial URL Parameter Parsing
     useEffect(() => {
@@ -157,8 +159,19 @@ export default function PriceCalculator() {
     }, []);
 
     useEffect(() => {
-        if (containerRef.current && step !== STEPS.SIZE && isExpanded) {
-            containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (isExpanded) {
+            // Focus management
+            if (stepTitleRef.current) {
+                stepTitleRef.current.focus({ preventScroll: true });
+            }
+
+            // Scroll management
+            if (containerRef.current && step !== STEPS.SIZE) {
+                const shouldSmooth = typeof window.matchMedia === 'function'
+                    ? !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    : true;
+                containerRef.current.scrollIntoView({ behavior: shouldSmooth ? 'smooth' : 'auto', block: 'start' });
+            }
         }
     }, [step, isExpanded]);
 
@@ -259,7 +272,7 @@ export default function PriceCalculator() {
 
             return (
                  <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/30 transition-colors duration-500">
-                    <div className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">Wohnmobil Spezial</div>
+                    <h3 ref={stepTitleRef} tabIndex={-1} className="text-2xl md:text-3xl font-bold text-white mb-6 text-center focus:outline-none">Wohnmobil Spezial</h3>
 
                     <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
                         <div className="text-zinc-400 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
@@ -295,7 +308,7 @@ export default function PriceCalculator() {
                          <span className="inline-block py-1.5 px-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
                             Investition statt Strafe
                         </span>
-                        <div className="text-3xl md:text-4xl font-bold text-white mb-3">Leasing Rettung</div>
+                        <h3 ref={stepTitleRef} tabIndex={-1} className="text-3xl md:text-4xl font-bold text-white mb-3 focus:outline-none">Leasing Rettung</h3>
                         <p className="text-zinc-400">Vermeiden Sie teure Nachzahlungen.</p>
                     </div>
 
@@ -327,7 +340,7 @@ export default function PriceCalculator() {
 
                 <div className="relative z-10">
                     <div className="text-center mb-10">
-                        <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6">
+                        <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6 focus:outline-none">
                             Ihre Investition
                         </span>
                         <div className="flex items-baseline justify-center gap-3 leading-none mb-3">
@@ -428,7 +441,7 @@ export default function PriceCalculator() {
                 <div className="min-h-[400px] transition-all duration-500 ease-in-out">
                     {step === STEPS.SIZE && (
                         <div className="animate-fade-in">
-                            <StepTitle>Fahrzeug wählen</StepTitle>
+                            <StepTitle ref={stepTitleRef}>Fahrzeug wählen</StepTitle>
                             <StepSubtitle>Starten wir mit der Größe Ihres Fahrzeugs.</StepSubtitle>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                                 {Object.entries(config.sizes).map(([key, size]) => (
@@ -448,7 +461,7 @@ export default function PriceCalculator() {
                     {step === STEPS.CAMPER_LENGTH && (
                          <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
-                            <StepTitle>Fahrzeuglänge</StepTitle>
+                            <StepTitle ref={stepTitleRef}>Fahrzeuglänge</StepTitle>
                             <StepSubtitle>Bitte geben Sie die Länge in Metern an (inkl. Deichsel/Aufbau).</StepSubtitle>
 
                             <div className="max-w-xl mx-auto bg-black/40 p-6 md:p-10 rounded-3xl border border-white/10 shadow-xl backdrop-blur-md">
@@ -492,7 +505,7 @@ export default function PriceCalculator() {
                     {step === STEPS.CONDITION && (
                         <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
-                            <StepTitle>Lackzustand</StepTitle>
+                            <StepTitle ref={stepTitleRef}>Lackzustand</StepTitle>
                             <StepSubtitle>Wie würden Sie den aktuellen Zustand beschreiben?</StepSubtitle>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                                  {Object.entries(config.conditions).map(([key, cond]) => (
@@ -514,7 +527,7 @@ export default function PriceCalculator() {
                     {step === STEPS.PACKAGE && (
                         <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.CONDITION)} /></div>
-                            <StepTitle>Paketwahl</StepTitle>
+                            <StepTitle ref={stepTitleRef}>Paketwahl</StepTitle>
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
 
                             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
