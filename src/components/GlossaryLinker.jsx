@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 // Common terms to link. In a real app, pass this from props or a store to avoid duplication.
+// Optimization: Moved outside component to avoid re-creation on every render.
 const TERMS = {
     'Keramikversiegelung': '/glossar/keramikversiegelung',
     'Trockendampf': '/glossar/trockendampf',
@@ -11,28 +12,35 @@ const TERMS = {
     'Flugrost': '/glossar/flugrost'
 };
 
-export default function GlossaryLinker({ text }) {
+// Optimization: Pre-compute regex and lookup map to avoid re-creation on every render.
+const REGEX = new RegExp(`(${Object.keys(TERMS).join('|')})`, 'gi');
+
+const TERM_LOOKUP = Object.keys(TERMS).reduce((acc, key) => {
+    acc[key.toLowerCase()] = {
+        url: TERMS[key],
+        term: key // Store original case for title
+    };
+    return acc;
+}, {});
+
+function GlossaryLinker({ text }) {
     if (!text) return null;
 
-    // Create a regex to find all terms, case-insensitive
-    const regex = new RegExp(`(${Object.keys(TERMS).join('|')})`, 'gi');
-
-    const parts = text.split(regex);
+    const parts = text.split(REGEX);
 
     return (
         <>
             {parts.map((part, i) => {
-                // Check if this part matches a term (case-insensitive check)
-                const lowerPart = part.toLowerCase();
-                const matchedTerm = Object.keys(TERMS).find(t => t.toLowerCase() === lowerPart);
+                // Optimization: O(1) lookup instead of O(N) find
+                const match = TERM_LOOKUP[part.toLowerCase()];
 
-                if (matchedTerm) {
+                if (match) {
                     return (
                         <a
                             key={i}
-                            href={TERMS[matchedTerm]}
+                            href={match.url}
                             className="text-white border-b border-red-500/50 hover:text-red-500 hover:border-red-500 transition-colors cursor-help decoration-dotted pointer-events-auto relative z-20"
-                            title={`Definition: ${matchedTerm}`}
+                            title={`Definition: ${match.term}`}
                         >
                             {part}
                         </a>
@@ -43,3 +51,6 @@ export default function GlossaryLinker({ text }) {
         </>
     );
 }
+
+// Optimization: Prevent re-rendering in lists (like ServiceGrid) when unrelated state changes.
+export default memo(GlossaryLinker);
