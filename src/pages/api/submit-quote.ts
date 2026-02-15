@@ -26,6 +26,13 @@ export const escapeHtml = (unsafe: string): string => {
         .replace(/'/g, "&#039;");
 }
 
+const maskEmail = (email: string): string => {
+    const parts = email.split('@');
+    if (parts.length !== 2) return '***';
+    const [name, domain] = parts;
+    return `${name.substring(0, 3)}***@${domain}`;
+};
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
         const rawIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
@@ -165,7 +172,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 const apiResult = await response.json();
 
                 if (apiResult.success) {
-                    console.log(`>>> Email sent successfully to owner via Web3Forms (Ref: ${data.email})`);
+                    console.log(`>>> Email sent successfully to owner via Web3Forms (Ref: ${maskEmail(data.email)})`);
                 } else {
                     console.error(">>> Web3Forms API Error:", apiResult);
                     // SECURITY: Do not leak internal API details to client
@@ -185,7 +192,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
             console.log(">>> [MOCK EMAIL] WEB3FORMS_ACCESS_KEY missing. Printing to console:");
             console.log(`To: owner@rg-detailing.de | Subject: ${subject}`);
-            console.log(`Data: ${JSON.stringify(data)}`);
+            console.log(`Data: ${JSON.stringify({ ...data, email: maskEmail(data.email) })}`);
         }
 
         return new Response(JSON.stringify({
