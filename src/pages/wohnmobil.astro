@@ -13,8 +13,10 @@ import FAQ from '../components/FAQ.jsx';
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
+const [optimizedBefore, optimizedAfter] = await Promise.all([
+  getImage({src: wohnmobilBefore, format: 'avif'}),
+  getImage({src: wohnmobilAfter, format: 'avif'})
+]);
 
 const schema = {
   "@context": "https://schema.org",

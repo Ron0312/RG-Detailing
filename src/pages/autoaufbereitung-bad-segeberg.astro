@@ -27,8 +27,10 @@ import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
+const [optimizedBefore, optimizedAfter] = await Promise.all([
+  getImage({src: wohnmobilBefore, format: 'avif', width: 1024}),
+  getImage({src: wohnmobilAfter, format: 'avif', width: 1024})
+]);
 
 const galleryRawImages = [
   { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis für Kunden aus Bad Segeberg", category: "Lack" },
@@ -64,8 +66,10 @@ const galleryRawImages = [
 ];
 
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
-    const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
-    const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+    const [full, thumb] = await Promise.all([
+        getImage({ src: img.src, format: 'webp', width: 1280 }),
+        getImage({ src: img.src, format: 'webp', width: 600 })
+    ]);
     return {
         src: full.src,
         thumbnail: thumb.src,

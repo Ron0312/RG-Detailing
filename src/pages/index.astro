@@ -41,10 +41,12 @@ import glossbossLogo from '../assets/glossboss-autopflege-zubehoer-logo.webp';
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
-const beforeMobile = await getImage({src: wohnmobilBefore, format: 'avif', width: 600});
-const afterMobile = await getImage({src: wohnmobilAfter, format: 'avif', width: 600});
+const [optimizedBefore, optimizedAfter, beforeMobile, afterMobile] = await Promise.all([
+  getImage({src: wohnmobilBefore, format: 'avif', width: 1024}),
+  getImage({src: wohnmobilAfter, format: 'avif', width: 1024}),
+  getImage({src: wohnmobilBefore, format: 'avif', width: 600}),
+  getImage({src: wohnmobilAfter, format: 'avif', width: 600})
+]);
 
 const beforeSrcSet = `${beforeMobile.src} 600w, ${optimizedBefore.src} 1024w`;
 const afterSrcSet = `${afterMobile.src} 600w, ${optimizedAfter.src} 1024w`;
@@ -154,10 +156,12 @@ const galleryRawImages = [
 ];
 
 const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
-    const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
-    const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
-    const thumbSmall = await getImage({ src: img.src, format: 'webp', width: 400 });
-    const thumbLarge = await getImage({ src: img.src, format: 'webp', width: 800 });
+    const [full, thumb, thumbSmall, thumbLarge] = await Promise.all([
+        getImage({ src: img.src, format: 'webp', width: 1280 }),
+        getImage({ src: img.src, format: 'webp', width: 600 }),
+        getImage({ src: img.src, format: 'webp', width: 400 }),
+        getImage({ src: img.src, format: 'webp', width: 800 })
+    ]);
     return {
         src: full.src,
         thumbnail: thumb.src,
