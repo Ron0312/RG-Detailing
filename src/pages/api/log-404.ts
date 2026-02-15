@@ -10,11 +10,34 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }
 
-    const data = await request.json();
+    // Security: Check Content-Type to prevent CSRF via Simple Requests
+    const contentType = request.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+        return new Response(JSON.stringify({ error: "Unsupported Media Type" }), { status: 415 });
+    }
+
+    // Security: Check Content-Length to prevent large payloads (DoS protection)
+    const contentLength = request.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > 5120) { // 5KB limit
+        return new Response(JSON.stringify({ error: "Payload too large" }), { status: 413 });
+    }
+
+    let data;
+    try {
+        data = await request.json();
+    } catch (e) {
+        return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
+    }
 
     const sanitize = (str: any) => {
         if (typeof str !== 'string') return '';
-        return str.replace(/[\r\n]+/g, ' ').substring(0, 500);
+        return str
+            .replace(/[\r\n]+/g, ' ') // Replace newlines with space
+            // eslint-disable-next-line no-control-regex
+            .replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '') // Remove ANSI sequences
+            // eslint-disable-next-line no-control-regex
+            .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
+            .substring(0, 500);
     };
 
     const url = sanitize(data.url);
