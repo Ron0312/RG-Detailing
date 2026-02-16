@@ -12,3 +12,8 @@
 **Vulnerability:** Unbounded string length in rate limit keys (from `X-Forwarded-For`) could allow memory exhaustion via large payloads.
 **Learning:** Untrusted input used as map keys must be validated for length and format to prevent resource exhaustion attacks.
 **Prevention:** Validate and sanitize identifiers (like IPs) before using them as keys in internal data structures.
+
+## 2026-02-16 - PII Leakage in 404 Logs
+**Vulnerability:** The 404 logging endpoint logged the full URL including query parameters, which could expose sensitive tokens or PII (e.g. `?token=...`, `?email=...`).
+**Learning:** Logging `window.location.href` or request URLs directly is a common PII leak source, as developers often forget that sensitive data can be passed in query params.
+**Prevention:** Always parse and sanitize URLs before logging. Strip query parameters or redact sensitive keys, especially in error or access logs.
