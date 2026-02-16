@@ -18,8 +18,8 @@ const Spinner = () => (
     </svg>
 );
 
-const StepTitle = forwardRef(({ children }, ref) => (
-    <h3 ref={ref} tabIndex={-1} className="text-2xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg focus:outline-none">{children}</h3>
+const StepTitle = forwardRef(({ children, ...props }, ref) => (
+    <h3 ref={ref} tabIndex={-1} className="text-2xl md:text-4xl font-bold text-white mb-3 text-center tracking-tight drop-shadow-lg focus:outline-none" {...props}>{children}</h3>
 ));
 StepTitle.displayName = 'StepTitle';
 
@@ -30,8 +30,9 @@ const StepSubtitle = ({ children }) => (
 const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
     <button
         type="button"
+        role="radio"
+        aria-checked={active}
         onClick={onClick}
-        aria-pressed={active}
         className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900
             ${active
                 ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
@@ -441,9 +442,9 @@ export default function PriceCalculator() {
                 <div className="min-h-[400px] transition-all duration-500 ease-in-out">
                     {step === STEPS.SIZE && (
                         <div className="animate-fade-in">
-                            <StepTitle ref={stepTitleRef}>Fahrzeug wählen</StepTitle>
+                            <StepTitle id="step-size-title" ref={stepTitleRef}>Fahrzeug wählen</StepTitle>
                             <StepSubtitle>Starten wir mit der Größe Ihres Fahrzeugs.</StepSubtitle>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                            <div role="radiogroup" aria-labelledby="step-size-title" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                                 {Object.entries(config.sizes).map(([key, size]) => (
                                     <Card
                                         key={key}
@@ -461,7 +462,7 @@ export default function PriceCalculator() {
                     {step === STEPS.CAMPER_LENGTH && (
                          <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
-                            <StepTitle ref={stepTitleRef}>Fahrzeuglänge</StepTitle>
+                            <StepTitle id="step-camper-title" ref={stepTitleRef}>Fahrzeuglänge</StepTitle>
                             <StepSubtitle>Bitte geben Sie die Länge in Metern an (inkl. Deichsel/Aufbau).</StepSubtitle>
 
                             <div className="max-w-xl mx-auto bg-black/40 p-6 md:p-10 rounded-3xl border border-white/10 shadow-xl backdrop-blur-md">
@@ -505,9 +506,9 @@ export default function PriceCalculator() {
                     {step === STEPS.CONDITION && (
                         <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.SIZE)} /></div>
-                            <StepTitle ref={stepTitleRef}>Lackzustand</StepTitle>
+                            <StepTitle id="step-condition-title" ref={stepTitleRef}>Lackzustand</StepTitle>
                             <StepSubtitle>Wie würden Sie den aktuellen Zustand beschreiben?</StepSubtitle>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                            <div role="radiogroup" aria-labelledby="step-condition-title" className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                                  {Object.entries(config.conditions).map(([key, cond]) => (
                                     <Card
                                         key={key}
@@ -527,7 +528,7 @@ export default function PriceCalculator() {
                     {step === STEPS.PACKAGE && (
                         <div className="animate-fade-in">
                             <div className="mb-6"><BackButton onClick={() => setStep(STEPS.CONDITION)} /></div>
-                            <StepTitle ref={stepTitleRef}>Paketwahl</StepTitle>
+                            <StepTitle id="step-package-title" ref={stepTitleRef}>Paketwahl</StepTitle>
                             <StepSubtitle>Wählen Sie Ihre gewünschte Leistungsklasse.</StepSubtitle>
 
                             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl mb-6 flex items-start gap-4 max-w-2xl mx-auto">
@@ -540,7 +541,7 @@ export default function PriceCalculator() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div role="radiogroup" aria-labelledby="step-package-title" className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                 {Object.entries(config.packages).map(([key, pkg]) => (
                                     <Card
                                         key={key}
@@ -579,15 +580,20 @@ export default function PriceCalculator() {
                                 />
                                  <h4 className="text-white font-bold mb-6 text-center text-xl">Angebot sichern</h4>
                                 {error && (
-                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-sm text-center">
+                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-sm text-center" role="alert">
                                         {error}
                                     </div>
                                 )}
                                 <div className="flex gap-3 flex-col">
+                                    <label htmlFor="email-input" className="text-sm font-bold text-zinc-300 ml-1">
+                                        Ihre E-Mail Adresse <span className="text-red-500">*</span>
+                                    </label>
                                     <input
+                                        id="email-input"
                                         type="email"
                                         required
-                                        placeholder="Ihre E-Mail Adresse"
+                                        autoComplete="email"
+                                        placeholder="beispiel@domain.de"
                                         className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}

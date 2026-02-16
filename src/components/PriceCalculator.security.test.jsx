@@ -50,7 +50,7 @@ describe('PriceCalculator Security', () => {
         await user.click(packageButton);
 
         // 4. Fill out form
-        const emailInput = screen.getByPlaceholderText('Ihre E-Mail Adresse');
+        const emailInput = screen.getByLabelText(/Ihre E-Mail Adresse/i);
         await user.type(emailInput, 'test@example.com');
 
         // 5. Submit

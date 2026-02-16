@@ -30,8 +30,9 @@ describe('PriceCalculator Accessibility', () => {
 
         // These assertions will fail initially
         expect(cardButton.getAttribute('type')).toBe('button');
+        expect(cardButton.getAttribute('role')).toBe('radio');
         expect(cardButton.className).toContain('focus-visible:ring-2');
-        expect(cardButton.getAttribute('aria-pressed')).toBe('false');
+        expect(cardButton.getAttribute('aria-checked')).toBe('false');
 
         // Click to select "Kleinwagen"
         await user.click(cardButton);
@@ -48,7 +49,7 @@ describe('PriceCalculator Accessibility', () => {
         // Back at Size step
         cardButton = screen.getByText('Kleinwagen').closest('button');
         // Now it should be selected
-        expect(cardButton.getAttribute('aria-pressed')).toBe('true');
+        expect(cardButton.getAttribute('aria-checked')).toBe('true');
     });
 
     it('renders camper length range with aria-label', async () => {
