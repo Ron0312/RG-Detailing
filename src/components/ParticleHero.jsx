@@ -17,7 +17,10 @@ class Particle {
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
-        this.opacity = Math.random() * 0.5 + 0.1;
+
+        // Quantize opacity to 0.1 steps to allow batching
+        // Range: 0.1 to 0.6
+        this.opacity = Math.round((Math.random() * 0.5 + 0.1) * 10) / 10;
     }
 
     update(width, height) {
@@ -31,12 +34,10 @@ class Particle {
         if (this.y < 0) this.y = height;
     }
 
-    draw(ctx) {
-        // Optimization: Use globalAlpha instead of parsing rgba string
-        ctx.globalAlpha = this.opacity;
-        ctx.beginPath();
+    // Trace path instead of drawing immediately
+    trace(ctx) {
+        ctx.moveTo(this.x + this.size, this.y);
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
     }
 }
 
@@ -47,9 +48,10 @@ export default function ParticleHero() {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d', { alpha: true }); // optimize for transparency? No, 'alpha: true' is default.
+        const ctx = canvas.getContext('2d', { alpha: true });
         let animationFrameId;
         let particles = [];
+        let buckets = {}; // { opacity: [particles] }
         let isAnimating = false;
 
         // Cache dimensions to avoid DOM layout thrashing in loop
@@ -72,9 +74,17 @@ export default function ParticleHero() {
 
         const init = () => {
             particles = [];
-            const numberOfParticles = Math.min(canvasWidth * 0.05, 100); // Responsive count using cached width
+            buckets = {};
+            const numberOfParticles = Math.min(canvasWidth * 0.05, 100);
+
             for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Particle(canvasWidth, canvasHeight));
+                const p = new Particle(canvasWidth, canvasHeight);
+                particles.push(p);
+
+                // Group by opacity for batch drawing
+                const key = p.opacity;
+                if (!buckets[key]) buckets[key] = [];
+                buckets[key].push(p);
             }
         };
 
@@ -83,15 +93,25 @@ export default function ParticleHero() {
 
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-            // Optimization: Set fillStyle once per frame (since all particles are white)
+            // Optimization: Set fillStyle once per frame
             ctx.fillStyle = 'white';
 
-            particles.forEach(particle => {
-                particle.update(canvasWidth, canvasHeight);
-                particle.draw(ctx);
-            });
+            // Update all particles
+            particles.forEach(p => p.update(canvasWidth, canvasHeight));
 
-            // Reset globalAlpha for other potential drawing operations (good practice)
+            // Batch draw by opacity bucket
+            // This reduces draw calls from N (e.g. 50-100) to K (number of opacity steps, e.g. 5-6)
+            for (const opacity in buckets) {
+                const bucketParticles = buckets[opacity];
+                if (bucketParticles.length === 0) continue;
+
+                ctx.globalAlpha = parseFloat(opacity);
+                ctx.beginPath();
+                bucketParticles.forEach(p => p.trace(ctx));
+                ctx.fill();
+            }
+
+            // Reset globalAlpha
             ctx.globalAlpha = 1.0;
 
             animationFrameId = requestAnimationFrame(animate);
@@ -99,7 +119,6 @@ export default function ParticleHero() {
 
         init();
 
-        // Intersection Observer to pause animation when off-screen
         const observer = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting) {
                 if (!isAnimating) {
