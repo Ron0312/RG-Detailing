@@ -1,3 +1,3 @@
-## 2024-05-23 - Canvas Batch Rendering
-**Learning:** HTML5 Canvas performance is heavily impacted by the number of draw calls (e.g., `ctx.fill()`, `ctx.stroke()`) and state changes (e.g., `ctx.fillStyle`, `ctx.globalAlpha`).
-**Action:** Always look for opportunities to batch similar shapes. When drawing multiple disconnected shapes (like particles) in a single path, use `ctx.moveTo()` to lift the pen between shapes to avoid connecting lines. Grouping by state (like opacity) allows setting context properties once per group.
+## 2025-05-23 - Canvas Animation Optimization
+**Learning:** Object key iteration (`for...in`) in 60fps canvas animation loops creates unnecessary overhead compared to iterating pre-allocated arrays. Grouping entities by property (like opacity) using an array of layers is significantly more efficient than dynamic object buckets.
+**Action:** Use fixed-size arrays for grouping entities in high-frequency loops instead of dynamic objects.
