@@ -46,24 +46,24 @@ const schema = {
                 sizes="100vw"
              />
              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-             <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
+            <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
         </div>
 
         <div class="container mx-auto px-4 z-20 text-center pt-20">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
-                <ThermometerSun size={16} class="text-blue-400" />
-                <span class="text-xs md:text-sm font-bold text-blue-400 uppercase tracking-widest">Der Dampfdrache</span>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
+                <ThermometerSun size={16} className="text-red-500" />
+                <span class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-widest">Der Dampfdrache</span>
             </div>
 
             <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tighter animate-fade-in-up delay-100">
                 Reine Physik. <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">0% Chemie. 100% Hygiene.</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">0% Chemie. 100% Hygiene.</span>
             </h1>
             <p class="text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
                 Tiefenreinigung mit 170°C Trockendampf. Ideal für Familien, Tierbesitzer und Allergiker.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300">
-                <a href="#rechner" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-900/40 flex items-center justify-center gap-2">
+                <a href="#rechner" class="px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-red-900/40 flex items-center justify-center gap-2">
                     Preis berechnen <ArrowRight size={20} />
                 </a>
                 <a href="#vertrieb" class="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl font-bold transition-all backdrop-blur-sm">
@@ -81,7 +81,7 @@ const schema = {
                 <div class="flex flex-col lg:flex-row items-center gap-16">
                     <div class="lg:w-1/2">
                         <ScrollReveal client:visible>
-                            <span class="text-blue-500 font-bold uppercase tracking-widest text-sm mb-4 block">Technologie</span>
+                            <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Technologie</span>
                             <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Was ist Trockendampf?</h2>
                             <p class="text-zinc-400 text-lg leading-relaxed mb-6">
                                 <strong>Trockendampf</strong> (Micro-Trockendampf) ist Wasserdampf, der auf über 170°C erhitzt wird und nur noch einen Wasseranteil von etwa 5% besitzt. Anders als "nasser" Dampf ist er nicht feucht, sondern gasförmig und heiß.
@@ -94,10 +94,10 @@ const schema = {
                                 <h4 class="text-white font-bold mb-4 flex items-center gap-2"><Flame className="text-red-500"/> 170°C Hitze überlebt nichts</h4>
                                 <ul class="space-y-3">
                                     <li class="flex items-center gap-3 text-zinc-400 text-sm">
-                                        <Check size={16} className="text-blue-500 shrink-0"/> <span><strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</span>
+                                        <Check size={16} className="text-red-500 shrink-0"/> <span><strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</span>
                                     </li>
                                     <li class="flex items-center gap-3 text-zinc-400 text-sm">
-                                        <Check size={16} className="text-blue-500 shrink-0"/> <span><strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</span>
+                                        <Check size={16} className="text-red-500 shrink-0"/> <span><strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</span>
                                     </li>
                                 </ul>
                             </div>
@@ -142,22 +142,22 @@ const schema = {
 
                 <div class="grid md:grid-cols-3 gap-8">
                     <ScrollReveal client:visible delay={100}>
-                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group">
-                            <Wind className="w-12 h-12 text-blue-500 mb-6 group-hover:scale-110 transition-transform" />
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <Wind className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
                             <h3 class="text-xl font-bold text-white mb-3">Geruchsneutralisierung</h3>
                             <p class="text-zinc-400 text-sm leading-relaxed">Rauch, Tiergeruch oder Lebensmittel – wir entfernen die Ursache porentief, statt sie nur mit Duftstoffen zu überdecken.</p>
                         </div>
                     </ScrollReveal>
                     <ScrollReveal client:visible delay={200}>
-                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group">
-                            <Droplets className="w-12 h-12 text-blue-500 mb-6 group-hover:scale-110 transition-transform" />
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <Droplets className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
                             <h3 class="text-xl font-bold text-white mb-3">Keine Nässe</h3>
                             <p class="text-zinc-400 text-sm leading-relaxed">Dank Trockendampf gelangt keine Feuchtigkeit in die Elektronik oder tief in den Schaumstoff. Kein Schimmelrisiko.</p>
                         </div>
                     </ScrollReveal>
                     <ScrollReveal client:visible delay={300}>
-                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group">
-                            <ShieldCheck className="w-12 h-12 text-blue-500 mb-6 group-hover:scale-110 transition-transform" />
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <ShieldCheck className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
                             <h3 class="text-xl font-bold text-white mb-3">Allergikerfreundlich</h3>
                             <p class="text-zinc-400 text-sm leading-relaxed">Ohne aggressive Chemie. Sie steigen in ein gesundes, reines Fahrzeugklima ein. Ideal für Kinder und Tiere.</p>
                         </div>
@@ -217,15 +217,15 @@ const schema = {
          {/* CTA */}
          <section id="rechner" class="section-spacing">
              <div class="container mx-auto px-4">
-                 <div class="glass-panel p-12 md:p-16 rounded-[3rem] border border-blue-900/30 text-center relative overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
-                    <div class="absolute inset-0 bg-blue-900/10 blur-[100px] pointer-events-none"></div>
+                 <div class="glass-panel p-12 md:p-16 rounded-[3rem] border border-red-900/30 text-center relative overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
+                    <div class="absolute inset-0 bg-red-900/10 blur-[100px] pointer-events-none"></div>
 
                     <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 relative z-10">Gönnen Sie sich ein gesundes Auto</h2>
                     <p class="text-zinc-400 max-w-2xl mx-auto mb-10 text-lg relative z-10">
                         Perfekt integrierbar in unser "All in One" oder "Full Detailing" Paket.
                     </p>
                     <div class="relative z-10 flex flex-col md:flex-row justify-center gap-4">
-                        <a href="/#rechner" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-blue-900/30 hover:scale-105">
+                        <a href="/#rechner" class="bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-red-900/30 hover:scale-105">
                             Preis jetzt berechnen
                         </a>
                         <a href="tel:+491633845081" class="px-8 py-4 rounded-xl border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
