@@ -1,39 +1,33 @@
+
 # AGENTS.md
 
-## Strategic Directives (User Mandate)
+This file provides context and instructions for AI agents working on the **RG Detailing** project.
 
-> **Important:** The following instructions are high-priority directives from the user regarding the project's strategic goals. All code changes and content updates must align with these goals.
+## 🎨 Design & Corporate Identity (CI)
 
-### 1. Primäres Ziel: Lead-Generierung & Auftragsbücher füllen
-Der Nutzen der Website ist die Lead-Generierung bzw. volle Auftragsbücher für den Inhaber der Firma. Die Website soll massiv Kunden werben und anziehen, letztlich überzeugen dort ein Fahrzeug aufzubereiten.
+**CRITICAL: The corporate identity color is RED.**
 
-### 2. Zeitrahmen & Erfolg
-Sorge dafür, dass dies in kürzester Zeit geschieht und langfristig Erfolg garantiert wird.
+*   **Primary Accent:** `red-500` to `red-700` (Tailwind CSS).
+*   **Backgrounds:** `zinc-900` to `black`. Glassmorphism effects often use `bg-zinc-900/50` or `bg-black/50` with `backdrop-blur`.
+*   **Forbidden Colors:** Do **NOT** use arbitrary page-specific accent colors like Blue, Cyan, Purple, Orange, etc. for main UI elements (buttons, icons, headings).
+*   **Exceptions:**
+    *   **Green:** Allowed for "Success" states, Checkmarks, Cost Savings (`text-green-500`), and WhatsApp buttons (`bg-green-600`).
+    *   **Brand Colors:** Allowed for specific external brand logos (e.g., Pink for Instagram, specific Red for YouTube).
 
-### 3. Strategie & Methoden
-Erstelle dafür Ideen und nutze bereits bewährte Strategien.
+**Design Consistency:**
+*   **Subpages:** Must follow the homepage aesthetic: Full-screen Hero images with gradient overlays, `glass-panel` cards, `ScrollReveal` animations, and no breadcrumbs.
+*   **Icons:** Use `lucide-react`. Ensure `className` (not `class`) is used in `.astro` files when rendering React components.
 
-### 4. UX, UI & Psychologie
-Achte stets auf:
-*   **UX (User Experience):** Reibungslose Abläufe.
-*   **UI (User Interface):** Ansprechendes, vertrauenswürdiges Design.
-*   **Psychologische Faktoren:** Nutzung von Verkaufspsychologie (Scarcity, Authority, Social Proof, Loss Aversion).
+## 🛠️ Tech Stack & Environment
 
-### 5. Zielgruppe
-Das Design muss die Zielgruppe anziehen.
-*   **Aufgabe:** Finde raus wer die vollständige Zielgruppe ist oder ggf. erweitert werden kann. (Siehe `GROWTH_STRATEGY.md` für Details).
+*   **Framework:** Astro
+*   **UI Library:** React (for interactive components like Swipers, Calculators)
+*   **Styling:** Tailwind CSS
+*   **Testing:** Vitest (Unit), Playwright (E2E/Verification)
 
-### 6. Autonomie
-Suche eigenständig nach nötigen Infos und Quellen, oder frage bei Bedarf.
+## ⚠️ Important Instructions
 
----
-
-## Technical Context & Architecture (Existing)
-
-For technical details, coding conventions, and architectural rules, please refer to:
-*   `IMPROVEMENTS_V2.md`
-*   `SEO_GEO_OPTIMIZATIONS.md`
-*   `README.md` (if applicable)
-
-## Implementation Roadmap
-See `GROWTH_STRATEGY.md` for the concrete execution plan derived from these directives.
+1.  **React in Astro:** When using React components in `.astro` files, remember to pass `client:visible` (or `client:load`, etc.) if interaction is needed.
+2.  **Linting:** Use `npx astro check` to verify types and syntax. `pnpm lint` is not available.
+3.  **Verification:** Always verify frontend changes visually using a temporary Playwright script before submitting.
+4.  **Security:** Validate API inputs (Zod) and prevent PII leakage in logs.
