@@ -17,10 +17,7 @@ class Particle {
         this.size = Math.random() * 2 + 0.5;
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
-
-        // Quantize opacity to 0.1 steps to allow batching
-        // Range: 0.1 to 0.6
-        this.opacity = Math.round((Math.random() * 0.5 + 0.1) * 10) / 10;
+        // Opacity is now managed by the layer container
     }
 
     update(width, height) {
@@ -41,6 +38,10 @@ class Particle {
     }
 }
 
+// Pre-define opacities to avoid calculation
+// Levels: 0.1, 0.2, 0.3, 0.4, 0.5, 0.6
+const LAYERS_COUNT = 6;
+
 export default function ParticleHero() {
     const canvasRef = useRef(null);
 
@@ -50,8 +51,8 @@ export default function ParticleHero() {
 
         const ctx = canvas.getContext('2d', { alpha: true });
         let animationFrameId;
-        let particles = [];
-        let buckets = {}; // { opacity: [particles] }
+        // Layers: array of { opacity: number, particles: Particle[] }
+        let layers = [];
         let isAnimating = false;
 
         // Cache dimensions to avoid DOM layout thrashing in loop
@@ -73,18 +74,19 @@ export default function ParticleHero() {
         window.addEventListener('resize', debouncedResize);
 
         const init = () => {
-            particles = [];
-            buckets = {};
+            // Initialize layers
+            layers = Array.from({ length: LAYERS_COUNT }, (_, i) => ({
+                opacity: (i + 1) / 10,
+                particles: []
+            }));
+
             const numberOfParticles = Math.min(canvasWidth * 0.05, 100);
 
             for (let i = 0; i < numberOfParticles; i++) {
                 const p = new Particle(canvasWidth, canvasHeight);
-                particles.push(p);
-
-                // Group by opacity for batch drawing
-                const key = p.opacity;
-                if (!buckets[key]) buckets[key] = [];
-                buckets[key].push(p);
+                // Randomly assign to a layer (uniform distribution 0-5)
+                const layerIndex = Math.floor(Math.random() * LAYERS_COUNT);
+                layers[layerIndex].particles.push(p);
             }
         };
 
@@ -96,18 +98,23 @@ export default function ParticleHero() {
             // Optimization: Set fillStyle once per frame
             ctx.fillStyle = 'white';
 
-            // Update all particles
-            particles.forEach(p => p.update(canvasWidth, canvasHeight));
+            // Iterate layers to update and draw
+            // Using for loop for better performance than forEach
+            for (let i = 0; i < layers.length; i++) {
+                const layer = layers[i];
+                if (layer.particles.length === 0) continue;
 
-            // Batch draw by opacity bucket
-            // This reduces draw calls from N (e.g. 50-100) to K (number of opacity steps, e.g. 5-6)
-            for (const opacity in buckets) {
-                const bucketParticles = buckets[opacity];
-                if (bucketParticles.length === 0) continue;
-
-                ctx.globalAlpha = parseFloat(opacity);
+                // Set opacity for this batch
+                ctx.globalAlpha = layer.opacity;
                 ctx.beginPath();
-                bucketParticles.forEach(p => p.trace(ctx));
+
+                // Update and trace all particles in this layer
+                for (let j = 0; j < layer.particles.length; j++) {
+                    const p = layer.particles[j];
+                    p.update(canvasWidth, canvasHeight);
+                    p.trace(ctx);
+                }
+
                 ctx.fill();
             }
 
