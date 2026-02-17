@@ -34,6 +34,7 @@ import imgLack11 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-poli
 import imgKeramikBremssattel12 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramik-bremssattel-12.jpg';
 import imgKeramikDetail13 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramik-detail-13.jpg';
 import imgInnenraumDetail14 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenraum-detail-14.jpg';
+import imgLackKratzer15 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-kratzer-entfernung-15.jpg';
 
 // Other Assets
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
@@ -53,6 +54,13 @@ const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
 const galleryRawImages = [
+  {
+    src: imgLackKratzer15,
+    alt: "Lackkratzer Entfernung und Defektkorrektur Tensfeld",
+    category: "Lack",
+    title: "Kratzerentfernung & Lackkorrektur",
+    description: "Entfernung tiefer Kratzer und Swirls für eine makellose Oberfläche."
+  },
   {
     src: imgKeramikDetail13,
     alt: "Keramikversiegelung Detailarbeit an Fahrzeug Kunststoffteilen Tensfeld",

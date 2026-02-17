@@ -1,0 +1,287 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PriceCalculator from '../components/PriceCalculator.jsx';
+import Reviews from '../components/Reviews.astro';
+import FAQ from '../components/FAQ.jsx';
+import ScrollReveal from '../components/ScrollReveal.jsx';
+import { Sparkles, Car, Banknote, RefreshCw, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/hero-workshop.jpg';
+import detailImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
+
+const benefits = [
+    {
+        icon: RefreshCw,
+        title: "Innen & Außen komplett",
+        description: "Das Rundum-Sorglos-Paket. Wir kümmern uns um jeden Zentimeter Ihres Fahrzeugs, von der Felge bis zur Lüftungsdüse."
+    },
+    {
+        icon: Banknote,
+        title: "Werterhalt & Verkauf",
+        description: "Ideal zur Leasingrückgabe oder Verkaufsvorbereitung. Ein gepflegtes Fahrzeug erzielt nachweislich höhere Verkaufspreise."
+    },
+    {
+        icon: Sparkles,
+        title: "Hochglanz-Politur",
+        description: "Wir entfernen Grauschleier und leichte Defekte. Ihr Lack strahlt wieder in neuem Glanz und Farbtiefe."
+    },
+    {
+        icon: Car,
+        title: "Frische-Gefühl",
+        description: "Hygienische Innenraumreinigung mit Dampf und porentiefe Sauberkeit sorgen für ein Neuwagen-Feeling."
+    }
+];
+
+const processSteps = [
+    {
+        step: "01",
+        title: "Check & Handwäsche",
+        description: "Fahrzeug-Check und gründliche, schonende Handwäsche inkl. Felgen, Falze und Türeinstiege."
+    },
+    {
+        step: "02",
+        title: "Innenraum Tiefenreinigung",
+        description: "Reinigung von Polstern, Teppichen, Armaturen und Scheiben. Einsatz von Trockendampf für Hygiene ohne aggressive Chemie."
+    },
+    {
+        step: "03",
+        title: "Lackpolitur (Hochglanz)",
+        description: "Einstufige Hochglanzpolitur zur Entfernung von leichten Kratzern, Grauschleier und zur Glanzsteigerung."
+    },
+    {
+        step: "04",
+        title: "Lackschutz & Finish",
+        description: "Auftrag einer hochwertigen Sprühversiegelung oder Wachs für Schutz und Abperleffekt für mehrere Monate."
+    },
+    {
+        step: "05",
+        title: "Qualitätskontrolle",
+        description: "Abschließende Prüfung aller Arbeiten unter Speziallicht und Übergabe an Sie."
+    }
+];
+
+const faqItems = [
+    {
+        question: "Ist dieses Paket für Leasingrückläufer geeignet?",
+        answer: "Absolut. Das All-in-One Paket ist ideal, um das Fahrzeug optisch in einen Bestzustand zu versetzen und Abzüge bei der Rückgabe zu minimieren."
+    },
+    {
+        question: "Werden alle Kratzer entfernt?",
+        answer: "Bei diesem Paket führen wir eine Hochglanzpolitur durch. Diese entfernt leichte Defekte, Swirls und Grauschleier. Für tiefe Kratzer empfehlen wir unser 'Full Detailing' Paket mit mehrstufiger Lackkorrektur."
+    },
+    {
+        question: "Wie lange dauert die Aufbereitung?",
+        answer: "In der Regel benötigen wir Ihr Fahrzeug für 1-2 Tage, je nach Verschmutzungsgrad und Fahrzeuggröße."
+    },
+    {
+        question: "Ist eine Keramikversiegelung enthalten?",
+        answer: "Nein, dieses Paket beinhaltet eine hochwertige Polymer- oder Wachsversiegelung mit einer Standzeit von einigen Monaten. Eine Keramikversiegelung kann gegen Aufpreis dazu gebucht werden."
+    },
+    {
+        question: "Was ist mit starken Flecken im Polster?",
+        answer: "Normale Verschmutzungen werden entfernt. Bei extremen Härtefällen (z.B. ausgelaufene Flüssigkeiten, Schimmel) berechnen wir ggf. einen Mehraufwand nach Absprache."
+    }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "All-in-One Fahrzeugaufbereitung",
+  "provider": {
+    "@type": "AutoDetailing",
+    "name": "RG Detailing",
+    "image": "https://rg-detailing.de/logo.png"
+  },
+  "description": "Komplette Fahrzeugaufbereitung Innen & Außen inkl. Hochglanzpolitur. Ideal für Werterhalt und Verkauf.",
+  "areaServed": "Schleswig-Holstein",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Detailing Packages",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "All-in-One Paket"
+        }
+      }
+    ]
+  }
+};
+---
+
+<Layout
+    title="All-in-One Fahrzeugaufbereitung | Werterhalt & Verkaufsvorbereitung"
+    description="Das ideale Paket für den Werterhalt oder Verkauf. Innenraum-Tiefenreinigung + Außenwäsche + Lackpolitur & Versiegelung. Jetzt Angebot anfordern!"
+    schema={schema}
+>
+    {/* HERO SECTION */}
+    <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-black">
+        <div class="absolute inset-0 z-0">
+             <Image
+                src={heroImage}
+                alt="Fahrzeugaufbereitung All-in-One"
+                class="w-full h-full object-cover opacity-50"
+                loading="eager"
+                fetchpriority="high"
+                format="avif"
+             />
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+             <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
+        </div>
+
+        <div class="container mx-auto px-4 z-20 text-center pt-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
+                <Sparkles size={16} class="text-red-500" />
+                <span class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-widest">Das beliebteste Komplettpaket</span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tighter animate-fade-in-up delay-100">
+                All-in-One <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">Werterhalt</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
+                Der perfekte Einstieg in die Welt des Detailings. Wir bringen Innenraum und Lack wieder auf Vordermann – ideal für den <strong class="text-white font-normal">Verkauf</strong>, die <strong class="text-white font-normal">Leasingrückgabe</strong> oder den <strong class="text-white font-normal">Frühjahrsputz</strong>.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300">
+                <a href="#rechner" class="px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-red-900/40 flex items-center justify-center gap-2">
+                    Preis berechnen <ArrowRight size={20} />
+                </a>
+                <a href="#vorteile" class="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl font-bold transition-all backdrop-blur-sm">
+                    Mehr erfahren
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full overflow-x-hidden">
+        {/* BENEFITS GRID */}
+        <section id="vorteile" class="section-spacing relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {benefits.map((benefit, index) => (
+                        <ScrollReveal client:visible delay={index * 100}>
+                            <div class="h-full p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-red-500/30 hover:bg-zinc-900 transition-all group">
+                                <div class="w-14 h-14 bg-zinc-950 rounded-2xl flex items-center justify-center mb-6 text-red-500 group-hover:scale-110 transition-transform shadow-inner border border-white/5">
+                                    <benefit.icon size={28} strokeWidth={1.5} />
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-4">{benefit.title}</h3>
+                                <p class="text-zinc-400 leading-relaxed text-sm">
+                                    {benefit.description}
+                                </p>
+                            </div>
+                        </ScrollReveal>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        {/* DETAILS SECTION */}
+        <section class="section-spacing border-y border-white/5 bg-zinc-900/20">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-1/2">
+                        <ScrollReveal client:visible>
+                            <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Detailing Einstieg</span>
+                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Mehr als nur <br/>"Sauber machen"</h2>
+                            <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                                Unser All-in-One Paket schließt die Lücke zwischen einer einfachen Waschanlagen-Wäsche und einem High-End Detailing. Wir kombinieren professionelle Handwäsche, hygienische Innenraumreinigung und maschinelle Politur zu einem Paket, das Preis und Leistung perfekt vereint.
+                            </p>
+                            <ul class="space-y-4 mb-10">
+                                <li class="flex items-center gap-3 text-zinc-300">
+                                    <CheckCircle2 class="text-red-500 w-5 h-5" />
+                                    <span>Entfernung von Grauschleier</span>
+                                </li>
+                                <li class="flex items-center gap-3 text-zinc-300">
+                                    <CheckCircle2 class="text-red-500 w-5 h-5" />
+                                    <span>Hygienisch reiner Innenraum</span>
+                                </li>
+                                <li class="flex items-center gap-3 text-zinc-300">
+                                    <CheckCircle2 class="text-red-500 w-5 h-5" />
+                                    <span>Lackschutz für mehrere Monate</span>
+                                </li>
+                            </ul>
+                            <a href="#rechner" class="inline-flex items-center gap-2 text-white font-bold border-b-2 border-red-500 pb-1 hover:text-red-400 transition-colors">
+                                Jetzt Angebot einholen <ArrowRight size={16} />
+                            </a>
+                        </ScrollReveal>
+                    </div>
+                    <div class="lg:w-1/2 relative">
+                        <div class="absolute inset-0 bg-red-500/20 blur-[100px] rounded-full"></div>
+                        <Image
+                            src={detailImage}
+                            alt="Fahrzeugaufbereitung Innenraum und Lack"
+                            class="relative z-10 rounded-3xl border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700"
+                            width={800}
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* PROCESS STEPS */}
+        <section class="section-spacing bg-zinc-950">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-20">
+                    <span class="text-red-500 font-bold uppercase tracking-widest text-sm">Transparenz</span>
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mt-4">Der Ablauf</h2>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute left-[19px] top-0 bottom-0 w-0.5 bg-zinc-800 md:left-1/2 md:-ml-px"></div>
+
+                    <div class="space-y-12">
+                        {processSteps.map((item, index) => (
+                            <ScrollReveal client:visible delay={index * 100}>
+                                <div class={`relative flex items-center md:justify-between ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                                    <div class="hidden md:block w-5/12"></div>
+
+                                    <div class="absolute left-0 md:left-1/2 w-10 h-10 -ml-5 rounded-full border-4 border-zinc-950 bg-red-600 text-white flex items-center justify-center font-bold text-sm shadow-lg z-10">
+                                        {index + 1}
+                                    </div>
+
+                                    <div class="pl-16 md:pl-0 md:w-5/12">
+                                        <div class="bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/20 transition-colors">
+                                            <h3 class="text-xl font-bold text-white mb-2">{item.title}</h3>
+                                            <p class="text-zinc-400 text-sm leading-relaxed">{item.description}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ScrollReveal>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* FAQ */}
+        <section class="section-spacing bg-zinc-900/30 border-y border-white/5">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <h2 class="text-3xl font-bold text-white text-center mb-12">Häufige Fragen zum All-in-One Paket</h2>
+                <FAQ client:visible items={faqItems} />
+            </div>
+        </section>
+
+        {/* SOCIAL PROOF */}
+        <Reviews limit={3} />
+
+        {/* CTA */}
+        <section id="rechner" class="section-spacing relative overflow-hidden">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto glass-panel p-8 md:p-12 rounded-3xl border border-red-500/20 bg-zinc-900/80 backdrop-blur-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-96 h-96 bg-red-600/10 blur-[150px] rounded-full pointer-events-none"></div>
+
+                    <div class="text-center mb-12 relative z-10">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">Jetzt Wert steigern</h2>
+                        <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
+                            Wählen Sie Ihr Fahrzeug und erhalten Sie sofort eine unverbindliche Preisschätzung für Ihre Aufbereitung.
+                        </p>
+                    </div>
+
+                    <PriceCalculator client:visible />
+                </div>
+            </div>
+        </section>
+    </main>
+</Layout>

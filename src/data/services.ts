@@ -12,7 +12,7 @@ export const services = [
         description: "Der perfekte Einstieg in die Welt des Detailings. Innenraum-Pflege, Hochglanzpolitur (Auto polieren) und Lackschutz sichern den Wert Ihres Fahrzeugs langfristig.",
         icon: "sparkles",
         shortDescription: "Werterhalt und Glanz in einem Paket. Ideal für gepflegte Daily Driver. Ab 500 €.",
-        link: "#rechner",
+        link: "/all-in-one",
         category: "Lack & Keramik"
     },
     {
@@ -49,9 +49,9 @@ export const services = [
     },
     {
         title: "Spezial-Leistungen",
-        description: "Schonende Motorwäsche mit Trockendampf und Cabrioverdeck-Imprägnierung. Schonend für Material und Umwelt.",
+        description: "Schonende Motorwäsche mit Trockendampf, Cabrioverdeck-Imprägnierung sowie Felgenversiegelung und Polieren auf Anfrage. Schonend für Material und Umwelt.",
         icon: "star",
-        shortDescription: "Motorwäsche (Trockendampf) und Cabrio-Verdeck Imprägnierung.",
+        shortDescription: "Motorwäsche, Cabrio-Verdeck, Felgenversiegelung und Polieren auf Anfrage.",
         link: "#kontakt",
         category: "Innen & Sonstiges"
     }
