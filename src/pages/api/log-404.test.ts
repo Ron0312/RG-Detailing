@@ -67,4 +67,26 @@ describe('POST /api/log-404 Security Tests', () => {
         expect(loggedContent).not.toContain('\x1b[31m');
         expect(loggedContent).toContain('/fooBAD'); // Should verify what remains
     });
+
+    it('should redact query parameters to prevent PII leakage', async () => {
+        const sensitiveUrl = 'https://rg-detailing.de/reset-password?token=VERY_SECRET_TOKEN&email=user@example.com';
+        const req = new Request('http://localhost/api/log-404', {
+            method: 'POST',
+            body: JSON.stringify({ url: sensitiveUrl, referrer: '', userAgent: 'test' }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        // Use a unique client address to avoid rate limiting issues
+        const response = await POST({ request: req, clientAddress: '127.0.0.100' } as any);
+        expect(response.status).toBe(200);
+
+        expect(appendFileMock).toHaveBeenCalled();
+        const loggedContent = appendFileMock.mock.lastCall?.[1] || '';
+
+        // Should NOT contain the token or email
+        expect(loggedContent).not.toContain('VERY_SECRET_TOKEN');
+        expect(loggedContent).not.toContain('user@example.com');
+        // Should contain the path
+        expect(loggedContent).toContain('/reset-password');
+    });
 });

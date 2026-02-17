@@ -40,9 +40,27 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             .substring(0, 500);
     };
 
-    const url = sanitize(data.url);
+    let url = sanitize(data.url);
     const referrer = sanitize(data.referrer);
     const userAgent = sanitize(data.userAgent);
+
+    // Security: Redact query parameters to prevent PII leakage (e.g. ?token=...)
+    try {
+        // Use a dummy base to allow parsing relative URLs (e.g. "/foo")
+        const urlObj = new URL(url, 'http://localhost');
+        urlObj.search = '';
+        urlObj.hash = '';
+        // If the original URL was absolute, return the full redacted URL.
+        // Otherwise, return just the pathname.
+        if (url.startsWith('http')) {
+            url = urlObj.toString();
+        } else {
+            url = urlObj.pathname;
+        }
+    } catch (e) {
+        // Fallback for malformed URLs
+        url = url.split('?')[0].split('#')[0];
+    }
 
     // Log to console (stdout) for container/serverless environments
     console.log(`[404 TRACKING] URL: ${url} | Referrer: ${referrer || 'Direct'} | UA: ${userAgent}`);
