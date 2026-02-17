@@ -1,10 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
+import ScrollReveal from '../components/ScrollReveal.jsx';
+import FAQ from '../components/FAQ.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
-import { CheckCircle2, AlertTriangle, Hammer, ArrowRight, Phone } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Hammer, ArrowRight, Phone, Wrench, Coins, Clock } from 'lucide-react';
 
 export const prerender = true;
 
@@ -16,6 +17,39 @@ const schema = {
   "priceRange": "$$",
   "dateModified": new Date().toISOString().split('T')[0]
 };
+
+const services = [
+    {
+        icon: Wrench,
+        title: "Kratzer entfernen",
+        description: "Tiefe Kratzer, die nicht mehr poliert werden können, werden per Spot-Repair beilackiert. Kostengünstig und effizient."
+    },
+    {
+        icon: Hammer,
+        title: "Dellen drücken",
+        description: "Parkdellen und Hagelschäden werden sanft herausmassiert (Beulendoktor), ohne den Lack zu beschädigen."
+    },
+    {
+        icon: CheckCircle2,
+        title: "Felgen Reparatur",
+        description: "Bordsteinschäden an Alufelgen werden geschliffen, gefüllert und lackiert oder professionell glanzgedreht."
+    }
+];
+
+const faqItems = [
+    {
+        question: "Machen Sie das selbst?",
+        answer: "Wir arbeiten mit spezialisierten Partnern zusammen, die echte Meister ihres Fachs sind. Sie geben Ihr Auto bei uns ab, wir kümmern uns um den Rest. Alles aus einer Hand."
+    },
+    {
+        question: "Wie lange dauert Smart Repair?",
+        answer: "In der Regel 1-2 Tage. Da keine großen Demontagearbeiten nötig sind, geht es deutlich schneller als bei einer klassischen Lackierung."
+    },
+    {
+        question: "Was kostet das?",
+        answer: "Smart Repair ist bis zu 60% günstiger als eine Lackierung. Schicken Sie uns ein Foto per WhatsApp für eine erste Einschätzung."
+    }
+];
 ---
 
 <Layout title="Smart Repair & Kratzer entfernen lassen" description="Smart Repair & Dellenentfernung in Schleswig-Holstein. Kratzer entfernen, Felgen Reparatur und Dellen drücken. Kostengünstig via Partner-Netzwerk." schema={schema} preloadImage={heroImage.src}>
@@ -26,8 +60,8 @@ const schema = {
     />
 
     {/* HERO SECTION */}
-    <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black">
-        <div class="absolute inset-0">
+    <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-black">
+        <div class="absolute inset-0 z-0">
              <Image
                 src={heroImage}
                 alt="Smart Repair Werkstatt"
@@ -35,117 +69,155 @@ const schema = {
                 fetchpriority="high"
                 loading="eager"
              />
-             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
              <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div>
         </div>
 
-        <div class="container mx-auto px-4 z-10 text-center pt-20">
-            <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-bold tracking-wider mb-6 uppercase backdrop-blur-md">
-                Partner-Netzwerk
-            </span>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white leading-tight">
+        <div class="container mx-auto px-4 z-20 text-center pt-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
+                <Hammer size={16} className="text-red-500" />
+                <span class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-widest">Partner-Netzwerk</span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tighter animate-fade-in-up delay-100">
                 Smart Repair <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-400">& Dellenentfernung</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">& Dellenentfernung</span>
             </h1>
-            <p class="text-xl md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
                 Kleine Schäden, kleine Preise. Wir kümmern uns um Kratzer, Dellen und Felgen – schnell und professionell.
             </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300">
+                <a href="https://wa.me/491633845081" target="_blank" class="px-8 py-4 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-green-900/40 flex items-center justify-center gap-2">
+                    <Phone size={20} /> Foto senden (WhatsApp)
+                </a>
+                <a href="#services" class="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl font-bold transition-all backdrop-blur-sm">
+                    Leistungen ansehen
+                </a>
+            </div>
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-12 -mt-20 relative z-20">
-        <Breadcrumbs crumbs={[
-            { label: 'Startseite', href: '/' },
-            { label: 'Smart Repair', href: '/smart-repair' }
-        ]} />
+    <main class="w-full overflow-x-hidden">
 
-        {/* Content Section */}
-        <div class="grid md:grid-cols-2 gap-16 items-start mb-24 mt-12">
-             <div class="prose prose-invert prose-lg">
-                <h2 class="text-3xl font-bold text-white mb-6">Was ist Smart Repair?</h2>
-                <p class="text-zinc-400 leading-relaxed">
-                    <strong>Smart Repair</strong> (Small Middle Area Repair Technologies) ist die kostengünstige Alternative zur klassischen Lackierung.
-                    Statt ganze Bauteile auszutauschen oder großflächig zu lackieren, werden Schäden punktuell behoben.
-                </p>
-
-                <div class="bg-blue-900/10 border-l-4 border-blue-500 p-6 my-8 rounded-r-xl">
-                    <h4 class="text-blue-400 font-bold mb-2 flex items-center gap-2"><AlertTriangle size={20}/> Wichtiger Hinweis</h4>
-                    <p class="text-zinc-300 text-sm m-0">
-                        Diese Leistungen (Beulen drücken, Spot-Repair Lackierung, Felgeninstandsetzung) führen wir in Kooperation mit spezialisierten <strong>externen Partnern</strong> durch. Sie geben Ihr Fahrzeug bei uns ab, und wir koordinieren alles für Sie. Ein Ansprechpartner für alles.
-                    </p>
-                </div>
-
-                <h3 class="text-2xl font-bold text-white mb-4">Unsere Leistungen</h3>
-                <ul class="space-y-4">
-                    <li class="flex items-start gap-3">
-                        <CheckCircle2 className="text-blue-500 shrink-0 mt-1" />
-                        <div>
-                            <strong class="text-white block">Kratzer entfernen lassen</strong>
-                            <span class="text-zinc-400 text-sm">Tiefe Kratzer, die nicht mehr poliert werden können, werden per Spot-Repair beilackiert.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <CheckCircle2 className="text-blue-500 shrink-0 mt-1" />
-                        <div>
-                            <strong class="text-white block">Dellen drücken (Beulendoktor)</strong>
-                            <span class="text-zinc-400 text-sm">Parkdellen und Hagelschäden werden sanft herausmassiert, ohne den Lack zu beschädigen.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <CheckCircle2 className="text-blue-500 shrink-0 mt-1" />
-                        <div>
-                            <strong class="text-white block">Felgen Reparatur</strong>
-                            <span class="text-zinc-400 text-sm">Bordsteinschäden an Alufelgen werden geschliffen, gefüllert und lackiert oder glanzgedreht.</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="sticky top-24">
-                 <div class="glass-panel p-8 rounded-3xl border border-white/10 bg-zinc-950/80 shadow-2xl relative overflow-hidden group">
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/20 blur-[60px] rounded-full"></div>
-
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center text-white border border-white/10">
-                            <Hammer size={24} />
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-white">Angebot anfordern</h3>
-                            <p class="text-xs text-zinc-400 uppercase tracking-widest">Schnelle Abwicklung</p>
+        {/* INFO BANNER */}
+        <section class="section-spacing border-b border-white/5 bg-zinc-950">
+            <div class="container mx-auto px-4">
+                <ScrollReveal client:visible>
+                    <div class="bg-red-900/10 border-l-4 border-red-600 p-8 rounded-r-2xl max-w-4xl mx-auto">
+                        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                            <div class="bg-red-500/20 p-4 rounded-full text-red-500 shrink-0">
+                                <AlertTriangle size={32} />
+                            </div>
+                            <div>
+                                <h4 class="text-red-500 font-bold text-xl mb-2">Wichtiger Hinweis</h4>
+                                <p class="text-zinc-300 text-lg leading-relaxed">
+                                    Diese Leistungen (Beulen drücken, Spot-Repair Lackierung, Felgeninstandsetzung) führen wir in Kooperation mit spezialisierten <strong>externen Partnern</strong> durch. Sie geben Ihr Fahrzeug bei uns ab, und wir koordinieren alles für Sie. Ein Ansprechpartner für alles.
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </ScrollReveal>
+            </div>
+        </section>
 
-                    <p class="text-zinc-400 mb-8 leading-relaxed">
-                        Schicken Sie uns einfach Fotos vom Schaden per WhatsApp. Wir geben eine erste Einschätzung und koordinieren den Termin mit unseren Partnern.
-                    </p>
+        {/* SERVICES GRID */}
+        <section id="services" class="section-spacing bg-zinc-900/20">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <ScrollReveal client:visible>
+                        <span class="text-blue-500 font-bold uppercase tracking-widest text-sm mb-4 block">Portfolio</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Was wir reparieren</h2>
+                        <p class="text-zinc-400 max-w-2xl mx-auto">
+                            Smart Repair (Small Middle Area Repair Technologies) ist die kostengünstige Alternative zur klassischen Lackierung.
+                        </p>
+                    </ScrollReveal>
+                </div>
 
-                    <a href="https://wa.me/491633845081" target="_blank" class="flex items-center justify-center gap-2 w-full bg-green-600 text-white font-bold py-4 rounded-xl hover:bg-green-500 transition-all mb-4 shadow-lg shadow-green-900/20">
-                        <Phone size={20} />
-                        Fotos per WhatsApp senden
-                    </a>
+                <div class="grid md:grid-cols-3 gap-8">
+                    {services.map((service, index) => (
+                        <ScrollReveal client:visible delay={index * 100}>
+                            <div class="h-full bg-zinc-950 p-8 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group hover:-translate-y-2 duration-300">
+                                <div class="w-14 h-14 bg-zinc-900 rounded-2xl flex items-center justify-center mb-6 text-blue-500 border border-white/5 group-hover:bg-blue-500/10 group-hover:text-blue-400 transition-colors">
+                                    <service.icon size={28} strokeWidth={1.5} />
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-4">{service.title}</h3>
+                                <p class="text-zinc-400 leading-relaxed text-sm">
+                                    {service.description}
+                                </p>
+                            </div>
+                        </ScrollReveal>
+                    ))}
+                </div>
+            </div>
+        </section>
 
-                    <a href="tel:+491633845081" class="block w-full text-zinc-400 text-sm hover:text-white transition-colors text-center underline">
-                        Oder anrufen: 0163 38 45 08 1
-                    </a>
+        {/* BENEFITS SECTION */}
+        <section class="section-spacing bg-zinc-950 relative overflow-hidden">
+             <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+             <div class="container mx-auto px-4">
+                 <div class="grid md:grid-cols-3 gap-8">
+                     <ScrollReveal client:visible delay={100}>
+                         <div class="text-center">
+                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-900/20 text-blue-500 mb-6 border border-blue-500/20">
+                                 <Coins size={32} />
+                             </div>
+                             <h3 class="text-xl font-bold text-white mb-3">Bis zu 60% günstiger</h3>
+                             <p class="text-zinc-400 text-sm">Punktuelle Reparatur spart Material und Zeit. Keine teuren Ersatzteile nötig.</p>
+                         </div>
+                     </ScrollReveal>
+                     <ScrollReveal client:visible delay={200}>
+                         <div class="text-center">
+                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-900/20 text-blue-500 mb-6 border border-blue-500/20">
+                                 <Clock size={32} />
+                             </div>
+                             <h3 class="text-xl font-bold text-white mb-3">Schnelle Abwicklung</h3>
+                             <p class="text-zinc-400 text-sm">Oft innerhalb von 24-48 Stunden erledigt. Sie bleiben mobil.</p>
+                         </div>
+                     </ScrollReveal>
+                     <ScrollReveal client:visible delay={300}>
+                         <div class="text-center">
+                             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-900/20 text-blue-500 mb-6 border border-blue-500/20">
+                                 <CheckCircle2 size={32} />
+                             </div>
+                             <h3 class="text-xl font-bold text-white mb-3">Werterhalt</h3>
+                             <p class="text-zinc-400 text-sm">Ideal vor dem Verkauf oder der Leasingrückgabe. Kleine Investition, große Wirkung.</p>
+                         </div>
+                     </ScrollReveal>
                  </div>
-            </div>
-        </div>
+             </div>
+        </section>
 
-        {/* Benefits Section */}
-        <div class="grid md:grid-cols-3 gap-6 mb-24">
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <h3 class="text-xl font-bold text-white mb-2">Bis zu 60% günstiger</h3>
-                <p class="text-zinc-400 text-sm">Im Vergleich zur klassischen Lackierung ganzer Bauteile sparen Sie mit Smart Repair deutlich Kosten.</p>
+        {/* FAQ */}
+        <section class="section-spacing bg-zinc-900/30 border-y border-white/5">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <h2 class="text-3xl font-bold text-white text-center mb-12">Häufige Fragen zu Smart Repair</h2>
+                <FAQ client:visible items={faqItems} />
             </div>
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <h3 class="text-xl font-bold text-white mb-2">Werterhalt</h3>
-                <p class="text-zinc-400 text-sm">Ideal vor dem Verkauf oder der Leasingrückgabe. Kleine Investition, großer Effekt auf den Verkaufspreis.</p>
+        </section>
+
+        {/* CTA */}
+        <section class="section-spacing">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto glass-panel p-12 rounded-[3rem] border border-green-900/30 text-center relative overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
+                    <div class="absolute inset-0 bg-green-900/10 blur-[100px] pointer-events-none"></div>
+
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 relative z-10">Schaden schnell beheben?</h2>
+                    <p class="text-zinc-400 max-w-2xl mx-auto mb-10 text-lg relative z-10">
+                        Schicken Sie uns einfach Fotos vom Schaden per WhatsApp. Wir geben eine erste Einschätzung und koordinieren den Termin.
+                    </p>
+                    <div class="relative z-10 flex flex-col md:flex-row justify-center gap-4">
+                        <a href="https://wa.me/491633845081" target="_blank" class="bg-green-600 hover:bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-green-900/30 hover:scale-105 flex items-center justify-center gap-2">
+                            <Phone size={20} />
+                            Fotos per WhatsApp senden
+                        </a>
+                        <a href="tel:+491633845081" class="px-8 py-4 rounded-xl border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
+                            Anrufen: 0163 38 45 08 1
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <h3 class="text-xl font-bold text-white mb-2">Schnelle Reparatur</h3>
-                <p class="text-zinc-400 text-sm">Oft innerhalb von 24-48 Stunden erledigt, da keine großen Demontagearbeiten nötig sind.</p>
-            </div>
-        </div>
+        </section>
 
     </main>
 </Layout>

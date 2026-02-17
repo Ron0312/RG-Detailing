@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PriceCalculator from '../components/PriceCalculator.jsx';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
+import ScrollReveal from '../components/ScrollReveal.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
 import remoImage from '../assets/remo-dampfdrachen-full.jpg';
 import remoSteamCleaning from '../assets/certificates/remo-steam-cleaning.jpg';
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
-import { Check, Flame, Droplets, Wind, ShoppingBag } from 'lucide-react';
+import { Check, Flame, Droplets, Wind, ShoppingBag, ArrowRight, ShieldCheck, ThermometerSun } from 'lucide-react';
 
 const schema = {
   "@context": "https://schema.org",
@@ -29,8 +29,8 @@ const schema = {
     />
 
     {/* HERO SECTION */}
-    <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-black">
-        <div class="absolute inset-0">
+    <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-black">
+        <div class="absolute inset-0 z-0">
              {/* Integrated Logo in Background */}
              <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
                  <Image src={dampfdrachenLogo} alt="Dampfdrachen Hintergrund" class="w-[80%] md:w-[50%] object-contain" />
@@ -45,164 +45,196 @@ const schema = {
                 widths={[640, 768, 1024, 1280, 1536, 1920]}
                 sizes="100vw"
              />
-             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black"></div>
-             <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div> {/* Slightly blue hint for 'Steam/Clean' */}
+             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>
         </div>
 
-        <div class="container mx-auto px-4 z-10 text-center pt-20">
-            <span class="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm font-bold tracking-wider mb-6 uppercase backdrop-blur-md">
-                Der Dampfdrache
-            </span>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white leading-tight">
+        <div class="container mx-auto px-4 z-20 text-center pt-20">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-md mb-8 animate-fade-in-up">
+                <ThermometerSun size={16} className="text-red-500" />
+                <span class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-widest">Der Dampfdrache</span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tighter animate-fade-in-up delay-100">
                 Reine Physik. <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600">0% Chemie. 100% Hygiene.</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">0% Chemie. 100% Hygiene.</span>
             </h1>
-            <p class="text-xl md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
                 Tiefenreinigung mit 170°C Trockendampf. Ideal für Familien, Tierbesitzer und Allergiker.
             </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300">
+                <a href="#rechner" class="px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-red-900/40 flex items-center justify-center gap-2">
+                    Preis berechnen <ArrowRight size={20} />
+                </a>
+                <a href="#vertrieb" class="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl font-bold transition-all backdrop-blur-sm">
+                    Geräte kaufen
+                </a>
+            </div>
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-12 -mt-20 relative z-20">
-        <Breadcrumbs crumbs={[
-            { label: 'Startseite', href: '/' },
-            { label: 'Dampfreinigung', href: '/dampfreinigung' }
-        ]} />
+    <main class="w-full overflow-x-hidden">
 
-        {/* Content Section */}
-        <div class="grid md:grid-cols-3 gap-12 items-start mb-24 mt-12">
-            <div class="md:col-span-1">
-                 <div class="relative group rounded-2xl overflow-hidden shadow-2xl border border-zinc-800 mb-8">
-                     <Image
-                        src={remoImage}
-                        alt="Dampfreinigung Innenraum RG Detailing"
-                        class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
-                    />
-                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                     <div class="absolute bottom-6 left-6 text-white font-bold text-xl">
-                        Dampfdrachen im Einsatz
-                     </div>
-                 </div>
+        {/* DETAILS SECTION */}
+        <section class="section-spacing border-b border-white/5 bg-zinc-900/20">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-1/2">
+                        <ScrollReveal client:visible>
+                            <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Technologie</span>
+                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Was ist Trockendampf?</h2>
+                            <p class="text-zinc-400 text-lg leading-relaxed mb-6">
+                                <strong>Trockendampf</strong> (Micro-Trockendampf) ist Wasserdampf, der auf über 170°C erhitzt wird und nur noch einen Wasseranteil von etwa 5% besitzt. Anders als "nasser" Dampf ist er nicht feucht, sondern gasförmig und heiß.
+                            </p>
+                            <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                                Diese extrem hohe Temperatur löst Fette, Öle und tiefsitzenden Schmutz aus den Poren von Leder, Kunststoff und Textilien – <strong>ganz ohne Chemie</strong>. Gleichzeitig "ertrinkt" das Material nicht, sondern ist nach wenigen Minuten wieder trocken.
+                            </p>
 
-                 <div class="bg-zinc-900/80 backdrop-blur-md p-8 rounded-2xl border border-zinc-800 shadow-xl">
-                    <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-4">Offizieller Partner</p>
-                    <Image src={dampfdrachenLogo} alt="Dampfdrachen Logo" class="h-16 w-auto mb-6 object-contain object-left" />
-                    <div class="text-2xl font-bold text-white mb-4">DAMPFDRACHEN <span class="text-zinc-400">VERTRIEBSPARTNER</span></div>
-                    <p class="text-zinc-400 text-sm mb-4">
-                        Wir nutzen nicht nur die Technik, wir sind davon so überzeugt, dass wir offizieller Partner sind. Deutsches Ingenieur Know-how, gefertigt in Italien.
-                    </p>
-                 </div>
-            </div>
+                            <div class="bg-zinc-950/50 rounded-xl p-6 border border-white/5">
+                                <h4 class="text-white font-bold mb-4 flex items-center gap-2"><Flame className="text-red-500"/> 170°C Hitze überlebt nichts</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center gap-3 text-zinc-400 text-sm">
+                                        <Check size={16} className="text-red-500 shrink-0"/> <span><strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</span>
+                                    </li>
+                                    <li class="flex items-center gap-3 text-zinc-400 text-sm">
+                                        <Check size={16} className="text-red-500 shrink-0"/> <span><strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ScrollReveal>
+                    </div>
 
-            <div class="prose prose-invert prose-lg md:col-span-2">
-                <h2 class="text-3xl font-bold text-white mb-6">Was ist Trockendampf?</h2>
-                <p class="text-zinc-400 leading-relaxed mb-6">
-                    <strong>Trockendampf</strong> (Micro-Trockendampf) ist Wasserdampf, der auf über 170°C erhitzt wird und nur noch einen Wasseranteil von etwa 5% besitzt. Anders als "nasser" Dampf, den man vom Bügeleisen kennt, ist er nicht feucht, sondern gasförmig und heiß.
-                </p>
-                <p class="text-zinc-400 leading-relaxed mb-8">
-                    Durch diese extrem hohe Temperatur bei minimaler Feuchtigkeit besitzt Trockendampf eine enorme Reinigungskraft. Er löst Fette, Öle und tiefsitzenden Schmutz aus den Poren von Leder, Kunststoff und Textilien – ganz ohne den Einsatz von Chemie. Gleichzeitig "ertrinkt" das Material nicht, sondern ist nach wenigen Minuten wieder trocken.
-                </p>
-
-                <h3 class="text-2xl font-bold text-white mb-4">Warum Dampf besser ist als Chemie</h3>
-                <p class="text-zinc-400 leading-relaxed mb-6">
-                    Klassische Innenreiniger arbeiten oft mit Tensiden und Duftstoffen. Sie überdecken Gerüche und hinterlassen chemische Rückstände auf den Polstern. Wenn im Sommer die Sonne draufscheint, dünsten diese Stoffe aus – Gift für Allergiker und kleine Kinder.
-                </p>
-                <div class="bg-red-900/10 border-l-4 border-red-600 p-6 my-8 rounded-r-xl">
-                    <h4 class="text-red-500 font-bold mb-2 flex items-center gap-2"><Flame size={20}/> 170°C Hitze überlebt nichts</h4>
-                    <ul class="space-y-2 text-zinc-300 text-sm">
-                        <li class="flex items-center gap-2"><Check size={16} className="text-red-500"/> <strong>Bakterien & Keime:</strong> Werden sofort abgetötet.</li>
-                        <li class="flex items-center gap-2"><Check size={16} className="text-red-500"/> <strong>Milben:</strong> Werden vernichtet (wichtig für Allergiker!).</li>
-                        <li class="flex items-center gap-2"><Check size={16} className="text-red-500"/> <strong>Schimmelsporen:</strong> Werden in der Tiefe neutralisiert.</li>
-                    </ul>
-                </div>
-
-                <h3 class="text-2xl font-bold text-white mb-4">Keine Nässe, kein Schimmelrisiko</h3>
-                <p class="text-zinc-400 leading-relaxed mb-4">
-                    Viele scheuen die Polsterreinigung aus Angst vor Nässe ("Das trocknet doch nie!"). Bei billigen Nasssaugern stimmt das. Aber wir nutzen <strong>Trockendampf</strong>.
-                </p>
-                <p class="text-zinc-400 leading-relaxed">
-                    Der Dampf hat nur einen minimalen Wasseranteil. Er löst den Schmutz in Sekundenbruchteilen, und wird sofort wieder abgesaugt. Das Ergebnis: Die Polster sind porentief rein und nach kürzester Zeit wieder komplett trocken. Schokoflecken vom Rücksitz? Verschwunden. Hundegeruch? Neutralisiert.
-                </p>
-            </div>
-        </div>
-
-        {/* Benefits Grid */}
-        <div class="grid md:grid-cols-3 gap-6 mb-24">
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <Wind className="w-10 h-10 text-red-500 mb-4" />
-                <h3 class="text-xl font-bold text-white mb-2">Geruchsneutralisierung</h3>
-                <p class="text-zinc-400 text-sm">Rauch, Tiergeruch oder Lebensmittel – wir entfernen die Ursache, statt sie nur zu überdecken.</p>
-            </div>
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <Droplets className="w-10 h-10 text-red-500 mb-4" />
-                <h3 class="text-xl font-bold text-white mb-2">Keine Wasserschäden</h3>
-                <p class="text-zinc-400 text-sm">Dank Trockendampf gelangt keine Feuchtigkeit in die Elektronik oder tief in den Schaumstoff.</p>
-            </div>
-            <div class="glass-panel p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
-                <Check className="w-10 h-10 text-red-500 mb-4" />
-                <h3 class="text-xl font-bold text-white mb-2">Allergikerfreundlich</h3>
-                <p class="text-zinc-400 text-sm">Ohne aggressive Chemie. Sie steigen in ein gesundes, reines Fahrzeugklima ein.</p>
-            </div>
-        </div>
-
-        {/* NEW: Dampfdrachen Sales Section */}
-        <div id="vertrieb" class="mb-24 relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/50">
-            <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/10 blur-[100px] rounded-full"></div>
-            <div class="grid md:grid-cols-2 gap-0">
-                <div class="p-12 flex flex-col justify-center">
-                    <span class="text-red-500 font-bold tracking-widest text-sm uppercase mb-2">Für Gewerbe & Privat</span>
-                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Dampfdrachen <br/> kaufen</h2>
-                    <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
-                        Wir sind offizieller Vertriebspartner für <strong>Dampfdrachen</strong>.
-                        Die wohl besten Trockendampfreiniger der Welt - Deutsches Ingenieur Know-how, gefertigt in Italien.
-                        Nutzen Sie die gleiche Profi-Technik wie wir für Ihr Unternehmen oder Ihr Zuhause.
-                    </p>
-                    <ul class="space-y-4 mb-8">
-                         <li class="flex items-center gap-3 text-zinc-300">
-                            <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500"><Check size={16} /></div>
-                            <span>Individuelle Vorführung vor Ort</span>
-                         </li>
-                         <li class="flex items-center gap-3 text-zinc-300">
-                            <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500"><Check size={16} /></div>
-                            <span>Verkauf, Schulung & Support</span>
-                         </li>
-                    </ul>
-                    <div>
-                        <a href="tel:+491633845081" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-zinc-200 transition-colors">
-                            <ShoppingBag className="w-5 h-5 mr-2" />
-                            Jetzt Beratung anfordern
-                        </a>
+                    <div class="lg:w-1/2 w-full">
+                        <ScrollReveal client:visible delay={200}>
+                            <div class="relative group rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                                <Image
+                                    src={remoImage}
+                                    alt="Dampfreinigung Innenraum RG Detailing"
+                                    class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 p-8">
+                                    <div class="flex items-center gap-4 mb-2">
+                                        <Image src={dampfdrachenLogo} alt="Dampfdrachen Logo" class="h-12 w-auto object-contain" />
+                                        <div class="h-8 w-px bg-white/30"></div>
+                                        <span class="text-white font-bold tracking-wider">OFFIZIELLER PARTNER</span>
+                                    </div>
+                                    <p class="text-zinc-400 text-sm">Wir setzen auf deutsches Ingenieur Know-how.</p>
+                                </div>
+                            </div>
+                        </ScrollReveal>
                     </div>
                 </div>
-                <div class="relative min-h-[400px] bg-zinc-950 flex items-center justify-center p-8">
-                     <Image
-                        src={remoSteamCleaning}
-                        alt="Dampfdrachen Gerät"
-                        width={800}
-                        height={800}
-                        format="avif"
-                        class="relative z-10 rounded-xl shadow-2xl border border-white/10 w-full max-w-md object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-500"
-                    />
+            </div>
+        </section>
+
+        {/* BENEFITS GRID */}
+        <section class="section-spacing bg-zinc-950">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <ScrollReveal client:visible>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Warum Dampf besser ist als Chemie</h2>
+                        <p class="text-zinc-400">
+                            Klassische Reiniger überdecken Gerüche oft nur und hinterlassen Rückstände. Wenn im Sommer die Sonne draufscheint, dünsten diese Stoffe aus – Gift für Allergiker und kleine Kinder.
+                        </p>
+                    </ScrollReveal>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <ScrollReveal client:visible delay={100}>
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <Wind className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
+                            <h3 class="text-xl font-bold text-white mb-3">Geruchsneutralisierung</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Rauch, Tiergeruch oder Lebensmittel – wir entfernen die Ursache porentief, statt sie nur mit Duftstoffen zu überdecken.</p>
+                        </div>
+                    </ScrollReveal>
+                    <ScrollReveal client:visible delay={200}>
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <Droplets className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
+                            <h3 class="text-xl font-bold text-white mb-3">Keine Nässe</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Dank Trockendampf gelangt keine Feuchtigkeit in die Elektronik oder tief in den Schaumstoff. Kein Schimmelrisiko.</p>
+                        </div>
+                    </ScrollReveal>
+                    <ScrollReveal client:visible delay={300}>
+                        <div class="h-full bg-zinc-900/50 p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group">
+                            <ShieldCheck className="w-12 h-12 text-red-500 mb-6 group-hover:scale-110 transition-transform" />
+                            <h3 class="text-xl font-bold text-white mb-3">Allergikerfreundlich</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Ohne aggressive Chemie. Sie steigen in ein gesundes, reines Fahrzeugklima ein. Ideal für Kinder und Tiere.</p>
+                        </div>
+                    </ScrollReveal>
                 </div>
             </div>
-        </div>
+        </section>
+
+        {/* DAMPFDRACHEN SALES SECTION */}
+        <section id="vertrieb" class="section-spacing bg-zinc-900/30 border-y border-white/5 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div class="container mx-auto px-4">
+                <div class="glass-panel rounded-3xl border border-white/10 bg-zinc-900/80 relative overflow-hidden">
+                    <div class="grid md:grid-cols-2 gap-0">
+                        <div class="p-8 md:p-16 flex flex-col justify-center relative z-10">
+                            <span class="text-red-500 font-bold tracking-widest text-sm uppercase mb-4">Für Gewerbe & Privat</span>
+                            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Dampfdrachen <br/> kaufen</h2>
+                            <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
+                                Wir sind offizieller Vertriebspartner für <strong>Dampfdrachen</strong>.
+                                Die wohl besten Trockendampfreiniger der Welt - Deutsches Ingenieur Know-how, gefertigt in Italien.
+                                Nutzen Sie die gleiche Profi-Technik wie wir für Ihr Unternehmen oder Ihr Zuhause.
+                            </p>
+                            <ul class="space-y-4 mb-10">
+                                 <li class="flex items-center gap-4 text-zinc-300">
+                                    <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500 shrink-0"><Check size={16} /></div>
+                                    <span>Individuelle Vorführung vor Ort</span>
+                                 </li>
+                                 <li class="flex items-center gap-4 text-zinc-300">
+                                    <div class="w-8 h-8 rounded-full bg-red-900/30 flex items-center justify-center text-red-500 shrink-0"><Check size={16} /></div>
+                                    <span>Verkauf, Schulung & Support</span>
+                                 </li>
+                            </ul>
+                            <div>
+                                <a href="tel:+491633845081" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black rounded-xl font-bold hover:bg-zinc-200 transition-colors shadow-lg hover:scale-105 transform duration-300">
+                                    <ShoppingBag className="w-5 h-5 mr-2" />
+                                    Jetzt Beratung anfordern
+                                </a>
+                            </div>
+                        </div>
+                        <div class="relative min-h-[400px] bg-zinc-950 flex items-center justify-center p-8 md:p-12 overflow-hidden">
+                             <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-800 via-zinc-950 to-zinc-950"></div>
+                             <Image
+                                src={remoSteamCleaning}
+                                alt="Dampfdrachen Gerät"
+                                width={800}
+                                height={800}
+                                format="avif"
+                                class="relative z-10 rounded-2xl shadow-2xl border border-white/10 w-full max-w-sm object-cover aspect-square object-top transform md:rotate-3 hover:rotate-0 transition duration-700"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
          {/* CTA */}
-         <div class="glass-panel p-12 rounded-[3rem] border border-red-900/30 text-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-red-900/10 to-transparent pointer-events-none"></div>
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Gönnen Sie sich ein gesundes Auto</h2>
-            <p class="text-zinc-400 max-w-2xl mx-auto mb-8 relative z-10">
-                Perfekt integrierbar in unser "All in One" oder "Full Detailing" Paket.
-            </p>
-            <div class="relative z-10 flex flex-col md:flex-row justify-center gap-4">
-                <a href="/#rechner" class="bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-red-900/30 hover:scale-105">
-                    Preis jetzt berechnen
-                </a>
-                <a href="tel:+491633845081" class="px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
-                    Beratung: 0163 38 45 08 1
-                </a>
-            </div>
-         </div>
+         <section id="rechner" class="section-spacing">
+             <div class="container mx-auto px-4">
+                 <div class="glass-panel p-12 md:p-16 rounded-[3rem] border border-red-900/30 text-center relative overflow-hidden bg-gradient-to-br from-zinc-900 to-black">
+                    <div class="absolute inset-0 bg-red-900/10 blur-[100px] pointer-events-none"></div>
+
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 relative z-10">Gönnen Sie sich ein gesundes Auto</h2>
+                    <p class="text-zinc-400 max-w-2xl mx-auto mb-10 text-lg relative z-10">
+                        Perfekt integrierbar in unser "All in One" oder "Full Detailing" Paket.
+                    </p>
+                    <div class="relative z-10 flex flex-col md:flex-row justify-center gap-4">
+                        <a href="/#rechner" class="bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-red-900/30 hover:scale-105">
+                            Preis jetzt berechnen
+                        </a>
+                        <a href="tel:+491633845081" class="px-8 py-4 rounded-xl border border-white/10 bg-white/5 text-white font-bold hover:bg-white/10 transition-colors">
+                            Beratung: 0163 38 45 08 1
+                        </a>
+                    </div>
+                 </div>
+             </div>
+         </section>
 
     </main>
 </Layout>
