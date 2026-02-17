@@ -77,7 +77,7 @@ describe('PriceCalculator Accessibility', () => {
         expect(teaserButton).not.toBeNull();
         expect(teaserButton.getAttribute('type')).toBe('button');
         // Check for focus styles
-        expect(teaserButton.className).toContain('focus-visible:ring-4');
+        expect(teaserButton.className).toContain('focus-visible:ring-2');
         expect(teaserButton.className).toContain('focus-visible:ring-red-500');
     });
 });
