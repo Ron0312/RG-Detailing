@@ -21,6 +21,13 @@ export default function GalleryLightbox({ images, limit = 10 }) {
 
   const visibleImages = useMemo(() => filteredImages.slice(0, visibleCount), [filteredImages, visibleCount]);
 
+  // Create slides for Lightbox without srcSet string
+  const lightboxSlides = useMemo(() => filteredImages.map(img => {
+      // Create a shallow copy and remove srcSet if it's a string to avoid Lightbox crash
+      const { srcSet, ...rest } = img;
+      return rest;
+  }), [filteredImages]);
+
   // Adjusted logic: hasMore is true if not all images are shown OR if we are collapsed on mobile (index >= 4 hidden)
   // But strictly speaking, "Mehr anzeigen" usually expands the list.
   // We want "Mehr anzeigen" to trigger expansion on mobile too.
@@ -111,7 +118,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
         open={index >= 0}
         index={index}
         close={() => setIndex(-1)}
-        slides={filteredImages}
+        slides={lightboxSlides}
         plugins={[Zoom, Captions]}
         zoom={{ maxZoomPixelRatio: 3 }}
       />
