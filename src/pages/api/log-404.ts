@@ -1,11 +1,15 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { z } from 'zod';
 import { checkRateLimit } from '../../lib/rate-limit';
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
+    const rawIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
+    // Validate IP to prevent key bloating / memory exhaustion
+    const ip = z.string().ip().safeParse(rawIp).success ? rawIp : 'unknown';
+
     if (!checkRateLimit(`log-404:${ip}`, 60, 60000)) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }

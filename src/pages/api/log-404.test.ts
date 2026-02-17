@@ -12,12 +12,43 @@ vi.mock('node:fs/promises', () => ({
   },
 }));
 
+// Mock rate-limit
+const checkRateLimitMock = vi.hoisted(() => vi.fn().mockReturnValue(true));
+vi.mock('../../lib/rate-limit', () => ({
+  checkRateLimit: checkRateLimitMock,
+}));
+
 describe('POST /api/log-404 Security Tests', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        // Reset rate limit for tests - handled by using unique IPs or mocking rate-limit
-        // Since rate-limit is stateful in-memory, we might hit it.
-        // We can mock the rate-limit module too.
+        checkRateLimitMock.mockReturnValue(true);
+    });
+
+    it('should use "unknown" as rate limit key when IP is invalid/bloated', async () => {
+        const hugeIp = 'A'.repeat(1000); // Invalid IP, potential DoS vector
+        const req = new Request('http://localhost/api/log-404', {
+            method: 'POST',
+            body: JSON.stringify({ url: '/foo' }),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Forwarded-For': hugeIp
+            }
+        });
+
+        await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+
+        // Should call checkRateLimit with sanitized key, NOT the huge IP
+        expect(checkRateLimitMock).toHaveBeenCalledWith(
+            expect.stringContaining('log-404:unknown'),
+            expect.any(Number),
+            expect.any(Number)
+        );
+        // Ensure it was NOT called with the huge IP
+        expect(checkRateLimitMock).not.toHaveBeenCalledWith(
+            expect.stringContaining(hugeIp),
+            expect.any(Number),
+            expect.any(Number)
+        );
     });
 
     it('should reject non-JSON Content-Type', async () => {
