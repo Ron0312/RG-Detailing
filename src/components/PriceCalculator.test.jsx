@@ -5,6 +5,10 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import PriceCalculator from './PriceCalculator';
 
+vi.mock('../lib/analytics', () => ({
+  trackEvent: vi.fn(),
+}));
+
 // Mock scrollIntoView since jsdom doesn't support it
 if (typeof window !== 'undefined' && !window.HTMLElement.prototype.scrollIntoView) {
     window.HTMLElement.prototype.scrollIntoView = vi.fn();

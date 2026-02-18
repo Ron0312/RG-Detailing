@@ -4,6 +4,10 @@ import { render, screen, cleanup } from '@testing-library/react';
 import React from 'react';
 import GalleryLightbox from './GalleryLightbox';
 
+vi.mock('../lib/analytics', () => ({
+  trackEvent: vi.fn(),
+}));
+
 // Mock the Lightbox component to avoid rendering issues and focus on the gallery grid
 vi.mock('yet-another-react-lightbox', () => ({
     default: () => <div data-testid="lightbox-mock">Lightbox</div>

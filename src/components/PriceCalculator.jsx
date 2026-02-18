@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { calculatePrice } from '../lib/pricing';
+import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
 import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator } from 'lucide-react';
 
@@ -161,6 +162,8 @@ export default function PriceCalculator() {
 
     useEffect(() => {
         if (isExpanded) {
+            trackEvent('calculator_step', { step });
+
             // Focus management
             if (stepTitleRef.current) {
                 stepTitleRef.current.focus({ preventScroll: true });
@@ -175,6 +178,12 @@ export default function PriceCalculator() {
             }
         }
     }, [step, isExpanded]);
+
+    useEffect(() => {
+        if (isExpanded) {
+            trackEvent('calculator_start');
+        }
+    }, [isExpanded]);
 
     const handleSelect = (key, value) => {
         let newSelections = { ...selections, [key]: value };
@@ -239,6 +248,14 @@ export default function PriceCalculator() {
             if (!response.ok) {
                 throw new Error('API Submission failed');
             }
+
+            trackEvent('calculator_submit', {
+                package: selections.package,
+                size: selections.size,
+                condition: selections.condition,
+                priceMin: quote?.minPrice,
+                priceMax: quote?.maxPrice
+            });
 
             setSubmitted(true);
         } catch (err) {

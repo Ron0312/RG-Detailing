@@ -4,6 +4,10 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import ServiceGrid from './ServiceGrid';
 
+vi.mock('../lib/analytics', () => ({
+  trackEvent: vi.fn(),
+}));
+
 // Mock GlossaryLinker to simplify testing
 vi.mock('./GlossaryLinker', () => ({
     default: ({ text }) => <span>{text}</span>

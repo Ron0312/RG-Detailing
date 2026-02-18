@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 import GlossaryLinker from './GlossaryLinker';
 
 const iconMap = {
@@ -97,7 +98,12 @@ export default function ServiceGrid({ services }) {
                             data-index={index}
                             className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0"
                         >
-                             <a href={service.link} className="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`}></a>
+                             <a
+                                href={service.link}
+                                className="absolute inset-0 z-10"
+                                aria-label={`Mehr erfahren zu ${service.title}`}
+                                onClick={() => trackEvent('service_click', { service: service.title })}
+                             ></a>
                              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
                              <div className="relative z-20 flex-grow pointer-events-none">
