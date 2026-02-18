@@ -2,7 +2,8 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github',
+    repo: 'Ron0312/RG-Detailing'
   },
   collections: {
     'homepage-services': collection({
