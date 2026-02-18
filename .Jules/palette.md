@@ -13,3 +13,7 @@
 ## 2025-02-26 - Managing Off-Screen Focus with inert
 **Learning:** CSS transforms like `translate-y` do not remove elements from the tab order, creating focus traps where users can tab into invisible content. The `inert` attribute is a perfect solution as it makes the element non-interactive and hides it from the accessibility tree without needing to manage `tabindex` on all children.
 **Action:** When animating elements off-screen without `display: none` or `visibility: hidden`, always apply the `inert` attribute (and `aria-hidden="true"`) to prevent focus traps.
+
+## 2025-03-05 - Carousel Navigation Accessibility
+**Learning:** Mobile pagination dots are often implemented as static `div`s, making them inaccessible to keyboard users and screen readers. Converting them to `<button>` elements with `aria-label` and `aria-current="step"` (instead of `role="tab"` for simple cases) provides a much better experience. `aria-current` is particularly useful for indicating the active item in a set of related elements like carousel slides or wizard steps.
+**Action:** Always check if visual indicators like dots or steps are interactive. If they control navigation, they must be buttons with appropriate labels and state indicators.
