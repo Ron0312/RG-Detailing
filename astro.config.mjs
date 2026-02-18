@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
+import keystatic from '@keystatic/astro';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always',
   },
-  integrations: [react()],
+  integrations: [react(), keystatic()],
 
   vite: {
     plugins: [tailwindcss()]
