@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { z } from 'zod';
 import { checkRateLimit } from '../../lib/rate-limit';
 
@@ -8,8 +9,27 @@ const EventSchema = z.object({
     eventName: z.string().min(1).max(50),
     url: z.string().optional(),
     sessionId: z.string().optional(),
+    visitorId: z.string().optional(),
     data: z.record(z.any()).optional()
 });
+
+// Helper for UA Parsing (Lightweight Regex)
+const parseUserAgent = (ua: string) => {
+    let browser = 'Unknown';
+    if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Edge')) browser = 'Edge';
+
+    let os = 'Unknown';
+    if (ua.includes('Win')) os = 'Windows';
+    else if (ua.includes('Mac')) os = 'MacOS';
+    else if (ua.includes('Linux')) os = 'Linux';
+    else if (ua.includes('Android')) os = 'Android';
+    else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+    return { browser, os };
+};
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
@@ -46,7 +66,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         return new Response(JSON.stringify({ error: "Invalid event data" }), { status: 400 });
     }
 
-    const { eventName, url, sessionId, data } = result.data;
+    const { eventName, url, sessionId, visitorId, data } = result.data;
 
     // Sanitize URL
     let sanitizedUrl = (url || '').substring(0, 200);
@@ -60,12 +80,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
              if (u.pathname.length > 1 && u.pathname.endsWith('/')) {
                  u.pathname = u.pathname.slice(0, -1);
              }
-             sanitizedUrl = u.pathname; // Store only pathname to be cleaner
+             sanitizedUrl = u.pathname;
         } else if (sanitizedUrl.includes('?')) {
              sanitizedUrl = sanitizedUrl.split('?')[0];
         }
 
-        // Simple normalization for relative paths
         if (sanitizedUrl.length > 1 && sanitizedUrl.endsWith('/')) {
             sanitizedUrl = sanitizedUrl.slice(0, -1);
         }
@@ -73,13 +92,26 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         // Fallback
     }
 
+    // Advanced Tracking Logic
+    const userAgent = data?.userAgent || request.headers.get('user-agent') || '';
+    const { browser, os } = parseUserAgent(userAgent);
+
+    // Privacy-Friendly Unique Visitor Hash (Daily Salt)
+    // Allows counting unique visitors per day without persistent cookies.
+    const dateSalt = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const dailyHash = crypto.createHash('sha256').update(`${ip}-${userAgent}-${dateSalt}`).digest('hex').substring(0, 16);
+
     // Construct log entry
     const entry = {
         timestamp: new Date().toISOString(),
         event: eventName,
         url: sanitizedUrl,
-        sessionId: sessionId ? sessionId.substring(0, 50) : undefined, // Truncate session ID
-        data: data // Keep as object for JSONL
+        sessionId: sessionId ? sessionId.substring(0, 50) : undefined,
+        visitorId: visitorId ? visitorId.substring(0, 50) : undefined, // Persistent ID if consent given
+        dailyHash, // Anonymous daily ID
+        browser,
+        os,
+        data: data
     };
 
     const logLine = JSON.stringify(entry) + '\n';

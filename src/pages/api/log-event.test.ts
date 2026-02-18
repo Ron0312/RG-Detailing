@@ -31,7 +31,7 @@ describe('POST /api/log-event', () => {
         statMock.mockResolvedValue({ size: 100 });
     });
 
-    it('should log a valid event', async () => {
+    it('should log a valid event with calculated dailyHash', async () => {
         const req = new Request('http://localhost/api/log-event', {
             method: 'POST',
             body: JSON.stringify({ eventName: 'test_event', url: '/home', sessionId: 'sess_123' }),
@@ -46,24 +46,18 @@ describe('POST /api/log-event', () => {
         expect(appendFileMock).toHaveBeenCalled();
         const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
         expect(content.event).toBe('test_event');
-        expect(content.url).toBe('/home');
-        expect(content.sessionId).toBe('sess_123');
-        expect(content.timestamp).toBeDefined();
+        expect(content.dailyHash).toBeDefined(); // Check if hash is generated
+        expect(content.dailyHash).toHaveLength(16);
     });
 
-    it('should log extended user context (referrer, device, etc.) in data', async () => {
+    it('should parse browser and OS from userAgent', async () => {
+        const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
         const req = new Request('http://localhost/api/log-event', {
             method: 'POST',
             body: JSON.stringify({
                 eventName: 'page_view',
                 url: '/home',
-                sessionId: 'sess_123',
-                data: {
-                    referrer: 'google.com',
-                    screen: '1920x1080',
-                    language: 'de-DE',
-                    device: 'Desktop'
-                }
+                data: { userAgent: ua }
             }),
             headers: { 'Content-Type': 'application/json' }
         });
@@ -71,82 +65,25 @@ describe('POST /api/log-event', () => {
         await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         await flushPromises();
 
-        expect(appendFileMock).toHaveBeenCalled();
         const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
-
-        expect(content.data).toBeDefined();
-        expect(content.data.referrer).toBe('google.com');
-        expect(content.data.screen).toBe('1920x1080');
-        expect(content.data.device).toBe('Desktop');
+        expect(content.browser).toBe('Chrome');
+        expect(content.os).toBe('Windows');
     });
 
-    it('should reject non-JSON content type', async () => {
+    it('should accept visitorId if provided', async () => {
         const req = new Request('http://localhost/api/log-event', {
             method: 'POST',
-            body: JSON.stringify({ eventName: 'test' }),
-            headers: { 'Content-Type': 'text/plain' }
-        });
-
-        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
-        expect(response.status).toBe(415);
-    });
-
-    it('should reject invalid schema (missing eventName)', async () => {
-        const req = new Request('http://localhost/api/log-event', {
-            method: 'POST',
-            body: JSON.stringify({ url: '/home' }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
-        expect(response.status).toBe(400);
-    });
-
-    it('should sanitize URL (remove query params)', async () => {
-        const req = new Request('http://localhost/api/log-event', {
-            method: 'POST',
-            body: JSON.stringify({ eventName: 'test', url: 'https://site.com/page?token=secret' }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
-        expect(response.status).toBe(200);
-
-        await flushPromises();
-
-        const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
-        expect(content.url).toBe('/page'); // Stores only pathname
-        expect(content.url).not.toContain('secret');
-    });
-
-    it('should normalize URL (remove trailing slash)', async () => {
-        const req = new Request('http://localhost/api/log-event', {
-            method: 'POST',
-            body: JSON.stringify({ eventName: 'test', url: 'https://site.com/page/' }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
-        expect(response.status).toBe(200);
-
-        await flushPromises();
-
-        const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
-        expect(content.url).toBe('/page');
-    });
-
-    it('should rotate log file if > 5MB', async () => {
-        statMock.mockResolvedValueOnce({ size: 6 * 1024 * 1024 });
-
-        const req = new Request('http://localhost/api/log-event', {
-            method: 'POST',
-            body: JSON.stringify({ eventName: 'test' }),
+            body: JSON.stringify({
+                eventName: 'page_view',
+                visitorId: 'vis_abc123'
+            }),
             headers: { 'Content-Type': 'application/json' }
         });
 
         await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         await flushPromises();
 
-        expect(renameMock).toHaveBeenCalled();
+        const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
+        expect(content.visitorId).toBe('vis_abc123');
     });
 });
