@@ -51,6 +51,35 @@ describe('POST /api/log-event', () => {
         expect(content.timestamp).toBeDefined();
     });
 
+    it('should log extended user context (referrer, device, etc.) in data', async () => {
+        const req = new Request('http://localhost/api/log-event', {
+            method: 'POST',
+            body: JSON.stringify({
+                eventName: 'page_view',
+                url: '/home',
+                sessionId: 'sess_123',
+                data: {
+                    referrer: 'google.com',
+                    screen: '1920x1080',
+                    language: 'de-DE',
+                    device: 'Desktop'
+                }
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        await flushPromises();
+
+        expect(appendFileMock).toHaveBeenCalled();
+        const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
+
+        expect(content.data).toBeDefined();
+        expect(content.data.referrer).toBe('google.com');
+        expect(content.data.screen).toBe('1920x1080');
+        expect(content.data.device).toBe('Desktop');
+    });
+
     it('should reject non-JSON content type', async () => {
         const req = new Request('http://localhost/api/log-event', {
             method: 'POST',

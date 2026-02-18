@@ -1,0 +1,56 @@
+<script>
+  import { trackEvent } from '../lib/analytics';
+
+  // Track Page Load
+  window.addEventListener('load', () => {
+    trackEvent('page_view', {
+      device: window.innerWidth < 768 ? 'Mobile' : 'Desktop',
+      platform: navigator.platform
+    });
+  });
+
+  // Track Time on Page
+  let startTime = Date.now();
+  const trackDuration = () => {
+    const duration = Math.round((Date.now() - startTime) / 1000); // seconds
+    if (duration > 5) { // Only track if > 5 seconds
+        trackEvent('time_on_page', { duration });
+    }
+  };
+
+  // Use visibilitychange as it's more reliable on mobile than unload
+  document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+          trackDuration();
+      }
+  });
+
+  // Track Scroll Depth (25%, 50%, 75%, 100%)
+  const thresholds = [25, 50, 75, 100];
+  const tracked = new Set();
+
+  const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      const percentage = Math.round((scrolled / scrollHeight) * 100);
+
+      thresholds.forEach(t => {
+          if (percentage >= t && !tracked.has(t)) {
+              tracked.add(t);
+              trackEvent('scroll_depth', { depth: t });
+          }
+      });
+  };
+
+  // Throttle scroll event
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+      if (!ticking) {
+          window.requestAnimationFrame(() => {
+              handleScroll();
+              ticking = false;
+          });
+          ticking = true;
+      }
+  }, { passive: true });
+</script>

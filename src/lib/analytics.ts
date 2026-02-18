@@ -8,11 +8,22 @@ export const trackEvent = async (eventName: string, data: Record<string, any> = 
       sessionStorage.setItem('analytics_session_id', sessionId);
     }
 
+    // Capture context
+    const context = {
+        referrer: document.referrer || 'direct',
+        screen: `${window.screen.width}x${window.screen.height}`,
+        language: navigator.language || 'unknown',
+        userAgent: navigator.userAgent
+    };
+
     const payload = {
       eventName,
-      data,
       url: window.location.href,
-      sessionId
+      sessionId,
+      data: {
+          ...context,
+          ...data
+      }
     };
 
     await fetch('/api/log-event', {

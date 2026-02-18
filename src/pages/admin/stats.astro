@@ -44,9 +44,23 @@ const calculator: { start: number; steps: Record<string, number>; submit: number
     steps: {},
     submit: 0
 };
+const devices: Record<string, number> = {};
+const referrers: Record<string, number> = {};
+const scrollDepth: Record<string, number> = {};
+let totalTimeOnPage = 0;
+let timeOnPageCount = 0;
 
 events.forEach(e => {
     eventsByName[e.event] = (eventsByName[e.event] || 0) + 1;
+
+    // Device & Referrer (from page_view or context)
+    if (e.data?.device) {
+        devices[e.data.device] = (devices[e.data.device] || 0) + 1;
+    }
+    if (e.data?.referrer && e.data.referrer !== 'direct' && !e.data.referrer.includes(url.host)) {
+        const ref = e.data.referrer.replace('https://', '').replace('http://', '').split('/')[0];
+        referrers[ref] = (referrers[ref] || 0) + 1;
+    }
 
     if (e.event === 'service_click') {
         const s = e.data?.service || 'Unknown';
@@ -68,12 +82,30 @@ events.forEach(e => {
     if (e.event === 'calculator_submit') {
         calculator.submit++;
     }
+    if (e.event === 'time_on_page' && e.data?.duration) {
+        totalTimeOnPage += Number(e.data.duration);
+        timeOnPageCount++;
+    }
+    if (e.event === 'scroll_depth' && e.data?.depth) {
+        const d = String(e.data.depth);
+        scrollDepth[d] = (scrollDepth[d] || 0) + 1;
+    }
 });
 
 const topServices = Object.entries(services).sort((a, b) => b[1] - a[1]).slice(0, 10);
 const topGallery = Object.entries(galleryFilters).sort((a, b) => b[1] - a[1]);
 const allEvents = Object.entries(eventsByName).sort((a, b) => b[1] - a[1]);
 const stepKeys = Object.keys(calculator.steps).sort((a, b) => Number(a) - Number(b));
+const topDevices = Object.entries(devices).sort((a, b) => b[1] - a[1]);
+const topReferrers = Object.entries(referrers).sort((a, b) => b[1] - a[1]);
+const scrollKeys = Object.keys(scrollDepth).sort((a, b) => Number(a) - Number(b));
+
+const avgTimeOnPage = timeOnPageCount > 0 ? Math.round(totalTimeOnPage / timeOnPageCount) : 0;
+const formatTime = (s: number) => {
+    const min = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${min}m ${sec}s`;
+}
 
 let logSize = 0;
 try {
@@ -114,12 +146,71 @@ try {
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1;">{totalEvents}</div>
         </div>
         <div>
+             <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Avg. Time</span>
+             <div style="font-size: 1.5rem; font-weight: bold; line-height: 1;">{formatTime(avgTimeOnPage)}</div>
+        </div>
+        <div>
              <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Log Size</span>
              <div style="font-size: 1.5rem; color: #888;">{(logSize / 1024).toFixed(2)} KB</div>
         </div>
     </div>
 
     <div class="grid">
+        <!-- Visitor Breakdown -->
+        <div class="card">
+            <h2>Audience</h2>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Devices</h3>
+                <table>
+                    <tbody>
+                        {topDevices.map(([name, count]) => (
+                            <tr>
+                                <td>{name}</td>
+                                <td class="stat-value" style="text-align: right;">{count}</td>
+                            </tr>
+                        ))}
+                         {topDevices.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No device data</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+             <div>
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Referrers</h3>
+                <table>
+                    <tbody>
+                        {topReferrers.map(([name, count]) => (
+                            <tr>
+                                <td>{name}</td>
+                                <td class="stat-value" style="text-align: right;">{count}</td>
+                            </tr>
+                        ))}
+                         {topReferrers.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No referrer data</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Scroll Depth -->
+        <div class="card">
+            <h2>Scroll Depth</h2>
+             <table>
+                <thead>
+                    <tr>
+                        <th>Depth</th>
+                        <th style="text-align: right;">Reach</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {scrollKeys.map(depth => (
+                        <tr>
+                            <td>{depth}%</td>
+                            <td class="stat-value" style="text-align: right;">{scrollDepth[depth]}</td>
+                        </tr>
+                    ))}
+                    {scrollKeys.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No scroll data yet</td></tr>}
+                </tbody>
+            </table>
+        </div>
+
         <!-- Funnel -->
         <div class="card">
             <h2>Calculator Funnel</h2>
