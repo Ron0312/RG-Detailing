@@ -3,6 +3,7 @@ import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import { ArrowDown } from "lucide-react";
+import { trackEvent } from '../lib/analytics';
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 
@@ -35,12 +36,15 @@ export default function GalleryLightbox({ images, limit = 10 }) {
   const hasMore = filteredImages.length > visibleCount || hasHiddenMobileItems;
 
   const handleFilterChange = (cat) => {
+      trackEvent('gallery_filter', { category: cat });
       setFilter(cat);
       setVisibleCount(limit);
       setIsExpanded(false);
   };
 
   const handleImageClick = (clickedIndex) => {
+      const img = visibleImages[clickedIndex];
+      trackEvent('gallery_view', { src: img?.src, alt: img?.alt, category: img?.category });
       setIndex(clickedIndex);
   };
 
