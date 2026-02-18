@@ -17,3 +17,8 @@
 **Vulnerability:** The 404 logging endpoint logged the full URL including query parameters, which could expose sensitive tokens or PII (e.g. `?token=...`, `?email=...`).
 **Learning:** Logging `window.location.href` or request URLs directly is a common PII leak source, as developers often forget that sensitive data can be passed in query params.
 **Prevention:** Always parse and sanitize URLs before logging. Strip query parameters or redact sensitive keys, especially in error or access logs.
+
+## 2026-02-18 - Uncontrolled Log File Growth
+**Vulnerability:** The 404 logging endpoint (`/api/log-404`) appended logs to a local file indefinitely without checking size limits, leading to potential disk exhaustion (DoS).
+**Learning:** Appending to files in a long-running server environment requires strict resource management (rotation/limits) to prevent DoS.
+**Prevention:** Always implement log rotation or size checks before writing to local files, or use a managed logging service.
