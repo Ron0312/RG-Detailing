@@ -10,6 +10,7 @@ import MobileStickyBar from '../components/MobileStickyBar.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 import ScrollProgress from '../components/ScrollProgress.jsx';
+import PageTracker from '../components/PageTracker.astro';
 
 interface Props {
 	title: string;
@@ -98,5 +99,6 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <MobileStickyBar />
         <ScrollToTop />
         <CookieBanner />
+        <PageTracker />
 	</body>
 </html>
