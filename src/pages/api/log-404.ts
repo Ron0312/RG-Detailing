@@ -76,7 +76,19 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Attempt to write to file, but don't crash if it fails (e.g. read-only FS)
     // Non-blocking fire-and-forget to avoid delaying the response
     fs.mkdir(logDir, { recursive: true })
-        .then(() => fs.appendFile(logFile, logEntry))
+        .then(async () => {
+            try {
+                // Log Rotation: Check if file exceeds 5MB
+                const stats = await fs.stat(logFile);
+                if (stats.size > 5 * 1024 * 1024) {
+                     await fs.rename(logFile, path.join(logDir, '404.log.old'));
+                }
+            } catch (err) {
+                // File likely doesn't exist yet, which is fine.
+                // Other errors (permission) will be caught by the outer catch or subsequent append.
+            }
+            return fs.appendFile(logFile, logEntry);
+        })
         .catch((fsError) => {
             console.warn('Could not write to local log file (likely read-only filesystem):', fsError);
         });

@@ -1,14 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { POST } from './log-404';
 
-// Mock fs.appendFile
+// Mock fs methods
 const appendFileMock = vi.fn().mockResolvedValue(undefined);
 const mkdirMock = vi.fn().mockResolvedValue(undefined);
+const statMock = vi.fn().mockResolvedValue({ size: 100 });
+const renameMock = vi.fn().mockResolvedValue(undefined);
 
 vi.mock('node:fs/promises', () => ({
   default: {
     appendFile: (...args: any[]) => appendFileMock(...args),
     mkdir: (...args: any[]) => mkdirMock(...args),
+    stat: (...args: any[]) => statMock(...args),
+    rename: (...args: any[]) => renameMock(...args),
   },
 }));
 
@@ -18,10 +22,14 @@ vi.mock('../../lib/rate-limit', () => ({
   checkRateLimit: checkRateLimitMock,
 }));
 
+const flushPromises = () => new Promise(resolve => setTimeout(resolve, 10));
+
 describe('POST /api/log-404 Security Tests', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         checkRateLimitMock.mockReturnValue(true);
+        // Default small size
+        statMock.mockResolvedValue({ size: 100 });
     });
 
     it('should use "unknown" as rate limit key when IP is invalid/bloated', async () => {
@@ -91,6 +99,8 @@ describe('POST /api/log-404 Security Tests', () => {
         const response = await POST({ request: req, clientAddress: '127.0.0.3' } as any);
         expect(response.status).toBe(200);
 
+        await flushPromises();
+
         expect(appendFileMock).toHaveBeenCalled();
         const loggedContent = appendFileMock.mock.calls[0][1];
 
@@ -111,6 +121,8 @@ describe('POST /api/log-404 Security Tests', () => {
         const response = await POST({ request: req, clientAddress: '127.0.0.100' } as any);
         expect(response.status).toBe(200);
 
+        await flushPromises();
+
         expect(appendFileMock).toHaveBeenCalled();
         const loggedContent = appendFileMock.mock.lastCall?.[1] || '';
 
@@ -119,5 +131,46 @@ describe('POST /api/log-404 Security Tests', () => {
         expect(loggedContent).not.toContain('user@example.com');
         // Should contain the path
         expect(loggedContent).toContain('/reset-password');
+    });
+
+    it('should rotate log file if it exceeds 5MB', async () => {
+        // Setup: Mock file size to be 6MB
+        statMock.mockResolvedValueOnce({ size: 6 * 1024 * 1024 });
+
+        const req = new Request('http://localhost/api/log-404', {
+            method: 'POST',
+            body: JSON.stringify({ url: '/foo', referrer: '', userAgent: 'test' }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.50' } as any);
+        expect(response.status).toBe(200);
+
+        await flushPromises();
+
+        // Verify that rename was called
+        expect(renameMock).toHaveBeenCalled();
+        const renameArgs = renameMock.mock.calls[0];
+        expect(renameArgs[0]).toContain('404.log');
+        expect(renameArgs[1]).toContain('404.log.old');
+    });
+
+    it('should NOT rotate log file if it is small', async () => {
+        // Setup: Mock file size to be 1MB
+        statMock.mockResolvedValueOnce({ size: 1 * 1024 * 1024 });
+
+        const req = new Request('http://localhost/api/log-404', {
+            method: 'POST',
+            body: JSON.stringify({ url: '/foo', referrer: '', userAgent: 'test' }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.51' } as any);
+        expect(response.status).toBe(200);
+
+        await flushPromises();
+
+        // Verify that rename was NOT called
+        expect(renameMock).not.toHaveBeenCalled();
     });
 });
