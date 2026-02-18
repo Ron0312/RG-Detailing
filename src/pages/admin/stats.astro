@@ -5,8 +5,6 @@ import path from 'node:path';
 // Auth Check (Simple)
 const url = new URL(Astro.request.url);
 const key = url.searchParams.get('key');
-// In production, STATS_SECRET must be set. In development, we use a default for testing.
-// User requested fallback 'RG!123' for live setup without ENV access.
 const isDev = import.meta.env.DEV;
 const secret = import.meta.env.STATS_SECRET || 'RG!123';
 
@@ -23,6 +21,10 @@ interface AnalyticsEvent {
     event: string;
     url?: string;
     sessionId?: string;
+    visitorId?: string; // Persistent if consented
+    dailyHash?: string; // Anonymous daily unique
+    browser?: string;
+    os?: string;
     data?: Record<string, any>;
 }
 
@@ -48,47 +50,42 @@ const calculator: { start: number; steps: Record<string, number>; submit: number
     submit: 0
 };
 const devices: Record<string, number> = {};
+const browsers: Record<string, number> = {};
+const os: Record<string, number> = {};
 const referrers: Record<string, number> = {};
 const scrollDepth: Record<string, number> = {};
 const pages: Record<string, { views: number; time: number; timeCount: number; bounces: number }> = {};
 let totalTimeOnPage = 0;
 let timeOnPageCount = 0;
 
+// Temporal Data for Charts
+const history: Record<string, { views: number; visitors: Set<string> }> = {};
+
 events.forEach(e => {
+    // Date Key (YYYY-MM-DD)
+    const dateKey = e.timestamp.split('T')[0];
+    if (!history[dateKey]) history[dateKey] = { views: 0, visitors: new Set() };
+
     eventsByName[e.event] = (eventsByName[e.event] || 0) + 1;
 
-    // Track Page Views & Time per Page
-    if (e.event === 'page_view' && e.url) {
-        if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
-        pages[e.url].views++;
-    }
-
-    // Time on Page (Global + Per Page)
-    if (e.event === 'time_on_page' && e.data?.duration) {
-        const d = Number(e.data.duration);
-        totalTimeOnPage += d;
-        timeOnPageCount++;
+    // Track Views & Visitors
+    if (e.event === 'page_view') {
+        history[dateKey].views++;
+        // Use visitorId if available, else dailyHash, else sessionId
+        const uniqueId = e.visitorId || e.dailyHash || e.sessionId;
+        if (uniqueId) history[dateKey].visitors.add(uniqueId);
 
         if (e.url) {
             if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
-            pages[e.url].time += d;
-            pages[e.url].timeCount++;
-
-            // Simple bounce check: if total duration reported is < 10s
-            // (Note: This is approximate as tracking logic might fire multiple times)
-            // Ideally, we'd check session length, but per-event this is a heuristic.
-            if (e.data.total && e.data.total < 10) {
-                // Not ideal, bounce is session-based.
-                // Better: Count sessions with only 1 page view? Too complex for this script.
-                // Fallback: If average time on this page is < 10s across all users.
-            }
+            pages[e.url].views++;
         }
     }
 
-    // Device & Referrer (from page_view or context)
-    if (e.data?.device) {
-        devices[e.data.device] = (devices[e.data.device] || 0) + 1;
-    }
+    // Context Stats
+    if (e.data?.device) devices[e.data.device] = (devices[e.data.device] || 0) + 1;
+    if (e.browser) browsers[e.browser] = (browsers[e.browser] || 0) + 1;
+    if (e.os) os[e.os] = (os[e.os] || 0) + 1;
+
     if (e.data?.referrer && e.data.referrer !== 'direct' && !e.data.referrer.includes(url.host)) {
         const ref = e.data.referrer.replace('https://', '').replace('http://', '').split('/')[0];
         referrers[ref] = (referrers[ref] || 0) + 1;
@@ -115,8 +112,14 @@ events.forEach(e => {
         calculator.submit++;
     }
     if (e.event === 'time_on_page' && e.data?.duration) {
-        totalTimeOnPage += Number(e.data.duration);
+        const d = Number(e.data.duration);
+        totalTimeOnPage += d;
         timeOnPageCount++;
+        if (e.url) {
+            if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
+            pages[e.url].time += d;
+            pages[e.url].timeCount++;
+        }
     }
     if (e.event === 'scroll_depth' && e.data?.depth) {
         const d = String(e.data.depth);
@@ -124,11 +127,24 @@ events.forEach(e => {
     }
 });
 
+// Calculate History Array (Last 30 Days)
+const sortedDates = Object.keys(history).sort();
+// Fill missing dates? For simple MVP, just show active days.
+const chartData = sortedDates.map(date => ({
+    date,
+    views: history[date].views,
+    visitors: history[date].visitors.size
+}));
+
+const totalUniqueVisitors = new Set(events.map(e => e.visitorId || e.dailyHash || e.sessionId).filter(Boolean)).size;
+
 const topServices = Object.entries(services).sort((a, b) => b[1] - a[1]).slice(0, 10);
 const topGallery = Object.entries(galleryFilters).sort((a, b) => b[1] - a[1]);
 const allEvents = Object.entries(eventsByName).sort((a, b) => b[1] - a[1]);
 const stepKeys = Object.keys(calculator.steps).sort((a, b) => Number(a) - Number(b));
 const topDevices = Object.entries(devices).sort((a, b) => b[1] - a[1]);
+const topBrowsers = Object.entries(browsers).sort((a, b) => b[1] - a[1]);
+const topOS = Object.entries(os).sort((a, b) => b[1] - a[1]);
 const topReferrers = Object.entries(referrers).sort((a, b) => b[1] - a[1]);
 const scrollKeys = Object.keys(scrollDepth).sort((a, b) => Number(a) - Number(b));
 
@@ -137,7 +153,7 @@ const topPages = Object.entries(pages)
     .map(([url, stats]) => ({
         url,
         views: stats.views,
-        avgTime: stats.timeCount > 0 ? Math.round(stats.time / stats.timeCount) : 0
+        avgTime: stats.views > 0 ? Math.round(stats.time / stats.views) : 0 // Corrected average logic
     }))
     .sort((a, b) => b.views - a.views)
     .slice(0, 15);
@@ -150,7 +166,8 @@ const serviceInterest = topServices.map(([name, count]) => ({
     rate: Math.round((count / homepageViews) * 100)
 }));
 
-const avgTimeOnPage = timeOnPageCount > 0 ? Math.round(totalTimeOnPage / timeOnPageCount) : 0;
+const totalViews = events.filter(e => e.event === 'page_view').length;
+const avgTimeOnPage = totalViews > 0 ? Math.round(totalTimeOnPage / totalViews) : 0;
 const formatTime = (s: number) => {
     if (!s) return '-';
     const min = Math.floor(s / 60);
@@ -163,6 +180,21 @@ try {
     const stat = await fs.stat(logFile);
     logSize = stat.size;
 } catch (e) {}
+
+// SVG Chart Generator
+const maxVal = Math.max(...chartData.map(d => d.views), 10);
+const chartHeight = 150;
+const chartWidth = 1000;
+const pointsViews = chartData.map((d, i) => {
+    const x = (i / (chartData.length - 1 || 1)) * chartWidth;
+    const y = chartHeight - (d.views / maxVal) * chartHeight;
+    return `${x},${y}`;
+}).join(' ');
+const pointsVisitors = chartData.map((d, i) => {
+    const x = (i / (chartData.length - 1 || 1)) * chartWidth;
+    const y = chartHeight - (d.visitors / maxVal) * chartHeight;
+    return `${x},${y}`;
+}).join(' ');
 
 ---
 
@@ -189,6 +221,16 @@ try {
         .controls { display: flex; gap: 1rem; margin-bottom: 2rem; }
         .btn { background: #333; color: #eee; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; transition: background 0.2s; font-size: 0.9rem; }
         .btn:hover, .btn.active { background: #ef4444; color: #fff; }
+
+        /* Chart */
+        .chart-container { width: 100%; height: 200px; position: relative; margin-bottom: 2rem; }
+        svg { width: 100%; height: 100%; overflow: visible; }
+        .line-views { fill: none; stroke: #ef4444; stroke-width: 2; }
+        .line-visitors { fill: none; stroke: #3b82f6; stroke-width: 2; stroke-dasharray: 4; }
+        .axis { stroke: #444; stroke-width: 1; }
+        .tooltip { position: absolute; background: #333; padding: 0.5rem; border-radius: 4px; border: 1px solid #555; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
+        .legend { display: flex; gap: 1rem; font-size: 0.8rem; justify-content: flex-end; margin-bottom: 0.5rem; }
+        .dot { width: 8px; height: 8px; display: inline-block; border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -203,16 +245,40 @@ try {
 
     <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Total Events</span>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Views (Total)</span>
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1;">{totalEvents}</div>
+        </div>
+        <div>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Unique Visitors</span>
+            <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #3b82f6;">{totalUniqueVisitors}</div>
         </div>
         <div>
              <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Avg. Time</span>
              <div style="font-size: 1.5rem; font-weight: bold; line-height: 1;">{formatTime(avgTimeOnPage)}</div>
         </div>
-        <div>
-             <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Log Size</span>
-             <div style="font-size: 1.5rem; color: #888;">{(logSize / 1024).toFixed(2)} KB</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+        <h2>Trends (Last 30 Days)</h2>
+        <div class="legend">
+            <span style="color: #ef4444;"><span class="dot" style="background: #ef4444;"></span> Page Views</span>
+            <span style="color: #3b82f6;"><span class="dot" style="background: #3b82f6;"></span> Unique Visitors</span>
+        </div>
+        <div class="chart-container">
+            <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
+                <!-- Axes -->
+                <line x1="0" y1={chartHeight} x2={chartWidth} y2={chartHeight} class="axis" />
+                <line x1="0" y1="0" x2="0" y2={chartHeight} class="axis" />
+
+                <!-- Data Lines -->
+                <polyline points={pointsViews} class="line-views" />
+                <polyline points={pointsVisitors} class="line-visitors" />
+            </svg>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888;">
+            <span>{chartData[0]?.date}</span>
+            <span>{chartData[chartData.length - 1]?.date}</span>
         </div>
     </div>
 
@@ -250,16 +316,28 @@ try {
         <div class="card">
             <h2>Audience</h2>
             <div style="margin-bottom: 1.5rem;">
-                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Devices</h3>
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Browsers</h3>
                 <table>
                     <tbody>
-                        {topDevices.map(([name, count]) => (
+                        {topBrowsers.map(([name, count]) => (
                             <tr>
                                 <td>{name}</td>
                                 <td class="stat-value" style="text-align: right;">{count}</td>
                             </tr>
                         ))}
-                         {topDevices.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No device data</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Operating Systems</h3>
+                <table>
+                    <tbody>
+                        {topOS.map(([name, count]) => (
+                            <tr>
+                                <td>{name}</td>
+                                <td class="stat-value" style="text-align: right;">{count}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

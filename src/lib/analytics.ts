@@ -8,6 +8,16 @@ export const trackEvent = async (eventName: string, data: Record<string, any> = 
       sessionStorage.setItem('analytics_session_id', sessionId);
     }
 
+    // Persistent Visitor ID (Consent Dependent)
+    let visitorId = undefined;
+    if (localStorage.getItem('cookie-consent') === 'accepted') {
+        visitorId = localStorage.getItem('analytics_visitor_id');
+        if (!visitorId) {
+            visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('analytics_visitor_id', visitorId);
+        }
+    }
+
     // Capture context
     const context = {
         referrer: document.referrer || 'direct',
@@ -20,6 +30,7 @@ export const trackEvent = async (eventName: string, data: Record<string, any> = 
       eventName,
       url: window.location.href,
       sessionId,
+      visitorId,
       data: {
           ...context,
           ...data
