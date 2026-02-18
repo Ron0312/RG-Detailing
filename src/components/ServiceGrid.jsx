@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator } from 'lucide-react';
 import GlossaryLinker from './GlossaryLinker';
 
@@ -20,25 +20,40 @@ export default function ServiceGrid({ services }) {
     // Get unique categories, ensuring 'Lack & Keramik' is first if present
     const categories = ["Lack & Keramik", "Spezial & Reparatur", "Innen & Sonstiges"];
 
-    const filteredServices = services.filter(service =>
+    // MEMOIZATION OPTIMIZATION:
+    // Prevent re-filtering on every render. Only re-filter when services or category changes.
+    const filteredServices = useMemo(() => services.filter(service =>
         activeCategory === "Alle" ? true : service.category === activeCategory
-    );
+    ), [services, activeCategory]);
 
+    // SCROLL OPTIMIZATION:
+    // Replaced high-frequency scroll event listener with IntersectionObserver.
+    // This avoids layout thrashing (reading scrollLeft/offsetWidth) and reduces main thread work.
     useEffect(() => {
-        const handleScroll = () => {
-            if (scrollRef.current) {
-                const scrollLeft = scrollRef.current.scrollLeft;
-                const width = scrollRef.current.offsetWidth;
-                const newIndex = Math.round(scrollLeft / width);
-                setActiveIndex(newIndex);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    // Update active index if card is >60% visible
+                    if (entry.isIntersecting) {
+                        const index = Number(entry.target.getAttribute('data-index'));
+                        setActiveIndex(index);
+                    }
+                });
+            },
+            {
+                root: scrollRef.current,
+                threshold: 0.6 // Card must be 60% visible to be considered active
             }
-        };
+        );
 
-        const ref = scrollRef.current;
-        if (ref) {
-            ref.addEventListener('scroll', handleScroll);
-            return () => ref.removeEventListener('scroll', handleScroll);
+        const container = scrollRef.current;
+        if (container) {
+            // Observe all service cards
+            const cards = container.querySelectorAll('[data-index]');
+            cards.forEach((card) => observer.observe(card));
         }
+
+        return () => observer.disconnect();
     }, [filteredServices]); // Re-attach when list changes
 
     // Reset index on category change
@@ -74,10 +89,14 @@ export default function ServiceGrid({ services }) {
                 ref={scrollRef}
                 className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-8 min-h-[400px] pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right"
             >
-                {filteredServices.map((service) => {
+                {filteredServices.map((service, index) => {
                     const IconComponent = iconMap[service.icon] || Sparkles;
                     return (
-                        <div key={service.title} className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0">
+                        <div
+                            key={service.title}
+                            data-index={index}
+                            className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0"
+                        >
                              <a href={service.link} className="absolute inset-0 z-10" aria-label={`Mehr erfahren zu ${service.title}`}></a>
                              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
