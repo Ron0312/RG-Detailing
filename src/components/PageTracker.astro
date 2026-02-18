@@ -43,9 +43,19 @@
       }
   });
 
-  // Track Scroll Depth (25%, 50%, 75%, 100%)
+  // Intent Tracking: Copy
+  document.addEventListener('copy', () => {
+      const selection = document.getSelection();
+      const text = selection ? selection.toString() : '';
+      if (text.length > 5 && text.length < 100) { // Ignore huge copies or tiny accidental ones
+          trackEvent('intent_copy', { text: text.substring(0, 50) });
+      }
+  });
+
+  // Track Scroll Depth & Reading Behavior
   const thresholds = [25, 50, 75, 100];
   const tracked = new Set();
+  let scrollStartTime = Date.now();
 
   const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -55,6 +65,14 @@
       thresholds.forEach(t => {
           if (percentage >= t && !tracked.has(t)) {
               tracked.add(t);
+
+              // Calculate reading speed to reach 50%
+              if (t === 50) {
+                  const timeToHalf = (Date.now() - scrollStartTime) / 1000;
+                  const behavior = timeToHalf < 3 ? 'skim' : 'read'; // <3s to scroll 50% = skimming
+                  trackEvent('reading_behavior', { type: behavior, seconds: Math.round(timeToHalf) });
+              }
+
               trackEvent('scroll_depth', { depth: t });
           }
       });

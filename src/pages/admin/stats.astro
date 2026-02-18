@@ -15,6 +15,7 @@ if (key !== secret) {
 // Read Logs
 const logDir = path.resolve('logs');
 const logFile = path.join(logDir, 'events.jsonl');
+const errorLogFile = path.join(logDir, '404.log');
 
 interface AnalyticsEvent {
     timestamp: string;
@@ -29,6 +30,7 @@ interface AnalyticsEvent {
 }
 
 let events: AnalyticsEvent[] = [];
+let notFoundErrors: { timestamp: string; url: string; referrer: string; ua: string; }[] = [];
 
 try {
     const content = await fs.readFile(logFile, 'utf-8');
@@ -37,6 +39,25 @@ try {
     }).filter((e): e is AnalyticsEvent => e !== null);
 } catch (e) {
     // No logs yet
+}
+
+try {
+    const errorContent = await fs.readFile(errorLogFile, 'utf-8');
+    // Parse: [ISO] 404: /url (Referrer: ...) - UA: ...
+    notFoundErrors = errorContent.trim().split('\n').map(line => {
+        const match = line.match(/^\[(.*?)\] 404: (.*?) \(Referrer: (.*?)\) - UA: (.*)$/);
+        if (match) {
+            return {
+                timestamp: match[1],
+                url: match[2],
+                referrer: match[3],
+                ua: match[4]
+            };
+        }
+        return null;
+    }).filter((e): e is NonNullable<typeof e> => e !== null).reverse().slice(0, 50); // Last 50 errors
+} catch (e) {
+    // No error logs yet
 }
 
 // Aggregation
@@ -55,6 +76,8 @@ const os: Record<string, number> = {};
 const referrers: Record<string, number> = {};
 const scrollDepth: Record<string, number> = {};
 const pages: Record<string, { views: number; time: number; timeCount: number; bounces: number }> = {};
+const readingBehavior: Record<string, number> = { read: 0, skim: 0 };
+const intents: Record<string, number> = {};
 let totalTimeOnPage = 0;
 let timeOnPageCount = 0;
 
@@ -125,6 +148,14 @@ events.forEach(e => {
         const d = String(e.data.depth);
         scrollDepth[d] = (scrollDepth[d] || 0) + 1;
     }
+    if (e.event === 'reading_behavior' && e.data?.type) {
+        const t = e.data.type as 'read' | 'skim';
+        if (readingBehavior[t] !== undefined) readingBehavior[t]++;
+    }
+    if (e.event === 'intent_copy' && e.data?.text) {
+        const t = String(e.data.text);
+        intents[t] = (intents[t] || 0) + 1;
+    }
 });
 
 // Calculate History Array (Last 30 Days)
@@ -147,6 +178,7 @@ const topBrowsers = Object.entries(browsers).sort((a, b) => b[1] - a[1]);
 const topOS = Object.entries(os).sort((a, b) => b[1] - a[1]);
 const topReferrers = Object.entries(referrers).sort((a, b) => b[1] - a[1]);
 const scrollKeys = Object.keys(scrollDepth).sort((a, b) => Number(a) - Number(b));
+const topIntents = Object.entries(intents).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
 // Process Top Pages
 const topPages = Object.entries(pages)
@@ -357,26 +389,35 @@ const pointsVisitors = chartData.map((d, i) => {
             </div>
         </div>
 
-        <!-- Scroll Depth -->
+        <!-- Scroll Depth & Behavior -->
         <div class="card">
-            <h2>Scroll Depth</h2>
-             <table>
-                <thead>
-                    <tr>
-                        <th>Depth</th>
-                        <th style="text-align: right;">Reach</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {scrollKeys.map(depth => (
-                        <tr>
-                            <td>{depth}%</td>
-                            <td class="stat-value" style="text-align: right;">{scrollDepth[depth]}</td>
-                        </tr>
-                    ))}
-                    {scrollKeys.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No scroll data yet</td></tr>}
-                </tbody>
-            </table>
+            <h2>Reading Habits</h2>
+             <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Scroll Depth</h3>
+                <table>
+                    <tbody>
+                        {scrollKeys.map(depth => (
+                            <tr>
+                                <td>{depth}%</td>
+                                <td class="stat-value" style="text-align: right;">{scrollDepth[depth]}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Behavior</h3>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="flex: 1; text-align: center; padding: 1rem; background: #333; border-radius: 8px;">
+                        <div style="color: #22c55e; font-size: 1.5rem; font-weight: bold;">{readingBehavior.read}</div>
+                        <div style="font-size: 0.7rem; text-transform: uppercase; color: #888;">Readers</div>
+                    </div>
+                    <div style="flex: 1; text-align: center; padding: 1rem; background: #333; border-radius: 8px;">
+                        <div style="color: #eab308; font-size: 1.5rem; font-weight: bold;">{readingBehavior.skim}</div>
+                        <div style="font-size: 0.7rem; text-transform: uppercase; color: #888;">Skimmers</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Funnel -->
@@ -473,14 +514,30 @@ const pointsVisitors = chartData.map((d, i) => {
             </table>
         </div>
 
-         <!-- All Events -->
+         <!-- Intent & Events -->
         <div class="card">
-            <h2>Event Log</h2>
+            <h2>User Intent</h2>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Copied Text</h3>
+                <table>
+                    <tbody>
+                        {topIntents.map(([text, count]) => (
+                            <tr>
+                                <td style="font-family: monospace; font-size: 0.8rem; color: #ccc;">"{text}"</td>
+                                <td class="stat-value" style="text-align: right;">{count}</td>
+                            </tr>
+                        ))}
+                        {topIntents.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No text copied yet</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">All Events</h3>
             <table>
                  <thead>
                     <tr>
-                        <th>Event Name</th>
-                        <th style="text-align: right;">Total</th>
+                        <th>Event</th>
+                        <th style="text-align: right;">Count</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -490,6 +547,30 @@ const pointsVisitors = chartData.map((d, i) => {
                             <td class="stat-value" style="text-align: right;">{count}</td>
                         </tr>
                     ))}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 404 Errors -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>Recent 404 Errors</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Path</th>
+                        <th>Referrer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {notFoundErrors.map((err) => (
+                        <tr>
+                            <td class="text-xs text-gray-400">{new Date(err.timestamp).toLocaleString('de-DE')}</td>
+                            <td class="font-mono text-sm text-red-400">{err.url}</td>
+                            <td class="text-xs text-gray-400 max-w-[200px] truncate" title={err.referrer}>{err.referrer}</td>
+                        </tr>
+                    ))}
+                    {notFoundErrors.length === 0 && <tr><td colspan="3" style="color: #666; text-align: center;">No 404 errors recorded</td></tr>}
                 </tbody>
             </table>
         </div>
