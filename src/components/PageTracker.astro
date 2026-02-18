@@ -9,19 +9,37 @@
     });
   });
 
-  // Track Time on Page
+  // Track Time on Page (Heartbeat + Visibility)
   let startTime = Date.now();
+  let timeTracked = 0;
+
   const trackDuration = () => {
-    const duration = Math.round((Date.now() - startTime) / 1000); // seconds
-    if (duration > 5) { // Only track if > 5 seconds
-        trackEvent('time_on_page', { duration });
+    const now = Date.now();
+    const duration = Math.round((now - startTime) / 1000); // seconds
+    if (duration > timeTracked && duration > 5) {
+        trackEvent('time_on_page', { duration: duration - timeTracked, total: duration });
+        timeTracked = duration;
     }
   };
 
-  // Use visibilitychange as it's more reliable on mobile than unload
+  // Heartbeat every 30 seconds
+  setInterval(trackDuration, 30000);
+
+  // Visibility Change
   document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
           trackDuration();
+      }
+  });
+
+  // Outbound Link Tracking
+  document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest('a');
+      if (link && link.href) {
+          const url = new URL(link.href);
+          if (url.origin !== window.location.origin) {
+              trackEvent('outbound_click', { url: link.href });
+          }
       }
   });
 

@@ -115,8 +115,24 @@ describe('POST /api/log-event', () => {
         await flushPromises();
 
         const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
-        expect(content.url).toBe('https://site.com/page');
+        expect(content.url).toBe('/page'); // Stores only pathname
         expect(content.url).not.toContain('secret');
+    });
+
+    it('should normalize URL (remove trailing slash)', async () => {
+        const req = new Request('http://localhost/api/log-event', {
+            method: 'POST',
+            body: JSON.stringify({ eventName: 'test', url: 'https://site.com/page/' }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(response.status).toBe(200);
+
+        await flushPromises();
+
+        const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
+        expect(content.url).toBe('/page');
     });
 
     it('should rotate log file if > 5MB', async () => {
