@@ -51,13 +51,23 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Sanitize URL
     let sanitizedUrl = (url || '').substring(0, 200);
     try {
-        // Redact query params
+        // Redact query params and normalize
         if (sanitizedUrl.startsWith('http')) {
              const u = new URL(sanitizedUrl);
              u.search = '';
-             sanitizedUrl = u.toString();
+             u.hash = '';
+             // Remove trailing slash if present (except root)
+             if (u.pathname.length > 1 && u.pathname.endsWith('/')) {
+                 u.pathname = u.pathname.slice(0, -1);
+             }
+             sanitizedUrl = u.pathname; // Store only pathname to be cleaner
         } else if (sanitizedUrl.includes('?')) {
              sanitizedUrl = sanitizedUrl.split('?')[0];
+        }
+
+        // Simple normalization for relative paths
+        if (sanitizedUrl.length > 1 && sanitizedUrl.endsWith('/')) {
+            sanitizedUrl = sanitizedUrl.slice(0, -1);
         }
     } catch (e) {
         // Fallback
