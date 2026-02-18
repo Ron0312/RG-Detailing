@@ -40,6 +40,17 @@ export default function WhyUs() {
         }
     }, []);
 
+    const scrollToSlide = (index) => {
+        if (scrollRef.current) {
+            const width = scrollRef.current.offsetWidth;
+            scrollRef.current.scrollTo({
+                left: width * index,
+                behavior: 'smooth'
+            });
+            setActiveIndex(index);
+        }
+    };
+
     return (
         <section className="section-spacing">
             <div className="container mx-auto px-4">
@@ -50,6 +61,8 @@ export default function WhyUs() {
 
                 <div
                     ref={scrollRef}
+                    role="region"
+                    aria-label="Vorteile Karussell"
                     className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-3 gap-0 md:gap-8 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right"
                 >
                     {items.map((item, index) => {
@@ -71,11 +84,21 @@ export default function WhyUs() {
                 </div>
 
                 {/* Mobile Pagination Dots */}
-                <div className="flex md:hidden justify-center gap-2 mt-4">
+                <div
+                    className="flex md:hidden justify-center gap-3 mt-6"
+                    aria-label="Karussell Navigation"
+                >
                     {items.map((_, index) => (
-                        <div
+                        <button
                             key={index}
-                            className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700'}`}
+                            onClick={() => scrollToSlide(index)}
+                            aria-label={`Gehe zu Slide ${index + 1}`}
+                            aria-current={index === activeIndex ? 'step' : undefined}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
+                                index === activeIndex
+                                    ? 'bg-red-600 scale-125'
+                                    : 'bg-zinc-700 hover:bg-zinc-600'
+                            }`}
                         />
                     ))}
                 </div>
