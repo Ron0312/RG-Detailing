@@ -6,13 +6,12 @@ import path from 'node:path';
 const url = new URL(Astro.request.url);
 const key = url.searchParams.get('key');
 // In production, STATS_SECRET must be set. In development, we use a default for testing.
-// This prevents accidental exposure in production if env var is forgotten.
+// User requested fallback 'RG!123' for live setup without ENV access.
 const isDev = import.meta.env.DEV;
-const secret = import.meta.env.STATS_SECRET || (isDev ? 'rg-stats-dev' : null);
+const secret = import.meta.env.STATS_SECRET || 'RG!123';
 
-if (!secret || key !== secret) {
-    // If no secret is configured in production, we deny all access by default
-    return new Response(`Unauthorized. Access Denied. ${!secret ? '(Server Config Error: STATS_SECRET missing)' : ''}`, { status: 401 });
+if (key !== secret) {
+    return new Response(`Unauthorized. Access Denied.`, { status: 401 });
 }
 
 // Read Logs
