@@ -28,7 +28,7 @@ let events: AnalyticsEvent[] = [];
 let notFoundErrors: { timestamp: string; url: string; referrer: string; ua: string; }[] = [];
 
 // Simple In-Memory Cache
-const CACHE_TTL = 60 * 1000; // 60s
+const CACHE_TTL = 5 * 1000; // 5s (Realtime)
 // @ts-ignore
 if (!globalThis.analyticsCache) globalThis.analyticsCache = { data: [], lastFetch: 0 };
 // @ts-ignore
@@ -38,8 +38,11 @@ try {
     const nowTs = Date.now();
     let rawEvents: AnalyticsEvent[] = [];
 
+    // Check for Bypass
+    const noCache = url.searchParams.has('nocache');
+
     // Use Cache if fresh
-    if (cache.data.length > 0 && (nowTs - cache.lastFetch) < CACHE_TTL) {
+    if (!noCache && cache.data.length > 0 && (nowTs - cache.lastFetch) < CACHE_TTL) {
         rawEvents = cache.data;
     } else {
         const content = await fs.readFile(logFile, 'utf-8');

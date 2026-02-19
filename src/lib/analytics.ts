@@ -10,6 +10,7 @@ export const trackEvent = async (eventName: string, data: Record<string, any> = 
       pathname.startsWith('/admin') ||
       pathname.startsWith('/keystatic')
   ) {
+      console.log('Analytics skipped: Localhost/Admin detected');
       return;
   }
 
