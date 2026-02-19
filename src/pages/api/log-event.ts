@@ -43,6 +43,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }
 
+    // Bot Filter: Server-side check for common crawlers to ensure data accuracy
+    const headerUserAgent = request.headers.get('user-agent') || '';
+    if (/bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit/i.test(headerUserAgent)) {
+        // Silently ignore bots to save resources and keep logs clean
+        return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
+    }
+
     // Security: Check Content-Type to prevent CSRF via Simple Requests
     const contentType = request.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
