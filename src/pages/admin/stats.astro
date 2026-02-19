@@ -27,22 +27,45 @@ const filterCutoff = filterRange === '7d' ? now - (7 * oneDay) : (filterRange ==
 let events: AnalyticsEvent[] = [];
 let notFoundErrors: { timestamp: string; url: string; referrer: string; ua: string; }[] = [];
 
-try {
-    const content = await fs.readFile(logFile, 'utf-8');
-    events = content.trim().split('\n').map(line => {
-        try { return JSON.parse(line); } catch(e) { return null; }
-    }).filter((e): e is AnalyticsEvent => {
-        if (!e) return false;
-        // Filter out Admin/Dev logs (retroactive cleaning)
-        if (e.url?.includes('/admin') || e.url?.includes('/keystatic')) return false;
+// Simple In-Memory Cache
+const CACHE_TTL = 60 * 1000; // 60s
+// @ts-ignore
+if (!globalThis.analyticsCache) globalThis.analyticsCache = { data: [], lastFetch: 0 };
+// @ts-ignore
+const cache = globalThis.analyticsCache;
 
-        // Apply Date Filter
+try {
+    const nowTs = Date.now();
+    let rawEvents: AnalyticsEvent[] = [];
+
+    // Use Cache if fresh
+    if (cache.data.length > 0 && (nowTs - cache.lastFetch) < CACHE_TTL) {
+        rawEvents = cache.data;
+    } else {
+        const content = await fs.readFile(logFile, 'utf-8');
+        rawEvents = content.trim().split('\n').map(line => {
+            try { return JSON.parse(line); } catch(e) { return null; }
+        }).filter((e): e is AnalyticsEvent => {
+            if (!e) return false;
+            // Filter out Admin/Dev logs (retroactive cleaning)
+            if (e.url?.includes('/admin') || e.url?.includes('/keystatic')) return false;
+            return true;
+        });
+
+        // Update Cache
+        cache.data = rawEvents;
+        cache.lastFetch = nowTs;
+    }
+
+    // Apply Filters (Always fresh from rawEvents)
+    events = rawEvents.filter(e => {
         if (filterCutoff > 0) {
             const eventTime = new Date(e.timestamp).getTime();
             if (eventTime < filterCutoff) return false;
         }
         return true;
     });
+
 } catch (e) {
     // No logs yet
 }
@@ -93,6 +116,7 @@ const dayHeatmap: Record<string, number> = {}; // Day (0-6)
 const hourHeatmap: Record<string, number> = {}; // Hour (0-23)
 const lcpByPage: Record<string, { total: number; count: number }> = {};
 const seoIssues: Record<string, number> = {};
+const feedbackStats: Record<string, number> = { positive: 0, negative: 0 };
 
 let totalTimeOnPage = 0;
 let timeOnPageCount = 0;
@@ -204,6 +228,10 @@ events.forEach(e => {
         const t = String(e.data.text);
         intents[t] = (intents[t] || 0) + 1;
     }
+    if (e.event === 'feedback_submitted' && e.data?.value) {
+        const v = e.data.value as 'positive' | 'negative';
+        if (feedbackStats[v] !== undefined) feedbackStats[v]++;
+    }
     if (e.event === 'element_view' && e.data?.elementId) {
         const el = e.data.elementId;
         elementViews[el] = (elementViews[el] || 0) + 1;
@@ -293,6 +321,14 @@ const serviceInterest = topServices.map(([name, count]) => ({
     count,
     rate: Math.round((count / homepageViews) * 100)
 }));
+
+// Goals (Hardcoded for now)
+const DAILY_LEAD_TARGET = 3;
+const totalLeads = calculator.submit + Object.values(contactClicks).reduce((sum, ch) => sum + Object.values(ch).reduce((a, b) => a + b, 0), 0);
+// Normalize to daily if range is 'all' (approx) or '30d'
+const daysInRange = filterRange === '7d' ? 7 : (filterRange === '30d' ? 30 : (events.length > 0 ? (Date.now() - new Date(events[events.length-1].timestamp).getTime()) / (1000 * 60 * 60 * 24) : 1));
+const dailyLeadsAvg = totalLeads / Math.max(daysInRange, 1);
+const goalProgress = Math.min((dailyLeadsAvg / DAILY_LEAD_TARGET) * 100, 100);
 
 const totalViews = events.filter(e => e.event === 'page_view').length;
 const avgTimeOnPage = totalViews > 0 ? Math.round(totalTimeOnPage / totalViews) : 0;
@@ -440,10 +476,12 @@ if (insights.length === 0) {
         .insight.warning { background: rgba(234, 179, 8, 0.15); color: #fcd34d; border: 1px solid rgba(234, 179, 8, 0.3); }
         .insight.success { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
         .insight.info { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .sticky-header { position: sticky; top: 0; background: rgba(17, 17, 17, 0.95); backdrop-filter: blur(10px); z-index: 50; padding: 1rem 0; margin-bottom: 2rem; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        tr:nth-child(even) { background: #1a1a1a; }
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 1rem; margin-bottom: 2rem;">
+    <div class="sticky-header">
         <h1 style="border: none; margin: 0; padding: 0;">Analytics Dashboard</h1>
         <div style="display: flex; gap: 1rem; align-items: center;">
             <a href="/api/backup-logs?key=RG!123" class="btn" style="background: #3b82f6;" download>💾 Backup Logs</a>
@@ -485,8 +523,26 @@ if (insights.length === 0) {
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #3b82f6;">{totalUniqueVisitors}</div>
         </div>
         <div>
-             <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Avg. Time</span>
-             <div style="font-size: 1.5rem; font-weight: bold; line-height: 1;">{formatTime(avgTimeOnPage)}</div>
+             <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Goal: 3 Leads/Day</span>
+             <div style="display: flex; align-items: baseline; gap: 8px;">
+                 <div style="font-size: 1.5rem; font-weight: bold; color: #fff;">{dailyLeadsAvg.toFixed(1)}</div>
+                 <div style="width: 60px; height: 6px; background: #333; border-radius: 3px;">
+                     <div style={`width: ${goalProgress}%; background: ${goalProgress >= 100 ? '#22c55e' : '#eab308'}; height: 100%; border-radius: 3px;`}></div>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+    <div class="card" style="display: flex; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1; text-align: center;">
+            <div style="font-size: 2rem;">👍</div>
+            <div style="font-weight: bold; font-size: 1.25rem; color: #22c55e;">{feedbackStats.positive}</div>
+            <div style="font-size: 0.7rem; color: #888;">Positive</div>
+        </div>
+        <div style="flex: 1; text-align: center;">
+            <div style="font-size: 2rem;">👎</div>
+            <div style="font-weight: bold; font-size: 1.25rem; color: #ef4444;">{feedbackStats.negative}</div>
+            <div style="font-size: 0.7rem; color: #888;">Negative</div>
         </div>
     </div>
 
@@ -908,11 +964,39 @@ if (insights.length === 0) {
         </div>
     </div>
 
+    <!-- Danger Zone -->
+    <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #333; text-align: center;">
+        <h3 style="color: #ef4444; margin-bottom: 1rem;">Danger Zone</h3>
+        <button onclick="deleteAllData()" style="background: #ef4444; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+            ⚠️ DELETE ALL DATA
+        </button>
+        <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">This action cannot be undone.</p>
+    </div>
+
     <div class="meta">
         Generated at {new Date().toLocaleString('de-DE')} | Protected Area
     </div>
 
     <script is:inline>
+        async function deleteAllData() {
+            if (!confirm('Are you absolutely sure? This will wipe all analytics data permanently.')) return;
+
+            const url = new URL(window.location.href);
+            const key = url.searchParams.get('key');
+
+            try {
+                const res = await fetch(`/api/delete-logs?key=${key}`, { method: 'POST' });
+                if (res.ok) {
+                    alert('Data deleted successfully.');
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete data.');
+                }
+            } catch (e) {
+                alert('Error connecting to server.');
+            }
+        }
+
         // Simple reload for filtering to keep it robust without client-side heavy lifting
         function filterData(range) {
             const url = new URL(window.location.href);

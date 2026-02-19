@@ -12,6 +12,7 @@ import CookieBanner from '../components/CookieBanner.astro';
 import ScrollProgress from '../components/ScrollProgress.jsx';
 import PageTracker from '../components/PageTracker.astro';
 import ViewTracker from '../components/ViewTracker.astro';
+import FeedbackWidget from '../components/FeedbackWidget.astro';
 
 interface Props {
 	title: string;
@@ -102,5 +103,6 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
         <CookieBanner />
         <PageTracker />
         <ViewTracker />
+        <FeedbackWidget />
 	</body>
 </html>
