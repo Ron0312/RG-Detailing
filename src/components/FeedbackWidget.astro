@@ -1,0 +1,42 @@
+---
+---
+<div id="feedback-widget" class="fixed bottom-6 left-6 z-40 hidden md:flex items-center gap-2 bg-zinc-900/90 backdrop-blur border border-white/10 p-2 rounded-full shadow-lg transition-opacity duration-500 opacity-0 translate-y-10">
+    <span class="text-xs text-zinc-400 pl-2 pr-1 font-medium">War diese Seite hilfreich?</span>
+    <button class="feedback-btn p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-green-400 transition" data-value="positive" aria-label="Ja, hilfreich">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+    </button>
+    <button class="feedback-btn p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-red-400 transition" data-value="negative" aria-label="Nein, nicht hilfreich">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"/></svg>
+    </button>
+</div>
+
+<script>
+    import { trackEvent } from '../lib/analytics';
+
+    const widget = document.getElementById('feedback-widget');
+
+    // Show after scrolling a bit or delay
+    setTimeout(() => {
+        const hasVoted = sessionStorage.getItem('feedback_voted');
+        if (widget && !hasVoted) {
+            widget.classList.remove('opacity-0', 'translate-y-10');
+        }
+    }, 5000); // Show after 5s
+
+    const buttons = document.querySelectorAll('.feedback-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const val = (e.currentTarget as HTMLElement).dataset.value;
+            trackEvent('feedback_submitted', { value: val });
+
+            sessionStorage.setItem('feedback_voted', 'true');
+            if(widget) {
+                widget.innerHTML = '<span class="text-xs text-green-400 px-3 py-1 font-bold">Danke für Ihr Feedback!</span>';
+                setTimeout(() => {
+                    widget.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(() => widget.remove(), 500);
+                }, 3000);
+            }
+        });
+    });
+</script>
