@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
 
 const FAQ = ({ items }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
+    if (openIndex !== index) {
+        trackEvent('faq_toggle', { question: items[index].question });
+    }
     setOpenIndex(openIndex === index ? null : index);
   };
 
