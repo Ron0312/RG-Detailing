@@ -89,6 +89,10 @@ const exitPages: Record<string, number> = {};
 const elementViews: Record<string, number> = {};
 const contactClicks: Record<string, Record<string, number>> = {}; // channel -> location -> count
 const faqInteractions: Record<string, number> = {};
+const dayHeatmap: Record<string, number> = {}; // Day (0-6)
+const hourHeatmap: Record<string, number> = {}; // Hour (0-23)
+const lcpByPage: Record<string, { total: number; count: number }> = {};
+const seoIssues: Record<string, number> = {};
 
 let totalTimeOnPage = 0;
 let timeOnPageCount = 0;
@@ -103,13 +107,23 @@ const sessions: Record<string, { lastUrl: string; lastTime: number; startPage: s
 
 events.forEach(e => {
     // Date Key (YYYY-MM-DD)
+    const dObj = new Date(e.timestamp);
     const dateKey = e.timestamp.split('T')[0];
+    const day = dObj.getDay(); // 0-6
+    const hour = dObj.getHours(); // 0-23
+
     if (!history[dateKey]) history[dateKey] = { views: 0, visitors: new Set() };
 
     // Live Ticker (Active in last 5 mins)
-    const eventTime = new Date(e.timestamp).getTime();
+    const eventTime = dObj.getTime();
     if (now - eventTime < 5 * 60 * 1000) {
         liveUsers.add(e.visitorId || e.dailyHash || e.sessionId || 'anon');
+    }
+
+    // Heatmap Data (Views only)
+    if (e.event === 'page_view') {
+        dayHeatmap[day] = (dayHeatmap[day] || 0) + 1;
+        hourHeatmap[hour] = (hourHeatmap[hour] || 0) + 1;
     }
 
     eventsByName[e.event] = (eventsByName[e.event] || 0) + 1;
@@ -204,6 +218,15 @@ events.forEach(e => {
         const q = e.data.question;
         faqInteractions[q] = (faqInteractions[q] || 0) + 1;
     }
+    if (e.event === 'performance_metric' && e.data?.metric === 'LCP' && e.url) {
+        if (!lcpByPage[e.url]) lcpByPage[e.url] = { total: 0, count: 0 };
+        lcpByPage[e.url].total += Number(e.data.value);
+        lcpByPage[e.url].count++;
+    }
+    if (e.event === 'seo_issue' && e.data?.type) {
+        const issue = `${e.data.type} on ${e.data.url || 'unknown'}`;
+        seoIssues[issue] = (seoIssues[issue] || 0) + 1;
+    }
 });
 
 // Calculate History Array (Last 30 Days)
@@ -238,6 +261,13 @@ const topIntents = Object.entries(intents).sort((a, b) => b[1] - a[1]).slice(0, 
 const topExitPages = Object.entries(exitPages).sort((a, b) => b[1] - a[1]).slice(0, 10);
 const topElementViews = Object.entries(elementViews).sort((a, b) => b[1] - a[1]);
 const topFAQs = Object.entries(faqInteractions).sort((a, b) => b[1] - a[1]).slice(0, 5);
+const topSEOIssues = Object.entries(seoIssues).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+// Performance Table
+const performanceTable = Object.entries(lcpByPage).map(([url, stats]) => ({
+    url,
+    avgLCP: Math.round(stats.total / stats.count)
+})).sort((a, b) => b.avgLCP - a.avgLCP).slice(0, 5);
 
 // Calculate contact totals
 const contactTotals = Object.entries(contactClicks).map(([channel, locs]) => {
@@ -350,7 +380,15 @@ if (totalReaders > 5) {
     }
 }
 
-// 5. Traffic Source
+// 5. Performance Check
+if (performanceTable.length > 0 && performanceTable[0].avgLCP > 2500) {
+    insights.push({
+        type: 'warning',
+        message: `Speed: ${performanceTable[0].url} lädt langsam (${performanceTable[0].avgLCP}ms LCP). Bilder optimieren?`
+    });
+}
+
+// 6. Traffic Source
 if (topReferrers.length > 0 && topReferrers[0][1] > totalEvents * 0.3) {
     insights.push({
         type: 'info',
@@ -407,10 +445,13 @@ if (insights.length === 0) {
 <body>
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 1rem; margin-bottom: 2rem;">
         <h1 style="border: none; margin: 0; padding: 0;">Analytics Dashboard</h1>
-        <div class="controls" style="margin: 0;">
-            <button class="btn active" onclick="filterData('all')">All Time</button>
-            <button class="btn" onclick="filterData('30d')">30 Days</button>
-            <button class="btn" onclick="filterData('7d')">7 Days</button>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="/api/backup-logs?key=RG!123" class="btn" style="background: #3b82f6;" download>💾 Backup Logs</a>
+            <div class="controls" style="margin: 0;">
+                <button class="btn active" onclick="filterData('all')">All Time</button>
+                <button class="btn" onclick="filterData('30d')">30 Days</button>
+                <button class="btn" onclick="filterData('7d')">7 Days</button>
+            </div>
         </div>
     </div>
 
@@ -474,6 +515,57 @@ if (insights.length === 0) {
     </div>
 
     <div class="grid">
+        <!-- Performance & SEO -->
+        <div class="card">
+            <h2>System Health</h2>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Slowest Pages (LCP)</h3>
+                <table>
+                    <tbody>
+                        {performanceTable.map((p) => (
+                            <tr>
+                                <td>{p.url}</td>
+                                <td class="stat-value" style="text-align: right; color: #fca5a5;">{p.avgLCP}ms</td>
+                            </tr>
+                        ))}
+                        {performanceTable.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No perf data</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">SEO Issues</h3>
+                <table>
+                    <tbody>
+                        {topSEOIssues.map(([issue, count]) => (
+                            <tr>
+                                <td class="text-xs text-yellow-400">{issue}</td>
+                                <td class="stat-value" style="text-align: right;">{count}</td>
+                            </tr>
+                        ))}
+                        {topSEOIssues.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">All good!</td></tr>}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="card">
+            <h2>Active Times</h2>
+            <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Day of Week</h3>
+            <div style="display: flex; gap: 4px; height: 100px; align-items: flex-end;">
+                {['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'].map((day, i) => {
+                    const count = dayHeatmap[i] || 0;
+                    const max = Math.max(...Object.values(dayHeatmap), 1);
+                    return (
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <div style={`width: 100%; background: #ef4444; border-radius: 4px; height: ${(count/max)*100}%; opacity: ${0.3 + (count/max)*0.7}`}></div>
+                            <span style="font-size: 0.7rem; color: #888;">{day}</span>
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+
         <!-- Conversions & Exits -->
         <div class="card" style="grid-column: span 2;">
             <h2>Conversion & Optimization</h2>

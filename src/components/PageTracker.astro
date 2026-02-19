@@ -24,6 +24,15 @@
         });
         observer.observe({ type: 'largest-contentful-paint', buffered: true });
     }
+
+    // SEO Health Check (Client-Side)
+    if (!document.title || document.title.length < 5) {
+        trackEvent('seo_issue', { type: 'missing_title', url: window.location.pathname });
+    }
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc || !metaDesc.getAttribute('content') || metaDesc.getAttribute('content').length < 10) {
+        trackEvent('seo_issue', { type: 'missing_description', url: window.location.pathname });
+    }
   });
 
   // Track Time on Page (Heartbeat + Visibility)
@@ -69,16 +78,20 @@
       }
   });
 
-  // Track Scroll Depth & Reading Behavior
+  // Track Scroll Depth, Reading Behavior & Re-Engagement
   const thresholds = [25, 50, 75, 100];
   const tracked = new Set();
   let scrollStartTime = Date.now();
+  let lastScrollY = 0;
+  let maxScrollY = 0;
+  let reEngagementTracked = false;
 
   const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = window.scrollY;
       const percentage = Math.round((scrolled / scrollHeight) * 100);
 
+      // Track Depth
       thresholds.forEach(t => {
           if (percentage >= t && !tracked.has(t)) {
               tracked.add(t);
@@ -93,6 +106,16 @@
               trackEvent('scroll_depth', { depth: t });
           }
       });
+
+      // Track Re-Engagement (Scrolling up > 300px after reaching > 500px)
+      if (scrolled > maxScrollY) maxScrollY = scrolled;
+
+      if (!reEngagementTracked && maxScrollY > 500 && lastScrollY - scrolled > 300) {
+          reEngagementTracked = true;
+          trackEvent('re_engagement', { depth: percentage });
+      }
+
+      lastScrollY = scrolled;
   };
 
   // Throttle scroll event
