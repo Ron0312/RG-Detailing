@@ -17,3 +17,7 @@
 ## 2025-03-05 - Carousel Navigation Accessibility
 **Learning:** Mobile pagination dots are often implemented as static `div`s, making them inaccessible to keyboard users and screen readers. Converting them to `<button>` elements with `aria-label` and `aria-current="step"` (instead of `role="tab"` for simple cases) provides a much better experience. `aria-current` is particularly useful for indicating the active item in a set of related elements like carousel slides or wizard steps.
 **Action:** Always check if visual indicators like dots or steps are interactive. If they control navigation, they must be buttons with appropriate labels and state indicators.
+
+## 2025-03-07 - Visible Focus on Sticky Elements
+**Learning:** Sticky or fixed-position buttons (like "Scroll to Top" or "WhatsApp") often have their default focus rings clipped or removed to "clean up" the design. This makes them invisible to keyboard users.
+**Action:** Always add explicit `focus-visible:ring` styles to fixed elements. Ensure the ring has high contrast against the background and doesn't get cut off by `overflow: hidden` containers.
