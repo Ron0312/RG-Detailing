@@ -497,6 +497,7 @@ export default function PriceCalculator() {
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
+                                        onBlur={() => trackEvent('form_interaction', { field: 'camper_length', value: selections.camperLength })}
                                         className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
@@ -614,6 +615,7 @@ export default function PriceCalculator() {
                                         className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        onBlur={() => trackEvent('form_interaction', { field: 'email' })}
                                         disabled={loading}
                                     />
                                     <button
