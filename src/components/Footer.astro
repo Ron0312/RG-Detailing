@@ -55,9 +55,9 @@ const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name
                     28RC+CP Tensfeld, Deutschland
                 </a>
             </p>
-            <p class="mt-4"><a href="tel:+491633845081" class="text-white hover:text-red-500 font-bold py-3 block text-lg">0163 38 45 08 1</a></p>
-            <p><a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="text-green-500 hover:text-green-400 font-bold py-2 block flex items-center gap-2"><MessageCircle size={18} /> WhatsApp Chat</a></p>
-            <p><a href="mailto:kontakt@rg-detailing.de" class="hover:text-red-500 py-3 block">kontakt@rg-detailing.de</a></p>
+            <p class="mt-4"><a href="tel:+491633845081" class="text-white hover:text-red-500 font-bold py-3 block text-lg" onclick="window.trackEvent && window.trackEvent('contact_click', { channel: 'phone', location: 'footer' })">0163 38 45 08 1</a></p>
+            <p><a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="text-green-500 hover:text-green-400 font-bold py-2 block flex items-center gap-2" onclick="window.trackEvent && window.trackEvent('contact_click', { channel: 'whatsapp', location: 'footer' })"><MessageCircle size={18} /> WhatsApp Chat</a></p>
+            <p><a href="mailto:kontakt@rg-detailing.de" class="hover:text-red-500 py-3 block" onclick="window.trackEvent && window.trackEvent('contact_click', { channel: 'email', location: 'footer' })">kontakt@rg-detailing.de</a></p>
         </div>
         <div class="h-48 rounded-xl overflow-hidden grayscale hover:grayscale-0 transition duration-500 border border-zinc-800">
              <PrivacyMap

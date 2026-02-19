@@ -1,6 +1,9 @@
 <script>
   import { trackEvent } from '../lib/analytics';
 
+  // Make trackEvent available globally for inline onclick handlers (e.g. Footer)
+  window.trackEvent = trackEvent;
+
   // Track Page Load
   window.addEventListener('load', () => {
     trackEvent('page_view', {

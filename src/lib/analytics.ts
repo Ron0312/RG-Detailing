@@ -50,3 +50,12 @@ export const trackEvent = async (eventName: string, data: Record<string, any> = 
     // console.warn("Analytics tracking failed:", err);
   }
 };
+
+// Auto-track exits
+if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            trackEvent('page_exit');
+        }
+    });
+}

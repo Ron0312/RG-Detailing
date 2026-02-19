@@ -78,11 +78,20 @@ const scrollDepth: Record<string, number> = {};
 const pages: Record<string, { views: number; time: number; timeCount: number; bounces: number }> = {};
 const readingBehavior: Record<string, number> = { read: 0, skim: 0 };
 const intents: Record<string, number> = {};
+// New Aggregations
+const exitPages: Record<string, number> = {};
+const elementViews: Record<string, number> = {};
+const contactClicks: Record<string, Record<string, number>> = {}; // channel -> location -> count
+const faqInteractions: Record<string, number> = {};
+
 let totalTimeOnPage = 0;
 let timeOnPageCount = 0;
 
 // Temporal Data for Charts
 const history: Record<string, { views: number; visitors: Set<string> }> = {};
+
+// Session Analysis for Exits
+const sessions: Record<string, { lastUrl: string; lastTime: number }> = {};
 
 events.forEach(e => {
     // Date Key (YYYY-MM-DD)
@@ -101,7 +110,17 @@ events.forEach(e => {
         if (e.url) {
             if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
             pages[e.url].views++;
+
+            // Track Session Last URL
+            const sid = e.sessionId || 'unknown';
+            if (!sessions[sid]) sessions[sid] = { lastUrl: e.url, lastTime: Date.now() };
+            sessions[sid].lastUrl = e.url;
         }
+    }
+
+    // Explicit Exit Tracking
+    if (e.event === 'page_exit' && e.url) {
+        exitPages[e.url] = (exitPages[e.url] || 0) + 1;
     }
 
     // Context Stats
@@ -156,6 +175,20 @@ events.forEach(e => {
         const t = String(e.data.text);
         intents[t] = (intents[t] || 0) + 1;
     }
+    if (e.event === 'element_view' && e.data?.elementId) {
+        const el = e.data.elementId;
+        elementViews[el] = (elementViews[el] || 0) + 1;
+    }
+    if (e.event === 'contact_click' && e.data?.channel) {
+        const ch = e.data.channel;
+        const loc = e.data.location || 'unknown';
+        if (!contactClicks[ch]) contactClicks[ch] = {};
+        contactClicks[ch][loc] = (contactClicks[ch][loc] || 0) + 1;
+    }
+    if (e.event === 'faq_toggle' && e.data?.question) {
+        const q = e.data.question;
+        faqInteractions[q] = (faqInteractions[q] || 0) + 1;
+    }
 });
 
 // Calculate History Array (Last 30 Days)
@@ -179,6 +212,16 @@ const topOS = Object.entries(os).sort((a, b) => b[1] - a[1]);
 const topReferrers = Object.entries(referrers).sort((a, b) => b[1] - a[1]);
 const scrollKeys = Object.keys(scrollDepth).sort((a, b) => Number(a) - Number(b));
 const topIntents = Object.entries(intents).sort((a, b) => b[1] - a[1]).slice(0, 5);
+const topExitPages = Object.entries(exitPages).sort((a, b) => b[1] - a[1]).slice(0, 10);
+const topElementViews = Object.entries(elementViews).sort((a, b) => b[1] - a[1]);
+const topFAQs = Object.entries(faqInteractions).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+// Calculate contact totals
+const contactTotals = Object.entries(contactClicks).map(([channel, locs]) => {
+    const total = Object.values(locs).reduce((sum, v) => sum + v, 0);
+    return { channel, total, locations: locs };
+}).sort((a, b) => b.total - a.total);
+
 
 // Process Top Pages
 const topPages = Object.entries(pages)
@@ -315,6 +358,56 @@ const pointsVisitors = chartData.map((d, i) => {
     </div>
 
     <div class="grid">
+        <!-- Conversions & Exits -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>Conversion & Optimization</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <!-- Exit Pages -->
+                <div>
+                    <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Top Exit Pages</h3>
+                    <table>
+                        <tbody>
+                            {topExitPages.map(([url, count]) => (
+                                <tr>
+                                    <td>{url}</td>
+                                    <td class="stat-value" style="text-align: right;">{count}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Contact Clicks -->
+                <div>
+                    <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Contact Channels</h3>
+                    <table>
+                        <tbody>
+                            {contactTotals.map(({channel, total}) => (
+                                <tr>
+                                    <td style="text-transform: capitalize;">{channel}</td>
+                                    <td class="stat-value" style="text-align: right;">{total}</td>
+                                </tr>
+                            ))}
+                            {contactTotals.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No conversions yet</td></tr>}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Element Visibility -->
+                <div>
+                    <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Element Views</h3>
+                    <table>
+                        <tbody>
+                            {topElementViews.map(([el, count]) => (
+                                <tr>
+                                    <td>{el}</td>
+                                    <td class="stat-value" style="text-align: right;">{count}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <!-- Top Pages -->
         <div class="card" style="grid-column: span 2;">
             <h2>Top Pages</h2>
@@ -387,6 +480,23 @@ const pointsVisitors = chartData.map((d, i) => {
                     </tbody>
                 </table>
             </div>
+        </div>
+
+        <!-- Content Interaction (FAQ) -->
+        <div class="card">
+            <h2>Content Interest</h2>
+            <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Top Questions (FAQ)</h3>
+            <table>
+                <tbody>
+                    {topFAQs.map(([q, count]) => (
+                        <tr>
+                            <td class="text-xs">{q}</td>
+                            <td class="stat-value" style="text-align: right;">{count}</td>
+                        </tr>
+                    ))}
+                    {topFAQs.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No interaction yet</td></tr>}
+                </tbody>
+            </table>
         </div>
 
         <!-- Scroll Depth & Behavior -->
@@ -580,7 +690,7 @@ const pointsVisitors = chartData.map((d, i) => {
         Generated at {new Date().toLocaleString('de-DE')} | Protected Area
     </div>
 
-    <script is:inline define:vars={{ events }}>
+    <script is:inline>
         let currentFilter = 'all';
 
         function filterData(range) {

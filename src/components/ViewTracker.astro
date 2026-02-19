@@ -1,0 +1,28 @@
+<script>
+  import { trackEvent } from '../lib/analytics';
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('data-track-view');
+        // Only track once per session
+        if (id && !sessionStorage.getItem(`viewed_${id}`)) {
+            // Require 1s visibility to count as "seen"
+            setTimeout(() => {
+                if (entry.target.isConnected) { // Simple check if still there
+                    trackEvent('element_view', { elementId: id });
+                    sessionStorage.setItem(`viewed_${id}`, 'true');
+                }
+            }, 1000);
+
+            // Stop observing after triggering
+            observer.unobserve(entry.target);
+        }
+      }
+    });
+  }, { threshold: 0.5 }); // 50% visible
+
+  // Observe all tracked elements
+  const elements = document.querySelectorAll('[data-track-view]');
+  elements.forEach(el => observer.observe(el));
+</script>

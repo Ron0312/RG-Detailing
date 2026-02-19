@@ -87,7 +87,7 @@ const WhatsAppButton = ({ message }) => (
 
 // New Teaser Component
 const Teaser = ({ onStart }) => (
-    <button type="button" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
+    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-50"></div>
 
         <div className="relative z-10 max-w-2xl mx-auto">
@@ -586,7 +586,7 @@ export default function PriceCalculator() {
                             }}>Korrigieren</BackButton></div>
                             {renderResult()}
 
-                            <form onSubmit={submitQuote} className="max-w-lg mx-auto bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
+                            <form onSubmit={submitQuote} className="max-w-lg mx-auto bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm" data-track-view="calculator-submit-form">
                                 <input
                                     type="checkbox"
                                     name="botcheck"
