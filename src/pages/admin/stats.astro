@@ -1,6 +1,7 @@
 ---
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import type { AnalyticsEvent } from '../../types/analytics';
 
 // Auth Check (Simple)
 const url = new URL(Astro.request.url);
@@ -17,17 +18,11 @@ const logDir = path.resolve('logs');
 const logFile = path.join(logDir, 'events.jsonl');
 const errorLogFile = path.join(logDir, '404.log');
 
-interface AnalyticsEvent {
-    timestamp: string;
-    event: string;
-    url?: string;
-    sessionId?: string;
-    visitorId?: string; // Persistent if consented
-    dailyHash?: string; // Anonymous daily unique
-    browser?: string;
-    os?: string;
-    data?: Record<string, any>;
-}
+// Date Filter Logic
+const filterRange = url.searchParams.get('range') || 'all';
+const now = Date.now();
+const oneDay = 24 * 60 * 60 * 1000;
+const filterCutoff = filterRange === '7d' ? now - (7 * oneDay) : (filterRange === '30d' ? now - (30 * oneDay) : 0);
 
 let events: AnalyticsEvent[] = [];
 let notFoundErrors: { timestamp: string; url: string; referrer: string; ua: string; }[] = [];
@@ -36,7 +31,18 @@ try {
     const content = await fs.readFile(logFile, 'utf-8');
     events = content.trim().split('\n').map(line => {
         try { return JSON.parse(line); } catch(e) { return null; }
-    }).filter((e): e is AnalyticsEvent => e !== null);
+    }).filter((e): e is AnalyticsEvent => {
+        if (!e) return false;
+        // Filter out Admin/Dev logs (retroactive cleaning)
+        if (e.url?.includes('/admin') || e.url?.includes('/keystatic')) return false;
+
+        // Apply Date Filter
+        if (filterCutoff > 0) {
+            const eventTime = new Date(e.timestamp).getTime();
+            if (eventTime < filterCutoff) return false;
+        }
+        return true;
+    });
 } catch (e) {
     // No logs yet
 }
@@ -89,14 +95,22 @@ let timeOnPageCount = 0;
 
 // Temporal Data for Charts
 const history: Record<string, { views: number; visitors: Set<string> }> = {};
+// Live Data
+const liveUsers = new Set<string>();
 
 // Session Analysis for Exits
-const sessions: Record<string, { lastUrl: string; lastTime: number }> = {};
+const sessions: Record<string, { lastUrl: string; lastTime: number; startPage: string }> = {};
 
 events.forEach(e => {
     // Date Key (YYYY-MM-DD)
     const dateKey = e.timestamp.split('T')[0];
     if (!history[dateKey]) history[dateKey] = { views: 0, visitors: new Set() };
+
+    // Live Ticker (Active in last 5 mins)
+    const eventTime = new Date(e.timestamp).getTime();
+    if (now - eventTime < 5 * 60 * 1000) {
+        liveUsers.add(e.visitorId || e.dailyHash || e.sessionId || 'anon');
+    }
 
     eventsByName[e.event] = (eventsByName[e.event] || 0) + 1;
 
@@ -111,10 +125,11 @@ events.forEach(e => {
             if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
             pages[e.url].views++;
 
-            // Track Session Last URL
+            // Track Session Flow (Landing & Exit)
             const sid = e.sessionId || 'unknown';
-            if (!sessions[sid]) sessions[sid] = { lastUrl: e.url, lastTime: Date.now() };
+            if (!sessions[sid]) sessions[sid] = { lastUrl: e.url, lastTime: eventTime, startPage: e.url };
             sessions[sid].lastUrl = e.url;
+            sessions[sid].lastTime = eventTime;
         }
     }
 
@@ -201,6 +216,14 @@ const chartData = sortedDates.map(date => ({
 }));
 
 const totalUniqueVisitors = new Set(events.map(e => e.visitorId || e.dailyHash || e.sessionId).filter(Boolean)).size;
+const liveUserCount = liveUsers.size;
+
+// Landing Pages
+const landingPages: Record<string, number> = {};
+Object.values(sessions).forEach(s => {
+    landingPages[s.startPage] = (landingPages[s.startPage] || 0) + 1;
+});
+const topLanding = Object.entries(landingPages).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
 const topServices = Object.entries(services).sort((a, b) => b[1] - a[1]).slice(0, 10);
 const topGallery = Object.entries(galleryFilters).sort((a, b) => b[1] - a[1]);
@@ -409,11 +432,15 @@ if (insights.length === 0) {
 
     <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Live (5m)</span>
+            <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #22c55e;">{liveUserCount}</div>
+        </div>
+        <div>
             <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Views (Total)</span>
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1;">{totalEvents}</div>
         </div>
         <div>
-            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Unique Visitors</span>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Visitors</span>
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #3b82f6;">{totalUniqueVisitors}</div>
         </div>
         <div>
@@ -451,6 +478,20 @@ if (insights.length === 0) {
         <div class="card" style="grid-column: span 2;">
             <h2>Conversion & Optimization</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <!-- Landing Pages -->
+                <div>
+                    <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Top Landing Pages</h3>
+                    <table>
+                        <tbody>
+                            {topLanding.map(([url, count]) => (
+                                <tr>
+                                    <td>{url}</td>
+                                    <td class="stat-value" style="text-align: right;">{count}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 <!-- Exit Pages -->
                 <div>
                     <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Top Exit Pages</h3>
@@ -780,22 +821,23 @@ if (insights.length === 0) {
     </div>
 
     <script is:inline>
-        let currentFilter = 'all';
-
+        // Simple reload for filtering to keep it robust without client-side heavy lifting
         function filterData(range) {
-            currentFilter = range;
-            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Client-side filtering logic could go here.
-            // Currently, this just updates the UI state as a placeholder.
-            // Full implementation would require re-calculating all stats in JS
-            // or sending a new request with ?range=...
-
-            // For now, we'll just reload with a param to keep it simple and robust server-side if desired later,
-            // or just alert that this is a UI demo.
-            alert("Date filtering would require server-side reload or heavy client-side JS. Currently showing all data.");
+            const url = new URL(window.location.href);
+            url.searchParams.set('range', range);
+            window.location.href = url.toString();
         }
+
+        // Set active button state based on URL
+        const params = new URLSearchParams(window.location.search);
+        const currentRange = params.get('range') || 'all';
+        document.querySelectorAll('.btn').forEach(btn => {
+            if (btn.textContent.toLowerCase().includes(currentRange === 'all' ? 'all' : (currentRange === '30d' ? '30' : '7'))) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
