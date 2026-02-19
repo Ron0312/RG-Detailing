@@ -38,8 +38,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Validate IP to prevent key bloating
     const ip = z.string().ip().safeParse(rawIp).success ? rawIp : 'unknown';
 
-    // Rate limit: 20 events per minute per IP (Stricter: 20 -> 15 to prevent flood)
-    if (!checkRateLimit(`log-event:${ip}`, 15, 60000)) {
+    // Rate limit: 20 events per minute per IP (Relaxed: 15 -> 60 to allow heavy interaction sessions)
+    if (!checkRateLimit(`log-event:${ip}`, 60, 60000)) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }
 
