@@ -6,7 +6,7 @@
 
   // Simple Bot Check (Global scope)
   // Prevents bots from attaching listeners and exhausting rate limits
-  const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent) || navigator.webdriver;
+  const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
 
   if (!isBot) {
       // Track Page Load
