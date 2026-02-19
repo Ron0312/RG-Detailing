@@ -4,6 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { z } from 'zod';
 import { checkRateLimit } from '../../lib/rate-limit';
+import type { AnalyticsEvent } from '../../types/analytics';
 
 const EventSchema = z.object({
     eventName: z.string().min(1).max(50),
@@ -37,8 +38,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // Validate IP to prevent key bloating
     const ip = z.string().ip().safeParse(rawIp).success ? rawIp : 'unknown';
 
-    // Rate limit: 20 events per minute per IP (generous for interaction tracking)
-    if (!checkRateLimit(`log-event:${ip}`, 20, 60000)) {
+    // Rate limit: 20 events per minute per IP (Stricter: 20 -> 15 to prevent flood)
+    if (!checkRateLimit(`log-event:${ip}`, 15, 60000)) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }
 
@@ -101,8 +102,19 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const dateSalt = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
     const dailyHash = crypto.createHash('sha256').update(`${ip}-${userAgent}-${dateSalt}`).digest('hex').substring(0, 16);
 
+    // Extract UTM parameters if present in original URL (before sanitization, passed in 'url')
+    let utm: Record<string, string> = {};
+    try {
+        if (url && url.includes('?')) {
+            const params = new URLSearchParams(url.split('?')[1]);
+            if (params.has('utm_source')) utm.source = params.get('utm_source') || '';
+            if (params.has('utm_medium')) utm.medium = params.get('utm_medium') || '';
+            if (params.has('utm_campaign')) utm.campaign = params.get('utm_campaign') || '';
+        }
+    } catch (e) {}
+
     // Construct log entry
-    const entry = {
+    const entry: AnalyticsEvent = {
         timestamp: new Date().toISOString(),
         event: eventName,
         url: sanitizedUrl,
@@ -111,7 +123,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         dailyHash, // Anonymous daily ID
         browser,
         os,
-        data: data
+        data: {
+            ...data,
+            ...utm // Add UTM params to data
+        }
     };
 
     const logLine = JSON.stringify(entry) + '\n';

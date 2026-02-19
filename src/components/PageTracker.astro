@@ -6,10 +6,24 @@
 
   // Track Page Load
   window.addEventListener('load', () => {
+    // Simple Bot Check
+    const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent) || navigator.webdriver;
+    if (isBot) return;
+
     trackEvent('page_view', {
       device: window.innerWidth < 768 ? 'Mobile' : 'Desktop',
       platform: navigator.platform
     });
+
+    // LCP Tracking
+    if ('PerformanceObserver' in window) {
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries[entries.length - 1];
+            trackEvent('performance_metric', { metric: 'LCP', value: Math.round(lastEntry.startTime) });
+        });
+        observer.observe({ type: 'largest-contentful-paint', buffered: true });
+    }
   });
 
   // Track Time on Page (Heartbeat + Visibility)

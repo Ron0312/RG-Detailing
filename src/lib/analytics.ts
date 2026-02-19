@@ -1,6 +1,18 @@
 export const trackEvent = async (eventName: string, data: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
 
+  // 1. Exclude Admin & Localhost
+  const { hostname, pathname } = window.location;
+  if (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.endsWith('.local') ||
+      pathname.startsWith('/admin') ||
+      pathname.startsWith('/keystatic')
+  ) {
+      return;
+  }
+
   try {
     let sessionId = sessionStorage.getItem('analytics_session_id');
     if (!sessionId) {
