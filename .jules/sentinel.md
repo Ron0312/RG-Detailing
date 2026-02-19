@@ -22,3 +22,8 @@
 **Vulnerability:** The 404 logging endpoint (`/api/log-404`) appended logs to a local file indefinitely without checking size limits, leading to potential disk exhaustion (DoS).
 **Learning:** Appending to files in a long-running server environment requires strict resource management (rotation/limits) to prevent DoS.
 **Prevention:** Always implement log rotation or size checks before writing to local files, or use a managed logging service.
+
+## 2026-02-18 - Hardcoded Admin Secret Fallback
+**Vulnerability:** The admin dashboard and associated API endpoints relied on a hardcoded fallback secret (`RG!123`) if the `STATS_SECRET` environment variable was missing, leaving production deployments vulnerable by default.
+**Learning:** Convenience defaults for development can become critical security holes if they silently propagate to production.
+**Prevention:** Implement a centralized secret accessor that distinguishes between environments, allowing defaults only in DEV but throwing critical errors or using secure random strings in PROD to fail securely.

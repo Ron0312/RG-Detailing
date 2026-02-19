@@ -1,11 +1,18 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { getAdminSecret } from '../../lib/secrets';
 
 export const POST: APIRoute = async ({ request, url }) => {
     // Auth Check
     const key = url.searchParams.get('key');
-    const secret = import.meta.env.STATS_SECRET || 'RG!123';
+
+    let secret: string;
+    try {
+        secret = getAdminSecret();
+    } catch (e) {
+        return new Response('Server Config Error', { status: 500 });
+    }
 
     if (key !== secret) {
         return new Response('Unauthorized', { status: 401 });

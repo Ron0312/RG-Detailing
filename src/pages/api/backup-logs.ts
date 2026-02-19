@@ -4,14 +4,20 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { pipeline } from 'node:stream';
 import { promisify } from 'node:util';
+import { getAdminSecret } from '../../lib/secrets';
 
 const pipe = promisify(pipeline);
 
 export const GET: APIRoute = async ({ request, url }) => {
     // Auth Check
     const key = url.searchParams.get('key');
-    const isDev = import.meta.env.DEV;
-    const secret = import.meta.env.STATS_SECRET || 'RG!123';
+
+    let secret: string;
+    try {
+        secret = getAdminSecret();
+    } catch (e) {
+        return new Response('Server Config Error', { status: 500 });
+    }
 
     if (key !== secret) {
         return new Response('Unauthorized', { status: 401 });

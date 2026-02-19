@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { AnalyticsEvent } from '../../types/analytics';
+import { getAdminSecret } from '../../lib/secrets';
 
 // CSV Escaping: Wrap in quotes if contains comma or quotes, and double quotes
 const escapeCsv = (str: string | undefined | null) => {
@@ -16,7 +17,13 @@ const escapeCsv = (str: string | undefined | null) => {
 export const GET: APIRoute = async ({ request, url }) => {
     // Auth Check
     const key = url.searchParams.get('key');
-    const secret = import.meta.env.STATS_SECRET || 'RG!123';
+
+    let secret: string;
+    try {
+        secret = getAdminSecret();
+    } catch (e) {
+        return new Response('Server Config Error', { status: 500 });
+    }
 
     if (key !== secret) {
         return new Response('Unauthorized. Access Denied.', { status: 401 });
