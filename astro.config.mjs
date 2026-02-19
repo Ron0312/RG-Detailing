@@ -20,5 +20,9 @@ export default defineConfig({
 
   adapter: node({
     mode: 'standalone'
-  })
+  }),
+  redirects: {
+    '/datenschutzerklaerung-eu': '/datenschutz',
+    '/cookie-richtlinie-eu': '/datenschutz'
+  }
 });

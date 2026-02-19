@@ -271,6 +271,74 @@ const pointsVisitors = chartData.map((d, i) => {
     return `${x},${y}`;
 }).join(' ');
 
+// Actionable Insights Logic
+interface Insight {
+    type: 'critical' | 'warning' | 'success' | 'info';
+    message: string;
+}
+const insights: Insight[] = [];
+
+// 1. 404 Analysis
+if (notFoundErrors.length > 0) {
+    const unique404s = [...new Set(notFoundErrors.map(e => e.url))];
+    insights.push({
+        type: 'critical',
+        message: `Kritisch: ${unique404s.length} fehlerhafte Links gefunden (z.B. ${unique404s[0]}). Bitte Redirects prüfen.`
+    });
+}
+
+// 2. Engagement Analysis
+if (avgTimeOnPage > 120) {
+    insights.push({
+        type: 'success',
+        message: `Stark: Nutzer bleiben durchschnittlich ${formatTime(avgTimeOnPage)} auf der Seite. Inhalte sind relevant!`
+    });
+} else if (avgTimeOnPage < 30 && totalViews > 10) {
+    insights.push({
+        type: 'warning',
+        message: `Vorsicht: Kurze Verweildauer (${avgTimeOnPage}s). Prüfe den "Above the Fold" Bereich.`
+    });
+}
+
+// 3. Calculator Funnel Analysis
+if (calculator.start > 5) {
+    const conversionRate = (calculator.submit / calculator.start) * 100;
+    if (conversionRate < 10) {
+        insights.push({
+            type: 'warning',
+            message: `Potential: Viele Rechner-Starts (${calculator.start}), aber kaum Abschlüsse (${Math.round(conversionRate)}%). Formular evtl. zu lang?`
+        });
+    } else if (conversionRate > 30) {
+        insights.push({
+            type: 'success',
+            message: `Top: Starke Rechner-Conversion (${Math.round(conversionRate)}%). Der Funnel funktioniert!`
+        });
+    }
+}
+
+// 4. Reading Behavior
+const totalReaders = readingBehavior.read + readingBehavior.skim;
+if (totalReaders > 5) {
+    if (readingBehavior.skim > readingBehavior.read * 2) {
+        insights.push({
+            type: 'info',
+            message: `Content: Viele "Skimmer" (${readingBehavior.skim}). Nutze mehr Zwischenüberschriften und Fettungen.`
+        });
+    }
+}
+
+// 5. Traffic Source
+if (topReferrers.length > 0 && topReferrers[0][1] > totalEvents * 0.3) {
+    insights.push({
+        type: 'info',
+        message: `Traffic-Fokus: ${topReferrers[0][0]} ist deine Hauptquelle (${topReferrers[0][1]} Events). Optimiere Landingpages dafür.`
+    });
+}
+
+if (insights.length === 0) {
+    insights.push({ type: 'info', message: 'Sammle mehr Daten für detaillierte Insights.' });
+}
+
 ---
 
 <html lang="de">
@@ -306,6 +374,11 @@ const pointsVisitors = chartData.map((d, i) => {
         .tooltip { position: absolute; background: #333; padding: 0.5rem; border-radius: 4px; border: 1px solid #555; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
         .legend { display: flex; gap: 1rem; font-size: 0.8rem; justify-content: flex-end; margin-bottom: 0.5rem; }
         .dot { width: 8px; height: 8px; display: inline-block; border-radius: 50%; }
+        .insight { padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 0.75rem; }
+        .insight.critical { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .insight.warning { background: rgba(234, 179, 8, 0.15); color: #fcd34d; border: 1px solid rgba(234, 179, 8, 0.3); }
+        .insight.success { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .insight.info { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body>
@@ -315,6 +388,22 @@ const pointsVisitors = chartData.map((d, i) => {
             <button class="btn active" onclick="filterData('all')">All Time</button>
             <button class="btn" onclick="filterData('30d')">30 Days</button>
             <button class="btn" onclick="filterData('7d')">7 Days</button>
+        </div>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2>Insights & Actions</h2>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            {insights.map(i => (
+                <div class={`insight ${i.type}`}>
+                    {i.type === 'critical' && '🔴'}
+                    {i.type === 'warning' && '🟡'}
+                    {i.type === 'success' && '🟢'}
+                    {i.type === 'info' && '🔵'}
+                    {i.message}
+                </div>
+            ))}
         </div>
     </div>
 
