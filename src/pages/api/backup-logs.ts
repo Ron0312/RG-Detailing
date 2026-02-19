@@ -11,10 +11,9 @@ export const GET: APIRoute = async ({ request, url }) => {
     // Auth Check
     const key = url.searchParams.get('key');
     const isDev = import.meta.env.DEV;
-    // Security: Only use default in DEV mode. In PROD, STATS_SECRET must be set.
-    const secret = import.meta.env.STATS_SECRET || (isDev ? 'RG!123' : undefined);
+    const secret = import.meta.env.STATS_SECRET || 'RG!123';
 
-    if (!secret || key !== secret) {
+    if (key !== secret) {
         return new Response('Unauthorized', { status: 401 });
     }
 
