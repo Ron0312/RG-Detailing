@@ -66,6 +66,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         url = url.split('?')[0].split('#')[0];
     }
 
+    // Security: Ignore Admin/Keystatic routes to prevent log spam
+    if (url.startsWith('/admin') || url.startsWith('/keystatic')) {
+        return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
+    }
+
     // Log to console (stdout) for container/serverless environments
     console.log(`[404 TRACKING] URL: ${url} | Referrer: ${referrer || 'Direct'} | UA: ${userAgent}`);
 

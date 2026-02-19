@@ -94,13 +94,14 @@ try {
 
 // Aggregation
 const totalEvents = events.length;
+const totalPageViews = events.filter(e => e.event === 'page_view').length;
 const eventsByName: Record<string, number> = {};
 const services: Record<string, number> = {};
 const galleryFilters: Record<string, number> = {};
-const calculator: { start: number; steps: Record<string, number>; submit: number } = {
-    start: 0,
+const calculator: { start: Set<string>; steps: Record<string, Set<string>>; submit: Set<string> } = {
+    start: new Set(),
     steps: {},
-    submit: 0
+    submit: new Set()
 };
 const devices: Record<string, number> = {};
 const browsers: Record<string, number> = {};
@@ -129,8 +130,18 @@ const history: Record<string, { views: number; visitors: Set<string> }> = {};
 // Live Data
 const liveUsers = new Set<string>();
 
-// Session Analysis for Exits
-const sessions: Record<string, { lastUrl: string; lastTime: number; startPage: string }> = {};
+// Session Analysis
+interface Session {
+    id: string;
+    startTime: number;
+    lastTime: number;
+    startPage: string;
+    lastUrl: string;
+    referrer: string;
+    device: string;
+    actions: number;
+}
+const sessions: Record<string, Session> = {};
 
 events.forEach(e => {
     // Date Key (YYYY-MM-DD)
@@ -138,6 +149,7 @@ events.forEach(e => {
     const dateKey = e.timestamp.split('T')[0];
     const day = dObj.getDay(); // 0-6
     const hour = dObj.getHours(); // 0-23
+    const sid = e.sessionId || 'unknown';
 
     if (!history[dateKey]) history[dateKey] = { views: 0, visitors: new Set() };
 
@@ -155,6 +167,28 @@ events.forEach(e => {
 
     eventsByName[e.event] = (eventsByName[e.event] || 0) + 1;
 
+    // Build/Update Session
+    if (!sessions[sid]) {
+        sessions[sid] = {
+            id: sid,
+            startTime: eventTime,
+            lastTime: eventTime,
+            startPage: e.url || '/',
+            lastUrl: e.url || '/',
+            referrer: e.data?.referrer || 'Direct',
+            device: e.data?.device || 'Unknown',
+            actions: 0
+        };
+    }
+    const sess = sessions[sid];
+    sess.lastTime = eventTime;
+    if (e.url) sess.lastUrl = e.url;
+    sess.actions++;
+    // Update context if available later in session (e.g. from page_view)
+    if (e.data?.referrer && e.data.referrer !== 'direct') sess.referrer = e.data.referrer;
+    if (e.data?.device) sess.device = e.data.device;
+
+
     // Track Views & Visitors
     if (e.event === 'page_view') {
         history[dateKey].views++;
@@ -165,12 +199,6 @@ events.forEach(e => {
         if (e.url) {
             if (!pages[e.url]) pages[e.url] = { views: 0, time: 0, timeCount: 0, bounces: 0 };
             pages[e.url].views++;
-
-            // Track Session Flow (Landing & Exit)
-            const sid = e.sessionId || 'unknown';
-            if (!sessions[sid]) sessions[sid] = { lastUrl: e.url, lastTime: eventTime, startPage: e.url };
-            sessions[sid].lastUrl = e.url;
-            sessions[sid].lastTime = eventTime;
         }
     }
 
@@ -198,16 +226,17 @@ events.forEach(e => {
         galleryFilters[c] = (galleryFilters[c] || 0) + 1;
     }
     if (e.event === 'calculator_start') {
-        calculator.start++;
+        calculator.start.add(sid);
     }
     if (e.event === 'calculator_step') {
         const s = String(e.data?.step);
         if (s) {
-             calculator.steps[s] = (calculator.steps[s] || 0) + 1;
+             if (!calculator.steps[s]) calculator.steps[s] = new Set();
+             calculator.steps[s].add(sid);
         }
     }
     if (e.event === 'calculator_submit') {
-        calculator.submit++;
+        calculator.submit.add(sid);
     }
     if (e.event === 'time_on_page' && e.data?.duration) {
         const d = Number(e.data.duration);
@@ -272,9 +301,13 @@ const chartData = sortedDates.map(date => ({
 const totalUniqueVisitors = new Set(events.map(e => e.visitorId || e.dailyHash || e.sessionId).filter(Boolean)).size;
 const liveUserCount = liveUsers.size;
 
+// Session Aggregations
+const sessionList = Object.values(sessions).sort((a, b) => b.lastTime - a.lastTime);
+const recentSessions = sessionList.slice(0, 20); // Top 20 recent
+
 // Landing Pages
 const landingPages: Record<string, number> = {};
-Object.values(sessions).forEach(s => {
+sessionList.forEach(s => {
     landingPages[s.startPage] = (landingPages[s.startPage] || 0) + 1;
 });
 const topLanding = Object.entries(landingPages).sort((a, b) => b[1] - a[1]).slice(0, 10);
@@ -327,14 +360,15 @@ const serviceInterest = topServices.map(([name, count]) => ({
 
 // Goals (Hardcoded for now)
 const DAILY_LEAD_TARGET = 3;
-const totalLeads = calculator.submit + Object.values(contactClicks).reduce((sum, ch) => sum + Object.values(ch).reduce((a, b) => a + b, 0), 0);
+const calcSubmitCount = calculator.submit.size;
+const totalLeads = calcSubmitCount + Object.values(contactClicks).reduce((sum, ch) => sum + Object.values(ch).reduce((a, b) => a + b, 0), 0);
 // Normalize to daily if range is 'all' (approx) or '30d'
 const daysInRange = filterRange === '7d' ? 7 : (filterRange === '30d' ? 30 : (events.length > 0 ? (Date.now() - new Date(events[events.length-1].timestamp).getTime()) / (1000 * 60 * 60 * 24) : 1));
 const dailyLeadsAvg = totalLeads / Math.max(daysInRange, 1);
 const goalProgress = Math.min((dailyLeadsAvg / DAILY_LEAD_TARGET) * 100, 100);
 
-const totalViews = events.filter(e => e.event === 'page_view').length;
-const avgTimeOnPage = totalViews > 0 ? Math.round(totalTimeOnPage / totalViews) : 0;
+const avgTimeOnPage = totalPageViews > 0 ? Math.round(totalTimeOnPage / totalPageViews) : 0;
+const avgActionsPerVisit = totalUniqueVisitors > 0 ? (totalEvents / totalUniqueVisitors).toFixed(1) : '0';
 const formatTime = (s: number) => {
     if (!s) return '-';
     const min = Math.floor(s / 60);
@@ -393,12 +427,13 @@ if (avgTimeOnPage > 120) {
 }
 
 // 3. Calculator Funnel Analysis
-if (calculator.start > 5) {
-    const conversionRate = (calculator.submit / calculator.start) * 100;
+const calcStartCount = calculator.start.size;
+if (calcStartCount > 5) {
+    const conversionRate = (calcSubmitCount / calcStartCount) * 100;
     if (conversionRate < 10) {
         insights.push({
             type: 'warning',
-            message: `Potential: Viele Rechner-Starts (${calculator.start}), aber kaum Abschlüsse (${Math.round(conversionRate)}%). Formular evtl. zu lang?`
+            message: `Potential: Viele Rechner-Starts (${calcStartCount}), aber kaum Abschlüsse (${Math.round(conversionRate)}%). Formular evtl. zu lang?`
         });
     } else if (conversionRate > 30) {
         insights.push({
@@ -518,12 +553,14 @@ if (insights.length === 0) {
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #22c55e;">{liveUserCount}</div>
         </div>
         <div>
-            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Views (Total)</span>
-            <div style="font-size: 2.5rem; font-weight: bold; line-height: 1;">{totalEvents}</div>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Page Views</span>
+            <div style="font-size: 2.5rem; font-weight: bold; line-height: 1;">{totalPageViews}</div>
+            <div style="font-size: 0.7rem; color: #888;">{totalEvents} Interactions</div>
         </div>
         <div>
-            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Visitors</span>
+            <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Unique Visitors</span>
             <div style="font-size: 2.5rem; font-weight: bold; line-height: 1; color: #3b82f6;">{totalUniqueVisitors}</div>
+            <div style="font-size: 0.7rem; color: #888;">Avg {avgActionsPerVisit} acts/visit</div>
         </div>
         <div>
              <span style="color: #888; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">Goal: 3 Leads/Day</span>
@@ -813,22 +850,22 @@ if (insights.length === 0) {
 
         <!-- Funnel -->
         <div class="card">
-            <h2>Calculator Funnel</h2>
+            <h2>Calculator Funnel (Unique Users)</h2>
             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
                  <!-- Start -->
                  <div style="display: flex; align-items: center; gap: 1rem;">
                     <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Started</div>
                     <div style="flex: 1; background: #333; height: 24px; border-radius: 4px; overflow: hidden; position: relative;">
                         <div style="width: 100%; background: #ef4444; height: 100%;"></div>
-                        <span style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold;">{calculator.start}</span>
+                        <span style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold;">{calcStartCount}</span>
                     </div>
                     <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #ef4444;">100%</div>
                  </div>
 
                  <!-- Steps -->
                  {stepKeys.map(step => {
-                     const count = calculator.steps[step];
-                     const pct = calculator.start > 0 ? (count / calculator.start) * 100 : 0;
+                     const count = calculator.steps[step].size;
+                     const pct = calcStartCount > 0 ? (count / calcStartCount) * 100 : 0;
                      return (
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Step {step}</div>
@@ -845,15 +882,47 @@ if (insights.length === 0) {
                  <div style="display: flex; align-items: center; gap: 1rem;">
                     <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Submitted</div>
                     <div style="flex: 1; background: #333; height: 24px; border-radius: 4px; overflow: hidden; position: relative;">
-                        <div style={`width: ${calculator.start > 0 ? (calculator.submit / calculator.start) * 100 : 0}%; background: #22c55e; height: 100%; transition: width 0.5s;`}></div>
-                        <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold; text-shadow: 0 1px 2px black;">{calculator.submit}</span>
+                        <div style={`width: ${calcStartCount > 0 ? (calcSubmitCount / calcStartCount) * 100 : 0}%; background: #22c55e; height: 100%; transition: width 0.5s;`}></div>
+                        <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold; text-shadow: 0 1px 2px black;">{calcSubmitCount}</span>
                     </div>
-                    <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #22c55e;">{calculator.start > 0 ? Math.round((calculator.submit / calculator.start) * 100) : 0}%</div>
+                    <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #22c55e;">{calcStartCount > 0 ? Math.round((calcSubmitCount / calcStartCount) * 100) : 0}%</div>
                  </div>
             </div>
             <div style="text-align: center; font-size: 0.75rem; color: #666;">
-                Funnel Conversion Rate: <span style="color: #eee;">{calculator.start > 0 ? ((calculator.submit / calculator.start) * 100).toFixed(1) : 0}%</span>
+                Funnel Conversion Rate: <span style="color: #eee;">{calcStartCount > 0 ? ((calcSubmitCount / calcStartCount) * 100).toFixed(1) : 0}%</span>
             </div>
+        </div>
+
+        <!-- Recent Sessions -->
+        <div class="card" style="grid-column: span 2;">
+            <h2>Recent Sessions (Last 20)</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Device</th>
+                        <th>Source</th>
+                        <th>Path (Start &rarr; End)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {recentSessions.map(s => (
+                        <tr>
+                            <td class="text-xs text-gray-400">{new Date(s.startTime).toLocaleTimeString('de-DE', {hour: '2-digit', minute:'2-digit'})}</td>
+                            <td class="text-xs text-gray-400">{s.device}</td>
+                            <td class="text-xs text-gray-400 truncate max-w-[100px]" title={s.referrer}>{s.referrer.replace('https://', '').split('/')[0]}</td>
+                            <td class="text-xs font-mono">
+                                <span style="color: #22c55e;">{s.startPage}</span>
+                                {s.startPage !== s.lastUrl && <span style="color: #666;"> &rarr; </span>}
+                                {s.startPage !== s.lastUrl && <span style="color: #ef4444;">{s.lastUrl}</span>}
+                            </td>
+                            <td class="stat-value" style="text-align: right;">{s.actions}</td>
+                        </tr>
+                    ))}
+                    {recentSessions.length === 0 && <tr><td colspan="5" style="color: #666; text-align: center;">No sessions recorded</td></tr>}
+                </tbody>
+            </table>
         </div>
 
         <!-- Service Interest -->
