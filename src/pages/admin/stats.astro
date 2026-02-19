@@ -811,43 +811,45 @@ if (insights.length === 0) {
         <!-- Funnel -->
         <div class="card">
             <h2>Calculator Funnel</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Stage</th>
-                        <th style="text-align: right;">Count</th>
-                        <th style="text-align: right;">% Start</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Started</td>
-                        <td class="stat-value" style="text-align: right;">{calculator.start}</td>
-                        <td class="stat-value" style="text-align: right; color: #ef4444;">100%</td>
-                    </tr>
-                    <tr>
-                        <td>Submitted</td>
-                        <td class="stat-value" style="text-align: right;">{calculator.submit}</td>
-                        <td class="stat-value" style="text-align: right; color: #22c55e;">
-                            {calculator.start > 0 ? Math.round((calculator.submit / calculator.start) * 100) : 0}%
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem;">
+                 <!-- Start -->
+                 <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Started</div>
+                    <div style="flex: 1; background: #333; height: 24px; border-radius: 4px; overflow: hidden; position: relative;">
+                        <div style="width: 100%; background: #ef4444; height: 100%;"></div>
+                        <span style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold;">{calculator.start}</span>
+                    </div>
+                    <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #ef4444;">100%</div>
+                 </div>
 
-            <div style="margin-top: 1.5rem;">
-                <h3 style="font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 0.5rem;">Steps Breakdown</h3>
-                <table>
-                    <tbody>
-                        {stepKeys.map(step => (
-                            <tr>
-                                <td>Step {step}</td>
-                                <td class="stat-value" style="text-align: right;">{calculator.steps[step]}</td>
-                            </tr>
-                        ))}
-                        {stepKeys.length === 0 && <tr><td colspan="2" style="color: #666; text-align: center;">No step data yet</td></tr>}
-                    </tbody>
-                </table>
+                 <!-- Steps -->
+                 {stepKeys.map(step => {
+                     const count = calculator.steps[step];
+                     const pct = calculator.start > 0 ? (count / calculator.start) * 100 : 0;
+                     return (
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Step {step}</div>
+                            <div style="flex: 1; background: #333; height: 24px; border-radius: 4px; overflow: hidden; position: relative;">
+                                <div style={`width: ${pct}%; background: #f97316; height: 100%; transition: width 0.5s;`}></div>
+                                <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold; text-shadow: 0 1px 2px black;">{count}</span>
+                            </div>
+                            <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #f97316;">{Math.round(pct)}%</div>
+                        </div>
+                     )
+                 })}
+
+                 <!-- Submitted -->
+                 <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 80px; font-size: 0.8rem; color: #aaa;">Submitted</div>
+                    <div style="flex: 1; background: #333; height: 24px; border-radius: 4px; overflow: hidden; position: relative;">
+                        <div style={`width: ${calculator.start > 0 ? (calculator.submit / calculator.start) * 100 : 0}%; background: #22c55e; height: 100%; transition: width 0.5s;`}></div>
+                        <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: white; font-weight: bold; text-shadow: 0 1px 2px black;">{calculator.submit}</span>
+                    </div>
+                    <div style="width: 40px; text-align: right; font-size: 0.8rem; color: #22c55e;">{calculator.start > 0 ? Math.round((calculator.submit / calculator.start) * 100) : 0}%</div>
+                 </div>
+            </div>
+            <div style="text-align: center; font-size: 0.75rem; color: #666;">
+                Funnel Conversion Rate: <span style="color: #eee;">{calculator.start > 0 ? ((calculator.submit / calculator.start) * 100).toFixed(1) : 0}%</span>
             </div>
         </div>
 
