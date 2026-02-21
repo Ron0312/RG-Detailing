@@ -11,6 +11,7 @@ vi.mock('node:path');
 describe('GET /api/export-csv', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.stubEnv('STATS_SECRET', 'RG!123');
         // Default mock implementation
         (path.resolve as any).mockReturnValue('/mock/logs');
         (path.join as any).mockImplementation((...args: string[]) => args.join('/'));
@@ -18,13 +19,13 @@ describe('GET /api/export-csv', () => {
 
     it('returns 401 if key is missing or invalid', async () => {
         const req = new Request('http://localhost/api/export-csv');
-        const context = { request: req, url: new URL('http://localhost/api/export-csv') };
+        const context = { request: req, url: new URL('http://localhost/api/export-csv'), cookies: { get: vi.fn() } };
 
         const response = await GET(context as any);
         expect(response.status).toBe(401);
 
         const reqInvalid = new Request('http://localhost/api/export-csv?key=wrong');
-        const contextInvalid = { request: reqInvalid, url: new URL('http://localhost/api/export-csv?key=wrong') };
+        const contextInvalid = { request: reqInvalid, url: new URL('http://localhost/api/export-csv?key=wrong'), cookies: { get: vi.fn() } };
         const responseInvalid = await GET(contextInvalid as any);
         expect(responseInvalid.status).toBe(401);
     });
@@ -33,7 +34,7 @@ describe('GET /api/export-csv', () => {
         (fs.access as any).mockRejectedValue(new Error('ENOENT'));
 
         const req = new Request('http://localhost/api/export-csv?key=RG!123');
-        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123') };
+        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123'), cookies: { get: vi.fn() } };
 
         const response = await GET(context as any);
         expect(response.status).toBe(404);
@@ -48,7 +49,7 @@ describe('GET /api/export-csv', () => {
         (fs.readFile as any).mockResolvedValue(mockEvents.map(e => JSON.stringify(e)).join('\n'));
 
         const req = new Request('http://localhost/api/export-csv?key=RG!123');
-        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123') };
+        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123'), cookies: { get: vi.fn() } };
 
         const response = await GET(context as any);
         expect(response.status).toBe(200);
@@ -72,7 +73,7 @@ describe('GET /api/export-csv', () => {
         (fs.readFile as any).mockResolvedValue(JSON.stringify(mockEvents[0]));
 
         const req = new Request('http://localhost/api/export-csv?key=RG!123');
-        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123') };
+        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123'), cookies: { get: vi.fn() } };
 
         const response = await GET(context as any);
         const text = await response.text();
