@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, memo } from 'react';
 import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import GlossaryLinker from './GlossaryLinker';
@@ -12,6 +12,40 @@ const iconMap = {
     'hammer': Hammer,
     'star': Star
 };
+
+// OPTIMIZATION: Memoized ServiceCard to prevent unnecessary re-renders when activeIndex changes during scroll.
+const ServiceCard = memo(({ service, index, IconComponent }) => {
+    return (
+        <div
+            data-index={index}
+            className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0"
+        >
+                <a
+                href={service.link}
+                className="absolute inset-0 z-10"
+                aria-label={`Mehr erfahren zu ${service.title}`}
+                onClick={() => trackEvent('service_click', { service: service.title })}
+                ></a>
+                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
+
+                <div className="relative z-20 flex-grow pointer-events-none">
+                <div className="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
+                    <IconComponent size={28} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
+                <div className="text-zinc-400 leading-relaxed mb-6">
+                    <GlossaryLinker text={service.shortDescription} />
+                </div>
+                </div>
+
+                <div className="relative z-20 mt-auto pt-6 border-t border-white/5 pointer-events-none">
+                <div className="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
+                    Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                </div>
+                </div>
+        </div>
+    );
+});
 
 export default function ServiceGrid({ services }) {
     const [activeCategory, setActiveCategory] = useState("Lack & Keramik");
@@ -93,35 +127,12 @@ export default function ServiceGrid({ services }) {
                 {filteredServices.map((service, index) => {
                     const IconComponent = iconMap[service.icon] || Sparkles;
                     return (
-                        <div
+                        <ServiceCard
                             key={service.title}
-                            data-index={index}
-                            className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0"
-                        >
-                             <a
-                                href={service.link}
-                                className="absolute inset-0 z-10"
-                                aria-label={`Mehr erfahren zu ${service.title}`}
-                                onClick={() => trackEvent('service_click', { service: service.title })}
-                             ></a>
-                             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
-
-                             <div className="relative z-20 flex-grow pointer-events-none">
-                                <div className="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
-                                    <IconComponent size={28} strokeWidth={1.5} />
-                                </div>
-                                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
-                                <div className="text-zinc-400 leading-relaxed mb-6">
-                                    <GlossaryLinker text={service.shortDescription} />
-                                </div>
-                             </div>
-
-                             <div className="relative z-20 mt-auto pt-6 border-t border-white/5 pointer-events-none">
-                                <div className="flex items-center text-sm font-bold text-zinc-300 group-hover:text-white">
-                                    Mehr erfahren <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                                </div>
-                             </div>
-                        </div>
+                            service={service}
+                            index={index}
+                            IconComponent={IconComponent}
+                        />
                     );
                 })}
             </div>
