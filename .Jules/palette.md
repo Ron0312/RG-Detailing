@@ -21,3 +21,7 @@
 ## 2025-03-07 - Visible Focus on Sticky Elements
 **Learning:** Sticky or fixed-position buttons (like "Scroll to Top" or "WhatsApp") often have their default focus rings clipped or removed to "clean up" the design. This makes them invisible to keyboard users.
 **Action:** Always add explicit `focus-visible:ring` styles to fixed elements. Ensure the ring has high contrast against the background and doesn't get cut off by `overflow: hidden` containers.
+
+## 2025-03-08 - Accessible Toggle Button States
+**Learning:** Filter/tab groups implemented as buttons often rely solely on background color for state, which is insufficient for accessibility. Adding `aria-pressed` (for toggles) or `aria-selected` (for tabs) is crucial for screen readers. Additionally, `focus-visible` rings are often forgotten on these "pill" style buttons.
+**Action:** Always verify `aria-pressed` or `aria-selected` on stateful toggle buttons and ensure high-contrast focus rings are present.

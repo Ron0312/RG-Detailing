@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import React from 'react';
 import GalleryLightbox from './GalleryLightbox';
 
@@ -36,18 +36,39 @@ describe('GalleryLightbox Accessibility', () => {
         expect(img1).toBeDefined();
 
         // Check parent element - should be a button
-        // In the current implementation (before fix), this is a div, so this test will fail
         const button1 = img1.closest('button');
 
         expect(button1).not.toBeNull();
         if (button1) {
              expect(button1.getAttribute('type')).toBe('button');
-             // We can check aria-label directly or implied via alt, but explicitly setting aria-label on button is better for screen readers if image is decorative or just thumbnail
-             // Actually, if the image has alt, the button might not need aria-label if it contains the image.
-             // But for consistent accessible name calculation, aria-label on the button is robust.
-             // Or at least checks if the accessible name of the button is "Image 1".
              expect(button1.getAttribute('aria-label')).toBe('Bild vergrößern: Image 1');
              expect(button1.className).toContain('focus-visible:ring-red-500');
         }
+    });
+
+    it('renders accessible filter buttons', () => {
+        render(<GalleryLightbox images={mockImages} />);
+
+        // 'Alle' button should be pressed by default
+        const alleButton = screen.getByRole('button', { name: 'Alle' });
+        expect(alleButton.getAttribute('aria-pressed')).toBe('true');
+        expect(alleButton.className).toContain('focus-visible:ring-red-500');
+
+        // 'Cat1' button should not be pressed
+        const cat1Button = screen.getByRole('button', { name: 'Cat1' });
+        expect(cat1Button.getAttribute('aria-pressed')).toBe('false');
+        expect(cat1Button.className).toContain('focus-visible:ring-red-500');
+
+        // Click Cat1
+        fireEvent.click(cat1Button);
+        expect(cat1Button.getAttribute('aria-pressed')).toBe('true');
+        expect(alleButton.getAttribute('aria-pressed')).toBe('false');
+    });
+
+    it('renders accessible "show more" button', () => {
+        render(<GalleryLightbox images={mockImages} limit={1} />);
+
+        const showMoreButton = screen.getByRole('button', { name: /Mehr anzeigen/i });
+        expect(showMoreButton.className).toContain('focus-visible:ring-red-500');
     });
 });

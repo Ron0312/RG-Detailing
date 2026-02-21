@@ -71,4 +71,25 @@ describe('ServiceGrid', () => {
              expect(queryByText('Service 1')).toBeNull();
         });
     });
+
+    it('renders accessible category buttons', () => {
+        const { getByRole } = render(<ServiceGrid services={mockServices} />);
+
+        // 'Lack & Keramik' button should be pressed by default
+        const lackButton = getByRole('button', { name: 'Lack & Keramik' });
+        expect(lackButton.getAttribute('aria-pressed')).toBe('true');
+        expect(lackButton.className).toContain('focus-visible:ring-red-500');
+
+        // 'Spezial & Reparatur' button should not be pressed
+        const spezialButton = getByRole('button', { name: 'Spezial & Reparatur' });
+        expect(spezialButton.getAttribute('aria-pressed')).toBe('false');
+        expect(spezialButton.className).toContain('focus-visible:ring-red-500');
+    });
+
+    it('renders accessible calculator link', () => {
+        const { getByRole } = render(<ServiceGrid services={mockServices} />);
+
+        const calcLink = getByRole('link', { name: /Preis jetzt berechnen/i });
+        expect(calcLink.className).toContain('focus-visible:ring-red-500');
+    });
 });
