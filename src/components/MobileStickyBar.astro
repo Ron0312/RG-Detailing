@@ -37,34 +37,37 @@ import { Phone, Calculator, MessageCircle } from 'lucide-react';
 
 <script>
     const stickyBar = document.getElementById('mobile-sticky-bar');
-    let isTicking = false;
 
-    function onScroll() {
-        if (!isTicking) {
-            requestAnimationFrame(() => {
-                updateStickyBar();
-                isTicking = false;
-            });
-            isTicking = true;
-        }
-    }
+    // BOLT OPTIMIZATION:
+    // Replaced scroll event listener with IntersectionObserver to improve main thread performance.
+    // Instead of checking scroll position on every frame, we observe a sentinel element.
+    const sentinel = document.createElement('div');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = '0';
+    sentinel.style.left = '0';
+    sentinel.style.width = '1px';
+    sentinel.style.height = '500px'; // Threshold for showing the bar
+    sentinel.style.pointerEvents = 'none';
+    sentinel.style.visibility = 'hidden';
+    document.body.appendChild(sentinel);
 
-    function updateStickyBar() {
+    const observer = new IntersectionObserver((entries) => {
+        const entry = entries[0];
         if (!stickyBar) return;
 
-        // Show bar after scrolling past 500px (approx Hero height)
-        if (window.scrollY > 500) {
+        // Show bar when we've scrolled past the sentinel (it's no longer intersecting and above viewport)
+        // If entry.boundingClientRect.top < 0, it means we are below the sentinel (scrolled down).
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
             stickyBar.classList.remove('translate-y-[150%]');
             stickyBar.removeAttribute('inert');
             stickyBar.removeAttribute('aria-hidden');
         } else {
+            // Hide bar when we are within the first 500px (intersecting or above)
             stickyBar.classList.add('translate-y-[150%]');
             stickyBar.setAttribute('inert', '');
             stickyBar.setAttribute('aria-hidden', 'true');
         }
-    }
+    });
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // Initial check
-    updateStickyBar();
+    observer.observe(sentinel);
 </script>
