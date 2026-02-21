@@ -12,7 +12,6 @@ import ParticleHero from '../components/ParticleHero.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import WhyUs from '../components/WhyUs.jsx';
 import { getCollection } from 'astro:content';
-import { services } from '../data/services';
 import { Gem, FlaskConical, Handshake, ArrowRight, CheckCircle2, MessageCircle, Instagram, Calendar, Car, Sparkles, Star } from 'lucide-react';
 import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/hero-workshop.jpg';
@@ -52,6 +51,8 @@ const afterSrcSet = `${afterMobile.src} 600w, ${optimizedAfter.src} 1024w`;
 
 const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const services = (await getCollection('homepage-services')).map(s => s.data);
 
 const galleryRawImages = [
   {

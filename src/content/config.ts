@@ -38,8 +38,32 @@ const glossaryCollection = defineCollection({
   }),
 });
 
+const homepageServicesCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    icon: z.string(),
+    shortDescription: z.string(),
+    link: z.string(),
+    category: z.string(),
+  }),
+});
+
+const reviewsCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    name: z.string(),
+    date: z.string(),
+    stars: z.number(),
+    text: z.string(),
+  }),
+});
+
 export const collections = {
   'cities': citiesCollection,
   'services': servicesCollection,
   'glossary': glossaryCollection,
+  'homepage-services': homepageServicesCollection,
+  'reviews': reviewsCollection,
 };
