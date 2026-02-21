@@ -86,4 +86,43 @@ describe('POST /api/log-event', () => {
         const content = JSON.parse(appendFileMock.mock.calls[0][1].trim());
         expect(content.visitorId).toBe('vis_abc123');
     });
+
+    it('should ignore HeadlessChrome via header', async () => {
+        const req = new Request('http://localhost/api/log-event', {
+            method: 'POST',
+            body: JSON.stringify({ eventName: 'test_event' }),
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.0.0 Safari/537.36'
+            }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(response.status).toBe(200);
+        const json = await response.json();
+        expect(json.ignored).toBe(true);
+        expect(appendFileMock).not.toHaveBeenCalled();
+    });
+
+    it('should ignore AdsBot via payload even if header is clean', async () => {
+        const req = new Request('http://localhost/api/log-event', {
+            method: 'POST',
+            body: JSON.stringify({
+                eventName: 'test_event',
+                data: {
+                    userAgent: 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.7559.132 Mobile Safari/537.36 (compatible; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html)'
+                }
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124' // Clean header
+            }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(response.status).toBe(200);
+        const json = await response.json();
+        expect(json.ignored).toBe(true);
+        expect(appendFileMock).not.toHaveBeenCalled();
+    });
 });

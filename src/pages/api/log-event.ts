@@ -43,10 +43,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429 });
     }
 
-    // Bot Filter: Server-side check for common crawlers to ensure data accuracy
+    // Bot Filter Logic (Enhanced)
+    const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot/i;
+
+    // 1. Check Header
     const headerUserAgent = request.headers.get('user-agent') || '';
-    if (/bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit/i.test(headerUserAgent)) {
-        // Silently ignore bots to save resources and keep logs clean
+    if (botRegex.test(headerUserAgent)) {
         return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
     }
 
@@ -75,6 +77,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
 
     const { eventName, url, sessionId, visitorId, data } = result.data;
+
+    // 2. Check Payload User-Agent (Some bots spoof headers but report honestly in JS)
+    if (data?.userAgent && botRegex.test(data.userAgent)) {
+        return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
+    }
 
     // Sanitize URL
     let sanitizedUrl = (url || '').substring(0, 200);
