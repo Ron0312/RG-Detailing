@@ -3,11 +3,19 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { AnalyticsEvent } from '../../types/analytics';
 
+import { getAdminSecret } from '../../lib/secrets';
+
 // Auth Check (Simple)
 const url = new URL(Astro.request.url);
 const key = url.searchParams.get('key');
-const isDev = import.meta.env.DEV;
-const secret = import.meta.env.STATS_SECRET || 'RG!123';
+
+let secret;
+try {
+    secret = getAdminSecret();
+} catch (e) {
+    console.error("Authentication Error: " + (e as Error).message);
+    return new Response(`Server Configuration Error.`, { status: 500 });
+}
 
 if (key !== secret) {
     return new Response(`Unauthorized. Access Denied.`, { status: 401 });
