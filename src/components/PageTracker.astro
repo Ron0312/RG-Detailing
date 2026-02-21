@@ -68,7 +68,7 @@
       let lastActivity = Date.now();
 
       // Update activity timestamp on interaction
-      ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
+      ['mousedown', 'keydown', 'touchstart'].forEach(evt =>
         document.addEventListener(evt, () => { lastActivity = Date.now(); }, { passive: true })
       );
 
@@ -157,6 +157,7 @@
       // Throttle scroll event
       let ticking = false;
       window.addEventListener('scroll', () => {
+          lastActivity = Date.now();
           if (!ticking) {
               window.requestAnimationFrame(() => {
                   handleScroll();
