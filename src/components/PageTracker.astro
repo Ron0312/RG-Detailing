@@ -6,7 +6,7 @@
 
   // Simple Bot Check (Global scope)
   // Prevents bots from attaching listeners and exhausting rate limits
-  const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
+  const isBot = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot/i.test(navigator.userAgent);
 
   if (!isBot) {
       // Track Page Load
@@ -62,11 +62,20 @@
         }
       });
 
-      // Track Time on Page (Heartbeat + Visibility)
+      // Track Time on Page (Heartbeat + Visibility + Idle Check)
       let startTime = Date.now();
       let timeTracked = 0;
+      let lastActivity = Date.now();
+
+      // Update activity timestamp on interaction
+      ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
+        document.addEventListener(evt, () => { lastActivity = Date.now(); }, { passive: true })
+      );
 
       const trackDuration = () => {
+        // Stop tracking if idle for > 5 minutes to prevent log flooding
+        if (Date.now() - lastActivity > 5 * 60 * 1000) return;
+
         const now = Date.now();
         const duration = Math.round((now - startTime) / 1000); // seconds
         if (duration > timeTracked && duration > 5) {
