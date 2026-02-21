@@ -1,9 +1,17 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypto';
 import type { APIContext } from 'astro';
 
 const USERNAME = 'Ronni';
 // SHA-256 of "Remo!123#"
 const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+
+// Generate a random secret for signing session cookies.
+// In a real production app, this should persist or be in ENV to survive restarts.
+const SESSION_SECRET = randomBytes(32);
+
+function sign(data: string): string {
+    return createHmac('sha256', SESSION_SECRET).update(data).digest('hex');
+}
 
 /**
  * Verifies the username and password against the hardcoded credentials.
@@ -18,10 +26,24 @@ export function verifyCredentials(username: string, password: string): boolean {
  * Checks if the request is authenticated via session cookie or API key.
  */
 export function isAuthenticated(context: APIContext): boolean {
-    // 1. Check Session Cookie
-    const session = context.cookies.get('admin_session');
-    if (session && session.value === PASSWORD_HASH) {
-        return true;
+    // 1. Check Session Cookie (Signed)
+    const cookie = context.cookies.get('admin_session');
+    if (cookie && cookie.value) {
+        const [payload, signature] = cookie.value.split('.');
+        if (payload && signature) {
+            const expectedSignature = sign(payload);
+            const signatureBuf = Buffer.from(signature);
+            const expectedBuf = Buffer.from(expectedSignature);
+
+            if (signatureBuf.length === expectedBuf.length &&
+                timingSafeEqual(signatureBuf, expectedBuf)) {
+                // Check expiry timestamp in payload
+                const expiry = parseInt(payload.split(':')[1] || '0');
+                if (Date.now() < expiry) {
+                    return true;
+                }
+            }
+        }
     }
 
     // 2. Check Legacy Key (Query Param or Authorization Header)
@@ -41,7 +63,11 @@ export function isAuthenticated(context: APIContext): boolean {
  * Creates a secure session cookie.
  */
 export function createSession(context: APIContext) {
-    context.cookies.set('admin_session', PASSWORD_HASH, {
+    const expires = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
+    const payload = `admin:${expires}`;
+    const signature = sign(payload);
+
+    context.cookies.set('admin_session', `${payload}.${signature}`, {
         path: '/',
         httpOnly: true,
         secure: import.meta.env.PROD,
