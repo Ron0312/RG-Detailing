@@ -2,50 +2,15 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { AnalyticsEvent } from '../../types/analytics';
+import { isAuthenticated } from '../../lib/auth';
 
-import { getAdminSecret } from '../../lib/secrets';
+// Auth Check
+if (!isAuthenticated(Astro)) {
+    return Astro.redirect('/admin/login');
+}
 
-// Auth Check (Simple)
 const url = new URL(Astro.request.url);
-const key = url.searchParams.get('key');
-
-let secret;
-try {
-    secret = getAdminSecret();
-} catch (e) {
-    console.error("Authentication Error: " + (e as Error).message);
-    return new Response(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="utf-8">
-            <title>Configuration Error</title>
-            <style>
-                body { font-family: system-ui, sans-serif; background: #111; color: #eee; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-                .container { background: #222; padding: 2rem; border-radius: 8px; border: 1px solid #ef4444; max-width: 500px; text-align: center; }
-                h1 { color: #ef4444; margin-top: 0; }
-                p { color: #ccc; line-height: 1.5; }
-                code { background: #333; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #fff; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Configuration Required</h1>
-                <p>The admin panel is disabled because the <code>STATS_SECRET</code> environment variable is not set.</p>
-                <p>Please configure this variable in your hosting environment (e.g., Vercel, Netlify, or .env file) to a secure password.</p>
-                <p style="font-size: 0.8rem; color: #888; margin-top: 2rem;">Error: ${(e as Error).message}</p>
-            </div>
-        </body>
-        </html>
-    `, {
-        status: 500,
-        headers: { 'Content-Type': 'text/html' }
-    });
-}
-
-if (key !== secret) {
-    return new Response(`Unauthorized. Access Denied.`, { status: 401 });
-}
+const key = url.searchParams.get('key') || '';
 
 // Read Logs
 const logDir = path.resolve('logs');
@@ -453,7 +418,7 @@ if (avgTimeOnPage > 120) {
         type: 'success',
         message: `Stark: Nutzer bleiben durchschnittlich ${formatTime(avgTimeOnPage)} auf der Seite. Inhalte sind relevant!`
     });
-} else if (avgTimeOnPage < 30 && totalViews > 10) {
+} else if (avgTimeOnPage < 30 && totalPageViews > 10) {
     insights.push({
         type: 'warning',
         message: `Vorsicht: Kurze Verweildauer (${avgTimeOnPage}s). Prüfe den "Above the Fold" Bereich.`
@@ -556,8 +521,8 @@ if (insights.length === 0) {
     <div class="sticky-header">
         <h1 style="border: none; margin: 0; padding: 0;">Analytics Dashboard</h1>
         <div style="display: flex; gap: 1rem; align-items: center;">
-            <a href="/api/export-csv?key=RG!123" class="btn" style="background: #22c55e;" download>📊 Export CSV</a>
-            <a href="/api/backup-logs?key=RG!123" class="btn" style="background: #3b82f6;" download>💾 Backup Logs</a>
+            <a href={`/api/export-csv${key ? '?key=' + key : ''}`} class="btn" style="background: #22c55e;" download>📊 Export CSV</a>
+            <a href={`/api/backup-logs${key ? '?key=' + key : ''}`} class="btn" style="background: #3b82f6;" download>💾 Backup Logs</a>
             <div class="controls" style="margin: 0;">
                 <button class="btn active" onclick="filterData('all')">All Time</button>
                 <button class="btn" onclick="filterData('30d')">30 Days</button>
@@ -1093,8 +1058,10 @@ if (insights.length === 0) {
             const url = new URL(window.location.href);
             const key = url.searchParams.get('key');
 
+            const query = key ? `?key=${key}` : '';
+
             try {
-                const res = await fetch(`/api/delete-logs?key=${key}`, { method: 'POST' });
+                const res = await fetch(`/api/delete-logs${query}`, { method: 'POST' });
                 if (res.ok) {
                     alert('Data deleted successfully.');
                     window.location.reload();

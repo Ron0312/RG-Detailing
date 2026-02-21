@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { getAdminSecret } from '../../lib/secrets';
+import { isAuthenticated } from '../../lib/auth';
 import type { AnalyticsEvent } from '../../types/analytics';
 
 // CSV Escaping: Wrap in quotes if contains comma or quotes, and double quotes
@@ -14,18 +14,9 @@ const escapeCsv = (str: string | undefined | null) => {
     return s;
 };
 
-export const GET: APIRoute = async ({ request, url }) => {
-    // Auth Check
-    const key = url.searchParams.get('key');
-    let secret;
-    try {
-        secret = getAdminSecret();
-    } catch (e) {
-        return new Response('Server Configuration Error', { status: 500 });
-    }
-
-    if (key !== secret) {
-        return new Response('Unauthorized. Access Denied.', { status: 401 });
+export const GET: APIRoute = async (context) => {
+    if (!isAuthenticated(context)) {
+        return new Response('Unauthorized', { status: 401 });
     }
 
     const logDir = path.resolve('logs');

@@ -1,24 +1,15 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs';
 import path from 'node:path';
-import { getAdminSecret } from '../../lib/secrets';
+import { isAuthenticated } from '../../lib/auth';
 import zlib from 'node:zlib';
 import { pipeline } from 'node:stream';
 import { promisify } from 'node:util';
 
 const pipe = promisify(pipeline);
 
-export const GET: APIRoute = async ({ request, url }) => {
-    // Auth Check
-    const key = url.searchParams.get('key');
-    let secret;
-    try {
-        secret = getAdminSecret();
-    } catch (e) {
-        return new Response('Server Configuration Error', { status: 500 });
-    }
-
-    if (key !== secret) {
+export const GET: APIRoute = async (context) => {
+    if (!isAuthenticated(context)) {
         return new Response('Unauthorized', { status: 401 });
     }
 

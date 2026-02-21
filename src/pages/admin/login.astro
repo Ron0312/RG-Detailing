@@ -1,0 +1,59 @@
+---
+import { verifyCredentials, createSession } from '../../lib/auth';
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+    try {
+        const data = await Astro.request.formData();
+        const username = data.get('username') as string;
+        const password = data.get('password') as string;
+
+        if (verifyCredentials(username, password)) {
+            createSession(Astro);
+            return Astro.redirect('/admin/stats');
+        } else {
+            error = 'Invalid username or password';
+        }
+    } catch (e) {
+        error = 'An error occurred';
+    }
+}
+---
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Admin Login</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #111; color: #eee; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: #222; padding: 2rem; border-radius: 12px; border: 1px solid #333; width: 100%; max-width: 400px; }
+        h1 { color: #ef4444; margin-top: 0; margin-bottom: 1.5rem; text-align: center; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #ccc; }
+        input { width: 100%; padding: 0.75rem; background: #333; border: 1px solid #444; border-radius: 6px; color: white; font-size: 1rem; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #ef4444; ring: 2px solid #ef4444; }
+        button { width: 100%; background: #ef4444; color: white; padding: 0.75rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: bold; margin-top: 1rem; transition: background 0.2s; }
+        button:hover { background: #dc2626; }
+        .error { color: #f87171; background: rgba(239, 68, 68, 0.1); padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; text-align: center; border: 1px solid rgba(239, 68, 68, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Admin Access</h1>
+        {error && <div class="error">{error}</div>}
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
