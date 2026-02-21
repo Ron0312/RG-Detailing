@@ -108,7 +108,8 @@ export default function ServiceGrid({ services }) {
                     <button
                         key={category}
                         onClick={() => setActiveCategory(category)}
-                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all border ${
+                        aria-pressed={activeCategory === category}
+                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all border focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
                             activeCategory === category
                                 ? 'bg-red-700 border-red-700 text-white shadow-[0_0_20px_-5px_rgba(220,38,38,0.5)] scale-105'
                                 : 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 hover:bg-zinc-800'
@@ -162,7 +163,7 @@ export default function ServiceGrid({ services }) {
                         </p>
                         <a
                             href="#rechner"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-red-900/40 hover:scale-105"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-red-900/40 hover:scale-105 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
                         >
                             <Calculator size={20} />
                             Preis jetzt berechnen
