@@ -14,7 +14,33 @@ try {
     secret = getAdminSecret();
 } catch (e) {
     console.error("Authentication Error: " + (e as Error).message);
-    return new Response(`Server Configuration Error.`, { status: 500 });
+    return new Response(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Configuration Error</title>
+            <style>
+                body { font-family: system-ui, sans-serif; background: #111; color: #eee; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                .container { background: #222; padding: 2rem; border-radius: 8px; border: 1px solid #ef4444; max-width: 500px; text-align: center; }
+                h1 { color: #ef4444; margin-top: 0; }
+                p { color: #ccc; line-height: 1.5; }
+                code { background: #333; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; color: #fff; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Configuration Required</h1>
+                <p>The admin panel is disabled because the <code>STATS_SECRET</code> environment variable is not set.</p>
+                <p>Please configure this variable in your hosting environment (e.g., Vercel, Netlify, or .env file) to a secure password.</p>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 2rem;">Error: ${(e as Error).message}</p>
+            </div>
+        </body>
+        </html>
+    `, {
+        status: 500,
+        headers: { 'Content-Type': 'text/html' }
+    });
 }
 
 if (key !== secret) {
