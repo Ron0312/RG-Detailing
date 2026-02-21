@@ -1,19 +1,27 @@
 ---
 import { verifyCredentials, createSession } from '../../lib/auth';
+import { checkRateLimit } from '../../lib/rate-limit';
 
 let error = '';
 
 if (Astro.request.method === 'POST') {
     try {
-        const data = await Astro.request.formData();
-        const username = data.get('username') as string;
-        const password = data.get('password') as string;
+        const clientAddress = Astro.clientAddress;
+        const ip = Astro.request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
 
-        if (verifyCredentials(username, password)) {
-            createSession(Astro);
-            return Astro.redirect('/admin/stats');
+        if (!checkRateLimit(`login:${ip}`, 5, 60 * 1000)) {
+            error = 'Too many login attempts. Please try again later.';
         } else {
-            error = 'Invalid username or password';
+            const data = await Astro.request.formData();
+            const username = data.get('username') as string;
+            const password = data.get('password') as string;
+
+            if (verifyCredentials(username, password)) {
+                createSession(Astro);
+                return Astro.redirect('/admin/stats');
+            } else {
+                error = 'Invalid username or password';
+            }
         }
     } catch (e) {
         error = 'An error occurred';

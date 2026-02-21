@@ -27,19 +27,20 @@ pipeMock.mockReturnValue({}); // Gzip stream mock
 describe('GET /api/backup-logs', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.stubEnv('STATS_SECRET', 'RG!123');
         existsSyncMock.mockReturnValue(true);
     });
 
     it('should require authentication', async () => {
         const req = new Request('http://localhost/api/backup-logs');
-        const response = await GET({ request: req, url: new URL(req.url) } as any);
+        const response = await GET({ request: req, url: new URL(req.url), cookies: { get: vi.fn() } } as any);
         expect(response.status).toBe(401);
     });
 
     it('should return 404 if log file missing', async () => {
         existsSyncMock.mockReturnValue(false);
         const req = new Request('http://localhost/api/backup-logs?key=RG!123');
-        const response = await GET({ request: req, url: new URL(req.url) } as any);
+        const response = await GET({ request: req, url: new URL(req.url), cookies: { get: vi.fn() } } as any);
         expect(response.status).toBe(404);
     });
 
@@ -49,7 +50,7 @@ describe('GET /api/backup-logs', () => {
         // This will likely fail in jsdom/vitest without full stream polyfills if we don't handle the Readable.toWeb call mock
         // Since we are testing logic, checking headers is a good start.
         try {
-            await GET({ request: req, url: new URL(req.url) } as any);
+            await GET({ request: req, url: new URL(req.url), cookies: { get: vi.fn() } } as any);
         } catch (e) {
             // Expected error due to Readable.toWeb mock missing in environment
         }
