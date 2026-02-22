@@ -65,7 +65,8 @@ export default function GalleryLightbox({ images, limit = 10 }) {
             <button
               key={cat}
               onClick={() => handleFilterChange(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-bold transition-all border ${
+              aria-pressed={filter === cat}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-all border focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none ${
                 filter === cat
                   ? 'bg-red-700 border-red-700 text-white shadow-lg'
                   : 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
@@ -111,7 +112,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
           <div className="mt-8 text-center">
               <button
                 onClick={showMore}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900/80 border border-white/10 text-white font-bold hover:bg-zinc-800 transition-colors shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900/80 border border-white/10 text-white font-bold hover:bg-zinc-800 transition-colors shadow-lg focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
               >
                   Mehr anzeigen <ArrowDown size={18} />
               </button>
