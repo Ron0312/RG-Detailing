@@ -1,9 +1,20 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypto';
 import type { APIContext } from 'astro';
 
 const USERNAME = 'Ronni';
 // SHA-256 of "Remo!123#"
 const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+
+// Generate a random session secret on server start.
+// This invalidates all sessions on server restart, which is good for security.
+const SESSION_SECRET = randomBytes(32);
+
+/**
+ * Generates a secure session token signed with the session secret.
+ */
+function getSessionToken() {
+    return createHmac('sha256', SESSION_SECRET).update('admin-session').digest('hex');
+}
 
 /**
  * Verifies the username and password against the hardcoded credentials.
@@ -20,8 +31,15 @@ export function verifyCredentials(username: string, password: string): boolean {
 export function isAuthenticated(context: APIContext): boolean {
     // 1. Check Session Cookie
     const session = context.cookies.get('admin_session');
-    if (session && session.value === PASSWORD_HASH) {
-        return true;
+
+    if (session && session.value) {
+        const expectedToken = getSessionToken();
+        const sessionBuf = Buffer.from(session.value);
+        const expectedBuf = Buffer.from(expectedToken);
+
+        if (sessionBuf.length === expectedBuf.length && timingSafeEqual(sessionBuf, expectedBuf)) {
+            return true;
+        }
     }
 
     // 2. Check Legacy Key (Query Param or Authorization Header)
@@ -41,7 +59,7 @@ export function isAuthenticated(context: APIContext): boolean {
  * Creates a secure session cookie.
  */
 export function createSession(context: APIContext) {
-    context.cookies.set('admin_session', PASSWORD_HASH, {
+    context.cookies.set('admin_session', getSessionToken(), {
         path: '/',
         httpOnly: true,
         secure: import.meta.env.PROD,
