@@ -23,21 +23,31 @@ export default function WhyUs() {
         }
     ];
 
+    // OPTIMIZATION: Use IntersectionObserver instead of scroll event listener
+    // Prevents layout thrashing (reflows) on every scroll frame.
     useEffect(() => {
-        const handleScroll = () => {
-            if (scrollRef.current) {
-                const scrollLeft = scrollRef.current.scrollLeft;
-                const width = scrollRef.current.offsetWidth;
-                const newIndex = Math.round(scrollLeft / width);
-                setActiveIndex(newIndex);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const index = Number(entry.target.getAttribute('data-index'));
+                        setActiveIndex(index);
+                    }
+                });
+            },
+            {
+                root: scrollRef.current,
+                threshold: 0.6 // Item considered active when >60% visible
             }
-        };
+        );
 
-        const ref = scrollRef.current;
-        if (ref) {
-            ref.addEventListener('scroll', handleScroll);
-            return () => ref.removeEventListener('scroll', handleScroll);
+        const container = scrollRef.current;
+        if (container) {
+            const elements = container.querySelectorAll('[data-index]');
+            elements.forEach(el => observer.observe(el));
         }
+
+        return () => observer.disconnect();
     }, []);
 
     const scrollToSlide = (index) => {
@@ -47,7 +57,8 @@ export default function WhyUs() {
                 left: width * index,
                 behavior: 'smooth'
             });
-            setActiveIndex(index);
+            // State update happens via observer, but we can optimistically set it too
+            // However, let's rely on observer to be consistent
         }
     };
 
@@ -70,6 +81,7 @@ export default function WhyUs() {
                         return (
                              <div
                                 key={index}
+                                data-index={index}
                                 className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center glass-panel p-6 md:p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0 animate-fade-in-up"
                                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
                             >
@@ -94,7 +106,7 @@ export default function WhyUs() {
                             onClick={() => scrollToSlide(index)}
                             aria-label={`Gehe zu Slide ${index + 1}`}
                             aria-current={index === activeIndex ? 'step' : undefined}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 ${
+                            className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
                                 index === activeIndex
                                     ? 'bg-red-600 scale-125'
                                     : 'bg-zinc-700 hover:bg-zinc-600'

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import React from 'react';
 import WhyUs from './WhyUs';
 
@@ -9,6 +9,27 @@ const scrollToMock = vi.fn();
 Element.prototype.scrollTo = scrollToMock;
 
 describe('WhyUs Component', () => {
+    let observerCallback;
+    let observeMock;
+    let unobserveMock;
+    let disconnectMock;
+
+    beforeEach(() => {
+        observeMock = vi.fn();
+        unobserveMock = vi.fn();
+        disconnectMock = vi.fn();
+
+        // Mock IntersectionObserver as a class
+        window.IntersectionObserver = class IntersectionObserver {
+            constructor(cb) {
+                observerCallback = cb;
+            }
+            observe(element) { observeMock(element); }
+            unobserve(element) { unobserveMock(element); }
+            disconnect() { disconnectMock(); }
+        };
+    });
+
     afterEach(() => {
         cleanup();
         vi.restoreAllMocks();
@@ -22,27 +43,42 @@ describe('WhyUs Component', () => {
 
     it('renders pagination dots as interactive buttons', () => {
         render(<WhyUs />);
-
-        // This will check if there are buttons with aria-labels for navigation
-        // Currently, this should fail because they are divs
         const buttons = screen.getAllByRole('button', { name: /Gehe zu Slide/i });
         expect(buttons).toHaveLength(3);
     });
 
-    it('updates active state on click and scrolls', () => {
+    it('triggers scroll on button click', () => {
         render(<WhyUs />);
-
         const buttons = screen.getAllByRole('button', { name: /Gehe zu Slide/i });
         const secondButton = buttons[1];
 
-        // Click the second button
         fireEvent.click(secondButton);
-
-        // Check if scrollTo was called
         expect(scrollToMock).toHaveBeenCalled();
+    });
 
-        // Check if the second button is now active (aria-current)
-        // Note: aria-current is a boolean or string, usually "step" or "page" or "true"
-        expect(secondButton.getAttribute('aria-current')).toBe('step');
+    it('updates active state when intersection occurs', () => {
+        render(<WhyUs />);
+
+        const buttons = screen.getAllByRole('button', { name: /Gehe zu Slide/i });
+
+        // Initial state: first button active
+        expect(buttons[0].getAttribute('aria-current')).toBe('step');
+        expect(buttons[1].getAttribute('aria-current')).toBeNull();
+
+        // Simulate intersection on index 1
+        act(() => {
+            if (observerCallback) {
+                observerCallback([
+                    {
+                        isIntersecting: true,
+                        target: { getAttribute: () => '1' } // Mock target
+                    }
+                ]);
+            }
+        });
+
+        // Now second button should be active
+        expect(buttons[1].getAttribute('aria-current')).toBe('step');
+        expect(buttons[0].getAttribute('aria-current')).toBeNull();
     });
 });
