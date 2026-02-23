@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, memo } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
@@ -120,6 +120,141 @@ const BackButton = ({ onClick, className = '', children }) => (
         <span>{children || 'Zurück'}</span>
     </button>
 );
+
+const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
+    const sizeName = config.sizes[selections.size]?.name;
+    const conditionName = config.conditions[selections.condition]?.name;
+    const pkg = config.packages[selections.package];
+    const packageName = pkg?.name;
+
+    if (quote.isRequestOnly) {
+        const meterPrice = 25;
+        const washPrice = Math.round(selections.camperLength * meterPrice);
+        const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
+
+        return (
+             <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/30 transition-colors duration-500">
+                <h3 ref={stepTitleRef} tabIndex={-1} className="text-2xl md:text-3xl font-bold text-white mb-6 text-center focus:outline-none">Wohnmobil Spezial</h3>
+
+                <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
+                    <div className="text-zinc-400 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
+                    <div className="text-5xl font-bold text-white mb-2 tracking-tight">{washPrice}€</div>
+                     <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
+                     <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
+                     <div className="text-zinc-300 text-sm font-medium">
+                        <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
+                        Individuelles Angebot nach Besichtigung
+                     </div>
+                </div>
+
+                <div className="space-y-3 mb-8">
+                    <div className="flex gap-4 items-center p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                        <div className="text-sm">
+                            <span className="font-bold text-white block mb-0.5">GFK & Gelcoat Schutz</span>
+                            <span className="text-zinc-400">Werterhalt gegen UV-Schäden.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <WhatsAppButton message={message} />
+                <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
+            </div>
+        )
+    }
+
+    if (selections.package === 'leasing') {
+         const message = `Hallo RG-Detailing, ich brauche Hilfe bei der Leasing-Rückgabe (${sizeName}). Bitte um Termin zur Vorab-Inspektion.`;
+         return (
+            <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl">
+                <div className="text-center mb-8 relative z-10">
+                     <span className="inline-block py-1.5 px-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                        Investition statt Strafe
+                    </span>
+                    <h3 ref={stepTitleRef} tabIndex={-1} className="text-3xl md:text-4xl font-bold text-white mb-3 focus:outline-none">Leasing Rettung</h3>
+                    <p className="text-zinc-400">Vermeiden Sie teure Nachzahlungen.</p>
+                </div>
+
+                <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
+                    <div>
+                        <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
+                        <div className="text-sm text-zinc-300 leading-relaxed">
+                            Ein Kratzer im Protokoll kostet oft 300-600€. Wir entfernen ihn für einen Bruchteil.
+                            <br/><span className="text-red-400 font-bold mt-1 block">Sparpotenzial: bis zu 70%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="text-center mb-8">
+                    <div className="text-xs text-zinc-400 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
+                    <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-400 align-top ml-1">*</span></div>
+                </div>
+
+                <WhatsAppButton message={message} />
+            </div>
+         );
+    }
+
+    const message = `Hallo RG-Detailing, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}. Schätzung: ${quote.minPrice}-${quote.maxPrice}EUR.`;
+
+    return (
+        <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/20 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none"></div>
+
+            <div className="relative z-10">
+                <div className="text-center mb-10">
+                    <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6 focus:outline-none">
+                        Ihre Investition
+                    </span>
+                    <div className="flex items-baseline justify-center gap-3 leading-none mb-3">
+                         <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
+                         <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
+                    </div>
+                    <div className="text-zinc-400 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
+                </div>
+
+                <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
+                    <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Fahrzeug</span>
+                        <span className="text-white font-medium">{sizeName}</span>
+                    </div>
+                    <div className="h-px bg-white/5 mx-4"></div>
+                    <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Zustand</span>
+                        <span className="text-white font-medium">{conditionName}</span>
+                    </div>
+                    <div className="h-px bg-white/5 mx-4"></div>
+                    <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
+                        <span className="text-red-400 font-bold">{packageName}</span>
+                    </div>
+                </div>
+
+                {pkg?.hasClubAbo && (
+                     <div className="mb-8 bg-gradient-to-br from-yellow-900/20 to-zinc-900 border border-yellow-600/20 p-5 rounded-2xl relative overflow-hidden group/abo">
+                        <div className="relative z-10">
+                            <div className="text-yellow-500 font-bold mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">
+                                Werterhalt-Garantie
+                            </div>
+                            <p className="text-zinc-300 text-sm leading-relaxed mb-3">
+                                Mit diesem Paket qualifizieren Sie sich für unser exklusives <span className="text-white font-bold border-b border-yellow-500/50">Maintenance-Abo</span>.
+                            </p>
+                            <ul className="text-zinc-400 text-xs space-y-1 mb-3">
+                                <li className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-500" /> Dauerhafter Neuwagen-Zustand</li>
+                                <li className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-500" /> Schutz vor Wertverlust</li>
+                            </ul>
+                            <div className="text-yellow-400 font-bold text-lg border-t border-yellow-500/20 pt-2 mt-2">
+                                -20% auf alle Nachpflege-Termine.
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <WhatsAppButton message={message} />
+                <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
+            </div>
+        </div>
+    );
+});
 
 export default function PriceCalculator() {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -277,140 +412,6 @@ export default function PriceCalculator() {
         window.history.replaceState({}, '', window.location.pathname);
     };
 
-    const renderResult = () => {
-        const sizeName = config.sizes[selections.size]?.name;
-        const conditionName = config.conditions[selections.condition]?.name;
-        const pkg = config.packages[selections.package];
-        const packageName = pkg?.name;
-
-        if (quote.isRequestOnly) {
-            const meterPrice = 25;
-            const washPrice = Math.round(selections.camperLength * meterPrice);
-            const message = `Hallo RG-Detailing, ich interessiere mich für eine Wohnmobil-Aufbereitung (${selections.camperLength}m). Bitte um Rückruf.`;
-
-            return (
-                 <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/30 transition-colors duration-500">
-                    <h3 ref={stepTitleRef} tabIndex={-1} className="text-2xl md:text-3xl font-bold text-white mb-6 text-center focus:outline-none">Wohnmobil Spezial</h3>
-
-                    <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
-                        <div className="text-zinc-400 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
-                        <div className="text-5xl font-bold text-white mb-2 tracking-tight">{washPrice}€</div>
-                         <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {meterPrice}€/m). Politur auf Anfrage.</div>
-                         <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
-                         <div className="text-zinc-300 text-sm font-medium">
-                            <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
-                            Individuelles Angebot nach Besichtigung
-                         </div>
-                    </div>
-
-                    <div className="space-y-3 mb-8">
-                        <div className="flex gap-4 items-center p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <div className="text-sm">
-                                <span className="font-bold text-white block mb-0.5">GFK & Gelcoat Schutz</span>
-                                <span className="text-zinc-400">Werterhalt gegen UV-Schäden.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <WhatsAppButton message={message} />
-                    <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
-                </div>
-            )
-        }
-
-        if (selections.package === 'leasing') {
-             const message = `Hallo RG-Detailing, ich brauche Hilfe bei der Leasing-Rückgabe (${sizeName}). Bitte um Termin zur Vorab-Inspektion.`;
-             return (
-                <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl">
-                    <div className="text-center mb-8 relative z-10">
-                         <span className="inline-block py-1.5 px-4 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
-                            Investition statt Strafe
-                        </span>
-                        <h3 ref={stepTitleRef} tabIndex={-1} className="text-3xl md:text-4xl font-bold text-white mb-3 focus:outline-none">Leasing Rettung</h3>
-                        <p className="text-zinc-400">Vermeiden Sie teure Nachzahlungen.</p>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-500 p-6 rounded-r-xl mb-8 flex items-start gap-5 relative z-10 backdrop-blur-sm">
-                        <div>
-                            <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
-                            <div className="text-sm text-zinc-300 leading-relaxed">
-                                Ein Kratzer im Protokoll kostet oft 300-600€. Wir entfernen ihn für einen Bruchteil.
-                                <br/><span className="text-red-400 font-bold mt-1 block">Sparpotenzial: bis zu 70%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="text-center mb-8">
-                        <div className="text-xs text-zinc-400 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
-                        <div className="text-5xl font-bold text-white tracking-tighter">~{quote.minPrice}€<span className="text-lg text-zinc-400 align-top ml-1">*</span></div>
-                    </div>
-
-                    <WhatsAppButton message={message} />
-                </div>
-             );
-        }
-
-        const message = `Hallo RG-Detailing, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}. Schätzung: ${quote.minPrice}-${quote.maxPrice}EUR.`;
-
-        return (
-            <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/20 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none"></div>
-
-                <div className="relative z-10">
-                    <div className="text-center mb-10">
-                        <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6 focus:outline-none">
-                            Ihre Investition
-                        </span>
-                        <div className="flex items-baseline justify-center gap-3 leading-none mb-3">
-                             <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
-                             <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
-                        </div>
-                        <div className="text-zinc-400 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
-                    </div>
-
-                    <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
-                        <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Fahrzeug</span>
-                            <span className="text-white font-medium">{sizeName}</span>
-                        </div>
-                        <div className="h-px bg-white/5 mx-4"></div>
-                        <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Zustand</span>
-                            <span className="text-white font-medium">{conditionName}</span>
-                        </div>
-                        <div className="h-px bg-white/5 mx-4"></div>
-                        <div className="flex justify-between items-center p-3 rounded-xl hover:bg-white/5 transition-colors">
-                            <span className="text-zinc-400 text-xs uppercase tracking-widest flex items-center gap-3 font-bold">Paket</span>
-                            <span className="text-red-400 font-bold">{packageName}</span>
-                        </div>
-                    </div>
-
-                    {pkg?.hasClubAbo && (
-                         <div className="mb-8 bg-gradient-to-br from-yellow-900/20 to-zinc-900 border border-yellow-600/20 p-5 rounded-2xl relative overflow-hidden group/abo">
-                            <div className="relative z-10">
-                                <div className="text-yellow-500 font-bold mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">
-                                    Werterhalt-Garantie
-                                </div>
-                                <p className="text-zinc-300 text-sm leading-relaxed mb-3">
-                                    Mit diesem Paket qualifizieren Sie sich für unser exklusives <span className="text-white font-bold border-b border-yellow-500/50">Maintenance-Abo</span>.
-                                </p>
-                                <ul className="text-zinc-400 text-xs space-y-1 mb-3">
-                                    <li className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-500" /> Dauerhafter Neuwagen-Zustand</li>
-                                    <li className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-500" /> Schutz vor Wertverlust</li>
-                                </ul>
-                                <div className="text-yellow-400 font-bold text-lg border-t border-yellow-500/20 pt-2 mt-2">
-                                    -20% auf alle Nachpflege-Termine.
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <WhatsAppButton message={message} />
-                    <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
-                </div>
-            </div>
-        );
-    };
 
     if (!isExpanded) {
         return <Teaser onStart={() => setIsExpanded(true)} />;
@@ -585,7 +586,7 @@ export default function PriceCalculator() {
                                 if (selections.size === 'camper') setStep(STEPS.CAMPER_LENGTH);
                                 else setStep(STEPS.PACKAGE);
                             }}>Korrigieren</BackButton></div>
-                            {renderResult()}
+                            <ResultCard quote={quote} selections={selections} stepTitleRef={stepTitleRef} />
 
                             <form onSubmit={submitQuote} className="max-w-lg mx-auto bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 backdrop-blur-sm" data-track-view="calculator-submit-form">
                                 <input
