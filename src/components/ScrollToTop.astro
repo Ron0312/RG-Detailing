@@ -13,19 +13,37 @@
 <script>
     const btn = document.getElementById('scrollToTopBtn');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-            btn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            btn.removeAttribute('tabindex');
-            btn.removeAttribute('aria-hidden');
-        } else {
-            btn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-            btn.setAttribute('tabindex', '-1');
-            btn.setAttribute('aria-hidden', 'true');
-        }
-    });
+    if (btn) {
+        // OPTIMIZATION: Use IntersectionObserver instead of scroll event for better performance
+        const sentinel = document.createElement('div');
+        sentinel.style.position = 'absolute';
+        sentinel.style.top = '0';
+        sentinel.style.left = '0';
+        sentinel.style.width = '1px';
+        sentinel.style.height = '500px'; // Threshold for showing the button
+        sentinel.style.pointerEvents = 'none';
+        sentinel.style.visibility = 'hidden';
+        document.body.appendChild(sentinel);
 
-    btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0];
+            // Show button when we've scrolled past the sentinel (it's no longer intersecting and above viewport)
+            if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+                btn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                btn.removeAttribute('tabindex');
+                btn.removeAttribute('aria-hidden');
+            } else {
+                // Hide button when we are within the first 500px
+                btn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                btn.setAttribute('tabindex', '-1');
+                btn.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        observer.observe(sentinel);
+
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 </script>
