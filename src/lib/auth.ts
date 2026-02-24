@@ -1,9 +1,15 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypto';
+import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
 const USERNAME = 'Ronni';
 // SHA-256 of "Remo!123#"
 const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+
+// Use a session secret. In production, this should be an env var.
+// If not set, generate a random one (invalidates sessions on restart).
+// Note: import.meta.env is build-time, process.env is runtime (Node adapter)
+const SESSION_SECRET = process.env.SESSION_SECRET || import.meta.env.SESSION_SECRET || randomBytes(32).toString('hex');
 
 /**
  * Verifies the username and password against the hardcoded credentials.
@@ -11,7 +17,12 @@ const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f
 export function verifyCredentials(username: string, password: string): boolean {
     if (username !== USERNAME) return false;
     const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+
+    const hashBuffer = Buffer.from(hash, 'hex');
+    const targetBuffer = Buffer.from(PASSWORD_HASH, 'hex');
+
+    if (hashBuffer.length !== targetBuffer.length) return false;
+    return timingSafeEqual(hashBuffer, targetBuffer);
 }
 
 /**
@@ -20,8 +31,10 @@ export function verifyCredentials(username: string, password: string): boolean {
 export function isAuthenticated(context: APIContext): boolean {
     // 1. Check Session Cookie
     const session = context.cookies.get('admin_session');
-    if (session && session.value === PASSWORD_HASH) {
-        return true;
+    if (session && session.value) {
+        if (verifySession(session.value)) {
+            return true;
+        }
     }
 
     // 2. Check Legacy Key (Query Param or Authorization Header)
@@ -38,10 +51,11 @@ export function isAuthenticated(context: APIContext): boolean {
 }
 
 /**
- * Creates a secure session cookie.
+ * Creates a signed session cookie.
  */
 export function createSession(context: APIContext) {
-    context.cookies.set('admin_session', PASSWORD_HASH, {
+    const token = generateSessionToken();
+    context.cookies.set('admin_session', token, {
         path: '/',
         httpOnly: true,
         secure: import.meta.env.PROD,
@@ -55,4 +69,37 @@ export function createSession(context: APIContext) {
  */
 export function destroySession(context: APIContext) {
     context.cookies.delete('admin_session', { path: '/' });
+}
+
+// Internal helper to generate a signed token
+function generateSessionToken(): string {
+    // Payload: timestamp
+    const payload = Date.now().toString();
+    const signature = createHmac('sha256', SESSION_SECRET).update(payload).digest('hex');
+    return `${payload}.${signature}`;
+}
+
+// Internal helper to verify a signed token
+function verifySession(token: string): boolean {
+    const parts = token.split('.');
+    if (parts.length !== 2) return false;
+
+    const [payload, signature] = parts;
+    if (!payload || !signature) return false;
+
+    // Check expiration (optional, but good practice - 7 days matching cookie)
+    const timestamp = parseInt(payload);
+    if (isNaN(timestamp)) return false;
+
+    const now = Date.now();
+    const maxAge = 7 * 24 * 60 * 60 * 1000;
+    if (now - timestamp > maxAge) return false;
+
+    const expectedSignature = createHmac('sha256', SESSION_SECRET).update(payload).digest('hex');
+
+    const signatureBuffer = Buffer.from(signature, 'hex');
+    const expectedBuffer = Buffer.from(expectedSignature, 'hex');
+
+    if (signatureBuffer.length !== expectedBuffer.length) return false;
+    return timingSafeEqual(signatureBuffer, expectedBuffer);
 }
