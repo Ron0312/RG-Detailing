@@ -23,6 +23,7 @@ export default defineConfig({
   }),
   redirects: {
     '/datenschutzerklaerung-eu': '/datenschutz',
-    '/cookie-richtlinie-eu': '/datenschutz'
+    '/cookie-richtlinie-eu': '/datenschutz',
+    '/fahrzeugaufbereitung-schleswig': '/'
   }
 });

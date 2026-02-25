@@ -372,6 +372,12 @@ export default function PriceCalculator() {
         setLoading(true);
         setError(null);
 
+        // Track attempt immediately to debug potential drop-offs
+        trackEvent('calculator_submit_attempt', {
+            step: STEPS.RESULT,
+            email_provided: !!email
+        });
+
         const payload = { ...selections, quote, email, botcheck };
 
         try {
@@ -385,13 +391,14 @@ export default function PriceCalculator() {
                 throw new Error('API Submission failed');
             }
 
+            // Track success - fire and forget, don't block UI
             trackEvent('calculator_submit', {
                 package: selections.package,
                 size: selections.size,
                 condition: selections.condition,
                 priceMin: quote?.minPrice,
                 priceMax: quote?.maxPrice
-            });
+            }).catch(console.error);
 
             setSubmitted(true);
         } catch (err) {
@@ -595,6 +602,8 @@ export default function PriceCalculator() {
                                     name="botcheck"
                                     className="hidden"
                                     style={{ display: 'none' }}
+                                    tabIndex={-1}
+                                    autoComplete="off"
                                     checked={botcheck}
                                     onChange={(e) => setBotcheck(e.target.checked)}
                                 />
@@ -620,6 +629,10 @@ export default function PriceCalculator() {
                                         onBlur={() => trackEvent('form_interaction', { field: 'email' })}
                                         disabled={loading}
                                     />
+                                    <div className="flex items-center gap-2 text-xs text-zinc-500 px-1">
+                                        <Shield size={12} className="text-green-500" />
+                                        <span>Kein Spam. Nur Ihr persönliches Angebot.</span>
+                                    </div>
                                     <button
                                         type="submit"
                                         disabled={loading}
