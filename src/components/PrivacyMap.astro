@@ -41,6 +41,7 @@ const { src, title, class: className = "" } = Astro.props;
         iframe.style.border = '0';
         iframe.setAttribute('allowfullscreen', '');
         iframe.setAttribute('loading', 'lazy');
+        iframe.setAttribute('fetchpriority', 'low');
         iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
         if (title) iframe.setAttribute('title', title);
 
