@@ -45,7 +45,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     // Bot Filter Logic (Enhanced)
     // Matches common bots, crawlers, headless browsers, and screenshot tools
-    const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i;
+    const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl|python|aiohttp|httpx|libwww|http-client|axios|got|node-fetch|mediapartners|scoutjet|w3c_validator|gtmetrix|telegrambot|whatsapp|skype|slack/i;
 
     // 1. Check Header
     const headerUserAgent = request.headers.get('user-agent') || '';
@@ -80,7 +80,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const { eventName, url, sessionId, visitorId, data } = result.data;
 
     // 2. Check Payload User-Agent (Some bots spoof headers but report honestly in JS)
-    if (data?.userAgent && botRegex.test(data.userAgent)) {
+    const userAgent = data?.userAgent || headerUserAgent;
+    if (botRegex.test(userAgent)) {
+        return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
+    }
+
+    // 3. Heuristic: Suspicious Linux Traffic
+    // Block Linux users that are NOT Android and do NOT report X11 or Wayland (Typical of headless servers/bots)
+    if (userAgent.includes('Linux') &&
+        !userAgent.includes('Android') &&
+        !userAgent.includes('X11') &&
+        !userAgent.includes('Wayland')) {
         return new Response(JSON.stringify({ success: true, ignored: true }), { status: 200 });
     }
 
@@ -109,7 +119,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
 
     // Advanced Tracking Logic
-    const userAgent = data?.userAgent || request.headers.get('user-agent') || '';
     const { browser, os } = parseUserAgent(userAgent);
 
     // Privacy-Friendly Unique Visitor Hash (Daily Salt)
