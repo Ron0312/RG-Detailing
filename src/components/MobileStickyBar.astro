@@ -2,17 +2,17 @@
 import { Phone, Calculator, MessageCircle } from 'lucide-react';
 ---
 <div id="mobile-sticky-bar" inert aria-hidden="true" class="fixed bottom-0 left-0 right-0 z-[100] bg-zinc-950/95 backdrop-blur-xl border-t border-white/10 px-4 py-3 md:hidden flex justify-between items-center safe-area-bottom shadow-[0_-5px_20px_rgba(0,0,0,0.5)] translate-y-[150%] transition-transform duration-500">
-    <a href="tel:+491633845081" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors active:scale-95 w-16">
+    <a href="tel:+491633845081" onclick="window.trackEvent && window.trackEvent('contact_click', { channel: 'phone', location: 'mobile_bar' })" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors active:scale-95 w-16">
         <Phone size={22} strokeWidth={1.5} />
         <span class="text-[9px] font-bold uppercase tracking-wider">Anrufen</span>
     </a>
 
-    <a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-[#128C7E] text-white px-6 py-2.5 rounded-full font-bold shadow-[0_0_15px_rgba(18,140,126,0.3)] hover:bg-[#0f7c6e] transition-all active:scale-95 -translate-y-4 border border-white/10">
+    <a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" onclick="window.trackEvent && window.trackEvent('contact_click', { channel: 'whatsapp', location: 'mobile_bar' })" class="flex items-center gap-2 bg-[#128C7E] text-white px-6 py-2.5 rounded-full font-bold shadow-[0_0_15px_rgba(18,140,126,0.3)] hover:bg-[#0f7c6e] transition-all active:scale-95 -translate-y-4 border border-white/10">
         <MessageCircle size={20} fill="currentColor" />
         <span>WhatsApp</span>
     </a>
 
-    <a href="/#rechner" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors active:scale-95 w-16">
+    <a href="/#rechner" onclick="window.trackEvent && window.trackEvent('element_view', { element: 'calculator', location: 'mobile_bar' })" class="flex flex-col items-center gap-1 text-zinc-400 hover:text-white transition-colors active:scale-95 w-16">
         <Calculator size={22} strokeWidth={1.5} />
         <span class="text-[9px] font-bold uppercase tracking-wider">Preis</span>
     </a>
