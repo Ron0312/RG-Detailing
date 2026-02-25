@@ -1,4 +1,4 @@
-export const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i;
+export const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl|python|aiohttp|httpx|libwww|http-client|axios|got|node-fetch|mediapartners|scoutjet|w3c_validator|gtmetrix|telegrambot|whatsapp|skype|slack/i;
 
 export const trackEvent = async (eventName: string, data: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
