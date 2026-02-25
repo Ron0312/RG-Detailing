@@ -1,40 +1,105 @@
-import { describe, it, expect } from 'vitest';
-import { verifyCredentials, isAuthenticated } from './auth';
 
-describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
-        const username = 'Ronni';
-        const password = 'Remo!123#';
-        expect(verifyCredentials(username, password)).toBe(true);
-    });
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { verifyCredentials, isAuthenticated, createSession } from './auth';
 
-    it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
-    });
+describe('auth.ts', () => {
+  beforeEach(() => {
+    vi.unstubAllEnvs();
+    // Default mock environment
+    vi.stubEnv('ADMIN_USERNAME', 'admin');
+    vi.stubEnv('ADMIN_PASSWORD', 'securepassword');
+    vi.stubEnv('SESSION_SECRET', 'supersecret');
+  });
 
-    it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
-    });
+  it('verifyCredentials should return true for correct credentials from env', () => {
+    expect(verifyCredentials('admin', 'securepassword')).toBe(true);
+  });
 
-    it('should authenticate with valid cookie', () => {
-        const context = {
-            request: { url: 'http://localhost/admin/stats', headers: new Headers() },
-            cookies: {
-                get: (name) => name === 'admin_session' ? { value: '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba' } : undefined
-            }
-        };
-        // @ts-ignore
-        expect(isAuthenticated(context)).toBe(true);
-    });
+  it('verifyCredentials should return false for incorrect credentials', () => {
+    expect(verifyCredentials('admin', 'wrongpass')).toBe(false);
+    expect(verifyCredentials('wronguser', 'securepassword')).toBe(false);
+  });
 
-    it('should fail with invalid cookie', () => {
-        const context = {
-            request: { url: 'http://localhost/admin/stats', headers: new Headers() },
-            cookies: {
-                get: (name) => name === 'admin_session' ? { value: 'badhash' } : undefined
-            }
-        };
-        // @ts-ignore
-        expect(isAuthenticated(context)).toBe(false);
-    });
+  it('isAuthenticated should return true with correct signed session cookie', () => {
+    const cookies = new Map();
+    const mockContext = {
+        cookies: {
+            set: (key: string, value: string) => cookies.set(key, { value }),
+            get: (key: string) => cookies.get(key),
+            delete: (key: string) => cookies.delete(key),
+        },
+        request: {
+            url: 'http://localhost/admin',
+            headers: { get: vi.fn() }
+        }
+    };
+
+    // Create session
+    createSession(mockContext as any);
+    const sessionCookie = cookies.get('admin_session');
+    expect(sessionCookie).toBeDefined();
+
+    // Verify authentication
+    const authContext = {
+        cookies: {
+            get: (key: string) => cookies.get(key),
+        },
+        request: {
+            url: 'http://localhost/admin',
+            headers: { get: vi.fn() }
+        }
+    };
+
+    expect(isAuthenticated(authContext as any)).toBe(true);
+  });
+
+  it('isAuthenticated should return false with tampered session cookie', () => {
+    const mockContext = {
+        cookies: {
+            get: vi.fn().mockReturnValue({ value: 'admin.invalidsignature' })
+        },
+        request: {
+            url: 'http://localhost/admin',
+            headers: { get: vi.fn() }
+        }
+    };
+    expect(isAuthenticated(mockContext as any)).toBe(false);
+  });
+
+    it('isAuthenticated should return false with invalid session format', () => {
+    const mockContext = {
+        cookies: {
+            get: vi.fn().mockReturnValue({ value: 'invalidformat' })
+        },
+        request: {
+            url: 'http://localhost/admin',
+            headers: { get: vi.fn() }
+        }
+    };
+    expect(isAuthenticated(mockContext as any)).toBe(false);
+  });
+
+  it('isAuthenticated should return true with correct API key (STATS_SECRET)', () => {
+    vi.stubEnv('STATS_SECRET', 'secret-api-key');
+    const mockContext = {
+        cookies: { get: vi.fn() },
+        request: {
+            url: 'http://localhost/admin?key=secret-api-key',
+            headers: { get: vi.fn() }
+        }
+    };
+    expect(isAuthenticated(mockContext as any)).toBe(true);
+  });
+
+  it('isAuthenticated should return false with incorrect API key', () => {
+    vi.stubEnv('STATS_SECRET', 'secret-api-key');
+    const mockContext = {
+        cookies: { get: vi.fn() },
+        request: {
+            url: 'http://localhost/admin?key=wrong-key',
+            headers: { get: vi.fn() }
+        }
+    };
+    expect(isAuthenticated(mockContext as any)).toBe(false);
+  });
 });
