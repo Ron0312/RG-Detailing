@@ -21,3 +21,7 @@
 ## 2025-03-07 - Visible Focus on Sticky Elements
 **Learning:** Sticky or fixed-position buttons (like "Scroll to Top" or "WhatsApp") often have their default focus rings clipped or removed to "clean up" the design. This makes them invisible to keyboard users.
 **Action:** Always add explicit `focus-visible:ring` styles to fixed elements. Ensure the ring has high contrast against the background and doesn't get cut off by `overflow: hidden` containers.
+
+## 2025-03-08 - Mobile Menu Focus Loop
+**Learning:** Opening a mobile menu without managing focus leaves keyboard users stranded in the main content or tabbing through hidden elements. The critical UX detail is not just moving focus *into* the menu (to the Close button), but crucially returning it *back* to the toggle button when closed.
+**Action:** Always pair `aria-expanded` toggles with `element.focus()` calls: focus Close button on open, focus Toggle button on close.
