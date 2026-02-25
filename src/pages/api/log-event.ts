@@ -44,7 +44,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
 
     // Bot Filter Logic (Enhanced)
-    const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot/i;
+    // Matches common bots, crawlers, headless browsers, and screenshot tools
+    const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i;
 
     // 1. Check Header
     const headerUserAgent = request.headers.get('user-agent') || '';

@@ -6,7 +6,7 @@
 
   // Simple Bot Check (Global scope)
   // Prevents bots from attaching listeners and exhausting rate limits
-  const isBot = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot/i.test(navigator.userAgent);
+  const isBot = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i.test(navigator.userAgent);
 
   if (!isBot) {
       // Track Page Load
@@ -78,6 +78,10 @@
 
         const now = Date.now();
         const duration = Math.round((now - startTime) / 1000); // seconds
+
+        // Stop tracking if session exceeds 2 hours (7200s) to prevent zombie sessions
+        if (duration > 7200) return;
+
         if (duration > timeTracked && duration > 5) {
             trackEvent('time_on_page', { duration: duration - timeTracked, total: duration });
             timeTracked = duration;

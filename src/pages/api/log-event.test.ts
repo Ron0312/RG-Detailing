@@ -125,4 +125,26 @@ describe('POST /api/log-event', () => {
         expect(json.ignored).toBe(true);
         expect(appendFileMock).not.toHaveBeenCalled();
     });
+
+    it('should ignore Plesk screenshot bot via payload', async () => {
+        const req = new Request('http://localhost/api/log-event', {
+            method: 'POST',
+            body: JSON.stringify({
+                eventName: 'page_view',
+                data: {
+                    userAgent: 'Plesk screenshot bot https://support.plesk.com/hc/en-us/articles/10301006946066'
+                }
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124'
+            }
+        });
+
+        const response = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(response.status).toBe(200);
+        const json = await response.json();
+        expect(json.ignored).toBe(true);
+        expect(appendFileMock).not.toHaveBeenCalled();
+    });
 });

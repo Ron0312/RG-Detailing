@@ -1,7 +1,15 @@
+export const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i;
+
 export const trackEvent = async (eventName: string, data: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
 
-  // 1. Exclude Admin & Localhost
+  // 1. Bot Check (Global)
+  if (botRegex.test(navigator.userAgent)) {
+      // console.log('Analytics skipped: Bot detected');
+      return;
+  }
+
+  // 2. Exclude Admin & Localhost
   const { hostname, pathname } = window.location;
   if (
       hostname === 'localhost' ||
