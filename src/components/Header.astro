@@ -163,6 +163,7 @@ import logoImage from '../assets/logo.png';
         const sections = ['leistungen', 'gallery', 'rechner', 'about', 'faq'];
         const navLinks = document.querySelectorAll('nav a');
         let cachedSections = [];
+        let lastActiveId = '__init__';
 
         function cacheSections() {
             cachedSections = sections.map(id => {
@@ -208,20 +209,29 @@ import logoImage from '../assets/logo.png';
         }
 
         function updateActiveLink() {
-            let currentSection = '';
+            let currentId = '';
             const scrollPosition = window.scrollY + 200; // Offset for header height
 
             cachedSections.forEach(section => {
                 if (section.offsetTop <= scrollPosition) {
-                    currentSection = section.id;
+                    currentId = section.id;
                 }
             });
+
+            // BOLT OPTIMIZATION: Handle "Startseite" (Home) as a virtual section ID
+            if (!currentId && window.scrollY < 300) {
+                currentId = 'home';
+            }
+
+            // BOLT OPTIMIZATION: Only update DOM if the active section has changed
+            if (currentId === lastActiveId) return;
+            lastActiveId = currentId;
 
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
                 // Skip the calculator button for span animation, but we can highlight it
                 if (href.includes('#rechner')) {
-                     if (currentSection === 'rechner') {
+                     if (currentId === 'rechner') {
                          link.classList.add('bg-red-500', 'text-white');
                          link.classList.remove('bg-red-900/20', 'text-red-500');
                      } else {
@@ -237,17 +247,16 @@ import logoImage from '../assets/logo.png';
                 link.classList.remove('text-white');
                 span.style.width = '0';
 
-                if (currentSection) {
-                     if (href.includes('#' + currentSection)) {
-                         link.classList.add('text-white');
-                         span.style.width = '100%';
-                     }
-                } else {
-                    // If no section matches and we are near top, it's Startseite
-                    if ((href === '/' || href === '/#') && window.scrollY < 300) {
+                if (currentId === 'home') {
+                    if (href === '/' || href === '/#') {
                          link.classList.add('text-white');
                          span.style.width = '100%';
                     }
+                } else if (currentId) {
+                     if (href.includes('#' + currentId)) {
+                         link.classList.add('text-white');
+                         span.style.width = '100%';
+                     }
                 }
             });
         }
