@@ -15,6 +15,7 @@ pnpm-debug.log*
 server.log
 wget-log
 *.log
+logs/
 
 # environment variables
 .env
