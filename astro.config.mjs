@@ -25,5 +25,8 @@ export default defineConfig({
     '/datenschutzerklaerung-eu': '/datenschutz',
     '/cookie-richtlinie-eu': '/datenschutz',
     '/fahrzeugaufbereitung-schleswig': '/'
+  },
+  security: {
+    checkOrigin: false
   }
 });
