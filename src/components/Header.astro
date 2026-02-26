@@ -85,7 +85,7 @@ import logoImage from '../assets/logo.png';
             </a>
 
             {/* Mobile Menu Button */}
-            <button id="mobile-menu-btn" class="md:hidden text-zinc-300 hover:text-white p-3 transition-colors" aria-label="Menü öffnen">
+            <button id="mobile-menu-btn" class="md:hidden text-zinc-300 hover:text-white p-3 transition-colors" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
         </div>
@@ -93,7 +93,7 @@ import logoImage from '../assets/logo.png';
 </header>
 
 {/* Mobile Navigation Overlay */}
-<div id="mobile-menu" class="fixed inset-0 h-[100dvh] w-full bg-zinc-950/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col items-center justify-center gap-8 md:hidden invisible">
+<div id="mobile-menu" aria-hidden="true" class="fixed inset-0 h-[100dvh] w-full bg-zinc-950/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col items-center justify-center gap-8 md:hidden invisible">
     <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white p-3 transition-colors" aria-label="Menü schließen">
          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
@@ -134,22 +134,65 @@ import logoImage from '../assets/logo.png';
                 if (isClosed) {
                     // Open menu
                     mobileMenu.classList.remove('invisible');
+                    mobileMenu.setAttribute('aria-hidden', 'false');
+                    if(menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+
                     // Small delay to ensure invisible class removal is registered before transform
                     requestAnimationFrame(() => {
                         mobileMenu.classList.remove('translate-x-full');
                     });
                     document.body.classList.add('overflow-hidden');
+
+                    // Focus Management
+                    closeBtn?.focus();
                 } else {
                     // Close menu
                     mobileMenu.classList.add('translate-x-full');
+                    mobileMenu.setAttribute('aria-hidden', 'true');
+                    if(menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
                     document.body.classList.remove('overflow-hidden');
 
                     // Wait for transition to finish before hiding
                     setTimeout(() => {
                         mobileMenu.classList.add('invisible');
                     }, 300);
+
+                    // Focus Management
+                    menuBtn?.focus();
                 }
             }
+        }
+
+        // Escape key listener
+        document.addEventListener('keydown', (e) => {
+             if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+                 toggleMenu();
+             }
+        });
+
+        // Focus Trap inside Mobile Menu
+        if (mobileMenu) {
+            mobileMenu.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    const focusableElements = mobileMenu.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    if (focusableElements.length === 0) return;
+
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.shiftKey) { /* Shift + Tab */
+                        if (document.activeElement === firstElement) {
+                            e.preventDefault();
+                            lastElement.focus();
+                        }
+                    } else { /* Tab */
+                        if (document.activeElement === lastElement) {
+                            e.preventDefault();
+                            firstElement.focus();
+                        }
+                    }
+                }
+            });
         }
 
         menuBtn?.addEventListener('click', toggleMenu);
