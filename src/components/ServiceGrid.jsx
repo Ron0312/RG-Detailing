@@ -99,6 +99,15 @@ export default function ServiceGrid({ services }) {
         setActiveIndex(0);
     }, [activeCategory]);
 
+    const scrollToSlide = (index) => {
+        if (scrollRef.current) {
+            const width = scrollRef.current.offsetWidth;
+            scrollRef.current.scrollTo({
+                left: width * index,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     return (
         <div>
@@ -141,10 +150,15 @@ export default function ServiceGrid({ services }) {
             {/* Mobile Pagination Dots */}
             <div className="flex md:hidden justify-center gap-2 mt-4">
                 {filteredServices.map((_, index) => (
-                    <div
+                    <button
                         key={index}
-                        className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700'}`}
-                    />
+                        onClick={() => scrollToSlide(index)}
+                        aria-label={`Gehe zu Slide ${index + 1}`}
+                        aria-current={index === activeIndex ? 'step' : undefined}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
+                            index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700 hover:bg-zinc-600'
+                        }`}
+                    ></button>
                 ))}
             </div>
 
