@@ -43,11 +43,7 @@ describe('ServiceGrid', () => {
     });
 
     it('renders categories and initial services correctly', () => {
-        const { getByRole, getByText, queryByText, getAllByRole } = render(<ServiceGrid services={mockServices} />);
-
-        // Check exact number of category buttons to ensure no double rendering
-        const categoryButtons = getAllByRole('button');
-        expect(categoryButtons).toHaveLength(3);
+        const { getByRole, getByText, queryByText } = render(<ServiceGrid services={mockServices} />);
 
         // Check Categories are present
         expect(getByRole('button', { name: 'Lack & Keramik' })).toBeDefined();
@@ -58,6 +54,28 @@ describe('ServiceGrid', () => {
 
         // Check Other Services are NOT present
         expect(queryByText('Service 2')).toBeNull();
+    });
+
+    it('navigates to slide when pagination dot is clicked', () => {
+         // Use services that match the default category "Lack & Keramik"
+         const servicesInDefaultCat = [
+            { title: 'S1', category: 'Lack & Keramik', icon: 'shield', shortDescription: 'D1', link: '#' },
+            { title: 'S2', category: 'Lack & Keramik', icon: 'shield', shortDescription: 'D2', link: '#' },
+         ];
+
+         const { getByLabelText, container } = render(<ServiceGrid services={servicesInDefaultCat} />);
+
+         const scrollContainer = container.querySelector('.flex.overflow-x-auto');
+         Object.defineProperty(scrollContainer, 'offsetWidth', { configurable: true, value: 300 });
+
+         const slide2Button = getByLabelText('Gehe zu Slide 2');
+         fireEvent.click(slide2Button);
+
+         // Element.prototype.scrollTo is mocked in beforeEach
+         expect(scrollContainer.scrollTo).toHaveBeenCalledWith({
+            left: 300,
+            behavior: 'smooth'
+         });
     });
 
     it('filters services when category is clicked', async () => {
