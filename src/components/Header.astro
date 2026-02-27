@@ -178,6 +178,7 @@ import logoImage from '../assets/logo.png';
         // Smart Sticky Header Logic
         let lastScrollTop = window.scrollY || document.documentElement.scrollTop;
         let ticking = false;
+        let lastActiveId = null;
 
         function onScroll() {
             if (!ticking) {
@@ -217,39 +218,55 @@ import logoImage from '../assets/logo.png';
                 }
             });
 
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                // Skip the calculator button for span animation, but we can highlight it
-                if (href.includes('#rechner')) {
-                     if (currentSection === 'rechner') {
-                         link.classList.add('bg-red-500', 'text-white');
-                         link.classList.remove('bg-red-900/20', 'text-red-500');
-                     } else {
-                         link.classList.remove('bg-red-500', 'text-white');
-                         link.classList.add('bg-red-900/20', 'text-red-500');
-                     }
-                     return;
-                }
+            // Determine effective active ID
+            let activeId = currentSection;
 
-                const span = link.querySelector('span');
-                if (!span) return;
+            // Handle "Startseite" logic
+            if (!activeId && window.scrollY < 300) {
+                activeId = '__start__';
+            }
 
-                link.classList.remove('text-white');
-                span.style.width = '0';
+            // Optimization: Skip DOM updates if nothing changed
+            if (activeId !== lastActiveId) {
+                lastActiveId = activeId;
 
-                if (currentSection) {
-                     if (href.includes('#' + currentSection)) {
-                         link.classList.add('text-white');
-                         span.style.width = '100%';
-                     }
-                } else {
-                    // If no section matches and we are near top, it's Startseite
-                    if ((href === '/' || href === '/#') && window.scrollY < 300) {
-                         link.classList.add('text-white');
-                         span.style.width = '100%';
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+
+                    // Handle Calculator Button (Special Case)
+                    if (href.includes('#rechner')) {
+                        if (activeId === 'rechner') {
+                            link.classList.add('bg-red-500', 'text-white');
+                            link.classList.remove('bg-red-900/20', 'text-red-500');
+                        } else {
+                            link.classList.remove('bg-red-500', 'text-white');
+                            link.classList.add('bg-red-900/20', 'text-red-500');
+                        }
+                        return;
                     }
-                }
-            });
+
+                    const span = link.querySelector('span');
+                    if (!span) return;
+
+                    // Reset state
+                    link.classList.remove('text-white');
+                    span.style.width = '0';
+
+                    // Apply active state
+                    if (activeId === '__start__') {
+                        // Check if link is home link
+                        // The href for home might be "/" or "/#"
+                        const isHomeLink = href === '/' || href.endsWith('/#');
+                        if (isHomeLink) {
+                            link.classList.add('text-white');
+                            span.style.width = '100%';
+                        }
+                    } else if (activeId && href.includes('#' + activeId)) {
+                        link.classList.add('text-white');
+                        span.style.width = '100%';
+                    }
+                });
+            }
         }
 
         window.addEventListener('scroll', onScroll, { passive: true });
