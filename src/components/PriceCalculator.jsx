@@ -195,7 +195,7 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
          );
     }
 
-    const message = `Hallo RG-Detailing, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}. Schätzung: ${quote.minPrice}-${quote.maxPrice}EUR.`;
+    const message = `Hallo RG-Detailing, ich habe eine Preisanfrage: ${sizeName}, ${conditionName}, ${packageName}.`;
 
     return (
         <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10 mb-8 w-full max-w-lg mx-auto relative overflow-hidden shadow-2xl group hover:border-red-500/20 transition-all duration-500">
@@ -204,13 +204,10 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
             <div className="relative z-10">
                 <div className="text-center mb-10">
                     <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6 focus:outline-none">
-                        Ihre Investition
+                        Ihre Konfiguration
                     </span>
-                    <div className="flex items-baseline justify-center gap-3 leading-none mb-3">
-                         <div className="text-6xl md:text-7xl font-bold text-white tracking-tighter drop-shadow-2xl">{quote.minPrice}€</div>
-                         <div className="text-2xl md:text-3xl text-zinc-600 font-light">- {quote.maxPrice}€</div>
-                    </div>
-                    <div className="text-zinc-400 text-xs font-medium tracking-wide">*Alle Preise inkl. MwSt. Endgültiger Preis nach Fahrzeugbesichtigung.</div>
+                    <h3 className="text-3xl font-bold text-white mb-3">Fast geschafft!</h3>
+                    <p className="text-zinc-400 text-sm font-medium tracking-wide">Überprüfen Sie Ihre Auswahl. Fordern Sie jetzt Ihr individuelles, kostenloses Angebot an.</p>
                 </div>
 
                 <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
@@ -267,6 +264,8 @@ export default function PriceCalculator() {
         camperLength: 6.5
     });
     const [quote, setQuote] = useState(null);
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [botcheck, setBotcheck] = useState(false);
     const [submitted, setSubmitted] = useState(false);
@@ -378,7 +377,7 @@ export default function PriceCalculator() {
             email_provided: !!email
         });
 
-        const payload = { ...selections, quote, email, botcheck };
+        const payload = { ...selections, quote, name, phone, email, botcheck };
 
         try {
             const response = await fetch('/api/submit-quote', {
@@ -413,6 +412,8 @@ export default function PriceCalculator() {
         setSelections({ size: null, condition: null, package: null, camperLength: 6.5 });
         setQuote(null);
         setSubmitted(false);
+        setName('');
+        setPhone('');
         setEmail('');
         setBotcheck(false);
         setError(null);
@@ -614,24 +615,60 @@ export default function PriceCalculator() {
                                     </div>
                                 )}
                                 <div className="flex gap-3 flex-col">
-                                    <label htmlFor="email-input" className="text-sm font-bold text-zinc-300 ml-1">
-                                        Ihre E-Mail Adresse <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        id="email-input"
-                                        type="email"
-                                        required
-                                        autoComplete="email"
-                                        placeholder="beispiel@domain.de"
-                                        className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        onBlur={() => trackEvent('form_interaction', { field: 'email' })}
-                                        disabled={loading}
-                                    />
-                                    <div className="flex items-center gap-2 text-xs text-zinc-500 px-1">
-                                        <Shield size={12} className="text-green-500" />
-                                        <span>Kein Spam. Nur Ihr persönliches Angebot.</span>
+                                    <div className="flex flex-col gap-1.5 mb-2">
+                                        <label htmlFor="name-input" className="text-sm font-bold text-zinc-300 ml-1">
+                                            Ihr Name <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            id="name-input"
+                                            type="text"
+                                            required
+                                            autoComplete="name"
+                                            placeholder="Max Mustermann"
+                                            className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            onBlur={() => trackEvent('form_interaction', { field: 'name' })}
+                                            disabled={loading}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 mb-2">
+                                        <label htmlFor="phone-input" className="text-sm font-bold text-zinc-300 ml-1">
+                                            Telefonnummer (für Rückfragen/Termin) <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            id="phone-input"
+                                            type="tel"
+                                            required
+                                            autoComplete="tel"
+                                            placeholder="0123 456789"
+                                            className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            onBlur={() => trackEvent('form_interaction', { field: 'phone' })}
+                                            disabled={loading}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 mb-2">
+                                        <label htmlFor="email-input" className="text-sm font-bold text-zinc-300 ml-1">
+                                            Ihre E-Mail Adresse <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            id="email-input"
+                                            type="email"
+                                            required
+                                            autoComplete="email"
+                                            placeholder="beispiel@domain.de"
+                                            className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            onBlur={() => trackEvent('form_interaction', { field: 'email' })}
+                                            disabled={loading}
+                                        />
+                                        <div className="flex items-center gap-2 text-xs text-zinc-500 px-1 mt-1">
+                                            <Shield size={12} className="text-green-500" />
+                                            <span>Kein Spam. Nur Ihr persönliches Angebot.</span>
+                                        </div>
                                     </div>
                                     <button
                                         type="submit"
@@ -679,7 +716,7 @@ export default function PriceCalculator() {
                             </div>
                             <h3 className="text-4xl font-bold text-white mb-6 tracking-tight">Anfrage erfolgreich!</h3>
                             <p className="text-zinc-400 mb-8 max-w-md mx-auto leading-relaxed text-lg">
-                                Wir haben Ihre Konfiguration erhalten. Ein Mitarbeiter wird sich in Kürze mit Ihrem persönlichen Angebot bei Ihnen melden.
+                                Wir haben Ihre Konfiguration erhalten. Ein Mitarbeiter wird sich in Kürze mit Ihrem persönlichen Angebot bei Ihnen melden und Sie bezüglich eines Termins anrufen.
                             </p>
 
                             <div className="bg-zinc-800/50 p-6 rounded-2xl border border-white/10 max-w-lg mx-auto mb-12 text-sm text-zinc-300">

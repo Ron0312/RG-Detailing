@@ -11,6 +11,8 @@ const SizeEnum = z.enum(Object.keys(config.sizes) as [string, ...string[]]);
 const ConditionEnum = z.enum(Object.keys(config.conditions) as [string, ...string[]]);
 
 const QuoteSchema = z.object({
+    name: z.string().min(2).max(100),
+    phone: z.string().min(5).max(30),
     email: z.string().email().max(100),
     package: PackageEnum,
     size: SizeEnum,
@@ -66,6 +68,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
         // Validate input
         const result = QuoteSchema.safeParse({
+            name: body.name,
+            phone: body.phone,
             email: body.email,
             package: body.package, // client sends 'package', 'size', 'condition'
             size: body.size,
@@ -138,6 +142,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
 
                 <h3>Kunde</h3>
+                <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+                <p><strong>Telefon:</strong> <a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a></p>
                 <p><strong>E-Mail:</strong> <a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></p>
 
                 <h3>Fahrzeug & Zustand</h3>
@@ -189,6 +195,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                         from_name: "RG Detailing Rechner",
                         message: htmlContent,
                         // Additional metadata fields
+                        "Name": data.name,
+                        "Telefon": data.phone,
                         "Fahrzeug": sizeName,
                         "Paket": packageName,
                         "Preis_Min": priceQuote.minPrice,
