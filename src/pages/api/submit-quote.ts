@@ -169,12 +169,13 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         `;
 
         // Send via Web3Forms if Key is present
-        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env)
+        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env) -> Hardcoded Fallback
         const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
         const buildKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+        const fallbackKey = '51d8133f-baec-4504-ab1e-ea740b15dc8b'; // Public form ID from Web3Forms
 
-        const apiKey = runtimeKey || buildKey;
-        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "None");
+        const apiKey = runtimeKey || buildKey || fallbackKey;
+        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "Fallback Key");
 
         console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
 
@@ -211,34 +212,27 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                     emailSent = true;
                 } else {
                     console.error(">>> Web3Forms API Error:", apiResult);
-                    // Don't fail the request if logging succeeded, just log the error
+                    return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail über Web3Forms." }), { status: 500 });
                 }
             } catch (err) {
                 console.error(">>> Failed to send email via Web3Forms:", err);
+                return new Response(JSON.stringify({ error: "Verbindungsfehler zum E-Mail-Server." }), { status: 500 });
             }
         } else {
-            // In Production, missing key is a critical error but we should not fail the user experience if we logged it locally
-            if (import.meta.env.PROD) {
-                console.error(">>> CRITICAL: WEB3FORMS_ACCESS_KEY is missing in production environment!");
-            } else {
-                console.log(">>> [MOCK EMAIL] WEB3FORMS_ACCESS_KEY missing. Printing to console:");
-                console.log(`To: owner@rg-detailing.de | Subject: ${subject}`);
-                console.log(`Data: ${JSON.stringify({ ...data, email: maskEmail(data.email) })}`);
-                emailSent = true; // Pretend sent in dev
-            }
+            console.error(">>> CRITICAL: No WEB3FORMS_ACCESS_KEY available (including fallback)!");
+            return new Response(JSON.stringify({ error: "E-Mail-Konfiguration fehlt auf dem Server." }), { status: 500 });
         }
 
-        // Always return success if we reached this point (data is valid and likely logged)
-        // This prevents the 0% conversion issue due to email service failures
+        // Only return success if email was actually sent
         return new Response(JSON.stringify({
             success: true,
             message: "Anfrage erhalten",
             quote: priceQuote,
-            emailStatus: emailSent ? 'sent' : 'queued'
+            emailStatus: 'sent'
         }), { status: 200 });
 
     } catch (e) {
-        console.error(e);
-        return new Response(JSON.stringify({ error: "Server error" }), { status: 500 });
+        console.error("Unhandled error in submit-quote:", e);
+        return new Response(JSON.stringify({ error: "Interner Serverfehler" }), { status: 500 });
     }
 }
