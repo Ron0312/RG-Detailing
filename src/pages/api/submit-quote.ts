@@ -166,9 +166,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env)
         const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
         const buildKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+        const hardcodedKey = '51d8133f-baec-4504-ab1e-ea740b15dc8b';
 
-        const apiKey = runtimeKey || buildKey;
-        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "None");
+        const apiKey = runtimeKey || buildKey || hardcodedKey;
+        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : (hardcodedKey ? "Hardcoded" : "None"));
 
         console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
 
@@ -222,6 +223,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
         // Always return success if we reached this point (data is valid and likely logged)
         // This prevents the 0% conversion issue due to email service failures
+        if (!emailSent) {
+             return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail" }), { status: 500 });
+        }
+
         return new Response(JSON.stringify({
             success: true,
             message: "Anfrage erhalten",
