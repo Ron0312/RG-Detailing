@@ -39,6 +39,11 @@ describe('API submit-quote', () => {
     });
 
     it('returns 200 for valid data', async () => {
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({ success: true }),
+            ok: true
+        })) as any;
+
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
@@ -197,8 +202,35 @@ describe('API submit-quote', () => {
         const data = await res.json();
 
         expect(res.status).toBe(500);
-        // This assertion confirms the fix (we expect details to be undefined)
         expect(data.details).toBeUndefined();
+    });
+
+    it('uses hardcoded Web3Forms key if environment variables are missing', async () => {
+        delete process.env.WEB3FORMS_ACCESS_KEY;
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({ success: true }),
+            ok: true
+        })) as any;
+
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(200);
+        expect(global.fetch).toHaveBeenCalledWith(
+            'https://api.web3forms.com/submit',
+            expect.objectContaining({
+                body: expect.stringContaining('51d8133f-baec-4504-ab1e-ea740b15dc8b')
+            })
+        );
     });
 
     // NEW SECURITY TESTS
