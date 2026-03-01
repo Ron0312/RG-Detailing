@@ -100,6 +100,19 @@ export default function ServiceGrid({ services }) {
     }, [activeCategory]);
 
 
+    // Handle programmatic scrolling when pagination dots are clicked
+    const scrollToCard = (index) => {
+        if (!scrollRef.current) return;
+        const card = scrollRef.current.querySelector(`[data-index="${index}"]`);
+        if (card) {
+            scrollRef.current.scrollTo({
+                left: card.offsetLeft - scrollRef.current.offsetLeft,
+                behavior: 'smooth'
+            });
+            setActiveIndex(index);
+        }
+    };
+
     return (
         <div>
             {/* Category Tabs */}
@@ -139,11 +152,16 @@ export default function ServiceGrid({ services }) {
             </div>
 
             {/* Mobile Pagination Dots */}
-            <div className="flex md:hidden justify-center gap-2 mt-4">
+            <div className="flex md:hidden justify-center gap-3 mt-4" aria-label="Karussell Navigation">
                 {filteredServices.map((_, index) => (
-                    <div
+                    <button
                         key={index}
-                        className={`w-2 h-2 rounded-full transition-colors duration-300 ${index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700'}`}
+                        onClick={() => scrollToCard(index)}
+                        aria-label={`Gehe zu Karte ${index + 1}`}
+                        aria-current={index === activeIndex ? 'step' : undefined}
+                        style={{ padding: 0, minWidth: 0, minHeight: 0 }} className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
+                            index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700 hover:bg-zinc-600'
+                        }`}
                     />
                 ))}
             </div>

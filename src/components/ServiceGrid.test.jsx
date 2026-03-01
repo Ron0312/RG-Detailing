@@ -47,7 +47,7 @@ describe('ServiceGrid', () => {
 
         // Check exact number of category buttons to ensure no double rendering
         const categoryButtons = getAllByRole('button');
-        expect(categoryButtons).toHaveLength(3);
+        expect(getAllByRole('button', { name: /Lack & Keramik|Spezial & Reparatur|Innen & Sonstiges/ })).toHaveLength(3);
 
         // Check Categories are present
         expect(getByRole('button', { name: 'Lack & Keramik' })).toBeDefined();
