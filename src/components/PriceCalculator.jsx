@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef, memo } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, memo, useCallback } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
@@ -28,12 +28,17 @@ const StepSubtitle = ({ children }) => (
     <p className="text-zinc-400 text-center mb-8 md:mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed px-4">{children}</p>
 );
 
-const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
+const Card = memo(({ title, desc, price, badge, highlight, onClick, active, selectionGroup, value }) => {
+    const handleClick = useCallback(() => {
+        if (onClick) onClick(selectionGroup, value);
+    }, [onClick, selectionGroup, value]);
+
+    return (
     <button
         type="button"
         role="radio"
         aria-checked={active}
-        onClick={onClick}
+        onClick={handleClick}
         className={`relative p-5 md:p-6 rounded-2xl border transition-all duration-300 w-full text-left group overflow-hidden flex flex-col h-full hover:shadow-2xl hover:-translate-y-1 min-h-[140px] cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900
             ${active
                 ? 'border-red-500 bg-red-900/20 shadow-[0_0_30px_rgba(220,38,38,0.15)] ring-1 ring-red-500/50 scale-[1.02]'
@@ -71,7 +76,7 @@ const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
             </div>
         )}
     </button>
-);
+)});
 
 const WhatsAppButton = ({ message }) => (
     <a
@@ -257,12 +262,17 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
 export default function PriceCalculator() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [step, setStep] = useState(STEPS.SIZE);
-    const [selections, setSelections] = useState({
+        const [selections, setSelections] = useState({
+        service: null,
         size: null,
         condition: null,
         package: null,
-        camperLength: 6.5
+        camperLength: null
     });
+    const selectionsRef = useRef(selections);
+    useEffect(() => {
+        selectionsRef.current = selections;
+    }, [selections]);
     const [quote, setQuote] = useState(null);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -320,43 +330,34 @@ export default function PriceCalculator() {
         }
     }, [isExpanded]);
 
-    const handleSelect = (key, value) => {
-        let newSelections = { ...selections, [key]: value };
+    const handleSelect = useCallback((key, value) => {
+        setSelections(prevSelections => {
+            const newSelections = { ...prevSelections, [key]: value };
 
-        if (key === 'size') {
-            if (value === 'camper') {
-                setSelections(newSelections);
-                setStep(STEPS.CAMPER_LENGTH);
-                return;
+            if (key === 'size') {
+                if (value === 'camper') {
+                    setStep(STEPS.CAMPER_LENGTH);
+                    return newSelections;
+                }
+                setStep(STEPS.CONDITION);
+            } else if (key === 'condition') {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('preselect') === 'leasing') {
+                    const result = calculatePrice('leasing', newSelections.size, value);
+                    setQuote(result);
+                    setStep(STEPS.RESULT);
+                    return { ...newSelections, package: 'leasing' };
+                }
+                setStep(STEPS.PACKAGE);
+            } else if (key === 'package') {
+                const result = calculatePrice(value, newSelections.size, newSelections.condition);
+                setQuote(result);
+                setStep(STEPS.RESULT);
             }
-            // Check for preselect leasing intent if passed (not implemented fully above, keeping simple)
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('preselect') === 'leasing') {
-                 // Skip condition step for leasing?
-                 // Leasing usually needs "All-in-One" or "Politur".
-                 // Let's just go standard flow.
-            }
-            setStep(STEPS.CONDITION);
-        } else if (key === 'condition') {
-             // If preselect=leasing, maybe auto-select leasing package?
-             const params = new URLSearchParams(window.location.search);
-             if (params.get('preselect') === 'leasing') {
-                  // Auto-select leasing package
-                  const result = calculatePrice('leasing', newSelections.size, value); // Leasing package ID
-                  setQuote(result);
-                  setSelections({...newSelections, package: 'leasing'});
-                  setStep(STEPS.RESULT);
-                  return;
-             }
-            setStep(STEPS.PACKAGE);
-        } else if (key === 'package') {
-            const result = calculatePrice(value, newSelections.size, newSelections.condition);
-            setQuote(result);
-            setStep(STEPS.RESULT);
-        }
 
-        setSelections(newSelections);
-    };
+            return newSelections;
+        });
+    }, []);
 
     const handleCamperConfirm = () => {
         const newSelections = { ...selections, condition: 'good', package: 'all_in_one' };
@@ -477,7 +478,9 @@ export default function PriceCalculator() {
                                         key={key}
                                         title={size.name}
                                         desc={size.isRequestOnly ? "Spezialangebot für Camper & Caravans" : `z.B. ${key === 'small' ? 'Polo, Corsa' : key === 'medium' ? 'Golf, 3er, A4' : 'X5, Q7, T-Bus'}`}
-                                        onClick={() => handleSelect('size', key)}
+                                        onClick={handleSelect}
+                                        selectionGroup="size"
+                                        value={key}
                                         active={selections.size === key}
                                         icon={key === 'camper' ? Truck : null}
                                     />
@@ -542,7 +545,9 @@ export default function PriceCalculator() {
                                         key={key}
                                         title={cond.name}
                                         desc={key === 'good' ? 'Liebhaber-Fahrzeug. Handwäsche, kaum Defekte.' : key === 'normal' ? 'Alltags-Spuren. Waschstraßen-Kratzer, Grauschleier.' : 'Härtefall. Tierhaare, Baustellen-Staub, starke Kratzer.'}
-                                        onClick={() => handleSelect('condition', key)}
+                                        onClick={handleSelect}
+                                        selectionGroup="condition"
+                                        value={key}
                                         active={selections.condition === key}
                                     />
                                 ))}
@@ -578,7 +583,9 @@ export default function PriceCalculator() {
                                         price={pkg.basePrice}
                                         badge={pkg.badge}
                                         highlight={pkg.highlight}
-                                        onClick={() => handleSelect('package', key)}
+                                        onClick={handleSelect}
+                                        selectionGroup="package"
+                                        value={key}
                                         active={selections.package === key}
                                     />
                                 ))}

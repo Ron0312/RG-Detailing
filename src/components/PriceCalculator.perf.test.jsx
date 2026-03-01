@@ -41,11 +41,15 @@ describe('PriceCalculator Performance', () => {
     // Step 3: Package - Select "Premium Aufbereitung"
     await user.click(screen.getByText('Premium Aufbereitung'));
 
-    // Step 4: Result - Fill Email
-    const emailInput = await screen.findByLabelText(/Ihre E-Mail Adresse/i);
+    // Step 4: Result - Fill form
+    const nameInput = await screen.findByLabelText(/Ihr Name/i);
+    await user.type(nameInput, 'Test User');
+    const phoneInput = screen.getByLabelText(/Telefonnummer/i);
+    await user.type(phoneInput, '0123456789');
+    const emailInput = screen.getByLabelText(/Ihre E-Mail Adresse/i);
     await user.type(emailInput, 'test@example.com');
 
-    const submitButton = screen.getByText('Angebot anfordern');
+    const submitButton = screen.getByRole('button', { name: /Angebot anfordern/i });
 
     const start = performance.now();
     await user.click(submitButton);
