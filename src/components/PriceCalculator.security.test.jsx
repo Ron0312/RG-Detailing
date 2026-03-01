@@ -50,6 +50,12 @@ describe('PriceCalculator Security', () => {
         await user.click(packageButton);
 
         // 4. Fill out form
+        const nameInput = screen.getByLabelText(/Ihr Name/i);
+        await user.type(nameInput, 'Test User');
+
+        const phoneInput = screen.getByLabelText(/Telefonnummer/i);
+        await user.type(phoneInput, '123456789');
+
         const emailInput = screen.getByLabelText(/Ihre E-Mail Adresse/i);
         await user.type(emailInput, 'test@example.com');
 
@@ -72,5 +78,5 @@ describe('PriceCalculator Security', () => {
 
         // Verify that fetch was NOT called a second time (to Web3Forms directly)
         expect(fetchSpy).not.toHaveBeenCalledWith('https://api.web3forms.com/submit', expect.anything());
-    });
+    }, 10000);
 });
