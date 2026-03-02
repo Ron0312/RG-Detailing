@@ -3,13 +3,18 @@ import { GET } from './backup-logs';
 
 // Mock fs and zlib
 const createReadStreamMock = vi.fn();
-const existsSyncMock = vi.fn();
+const accessMock = vi.fn();
 const createGzipMock = vi.fn();
 
 vi.mock('node:fs', () => ({
     default: {
         createReadStream: (...args: any[]) => createReadStreamMock(...args),
-        existsSync: (...args: any[]) => existsSyncMock(...args),
+        promises: {
+            access: (...args: any[]) => accessMock(...args),
+        },
+        constants: {
+            F_OK: 0
+        }
     }
 }));
 
@@ -28,7 +33,7 @@ describe('GET /api/backup-logs', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.stubEnv('STATS_SECRET', 'RG!123');
-        existsSyncMock.mockReturnValue(true);
+        accessMock.mockResolvedValue(undefined); // File exists
     });
 
     it('should require authentication', async () => {
@@ -38,7 +43,7 @@ describe('GET /api/backup-logs', () => {
     });
 
     it('should return 404 if log file missing', async () => {
-        existsSyncMock.mockReturnValue(false);
+        accessMock.mockRejectedValue(new Error('ENOENT')); // File does not exist
         const req = new Request('http://localhost/api/backup-logs?key=RG!123');
         const response = await GET({ request: req, url: new URL(req.url), cookies: { get: vi.fn() } } as any);
         expect(response.status).toBe(404);
@@ -56,7 +61,7 @@ describe('GET /api/backup-logs', () => {
         }
 
         // Check standard logic path
-        expect(existsSyncMock).toHaveBeenCalled();
+        expect(accessMock).toHaveBeenCalled();
         // Since we reach the stream creation:
         expect(createReadStreamMock).toHaveBeenCalled();
         expect(createGzipMock).toHaveBeenCalled();

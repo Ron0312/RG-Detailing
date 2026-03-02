@@ -16,7 +16,11 @@ export const GET: APIRoute = async (context) => {
     const logDir = path.resolve('logs');
     const logFile = path.join(logDir, 'events.jsonl');
 
-    if (!fs.existsSync(logFile)) {
+    // ⚡ Bolt: Use asynchronous access check to avoid blocking the Node event loop
+    // synchronous fs.existsSync can stall requests during high concurrency.
+    try {
+        await fs.promises.access(logFile, fs.constants.F_OK);
+    } catch {
         return new Response('No logs found', { status: 404 });
     }
 
