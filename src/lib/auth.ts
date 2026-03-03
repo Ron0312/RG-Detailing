@@ -1,4 +1,5 @@
 import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypto';
+import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
 const USERNAME = 'Ronni';
@@ -52,8 +53,12 @@ export function isAuthenticated(context: APIContext): boolean {
     const key = url.searchParams.get('key') || context.request.headers.get('Authorization')?.replace('Bearer ', '');
 
     const envSecret = import.meta.env.STATS_SECRET;
-    if (envSecret && key === envSecret) {
-        return true;
+    if (envSecret && key) {
+        const keyBuf = Buffer.from(key);
+        const secretBuf = Buffer.from(envSecret);
+        if (keyBuf.length === secretBuf.length && timingSafeEqual(keyBuf, secretBuf)) {
+            return true;
+        }
     }
 
     return false;
