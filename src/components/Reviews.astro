@@ -29,8 +29,8 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
         </div>
 
         <div id="reviews-slider" class="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-6 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right">
-            {displayedReviews.map((review) => (
-                <div class="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0">
+            {displayedReviews.map((review, index) => (
+                <div data-index={index} class="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-lg hover:border-zinc-700 transition first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-red-700 rounded-full flex items-center justify-center text-white font-bold">
                             {review.name.charAt(0)}
@@ -75,22 +75,29 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
     if (slider && dotsContainer) {
         const dots = dotsContainer.querySelectorAll('div');
 
-        const updateDots = () => {
-            const scrollLeft = slider.scrollLeft;
-            const width = slider.offsetWidth;
-            const index = Math.round(scrollLeft / width);
-
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.remove('bg-zinc-700');
-                    dot.classList.add('bg-red-600', 'scale-125');
-                } else {
-                    dot.classList.remove('bg-red-600', 'scale-125');
-                    dot.classList.add('bg-zinc-700');
+        // OPTIMIZATION: Use IntersectionObserver instead of high-frequency scroll event listener.
+        // Prevents layout thrashing from continuous reads of scrollLeft and offsetWidth.
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const index = parseInt(entry.target.getAttribute('data-index') || '0', 10);
+                    dots.forEach((dot, i) => {
+                        if (i === index) {
+                            dot.classList.remove('bg-zinc-700');
+                            dot.classList.add('bg-red-600', 'scale-125');
+                        } else {
+                            dot.classList.remove('bg-red-600', 'scale-125');
+                            dot.classList.add('bg-zinc-700');
+                        }
+                    });
                 }
             });
-        };
+        }, {
+            root: slider,
+            threshold: 0.6 // Trigger when card is 60% visible
+        });
 
-        slider.addEventListener('scroll', updateDots);
+        const cards = slider.querySelectorAll('[data-index]');
+        cards.forEach(card => observer.observe(card));
     }
 </script>
