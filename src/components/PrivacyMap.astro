@@ -16,7 +16,7 @@ const { src, title, class: className = "" } = Astro.props;
             Mit dem Laden der Karte akzeptieren Sie die Datenschutzerklärung von Google.
             Es werden personenbezogene Daten an Google übertragen.
         </p>
-        <button class="bg-red-700 hover:bg-red-600 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-colors shadow-lg shadow-red-900/20 load-map-btn cursor-pointer">
+        <button type="button" class="bg-red-700 hover:bg-red-600 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-colors shadow-lg shadow-red-900/20 load-map-btn cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900">
             Karte anzeigen
         </button>
     </div>
