@@ -25,3 +25,6 @@
 ## 2025-03-08 - Accessible Toggle Button States
 **Learning:** Filter/tab groups implemented as buttons often rely solely on background color for state, which is insufficient for accessibility. Adding `aria-pressed` (for toggles) or `aria-selected` (for tabs) is crucial for screen readers. Additionally, `focus-visible` rings are often forgotten on these "pill" style buttons.
 **Action:** Always verify `aria-pressed` or `aria-selected` on stateful toggle buttons and ensure high-contrast focus rings are present.
+## 2025-03-09 - Accessible programmatic scrolling for pagination
+**Learning:** When using pagination dots to scroll through a carousel (like ServiceGrid), if they are interactive and change the active state programmatically, they should correctly compute the scroll offset instead of only updating the state index. The visual dots need to be actual interactive elements (buttons) that users can click to navigate.
+**Action:** Replaced static `div` dots with interactive `button`s that use an internal `scrollToCard` function. Used `scrollRef.current.scrollTo` by calculating the child element's `offsetLeft` relative to the container's `offsetLeft`.
