@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { z } from 'zod';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import nodemailer from 'nodemailer';
 import { calculatePrice, type PackageId, type SizeId, type ConditionId } from '../../lib/pricing';
 import config from '../../lib/pricingConfig.json';
 import { checkRateLimit } from '../../lib/rate-limit';
@@ -163,75 +164,65 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
                 <p style="font-size: 0.8em; color: #888;">
-                    Diese E-Mail wurde automatisch von rg-detailing.de gesendet via Web3Forms.
+                    Diese E-Mail wurde automatisch von rg-detailing.de gesendet.
                 </p>
             </div>
         `;
 
-        // Send via Web3Forms if Key is present
+        // Configure Nodemailer transporter
         // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env)
-        const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
-        // In Astro, import.meta.env might not exist in all environments if not properly mocked in tests
-        const buildKey = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.WEB3FORMS_ACCESS_KEY : undefined;
-
-        const apiKey = runtimeKey || buildKey;
-        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "None");
-
-        if (apiKey) {
-            console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
-        }
-
-        let emailSent = false;
-
-        if (apiKey) {
-            try {
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        access_key: apiKey,
-                        subject: subject,
-                        email: data.email, // Reply-To address
-                        from_name: "RG Detailing Rechner",
-                        message: htmlContent,
-                        // Additional metadata fields
-                        "Name": data.name,
-                        "Telefon": data.phone,
-                        "Fahrzeug": sizeName,
-                        "Paket": packageName,
-                        "Preis_Min": priceQuote.minPrice,
-                        "Preis_Max": priceQuote.maxPrice
-                    })
-                });
-
-                const apiResult = await response.json();
-
-                if (apiResult.success) {
-                    console.log(`>>> Email sent successfully to owner via Web3Forms (Ref: ${maskEmail(data.email)})`);
-                    emailSent = true;
-                } else {
-                    console.error(">>> Web3Forms API Error:", apiResult);
-                    return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail über Web3Forms." }), { status: 500 });
-                }
-            } catch (err) {
-                console.error(">>> Failed to send email via Web3Forms:", err);
-                return new Response(JSON.stringify({ error: "Verbindungsfehler zum E-Mail-Server." }), { status: 500 });
+        const getEnv = (key: string) => {
+            if (typeof process !== 'undefined' && process.env[key]) {
+                return process.env[key];
             }
-        } else {
-            console.error(">>> CRITICAL: No WEB3FORMS_ACCESS_KEY available (including fallback)!");
+            if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+                return import.meta.env[key];
+            }
+            return undefined;
+        };
+
+        const smtpHost = getEnv('SMTP_HOST') || 'smtp.goneo.de';
+        const smtpPort = parseInt(getEnv('SMTP_PORT') || '465', 10);
+        const smtpUser = getEnv('SMTP_USER') || 'kontakt@rg-detailing.de';
+        const smtpPass = getEnv('SMTP_PASS');
+
+        if (!smtpPass) {
+            console.error(">>> CRITICAL: No SMTP_PASS available!");
             return new Response(JSON.stringify({ error: "E-Mail-Konfiguration fehlt auf dem Server." }), { status: 500 });
         }
 
-        // Only return success if email was actually sent
-        return new Response(JSON.stringify({
-            success: true,
-            message: "Anfrage erhalten",
-            quote: priceQuote,
-            emailStatus: 'sent'
-        }), { status: 200 });
+        const transporter = nodemailer.createTransport({
+            host: smtpHost,
+            port: smtpPort,
+            secure: smtpPort === 465, // true for 465, false for other ports
+            auth: {
+                user: smtpUser,
+                pass: smtpPass,
+            },
+        });
+
+        try {
+            await transporter.sendMail({
+                from: `"RG Detailing Rechner" <${smtpUser}>`,
+                to: smtpUser, // Send to the owner
+                replyTo: data.email, // Reply to the customer
+                subject: subject,
+                html: htmlContent,
+            });
+
+            console.log(`>>> Email sent successfully via SMTP (Ref: ${maskEmail(data.email)})`);
+
+            return new Response(JSON.stringify({
+                success: true,
+                message: "Anfrage erhalten",
+                quote: priceQuote,
+                emailStatus: 'sent'
+            }), { status: 200 });
+
+        } catch (err) {
+            console.error(">>> Failed to send email via SMTP:", err);
+            return new Response(JSON.stringify({ error: "Fehler beim Senden der E-Mail." }), { status: 500 });
+        }
 
     } catch (e) {
         console.error("Unhandled error in submit-quote:", e);
