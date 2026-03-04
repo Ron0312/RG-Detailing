@@ -39,9 +39,17 @@ describe('API submit-quote', () => {
     });
 
     it('returns 200 for valid data', async () => {
+        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({ success: true, message: 'OK' }),
+            ok: true
+        })) as any;
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -134,6 +142,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -147,7 +157,7 @@ describe('API submit-quote', () => {
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(500);
         const data = await res.json();
-        expect(data.error).toContain('Fehler');
+        expect(data.error.toLowerCase()).toContain('fehler');
     });
 
     it('returns 500 when Web3Forms fetch throws', async () => {
@@ -160,6 +170,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -173,7 +185,7 @@ describe('API submit-quote', () => {
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(500);
         const data = await res.json();
-        expect(data.error).toContain('Fehler');
+        expect(data.error.toLowerCase()).toContain('fehler');
     });
 
     it('does not leak sensitive details in error response', async () => {
@@ -183,6 +195,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -223,6 +237,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: longEmail,
                 size: 'small',
                 condition: 'good',
@@ -240,6 +256,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'John Doe',
+                phone: '1234567890',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',

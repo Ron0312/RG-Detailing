@@ -169,15 +169,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         `;
 
         // Send via Web3Forms if Key is present
-        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env) -> Hardcoded Fallback
+        // Prioritize Runtime Env (process.env) -> Build Env (import.meta.env)
         const runtimeKey = typeof process !== 'undefined' ? process.env.WEB3FORMS_ACCESS_KEY : undefined;
-        const buildKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
-        const fallbackKey = '51d8133f-baec-4504-ab1e-ea740b15dc8b'; // Public form ID from Web3Forms
+        // In Astro, import.meta.env might not exist in all environments if not properly mocked in tests
+        const buildKey = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.WEB3FORMS_ACCESS_KEY : undefined;
 
-        const apiKey = runtimeKey || buildKey || fallbackKey;
-        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "Fallback Key");
+        const apiKey = runtimeKey || buildKey;
+        const keySource = runtimeKey ? "Runtime Env" : (buildKey ? "Build Env" : "None");
 
-        console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
+        if (apiKey) {
+            console.log(`>>> Sending email using Web3Forms Key from: ${keySource}`);
+        }
 
         let emailSent = false;
 
