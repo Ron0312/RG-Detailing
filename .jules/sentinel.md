@@ -1,4 +1,4 @@
-## 2025-05-20 - [Hardcoded Admin Secret]
-**Vulnerability:** A hardcoded administrative password (`RG!123`) was used as a fallback in `src/pages/admin/stats.astro` and API routes if the `STATS_SECRET` environment variable was missing.
-**Learning:** Fallback secrets intended for development can inadvertently become production vulnerabilities if not strictly guarded by environment checks (e.g., `import.meta.env.PROD`).
-**Prevention:** Centralized secret management in `src/lib/secrets.ts` that enforces "Fail Closed" logic in production (throwing an error if the secret is missing) and "Fail Open" (with warning) only in development.
+## 2025-03-03 - [Timing Attack in Authentication]
+**Vulnerability:** Found a timing attack vulnerability in `src/lib/auth.ts` where the `STATS_SECRET` string comparison was using strict string equality (`===`).
+**Learning:** Checking string equality in authentication logic character by character is susceptible to timing attacks, allowing an attacker to brute force the secret character by character by measuring execution times.
+**Prevention:** Use `timingSafeEqual` from `node:crypto` with Buffers for constant-time comparisons of secrets.
