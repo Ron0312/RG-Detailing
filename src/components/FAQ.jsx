@@ -22,7 +22,10 @@ const FAQ = ({ items }) => {
           }`}
         >
           <button
-            className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+            type="button"
+            id={`faq-button-${index}`}
+            aria-controls={`faq-content-${index}`}
+            className="w-full px-6 py-5 flex items-center justify-between text-left focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-inset focus-visible:outline-none focus:outline-none rounded-2xl"
             onClick={() => toggleFAQ(index)}
             aria-expanded={openIndex === index}
           >
@@ -34,6 +37,9 @@ const FAQ = ({ items }) => {
             />
           </button>
           <div
+            id={`faq-content-${index}`}
+            role="region"
+            aria-labelledby={`faq-button-${index}`}
             className={`transition-all duration-300 ease-in-out overflow-hidden ${
               openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             }`}

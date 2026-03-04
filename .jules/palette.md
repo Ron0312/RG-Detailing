@@ -4,3 +4,6 @@
 ## 2026-03-03 - Focus-visible styles on generic interactive components
 **Learning:** Found that generic UI elements (Cookie Banner, Privacy Map, Feedback Widget) were lacking proper keyboard focus indicators (`focus-visible`) and explicit `type="button"` attributes, hindering keyboard navigation accessibility.
 **Action:** Always add explicit `type="button"` to standalone buttons and ensure `focus-visible:ring-2` (and associated offset classes) is applied consistently across all interactive UI components, not just main navigation or forms.
+## 2026-03-04 - Accessible Accordion Components
+**Learning:** Found that the accordion component (`FAQ.jsx`) lacked proper ARIA attributes and focus styles for keyboard accessibility.
+**Action:** Always use `type="button"`, `id`, `aria-controls`, and `focus-visible` classes for toggle buttons, and use `id`, `role="region"`, and `aria-labelledby` for content panels in accordion components.
