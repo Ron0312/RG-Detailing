@@ -42,10 +42,16 @@ describe('PriceCalculator Performance', () => {
     await user.click(screen.getByText('Premium Aufbereitung'));
 
     // Step 4: Result - Fill Email
+    const nameInput = await screen.findByLabelText(/Ihr Name/i);
+    await user.type(nameInput, 'Test User');
+
+    const phoneInput = await screen.findByLabelText(/Telefonnummer/i);
+    await user.type(phoneInput, '123456789');
+
     const emailInput = await screen.findByLabelText(/Ihre E-Mail Adresse/i);
     await user.type(emailInput, 'test@example.com');
 
-    const submitButton = screen.getByText('Angebot anfordern');
+    const submitButton = screen.getByText(/Angebot anfordern/i);
 
     const start = performance.now();
     await user.click(submitButton);
@@ -59,5 +65,5 @@ describe('PriceCalculator Performance', () => {
 
     // Verify fetch was called
     expect(global.fetch).toHaveBeenCalledTimes(1);
-  });
+  }, 10000);
 });

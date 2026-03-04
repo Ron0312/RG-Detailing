@@ -5,7 +5,7 @@ import { hits } from '../../lib/rate-limit';
 describe('API submit-quote', () => {
     afterEach(() => {
         vi.restoreAllMocks();
-        delete process.env.WEB3FORMS_ACCESS_KEY;
+        vi.unstubAllEnvs();
         hits.clear();
     });
 
@@ -39,9 +39,20 @@ describe('API submit-quote', () => {
     });
 
     it('returns 200 for valid data', async () => {
+        // Set API key to test successful path
+        vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
+
+        // Mock fetch to return success: true
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({ success: true, message: 'Success' }),
+            ok: true
+        })) as any;
+
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'Test User',
+                phone: '123456789',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -55,6 +66,31 @@ describe('API submit-quote', () => {
         expect(res.status).toBe(200);
         const data = await res.json();
         expect(data.success).toBe(true);
+    });
+
+    it('returns 500 when Web3Forms API key is missing', async () => {
+        // Ensure API key is missing
+        vi.stubEnv('WEB3FORMS_ACCESS_KEY', '');
+
+        const req = new Request('http://localhost/api/submit-quote', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: 'Test User',
+                phone: '123456789',
+                email: 'test@example.com',
+                size: 'small',
+                condition: 'good',
+                package: 'wash_interior'
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
+        expect(res.status).toBe(500);
+        const data = await res.json();
+        expect(data.error).toBe("E-Mail-Konfiguration fehlt auf dem Server.");
     });
 
     it('returns 400 for invalid data', async () => {
@@ -123,7 +159,7 @@ describe('API submit-quote', () => {
 
     it('returns 500 when Web3Forms API fails', async () => {
         // Set API key to trigger Web3Forms logic
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+        vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
 
         // Mock fetch to return success: false
         global.fetch = vi.fn(() => Promise.resolve({
@@ -134,6 +170,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'Test User',
+                phone: '123456789',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -152,7 +190,7 @@ describe('API submit-quote', () => {
 
     it('returns 500 when Web3Forms fetch throws', async () => {
         // Set API key to trigger Web3Forms logic
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+        vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
 
         // Mock fetch to throw error
         global.fetch = vi.fn(() => Promise.reject(new Error('Network Error'))) as any;
@@ -160,6 +198,8 @@ describe('API submit-quote', () => {
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'Test User',
+                phone: '123456789',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
@@ -173,16 +213,18 @@ describe('API submit-quote', () => {
         const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
         expect(res.status).toBe(500);
         const data = await res.json();
-        expect(data.error).toContain('Fehler');
+        expect(data.error).toContain('Verbindungsfehler');
     });
 
     it('does not leak sensitive details in error response', async () => {
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+        vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
         global.fetch = vi.fn(() => Promise.reject(new Error('Sensitive Internal Error'))) as any;
 
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
+                name: 'Test User',
+                phone: '123456789',
                 email: 'test@example.com',
                 size: 'small',
                 condition: 'good',
