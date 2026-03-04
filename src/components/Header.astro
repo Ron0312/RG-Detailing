@@ -178,6 +178,7 @@ import logoImage from '../assets/logo.png';
         // Smart Sticky Header Logic
         let lastScrollTop = window.scrollY || document.documentElement.scrollTop;
         let ticking = false;
+        let lastActiveId = null; // Optimization: Cache active section to avoid DOM thrashing
 
         function onScroll() {
             if (!ticking) {
@@ -217,39 +218,48 @@ import logoImage from '../assets/logo.png';
                 }
             });
 
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                // Skip the calculator button for span animation, but we can highlight it
-                if (href.includes('#rechner')) {
-                     if (currentSection === 'rechner') {
-                         link.classList.add('bg-red-500', 'text-white');
-                         link.classList.remove('bg-red-900/20', 'text-red-500');
-                     } else {
-                         link.classList.remove('bg-red-500', 'text-white');
-                         link.classList.add('bg-red-900/20', 'text-red-500');
-                     }
-                     return;
-                }
+            // Determine logical active state to prevent redundant DOM updates
+            let activeState = currentSection;
+            if (!currentSection && window.scrollY < 300) activeState = 'top';
 
-                const span = link.querySelector('span');
-                if (!span) return;
+            // Optimization: Skip DOM updates if the active section hasn't changed
+            if (activeState !== lastActiveId) {
+                lastActiveId = activeState;
 
-                link.classList.remove('text-white');
-                span.style.width = '0';
-
-                if (currentSection) {
-                     if (href.includes('#' + currentSection)) {
-                         link.classList.add('text-white');
-                         span.style.width = '100%';
-                     }
-                } else {
-                    // If no section matches and we are near top, it's Startseite
-                    if ((href === '/' || href === '/#') && window.scrollY < 300) {
-                         link.classList.add('text-white');
-                         span.style.width = '100%';
+                navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    // Skip the calculator button for span animation, but we can highlight it
+                    if (href.includes('#rechner')) {
+                         if (currentSection === 'rechner') {
+                             link.classList.add('bg-red-500', 'text-white');
+                             link.classList.remove('bg-red-900/20', 'text-red-500');
+                         } else {
+                             link.classList.remove('bg-red-500', 'text-white');
+                             link.classList.add('bg-red-900/20', 'text-red-500');
+                         }
+                         return;
                     }
-                }
-            });
+
+                    const span = link.querySelector('span');
+                    if (!span) return;
+
+                    link.classList.remove('text-white');
+                    span.style.width = '0';
+
+                    if (currentSection) {
+                         if (href.includes('#' + currentSection)) {
+                             link.classList.add('text-white');
+                             span.style.width = '100%';
+                         }
+                    } else {
+                        // If no section matches and we are near top, it's Startseite
+                        if ((href === '/' || href === '/#') && window.scrollY < 300) {
+                             link.classList.add('text-white');
+                             span.style.width = '100%';
+                        }
+                    }
+                });
+            }
         }
 
         window.addEventListener('scroll', onScroll, { passive: true });
