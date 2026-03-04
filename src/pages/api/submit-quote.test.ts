@@ -2,11 +2,22 @@ import { POST, escapeHtml } from './submit-quote';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { hits } from '../../lib/rate-limit';
 
+const mockSendMail = vi.fn();
+
+vi.mock('nodemailer', () => ({
+    default: {
+        createTransport: vi.fn(() => ({
+            sendMail: mockSendMail,
+        })),
+    },
+}));
+
 describe('API submit-quote', () => {
     afterEach(() => {
         vi.restoreAllMocks();
-        delete process.env.WEB3FORMS_ACCESS_KEY;
+        delete process.env.SMTP_PASS;
         hits.clear();
+        mockSendMail.mockClear();
     });
 
     it('escapes HTML special characters correctly', () => {
@@ -39,12 +50,10 @@ describe('API submit-quote', () => {
     });
 
     it('returns 200 for valid data', async () => {
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+        process.env.SMTP_PASS = 'test-pass';
 
-        global.fetch = vi.fn(() => Promise.resolve({
-            json: () => Promise.resolve({ success: true, message: 'OK' }),
-            ok: true
-        })) as any;
+        mockSendMail.mockResolvedValueOnce(true);
+
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
             body: JSON.stringify({
@@ -63,6 +72,7 @@ describe('API submit-quote', () => {
         expect(res.status).toBe(200);
         const data = await res.json();
         expect(data.success).toBe(true);
+        expect(mockSendMail).toHaveBeenCalled();
     });
 
     it('returns 400 for invalid data', async () => {
@@ -129,43 +139,12 @@ describe('API submit-quote', () => {
         expect(resAllowed.status).not.toBe(429);
     });
 
-    it('returns 500 when Web3Forms API fails', async () => {
-        // Set API key to trigger Web3Forms logic
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
+    it('returns 500 when SMTP sendMail throws', async () => {
+        // Set pass to trigger SMTP logic
+        process.env.SMTP_PASS = 'test-pass';
 
-        // Mock fetch to return success: false
-        global.fetch = vi.fn(() => Promise.resolve({
-            json: () => Promise.resolve({ success: false, message: 'Invalid key' }),
-            ok: true
-        })) as any;
-
-        const req = new Request('http://localhost/api/submit-quote', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: 'John Doe',
-                phone: '1234567890',
-                email: 'test@example.com',
-                size: 'small',
-                condition: 'good',
-                package: 'wash_interior'
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const res = await POST({ request: req, clientAddress: '127.0.0.1' } as any);
-        expect(res.status).toBe(500);
-        const data = await res.json();
-        expect(data.error.toLowerCase()).toContain('fehler');
-    });
-
-    it('returns 500 when Web3Forms fetch throws', async () => {
-        // Set API key to trigger Web3Forms logic
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
-
-        // Mock fetch to throw error
-        global.fetch = vi.fn(() => Promise.reject(new Error('Network Error'))) as any;
+        // Mock sendMail to throw error
+        mockSendMail.mockRejectedValueOnce(new Error('Network Error'));
 
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
@@ -189,8 +168,8 @@ describe('API submit-quote', () => {
     });
 
     it('does not leak sensitive details in error response', async () => {
-        process.env.WEB3FORMS_ACCESS_KEY = 'test-key';
-        global.fetch = vi.fn(() => Promise.reject(new Error('Sensitive Internal Error'))) as any;
+        process.env.SMTP_PASS = 'test-pass';
+        mockSendMail.mockRejectedValueOnce(new Error('Sensitive Internal Error'));
 
         const req = new Request('http://localhost/api/submit-quote', {
             method: 'POST',
