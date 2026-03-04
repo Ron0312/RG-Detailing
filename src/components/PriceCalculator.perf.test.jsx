@@ -42,6 +42,12 @@ describe('PriceCalculator Performance', () => {
     await user.click(screen.getByText('Premium Aufbereitung'));
 
     // Step 4: Result - Fill Email
+    const nameInput = await screen.findByLabelText(/Ihr Name/i);
+    await user.type(nameInput, 'John Doe');
+
+    const phoneInput = await screen.findByLabelText(/Telefonnummer/i);
+    await user.type(phoneInput, '1234567890');
+
     const emailInput = await screen.findByLabelText(/Ihre E-Mail Adresse/i);
     await user.type(emailInput, 'test@example.com');
 
