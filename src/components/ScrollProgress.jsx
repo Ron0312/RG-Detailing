@@ -3,17 +3,36 @@ import React, { useEffect, useRef } from 'react';
 export default function ScrollProgress() {
   const progressRef = useRef(null);
   const ticking = useRef(false);
+  const maxScrollRef = useRef(0);
 
   useEffect(() => {
+    // OPTIMIZATION: Cache maxScroll to avoid reading layout properties (scrollHeight/clientHeight)
+    // on every scroll event, which causes layout thrashing (synchronous reflows).
+    const calculateMaxScroll = () => {
+      const el = document.documentElement;
+      const scrollHeight = el.scrollHeight || document.body.scrollHeight;
+      const clientHeight = el.clientHeight || window.innerHeight;
+      maxScrollRef.current = scrollHeight - clientHeight;
+    };
+
+    calculateMaxScroll();
+
+    window.addEventListener('resize', calculateMaxScroll, { passive: true });
+
+    let observer;
+    if (typeof ResizeObserver !== 'undefined') {
+        observer = new ResizeObserver(calculateMaxScroll);
+        observer.observe(document.body);
+    }
+
     const updateProgress = () => {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
           const el = document.documentElement;
+          // Reading scrollTop does not force layout if we don't read scrollHeight/clientHeight
           const scrollTop = el.scrollTop || document.body.scrollTop;
-          const scrollHeight = el.scrollHeight || document.body.scrollHeight;
-          const clientHeight = el.clientHeight || window.innerHeight;
 
-          const maxScroll = scrollHeight - clientHeight;
+          const maxScroll = maxScrollRef.current;
           const percent = maxScroll > 0 ? scrollTop / maxScroll : 0;
           const clampedPercent = Math.min(Math.max(percent, 0), 1);
 
@@ -26,10 +45,16 @@ export default function ScrollProgress() {
       }
     };
 
-    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
 
-    return () => window.removeEventListener('scroll', updateProgress);
+    return () => {
+      window.removeEventListener('resize', calculateMaxScroll);
+      window.removeEventListener('scroll', updateProgress);
+      if (observer) {
+          observer.disconnect();
+      }
+    };
   }, []);
 
   return (

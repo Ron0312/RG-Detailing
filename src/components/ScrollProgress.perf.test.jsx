@@ -11,6 +11,13 @@ describe('ScrollProgress Performance', () => {
     // Mock requestAnimationFrame to execute callback asynchronously
     requestAnimationFrameSpy = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => setTimeout(cb, 0));
 
+    // Mock ResizeObserver
+    window.ResizeObserver = vi.fn(function() {
+      this.observe = vi.fn();
+      this.unobserve = vi.fn();
+      this.disconnect = vi.fn();
+    });
+
     // Mock document properties for scroll calculations
     Object.defineProperty(document.documentElement, 'scrollHeight', { value: 2000, writable: true });
     Object.defineProperty(document.documentElement, 'clientHeight', { value: 1000, writable: true });
