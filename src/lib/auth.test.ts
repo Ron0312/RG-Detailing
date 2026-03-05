@@ -3,15 +3,24 @@ import { verifyCredentials, isAuthenticated, createSession, destroySession } fro
 
 describe('Auth Library', () => {
     it('should verify correct credentials', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect username', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect password', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+        vi.unstubAllEnvs();
     });
 
     it('should authenticate with valid session cookie', () => {
