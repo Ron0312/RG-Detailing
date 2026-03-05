@@ -7,3 +7,6 @@
 ## 2026-03-04 - Accessible Accordion Components
 **Learning:** Found that the accordion component (`FAQ.jsx`) lacked proper ARIA attributes and focus styles for keyboard accessibility.
 **Action:** Always use `type="button"`, `id`, `aria-controls`, and `focus-visible` classes for toggle buttons, and use `id`, `role="region"`, and `aria-labelledby` for content panels in accordion components.
+## 2024-03-05 - Missing Focus Indicators on Header Navigation Elements
+**Learning:** Found an accessibility issue pattern where several interactive elements in the Header, specifically mobile navigation elements (hamburger menu button, close button, mobile links) and subtle icon links (phone icon, trust badge), lacked keyboard focus indicators. While main navigation links and primary buttons often get styled, these secondary utility/icon links and mobile-specific elements are frequently overlooked for keyboard accessibility.
+**Action:** Always ensure that every `button` and `a` tag, regardless of its visual prominence or whether it's primarily designed for mobile/touch interaction, has explicitly defined `:focus-visible` styles (e.g., using `focus-visible:ring-2 focus-visible:ring-red-500` along with appropriate offsets).
