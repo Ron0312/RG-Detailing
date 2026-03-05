@@ -2,25 +2,62 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+// Helper to get environment variables (process.env priority)
+const getEnv = (key: string) => {
+    if (typeof process !== 'undefined' && process.env[key]) {
+        return process.env[key];
+    }
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+        return import.meta.env[key];
+    }
+    return undefined;
+};
 
-// Generate a random secret for signing session cookies.
-// In a real production app, this should persist or be in ENV to survive restarts.
-const SESSION_SECRET = randomBytes(32);
+// Lazy loaded session secret
+let SESSION_SECRET: Buffer | null = null;
+
+function getSessionSecret(): Buffer {
+    if (!SESSION_SECRET) {
+        const secretStr = getEnv('SESSION_SECRET');
+        SESSION_SECRET = secretStr ? Buffer.from(secretStr) : randomBytes(32);
+    }
+    return SESSION_SECRET;
+}
 
 function sign(data: string): string {
-    return createHmac('sha256', SESSION_SECRET).update(data).digest('hex');
+    return createHmac('sha256', getSessionSecret()).update(data).digest('hex');
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies the username and password against the configured credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    let expectedUsername = getEnv('ADMIN_USERNAME');
+    let expectedPassword = getEnv('ADMIN_PASSWORD');
+
+    // Default 'admin'/'password' in DEV mode if missing
+    if (!expectedUsername || !expectedPassword) {
+        if (import.meta.env.DEV) {
+            expectedUsername = expectedUsername || 'admin';
+            expectedPassword = expectedPassword || 'password';
+        } else {
+            // Fail-closed in PROD if missing
+            return false;
+        }
+    }
+
+    if (username !== expectedUsername) return false;
+
+    // Use timingSafeEqual to compare hashed passwords
+    const expectedHashStr = createHash('sha256').update(expectedPassword).digest('hex');
+    const inputHashStr = createHash('sha256').update(password).digest('hex');
+
+    const expectedBuf = Buffer.from(expectedHashStr);
+    const inputBuf = Buffer.from(inputHashStr);
+
+    if (expectedBuf.length !== inputBuf.length) return false;
+
+    return timingSafeEqual(inputBuf, expectedBuf);
 }
 
 /**
