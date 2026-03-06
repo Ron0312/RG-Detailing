@@ -1,17 +1,45 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
+    beforeEach(() => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+        vi.restoreAllMocks();
+    });
+
+    it('should verify correct credentials with env vars', () => {
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
     });
 
-    it('should reject incorrect username', () => {
+    it('should reject incorrect username with env vars', () => {
         expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
     });
 
-    it('should reject incorrect password', () => {
+    it('should reject incorrect password with env vars', () => {
         expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+    });
+
+    it('should fallback to default admin credentials in dev mode if env missing', () => {
+        vi.unstubAllEnvs(); // Remove env vars
+        vi.stubEnv('DEV', 'true'); // Simulate dev mode
+
+        // Use DEV fallback values
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+        expect(verifyCredentials('admin', 'wrong')).toBe(false);
+    });
+
+    it('should fail closed in prod mode if env missing', () => {
+        vi.unstubAllEnvs(); // Remove env vars
+        vi.stubEnv('DEV', ''); // Simulate prod mode (not DEV)
+        vi.stubEnv('PROD', 'true');
+
+        expect(verifyCredentials('admin', 'password')).toBe(false);
+        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(false);
     });
 
     it('should authenticate with valid session cookie', () => {
