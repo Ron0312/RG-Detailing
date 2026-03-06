@@ -2,25 +2,58 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+// Helper to get environment variables securely across Node/Astro environments
+function getEnv(key: string): string | undefined {
+    if (typeof process !== 'undefined' && process.env[key]) {
+        return process.env[key];
+    }
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+        return import.meta.env[key];
+    }
+    return undefined;
+}
 
-// Generate a random secret for signing session cookies.
-// In a real production app, this should persist or be in ENV to survive restarts.
-const SESSION_SECRET = randomBytes(32);
+// Generate a random secret for signing session cookies if not provided.
+// Prioritizes process.env -> import.meta.env -> random fallback
+let sessionSecretEnv = getEnv('SESSION_SECRET');
+const SESSION_SECRET = sessionSecretEnv ? Buffer.from(sessionSecretEnv) : randomBytes(32);
 
 function sign(data: string): string {
     return createHmac('sha256', SESSION_SECRET).update(data).digest('hex');
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies the username and password securely against environment variables.
+ * Uses timingSafeEqual to prevent timing attacks.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    let adminUsername = getEnv('ADMIN_USERNAME');
+    let adminPassword = getEnv('ADMIN_PASSWORD');
+    let adminPasswordHash = adminPassword ? createHash('sha256').update(adminPassword).digest('hex') : undefined;
+
+    // Fallback to defaults only in DEV mode for local testing
+    if ((!adminUsername || !adminPasswordHash) && import.meta.env.DEV) {
+        adminUsername = 'admin';
+        // Hash for 'password'
+        adminPasswordHash = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+    }
+
+    // Fail closed if no credentials configured and not in dev
+    if (!adminUsername || !adminPasswordHash) {
+        return false;
+    }
+
+    // Compare usernames securely (timing attack prevention is less critical for username, but good practice)
+    if (username !== adminUsername) {
+        return false;
+    }
+
+    const inputHash = createHash('sha256').update(password).digest('hex');
+    const inputHashBuf = Buffer.from(inputHash);
+    const expectedHashBuf = Buffer.from(adminPasswordHash);
+
+    // Prevent timing attacks when comparing the password hash
+    return inputHashBuf.length === expectedHashBuf.length && timingSafeEqual(inputHashBuf, expectedHashBuf);
 }
 
 /**
