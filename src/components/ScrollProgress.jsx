@@ -3,15 +3,18 @@ import React, { useEffect, useRef } from 'react';
 export default function ScrollProgress() {
   const progressRef = useRef(null);
   const ticking = useRef(false);
+  const layoutCache = useRef({ scrollHeight: 0, clientHeight: 0 });
 
   useEffect(() => {
     const updateProgress = () => {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
           const el = document.documentElement;
+          // scrollTop is the only dynamic property during scroll, doesn't force synchronous reflow
+          // if we aren't also querying layout properties like offsetHeight in the same frame
           const scrollTop = el.scrollTop || document.body.scrollTop;
-          const scrollHeight = el.scrollHeight || document.body.scrollHeight;
-          const clientHeight = el.clientHeight || window.innerHeight;
+
+          const { scrollHeight, clientHeight } = layoutCache.current;
 
           const maxScroll = scrollHeight - clientHeight;
           const percent = maxScroll > 0 ? scrollTop / maxScroll : 0;
@@ -26,10 +29,43 @@ export default function ScrollProgress() {
       }
     };
 
-    window.addEventListener('scroll', updateProgress);
+    // ⚡ BOLT OPTIMIZATION: Cache expensive layout properties to prevent layout thrashing
+    // during scroll events. We only update these when the window resizes or DOM mutates.
+    const updateLayoutCache = () => {
+      const el = document.documentElement;
+      layoutCache.current = {
+        scrollHeight: el.scrollHeight || document.body.scrollHeight,
+        clientHeight: el.clientHeight || window.innerHeight
+      };
+      // We don't call updateProgress() directly here because it uses requestAnimationFrame
+      // which is better for performance, we just update the cache.
+      if (progressRef.current) {
+        // Manually trigger a progress update to reflect new layout
+        updateProgress();
+      }
+    };
+
+    // Initial calculation
+    updateLayoutCache();
+
+    // Re-calculate on resize
+    window.addEventListener('resize', updateLayoutCache, { passive: true });
+
+    // Watch for DOM mutations that might change scrollHeight
+    let resizeObserver = null;
+    if (typeof window !== 'undefined' && typeof window.ResizeObserver !== 'undefined') {
+      resizeObserver = new window.ResizeObserver(updateLayoutCache);
+      resizeObserver.observe(document.body);
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
 
-    return () => window.removeEventListener('scroll', updateProgress);
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateLayoutCache);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
   }, []);
 
   return (
