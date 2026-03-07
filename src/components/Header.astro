@@ -85,7 +85,7 @@ import logoImage from '../assets/logo.png';
             </a>
 
             {/* Mobile Menu Button */}
-            <button id="mobile-menu-btn" class="md:hidden text-zinc-300 hover:text-white p-3 transition-colors" aria-label="Menü öffnen">
+            <button id="mobile-menu-btn" class="md:hidden text-zinc-300 hover:text-white p-3 transition-colors" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menü öffnen">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
         </div>
@@ -93,7 +93,7 @@ import logoImage from '../assets/logo.png';
 </header>
 
 {/* Mobile Navigation Overlay */}
-<div id="mobile-menu" class="fixed inset-0 h-[100dvh] w-full bg-zinc-950/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col items-center justify-center gap-8 md:hidden invisible">
+<div id="mobile-menu" aria-hidden="true" class="fixed inset-0 h-[100dvh] w-full bg-zinc-950/95 backdrop-blur-xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col items-center justify-center gap-8 md:hidden invisible">
     <button id="close-menu-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white p-3 transition-colors" aria-label="Menü schließen">
          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
@@ -127,6 +127,8 @@ import logoImage from '../assets/logo.png';
         const mobileLinks = document.querySelectorAll('.mobile-link');
         const header = document.getElementById('main-header');
 
+        let focusTimeout;
+
         function toggleMenu() {
             if (mobileMenu && document.body) {
                 const isClosed = mobileMenu.classList.contains('translate-x-full');
@@ -134,19 +136,34 @@ import logoImage from '../assets/logo.png';
                 if (isClosed) {
                     // Open menu
                     mobileMenu.classList.remove('invisible');
+                    mobileMenu.removeAttribute('aria-hidden');
+                    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+
                     // Small delay to ensure invisible class removal is registered before transform
                     requestAnimationFrame(() => {
                         mobileMenu.classList.remove('translate-x-full');
+                        // Manage focus to close button
+                        if (closeBtn) {
+                            clearTimeout(focusTimeout);
+                            focusTimeout = setTimeout(() => closeBtn.focus(), 300); // Wait for animation
+                        }
                     });
                     document.body.classList.add('overflow-hidden');
                 } else {
                     // Close menu
                     mobileMenu.classList.add('translate-x-full');
                     document.body.classList.remove('overflow-hidden');
+                    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+
+                    // Return focus to menu button if it was focused before
+                    if (menuBtn) {
+                        menuBtn.focus();
+                    }
 
                     // Wait for transition to finish before hiding
                     setTimeout(() => {
                         mobileMenu.classList.add('invisible');
+                        mobileMenu.setAttribute('aria-hidden', 'true');
                     }, 300);
                 }
             }
@@ -157,6 +174,13 @@ import logoImage from '../assets/logo.png';
 
         mobileLinks.forEach(link => {
             link.addEventListener('click', toggleMenu);
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('translate-x-full')) {
+                toggleMenu();
+            }
         });
 
         // ScrollSpy
