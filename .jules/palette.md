@@ -7,3 +7,6 @@
 ## 2026-03-04 - Accessible Accordion Components
 **Learning:** Found that the accordion component (`FAQ.jsx`) lacked proper ARIA attributes and focus styles for keyboard accessibility.
 **Action:** Always use `type="button"`, `id`, `aria-controls`, and `focus-visible` classes for toggle buttons, and use `id`, `role="region"`, and `aria-labelledby` for content panels in accordion components.
+## 2026-03-08 - Accessible Image Thumbnails for Galleries
+**Learning:** Found that using `<img>` tags directly with `onClick` handlers or wrapped in a `<div>` (e.g., in `Certificates.jsx`) makes image thumbnails inaccessible to keyboard users and screen readers. They cannot be focused or activated via keyboard.
+**Action:** Always wrap interactive image thumbnails in semantic `<button type="button">` elements with an appropriate `aria-label`. Apply structural and hover styles (like borders, rounded corners, overflow, and scale) to the button itself, and ensure proper `focus-visible` styles are included for keyboard navigation.
