@@ -1,9 +1,4 @@
-## 2025-03-03 - [Timing Attack in Authentication]
-**Vulnerability:** Found a timing attack vulnerability in `src/lib/auth.ts` where the `STATS_SECRET` string comparison was using strict string equality (`===`).
-**Learning:** Checking string equality in authentication logic character by character is susceptible to timing attacks, allowing an attacker to brute force the secret character by character by measuring execution times.
-**Prevention:** Use `timingSafeEqual` from `node:crypto` with Buffers for constant-time comparisons of secrets.
-
-## 2025-03-04 - [Hardcoded Secrets]
-**Vulnerability:** The API endpoint `submit-quote.ts` contained a hardcoded fallback API key for Web3Forms.
-**Learning:** Storing secrets in source code, even as "fallbacks" or public keys, is a security risk as it exposes credentials to anyone with read access to the repository, potentially leading to unauthorized API usage or data breaches.
-**Prevention:** Always use environment variables for API keys and secrets, prioritizing `process.env` (runtime) and `import.meta.env` (build time).
+## 2025-02-12 - Critical: Hardcoded Administrative Credentials Fixed
+**Vulnerability:** Hardcoded username and password hash (`Ronni` and the hash of `Remo!123#`) were found directly embedded in the codebase for admin authentication in `src/lib/auth.ts`.
+**Learning:** Hardcoding credentials exposes sensitive data and limits the ability to dynamically change access control for different environments (like staging vs production). Any access to the code grants administrative privileges to the application.
+**Prevention:** Use environment variables (`ADMIN_USERNAME` and `ADMIN_PASSWORD`) to provide authentication secrets dynamically. Ensure the application fails closed strictly when secrets are absent in production, rather than falling back on insecure defaults. Continue to use timing-safe comparisons for sensitive token evaluation.

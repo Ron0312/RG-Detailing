@@ -1,16 +1,48 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
+    beforeEach(() => {
+        vi.unstubAllEnvs();
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+    });
+
+    it('should verify correct credentials from env', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
     });
 
+    it('should fail-close if credentials missing', () => {
+        // Completely remove any env from process.env explicitly for this test
+        const originalUser = process.env.ADMIN_USERNAME;
+        const originalPass = process.env.ADMIN_PASSWORD;
+
+        delete process.env.ADMIN_USERNAME;
+        delete process.env.ADMIN_PASSWORD;
+
+        // Stub to ensure it returns undefined to getEnv
+        vi.stubEnv('ADMIN_USERNAME', undefined as any);
+        vi.stubEnv('ADMIN_PASSWORD', undefined as any);
+
+        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(false);
+
+        if (originalUser !== undefined) process.env.ADMIN_USERNAME = originalUser;
+        if (originalPass !== undefined) process.env.ADMIN_PASSWORD = originalPass;
+    });
+
     it('should reject incorrect username', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
     });
 
     it('should reject incorrect password', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
     });
 

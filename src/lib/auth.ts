@@ -2,25 +2,53 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+export function getEnv(key: string): string | undefined {
+    if (typeof process !== 'undefined' && process.env && process.env[key] !== undefined && process.env[key] !== '') {
+        return process.env[key];
+    }
+    // Static replacement is needed for Vite, so we only handle the keys we actually use.
+    // @ts-ignore
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+        if (key === 'SESSION_SECRET') return import.meta.env.SESSION_SECRET;
+        if (key === 'ADMIN_USERNAME') return import.meta.env.ADMIN_USERNAME;
+        if (key === 'ADMIN_PASSWORD') return import.meta.env.ADMIN_PASSWORD;
+        if (key === 'STATS_SECRET') return import.meta.env.STATS_SECRET;
+    }
+    return undefined;
+}
 
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
-const SESSION_SECRET = randomBytes(32);
+const SESSION_SECRET = (() => {
+    const secret = getEnv('SESSION_SECRET');
+    return secret ? Buffer.from(secret) : randomBytes(32);
+})();
 
 function sign(data: string): string {
     return createHmac('sha256', SESSION_SECRET).update(data).digest('hex');
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies the username and password against the configured credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    const adminUsername = getEnv('ADMIN_USERNAME');
+    const adminPassword = getEnv('ADMIN_PASSWORD');
+
+    // Strict fail-closed policy
+    if (!adminUsername || !adminPassword) {
+        return false;
+    }
+
+    if (username !== adminUsername) return false;
+
+    // Compare SHA-256 hashes using timingSafeEqual to prevent timing attacks
+    const inputHash = createHash('sha256').update(password).digest();
+    const expectedHash = createHash('sha256').update(adminPassword).digest();
+
+    if (inputHash.length !== expectedHash.length) return false;
+
+    return timingSafeEqual(inputHash, expectedHash);
 }
 
 /**
@@ -52,7 +80,7 @@ export function isAuthenticated(context: APIContext): boolean {
     const url = new URL(context.request.url);
     const key = url.searchParams.get('key') || context.request.headers.get('Authorization')?.replace('Bearer ', '');
 
-    const envSecret = import.meta.env.STATS_SECRET;
+    const envSecret = getEnv('STATS_SECRET');
     if (envSecret && key) {
         const keyBuf = Buffer.from(key);
         const secretBuf = Buffer.from(envSecret);
@@ -72,10 +100,13 @@ export function createSession(context: APIContext) {
     const payload = `admin:${expires}`;
     const signature = sign(payload);
 
+    // @ts-ignore
+    const isProd = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.PROD;
+
     context.cookies.set('admin_session', `${payload}.${signature}`, {
         path: '/',
         httpOnly: true,
-        secure: import.meta.env.PROD,
+        secure: isProd,
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7 // 7 days
     });
