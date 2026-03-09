@@ -78,6 +78,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, beforeSrcSe
       aria-valuenow={Math.round(sliderPosition)}
       aria-valuemin={0}
       aria-valuemax={100}
+      aria-valuetext={`${Math.round(sliderPosition)}% Vorher sichtbar`}
     >
       {/* After Image (Background) */}
       <img
