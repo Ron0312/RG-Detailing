@@ -35,6 +35,7 @@ import imgKeramikBremssattel12 from '../assets/gallery/fahrzeugaufbereitung-tens
 import imgKeramikDetail13 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramik-detail-13.jpg';
 import imgInnenraumDetail14 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenraum-detail-14.jpg';
 import imgLackKratzer15 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-kratzer-entfernung-15.jpg';
+import imgInnenraumDetail16 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenraum-detail-16.jpg';
 
 // Other Assets
 import dampfdrachenLogo from '../assets/dampfdrachen-logo.webp';
@@ -54,6 +55,13 @@ const cities = await getCollection('cities');
 const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
 const galleryRawImages = [
+  {
+    src: imgInnenraumDetail16,
+    alt: "Fahrzeugaufbereitung Tensfeld Innenraum Detailpflege und Lederpflege",
+    category: "Innenraum",
+    title: "Detailpflege Innenraum",
+    description: "Porentiefe Reinigung und schonende Pflege hochwertiger Interieur-Materialien für ein frisches Neuwagengefühl."
+  },
   {
     src: imgLackKratzer15,
     alt: "Lackkratzer Entfernung und Defektkorrektur Tensfeld",
