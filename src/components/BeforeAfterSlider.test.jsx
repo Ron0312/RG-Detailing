@@ -27,6 +27,7 @@ describe('BeforeAfterSlider Accessibility', () => {
         expect(slider.getAttribute('aria-valuemax')).toBe('100');
         // Initial position is 50
         expect(slider.getAttribute('aria-valuenow')).toBe('50');
+        expect(slider.getAttribute('aria-valuetext')).toBe('50% Vorher sichtbar');
         expect(slider.getAttribute('tabindex')).toBe('0');
     });
 

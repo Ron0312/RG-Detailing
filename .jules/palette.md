@@ -7,3 +7,6 @@
 ## 2026-03-04 - Accessible Accordion Components
 **Learning:** Found that the accordion component (`FAQ.jsx`) lacked proper ARIA attributes and focus styles for keyboard accessibility.
 **Action:** Always use `type="button"`, `id`, `aria-controls`, and `focus-visible` classes for toggle buttons, and use `id`, `role="region"`, and `aria-labelledby` for content panels in accordion components.
+## 2025-03-09 - Added aria-valuetext to BeforeAfterSlider
+**Learning:** Adding custom screen-reader-only (`sr-only`) text to explain standard keyboard interactions (like using arrow keys on a `role="slider"`) is an accessibility anti-pattern. Screen readers natively announce how to interact with standard ARIA roles. However, `aria-valuetext` is extremely useful alongside `aria-valuenow` to explicitly communicate the semantic meaning of the slider number to screen readers (e.g., explaining that "50" means "50% Vorher sichtbar").
+**Action:** Use `aria-valuetext` to give semantic context to numbers in sliders, but avoid redundantly explaining basic keyboard controls for standard ARIA roles like `slider`.
