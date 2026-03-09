@@ -30,7 +30,7 @@ describe('PriceCalculator Performance', () => {
     render(<PriceCalculator />);
 
     // Expand
-    await user.click(screen.getByText('Jetzt Preis berechnen'));
+    await user.click(screen.getByText(/Preis berechnen \(3 Klicks\)/));
 
     // Step 1: Size - Select "Kleinwagen"
     await user.click(screen.getByText('Kleinwagen'));

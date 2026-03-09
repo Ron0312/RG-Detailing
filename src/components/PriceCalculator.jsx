@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, forwardRef, memo } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
-import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator } from 'lucide-react';
+import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator, Car, Eye, Droplets, Hammer } from 'lucide-react';
 
 const STEPS = {
     SIZE: 0,
@@ -28,7 +28,7 @@ const StepSubtitle = ({ children }) => (
     <p className="text-zinc-400 text-center mb-8 md:mb-10 max-w-lg mx-auto text-base md:text-lg leading-relaxed px-4">{children}</p>
 );
 
-const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
+const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Icon }) => (
     <button
         type="button"
         role="radio"
@@ -57,7 +57,8 @@ const Card = ({ title, desc, price, badge, highlight, onClick, active }) => (
         )}
 
         <div className="flex items-start justify-between mb-4 relative z-10">
-            <div className={`font-bold text-xl tracking-tight transition-colors ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
+            <div className={`font-bold text-xl tracking-tight transition-colors flex items-center gap-3 ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
+                {Icon && <Icon className={`w-6 h-6 ${active ? 'text-red-500' : 'text-zinc-500 group-hover:text-red-400'} transition-colors`} />}
                 {title}
             </div>
         </div>
@@ -88,22 +89,22 @@ const WhatsAppButton = ({ message }) => (
 
 // New Teaser Component
 const Teaser = ({ onStart }) => (
-    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-12 text-center group cursor-pointer hover:border-red-500/50 transition-colors animate-fade-in-up focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-50"></div>
+    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border-2 border-red-500/50 bg-gradient-to-br from-red-900/30 to-black p-8 md:p-14 text-center group cursor-pointer hover:border-red-500 transition-all shadow-[0_0_40px_rgba(220,38,38,0.15)] hover:shadow-[0_0_60px_rgba(220,38,38,0.3)] animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/20 via-transparent to-transparent opacity-60"></div>
 
-        <div className="relative z-10 max-w-2xl mx-auto">
-             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/20 text-red-500 mb-6 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(220,38,38,0.3)]">
-                <Calculator size={32} />
+        <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/20 text-red-500 mb-8 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(220,38,38,0.4)] animate-pulse">
+                <Calculator size={40} />
             </div>
-            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">Dein individueller Preis</h3>
-            <p className="text-zinc-400 mb-10 text-lg md:text-xl leading-relaxed">
-                Jedes Fahrzeug ist einzigartig. Nutzen Sie unseren intelligenten Rechner, um in wenigen Klicks ein unverbindliches Angebot zu erhalten.
+            <h3 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Dein individueller Preis</h3>
+            <p className="text-zinc-300 mb-10 text-lg md:text-xl leading-relaxed">
+                Finde in nur 3 Klicks heraus, was die Aufbereitung für dein Fahrzeug kostet. 100% kostenlos und unverbindlich.
             </p>
             <div
-                className="inline-flex items-center gap-3 px-10 py-5 bg-red-600 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-900/40 text-lg group-hover:bg-red-500 group-hover:scale-105 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
+                className="inline-flex items-center gap-3 px-12 py-5 bg-red-600 text-white rounded-2xl font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.5)] text-xl group-hover:bg-red-500 group-hover:scale-105 group-hover:-translate-y-1 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
             >
-                <Sparkles size={24} />
-                Jetzt Preis berechnen
+                <Sparkles size={28} className="animate-pulse" />
+                Preis berechnen (3 Klicks)
             </div>
         </div>
     </button>
@@ -279,6 +280,7 @@ export default function PriceCalculator() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [callbackTime, setCallbackTime] = useState('');
     const [botcheck, setBotcheck] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -390,7 +392,7 @@ export default function PriceCalculator() {
             email_provided: !!email
         });
 
-        const payload = { ...selections, quote, name, phone, email, botcheck };
+        const payload = { ...selections, quote, name, phone, email, callbackTime, botcheck };
 
         try {
             const response = await fetch('/api/submit-quote', {
@@ -428,6 +430,7 @@ export default function PriceCalculator() {
         setName('');
         setPhone('');
         setEmail('');
+        setCallbackTime('');
         setBotcheck(false);
         setError(null);
         // Clear URL param?
@@ -485,16 +488,19 @@ export default function PriceCalculator() {
                             <StepTitle id="step-size-title" ref={stepTitleRef}>Fahrzeug wählen</StepTitle>
                             <StepSubtitle>Starten wir mit der Größe Ihres Fahrzeugs.</StepSubtitle>
                             <div role="radiogroup" aria-labelledby="step-size-title" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                                {Object.entries(config.sizes).map(([key, size]) => (
-                                    <Card
-                                        key={key}
-                                        title={size.name}
-                                        desc={size.isRequestOnly ? "Spezialangebot für Camper & Caravans" : `z.B. ${key === 'small' ? 'Polo, Corsa' : key === 'medium' ? 'Golf, 3er, A4' : 'X5, Q7, T-Bus'}`}
-                                        onClick={() => handleSelect('size', key)}
-                                        active={selections.size === key}
-                                        icon={key === 'camper' ? Truck : null}
-                                    />
-                                ))}
+                                {Object.entries(config.sizes).map(([key, size]) => {
+                                    const iconMap = { small: Car, medium: Car, large: Truck, camper: Truck };
+                                    return (
+                                        <Card
+                                            key={key}
+                                            title={size.name}
+                                            desc={size.isRequestOnly ? "Spezialangebot für Camper & Caravans" : `z.B. ${key === 'small' ? 'Polo, Corsa' : key === 'medium' ? 'Golf, 3er, A4' : 'X5, Q7, T-Bus'}`}
+                                            onClick={() => handleSelect('size', key)}
+                                            active={selections.size === key}
+                                            icon={iconMap[key]}
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
@@ -550,15 +556,19 @@ export default function PriceCalculator() {
                             <StepTitle id="step-condition-title" ref={stepTitleRef}>Lackzustand</StepTitle>
                             <StepSubtitle>Wie würden Sie den aktuellen Zustand beschreiben?</StepSubtitle>
                             <div role="radiogroup" aria-labelledby="step-condition-title" className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                                 {Object.entries(config.conditions).map(([key, cond]) => (
-                                    <Card
-                                        key={key}
-                                        title={cond.name}
-                                        desc={key === 'good' ? 'Liebhaber-Fahrzeug. Handwäsche, kaum Defekte.' : key === 'normal' ? 'Alltags-Spuren. Waschstraßen-Kratzer, Grauschleier.' : 'Härtefall. Tierhaare, Baustellen-Staub, starke Kratzer.'}
-                                        onClick={() => handleSelect('condition', key)}
-                                        active={selections.condition === key}
-                                    />
-                                ))}
+                                 {Object.entries(config.conditions).map(([key, cond]) => {
+                                    const iconMap = { good: Eye, normal: Droplets, heavy: Hammer };
+                                    return (
+                                        <Card
+                                            key={key}
+                                            title={cond.name}
+                                            desc={key === 'good' ? 'Liebhaber-Fahrzeug. Handwäsche, kaum Defekte.' : key === 'normal' ? 'Alltags-Spuren. Waschstraßen-Kratzer, Grauschleier.' : 'Härtefall. Tierhaare, Baustellen-Staub, starke Kratzer.'}
+                                            onClick={() => handleSelect('condition', key)}
+                                            active={selections.condition === key}
+                                            icon={iconMap[key]}
+                                        />
+                                    );
+                                 })}
                             </div>
                             <div className="mt-12 text-center">
                                 <BackButton onClick={() => setStep(STEPS.SIZE)} className="mx-auto" />
@@ -661,6 +671,30 @@ export default function PriceCalculator() {
                                             disabled={loading}
                                         />
                                     </div>
+                                    {phone && (
+                                        <div className="flex flex-col gap-1.5 mb-2 animate-fade-in-up">
+                                            <label htmlFor="callback-input" className="text-sm font-bold text-zinc-300 ml-1">
+                                                Wann dürfen wir anrufen? (Optional)
+                                            </label>
+                                            <div className="relative">
+                                                <select
+                                                    id="callback-input"
+                                                    value={callbackTime}
+                                                    onChange={(e) => setCallbackTime(e.target.value)}
+                                                    className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all text-lg appearance-none cursor-pointer"
+                                                    disabled={loading}
+                                                >
+                                                    <option value="" className="bg-zinc-900 text-zinc-500">Jederzeit</option>
+                                                    <option value="Vormittags (09:00 - 12:00)" className="bg-zinc-900">Vormittags (09:00 - 12:00)</option>
+                                                    <option value="Nachmittags (12:00 - 16:00)" className="bg-zinc-900">Nachmittags (12:00 - 16:00)</option>
+                                                    <option value="Abends (ab 16:00)" className="bg-zinc-900">Abends (ab 16:00)</option>
+                                                </select>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400">
+                                                    <ChevronRight className="w-5 h-5 rotate-90" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="flex flex-col gap-1.5 mb-2">
                                         <label htmlFor="email-input" className="text-sm font-bold text-zinc-300 ml-1">
                                             Ihre E-Mail Adresse <span className="text-red-500">*</span>
@@ -698,7 +732,30 @@ export default function PriceCalculator() {
                                         )}
                                     </button>
                                 </div>
-                                <div className="mt-4 text-center">
+
+                                {/* Trust Badges */}
+                                <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 border-t border-white/5 pt-6">
+                                    <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
+                                            <Check size={12} strokeWidth={3} />
+                                        </div>
+                                        100% Kostenlos
+                                    </div>
+                                    <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
+                                            <Check size={12} strokeWidth={3} />
+                                        </div>
+                                        Unverbindlich
+                                    </div>
+                                    <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
+                                            <Shield size={12} strokeWidth={2.5} />
+                                        </div>
+                                        DSGVO-konform
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 text-center">
                                      <div className="inline-flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold px-3 py-1 rounded-full mb-2 animate-pulse">
                                         <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                                         Hohe Nachfrage im {new Date().toLocaleString('de-DE', { month: 'long' })}

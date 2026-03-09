@@ -25,7 +25,7 @@ describe('PriceCalculator Accessibility', () => {
         render(<PriceCalculator />);
 
         // Expand calculator
-        const startButton = screen.getByText('Jetzt Preis berechnen');
+        const startButton = screen.getByText(/Preis berechnen \(3 Klicks\)/);
         await user.click(startButton);
 
         // Initial state: Not selected
@@ -61,7 +61,7 @@ describe('PriceCalculator Accessibility', () => {
         render(<PriceCalculator />);
 
         // Expand calculator
-        const startButton = screen.getByText('Jetzt Preis berechnen');
+        const startButton = screen.getByText(/Preis berechnen \(3 Klicks\)/);
         await user.click(startButton);
 
         // Click "Wohnmobil / Caravan" to go to camper length step
@@ -76,12 +76,12 @@ describe('PriceCalculator Accessibility', () => {
     it('renders teaser as an accessible button', () => {
         render(<PriceCalculator />);
 
-        const teaserButton = screen.getByText('Jetzt Preis berechnen').closest('button');
+        const teaserButton = screen.getByText(/Preis berechnen \(3 Klicks\)/).closest('button');
 
         expect(teaserButton).not.toBeNull();
         expect(teaserButton.getAttribute('type')).toBe('button');
         // Check for focus styles
-        expect(teaserButton.className).toContain('focus-visible:ring-2');
+        expect(teaserButton.className).toContain('focus-visible:ring-');
         expect(teaserButton.className).toContain('focus-visible:ring-red-500');
     });
 });

@@ -19,6 +19,7 @@ const QuoteSchema = z.object({
     size: SizeEnum,
     condition: ConditionEnum,
     camperLength: z.number().optional(),
+    callbackTime: z.string().max(100).optional(),
     botcheck: z.boolean().optional()
 });
 
@@ -76,6 +77,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             size: body.size,
             condition: body.condition,
             camperLength: body.camperLength,
+            callbackTime: body.callbackTime,
             botcheck: body.botcheck
         });
 
@@ -145,6 +147,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
                 <h3>Kunde</h3>
                 <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
                 <p><strong>Telefon:</strong> ${data.phone ? `<a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a>` : '<i>Nicht angegeben</i>'}</p>
+                ${data.callbackTime ? `<p><strong>Wunsch-Anrufzeit:</strong> ${escapeHtml(data.callbackTime)}</p>` : ''}
                 <p><strong>E-Mail:</strong> <a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></p>
 
                 <h3>Fahrzeug & Zustand</h3>
