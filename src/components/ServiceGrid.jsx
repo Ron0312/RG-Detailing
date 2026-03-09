@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo, memo } from 'react';
-import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator } from 'lucide-react';
+import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator, Clock } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import GlossaryLinker from './GlossaryLinker';
 
@@ -29,8 +29,16 @@ const ServiceCard = memo(({ service, index, IconComponent }) => {
                 <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150 group-hover:from-red-600/20 pointer-events-none"></div>
 
                 <div className="relative z-20 flex-grow pointer-events-none">
-                <div className="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white mb-8 group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
-                    <IconComponent size={28} strokeWidth={1.5} />
+                <div className="flex justify-between items-start mb-8">
+                    <div className="w-16 h-16 bg-zinc-900/50 rounded-2xl border border-white/10 flex items-center justify-center text-white group-hover:border-red-500/50 transition-colors shadow-lg group-hover:text-red-500 group-hover:scale-110 duration-500">
+                        <IconComponent size={28} strokeWidth={1.5} />
+                    </div>
+                    {service.duration && (
+                        <div className="flex items-center gap-1.5 bg-zinc-900/50 border border-white/10 px-3 py-1.5 rounded-full text-xs font-medium text-zinc-300 shadow-sm">
+                            <Clock size={14} className="text-red-400" />
+                            {service.duration}
+                        </div>
+                    )}
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors">{service.title}</h3>
                 <div className="text-zinc-400 leading-relaxed mb-6">

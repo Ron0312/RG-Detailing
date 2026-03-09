@@ -125,9 +125,16 @@ const faqSchema = {
 };
 
 const schema = [localBusinessSchema, faqSchema];
+
+const optimizedHero = await getImage({
+    src: heroImage,
+    format: 'avif',
+    width: 640,
+    quality: 60,
+});
 ---
 
-<Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema}>
+<Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema} preloadImage={optimizedHero.src}>
 
     <div class="absolute top-24 left-0 w-full z-30 container mx-auto px-4">
         <Breadcrumbs crumbs={[

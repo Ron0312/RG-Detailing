@@ -13,7 +13,7 @@ const ConditionEnum = z.enum(Object.keys(config.conditions) as [string, ...strin
 
 const QuoteSchema = z.object({
     name: z.string().min(2).max(100),
-    phone: z.string().min(5).max(30),
+    phone: z.string().max(30).optional().or(z.literal('')),
     email: z.string().email().max(100),
     package: PackageEnum,
     size: SizeEnum,
@@ -144,7 +144,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
                 <h3>Kunde</h3>
                 <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
-                <p><strong>Telefon:</strong> <a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a></p>
+                <p><strong>Telefon:</strong> ${data.phone ? `<a href="tel:${escapeHtml(data.phone)}">${escapeHtml(data.phone)}</a>` : '<i>Nicht angegeben</i>'}</p>
                 <p><strong>E-Mail:</strong> <a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></p>
 
                 <h3>Fahrzeug & Zustand</h3>

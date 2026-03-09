@@ -5,7 +5,8 @@ export const services = [
         icon: "shield",
         shortDescription: "High-End Lackkorrektur (Auto polieren) + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 800 €.",
         link: "/keramikversiegelung",
-        category: "Lack & Keramik"
+        category: "Lack & Keramik",
+        duration: "ca. 3-4 Tage"
     },
     {
         title: "All-in-One (Werterhalt)",
@@ -13,7 +14,8 @@ export const services = [
         icon: "sparkles",
         shortDescription: "Werterhalt und Glanz in einem Paket. Ideal für gepflegte Daily Driver. Ab 500 €.",
         link: "/all-in-one",
-        category: "Lack & Keramik"
+        category: "Lack & Keramik",
+        duration: "ca. 1-2 Tage"
     },
     {
         title: "Wohnmobil-Spezial",
@@ -21,7 +23,8 @@ export const services = [
         icon: "bus",
         shortDescription: "Halle für Fahrzeuge bis 8m. GFK-Pflege und Versiegelung gegen Auskreiden. Außenwäsche ab 125 €.",
         link: "/wohnmobil",
-        category: "Spezial & Reparatur"
+        category: "Spezial & Reparatur",
+        duration: "nach Absprache"
     },
     {
         title: "Leasing-Rettung",
@@ -29,7 +32,8 @@ export const services = [
         icon: "file-check",
         shortDescription: "Sparen Sie durchschnittlich 40-60% gegenüber den Autohaus-Gebühren. Stressfreie Rückgabe.",
         link: "/leasing",
-        category: "Spezial & Reparatur"
+        category: "Spezial & Reparatur",
+        duration: "ca. 1-2 Tage"
     },
     {
         title: "Innen & Hygiene",
@@ -37,7 +41,8 @@ export const services = [
         icon: "droplet",
         shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar. Ab 350 €.",
         link: "/dampfreinigung",
-        category: "Innen & Sonstiges"
+        category: "Innen & Sonstiges",
+        duration: "ca. 1 Tag"
     },
     {
         title: "Smart Repair",
