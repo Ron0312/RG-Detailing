@@ -36,7 +36,7 @@ describe('PriceCalculator UX', () => {
         render(<PriceCalculator />);
 
         // Start
-        const startButton = screen.getByText('Jetzt Preis berechnen');
+        const startButton = screen.getByText(/Preis berechnen \(3 Klicks\)/);
         await user.click(startButton);
 
         // Select "Kleinwagen" (Size Step) -> Condition Step
@@ -61,7 +61,7 @@ describe('PriceCalculator UX', () => {
         render(<PriceCalculator />);
 
         // Start -> Size -> Condition
-        await user.click(screen.getByText('Jetzt Preis berechnen'));
+        await user.click(screen.getByText(/Preis berechnen \(3 Klicks\)/));
         await user.click(screen.getByText('Kleinwagen').closest('button'));
 
         // Verify Condition step
