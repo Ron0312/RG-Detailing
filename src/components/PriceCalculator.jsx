@@ -202,12 +202,19 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
             <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none"></div>
 
             <div className="relative z-10">
-                <div className="text-center mb-10">
-                    <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-6 focus:outline-none">
-                        Ihre Konfiguration
+                <div className="text-center mb-8">
+                    <span ref={stepTitleRef} tabIndex={-1} className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold tracking-widest uppercase mb-4 focus:outline-none">
+                        Dein Ergebnis
                     </span>
                     <h3 className="text-3xl font-bold text-white mb-3">Fast geschafft!</h3>
-                    <p className="text-zinc-400 text-sm font-medium tracking-wide">Überprüfen Sie Ihre Auswahl. Fordern Sie jetzt Ihr individuelles, kostenloses Angebot an.</p>
+
+                    <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 border border-white/10 rounded-2xl p-6 my-6 shadow-xl">
+                        <p className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-2">Geschätzte Investition</p>
+                        <div className="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+                            {quote.minPrice}€ <span className="text-zinc-500 text-2xl font-normal">-</span> {quote.maxPrice}€<span className="text-lg text-zinc-400 align-top ml-1">*</span>
+                        </div>
+                        <p className="text-xs text-zinc-500 mt-2">*Der finale Preis richtet sich nach dem genauen Zustand bei Besichtigung.</p>
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-2 mb-8 bg-zinc-950/40 p-2 rounded-2xl border border-white/5 shadow-inner">
@@ -247,8 +254,13 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
                     </div>
                 )}
 
+                <div className="text-center mb-6">
+                    <p className="text-white font-bold text-lg mb-2">Sichere dir jetzt dein exaktes Angebot</p>
+                    <p className="text-zinc-400 text-sm mb-4">Schick uns einfach eine WhatsApp – wir melden uns direkt mit einem verbindlichen Preis und Termin bei dir.</p>
+                </div>
+
                 <WhatsAppButton message={message} />
-                <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
+                <div className="text-center text-zinc-600 text-sm font-medium mt-4">Oder nutze das Formular unten</div>
             </div>
         </div>
     );
@@ -297,7 +309,8 @@ export default function PriceCalculator() {
 
     useEffect(() => {
         if (isExpanded) {
-            trackEvent('calculator_step', { step });
+            // Fix tracking for Step 0.5 to show up as step: 0.5 (or "0.5") properly
+            trackEvent('calculator_step', { step: step.toString() });
 
             // Focus management
             if (stepTitleRef.current) {
@@ -634,14 +647,13 @@ export default function PriceCalculator() {
                                     </div>
                                     <div className="flex flex-col gap-1.5 mb-2">
                                         <label htmlFor="phone-input" className="text-sm font-bold text-zinc-300 ml-1">
-                                            Telefonnummer (für Rückfragen/Termin) <span className="text-red-500">*</span>
+                                            Telefonnummer (optional für Rückfragen/Termin)
                                         </label>
                                         <input
                                             id="phone-input"
                                             type="tel"
-                                            required
                                             autoComplete="tel"
-                                            placeholder="0123 456789"
+                                            placeholder="0123 456789 (Optional)"
                                             className="w-full bg-zinc-950/50 border border-white/10 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 disabled:opacity-50 transition-all placeholder:text-zinc-600 text-lg"
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value)}

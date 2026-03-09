@@ -258,11 +258,20 @@ const faqSchema = {
     }
   }))
 };
+
+const optimizedHero = await getImage({
+    src: heroImage,
+    format: 'avif',
+    width: 640,
+    quality: 60,
+});
+
 ---
 
 <Layout
     title="Fahrzeugaufbereitung & Keramikversiegelung Schleswig-Holstein"
     description="High-End Fahrzeugaufbereitung & Autoaufbereitung in Schleswig-Holstein. Profi für Innenraumreinigung, Keramikversiegelung & Auto polieren lassen. Jetzt Preis berechnen!"
+    preloadImage={optimizedHero.src}
     schema={[
         howToSchema,
         faqSchema,
