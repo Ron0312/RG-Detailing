@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -15,12 +11,29 @@ function sign(data: string): string {
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies the username and password against the configured credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
+    let expectedUsername = import.meta.env.ADMIN_USERNAME;
+    let expectedPasswordHash = import.meta.env.ADMIN_PASSWORD;
+
+    if (!expectedUsername || !expectedPasswordHash) {
+        if (import.meta.env.DEV) {
+            expectedUsername = 'admin';
+            expectedPasswordHash = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // SHA-256 of 'password'
+        } else {
+            return false;
+        }
+    }
+
+    if (username !== expectedUsername) return false;
     const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+
+    const hashBuf = Buffer.from(hash);
+    const expectedBuf = Buffer.from(expectedPasswordHash);
+
+    if (hashBuf.length !== expectedBuf.length) return false;
+    return timingSafeEqual(hashBuf, expectedBuf);
 }
 
 /**

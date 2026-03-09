@@ -2,16 +2,35 @@ import { describe, it, expect, vi } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
-        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+    it('should verify correct credentials in dev fallback', () => {
+        vi.stubEnv('DEV', 'true');
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+        vi.stubEnv('DEV', 'true');
+        expect(verifyCredentials('Admin', 'password')).toBe(false);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+        vi.stubEnv('DEV', 'true');
+        expect(verifyCredentials('admin', 'wrongpassword')).toBe(false);
+        vi.unstubAllEnvs();
+    });
+
+    it('should verify correct credentials with environment variables', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'customadmin');
+        vi.stubEnv('ADMIN_PASSWORD', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'); // SHA-256 of 'password'
+        expect(verifyCredentials('customadmin', 'password')).toBe(true);
+        vi.unstubAllEnvs();
+    });
+
+    it('should fail closed when not in dev mode without environment variables', () => {
+        vi.stubEnv('DEV', '');
+        expect(verifyCredentials('admin', 'password')).toBe(false);
+        vi.unstubAllEnvs();
     });
 
     it('should authenticate with valid session cookie', () => {
