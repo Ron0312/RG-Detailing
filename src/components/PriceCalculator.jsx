@@ -56,14 +56,18 @@ const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Ico
             </div>
         )}
 
-        <div className="flex items-start justify-between mb-4 relative z-10">
-            <div className={`font-bold text-xl tracking-tight transition-colors flex items-center gap-3 ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
-                {Icon && <Icon className={`w-6 h-6 ${active ? 'text-red-500' : 'text-zinc-500 group-hover:text-red-400'} transition-colors`} />}
+        <div className="flex flex-col items-start gap-4 mb-4 relative z-10">
+            {Icon && (
+                <div className={`shrink-0 transition-colors duration-500 ${active ? 'text-red-500' : 'text-zinc-500 group-hover:text-red-400'}`}>
+                    <Icon className="w-8 h-8 md:w-10 md:h-10" />
+                </div>
+            )}
+            <div className={`font-bold text-xl md:text-2xl tracking-tight transition-colors ${active ? 'text-red-400' : 'text-white group-hover:text-red-400'}`}>
                 {title}
             </div>
         </div>
 
-        <div className="text-zinc-400 text-base md:text-sm leading-relaxed mb-6 flex-grow relative z-10 font-medium">{desc}</div>
+        <div className="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 flex-grow relative z-10 font-medium">{desc}</div>
 
         {price && (
             <div className={`mt-auto pt-4 border-t transition-colors ${active ? 'border-red-500/20' : 'border-white/5 group-hover:border-white/10'} flex justify-between items-center relative z-10`}>
@@ -89,21 +93,21 @@ const WhatsAppButton = ({ message }) => (
 
 // New Teaser Component
 const Teaser = ({ onStart }) => (
-    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border-2 border-red-500/50 bg-gradient-to-br from-red-900/30 to-black p-8 md:p-14 text-center group cursor-pointer hover:border-red-500 transition-all shadow-[0_0_40px_rgba(220,38,38,0.15)] hover:shadow-[0_0_60px_rgba(220,38,38,0.3)] animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/20 via-transparent to-transparent opacity-60"></div>
+    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-14 text-center group cursor-pointer hover:border-red-500/50 transition-all shadow-[0_0_40px_rgba(220,38,38,0.1)] hover:shadow-[0_0_60px_rgba(220,38,38,0.2)] animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-60"></div>
 
         <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/20 text-red-500 mb-8 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_40px_rgba(220,38,38,0.4)] animate-pulse">
+             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/10 text-red-500 mb-8 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
                 <Calculator size={40} />
             </div>
-            <h3 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Dein individueller Preis</h3>
-            <p className="text-zinc-300 mb-10 text-lg md:text-xl leading-relaxed">
+            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Dein individueller Preis</h3>
+            <p className="text-zinc-400 mb-10 text-lg md:text-xl leading-relaxed">
                 Finde in nur 3 Klicks heraus, was die Aufbereitung für dein Fahrzeug kostet. 100% kostenlos und unverbindlich.
             </p>
             <div
-                className="inline-flex items-center gap-3 px-12 py-5 bg-red-600 text-white rounded-2xl font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.5)] text-xl group-hover:bg-red-500 group-hover:scale-105 group-hover:-translate-y-1 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
+                className="inline-flex items-center gap-3 px-10 py-4 bg-red-600 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] text-lg group-hover:bg-red-500 group-hover:scale-105 group-hover:-translate-y-1 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
             >
-                <Sparkles size={28} className="animate-pulse" />
+                <Sparkles size={24} />
                 Preis berechnen (3 Klicks)
             </div>
         </div>
@@ -557,7 +561,7 @@ export default function PriceCalculator() {
                             <StepSubtitle>Wie würden Sie den aktuellen Zustand beschreiben?</StepSubtitle>
                             <div role="radiogroup" aria-labelledby="step-condition-title" className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                                  {Object.entries(config.conditions).map(([key, cond]) => {
-                                    const iconMap = { good: Eye, normal: Droplets, heavy: Hammer };
+                                    const iconMap = { good: Eye, normal: Droplets, bad: Hammer };
                                     return (
                                         <Card
                                             key={key}
