@@ -2,16 +2,18 @@ import { describe, it, expect, vi } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
-        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+    it('should verify correct credentials (development fallback)', () => {
+        // In the test environment, import.meta.env.DEV is true and no credentials are set,
+        // so it falls back to 'admin' / 'password'.
+        expect(verifyCredentials('admin', 'password')).toBe(true);
     });
 
     it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+        expect(verifyCredentials('wrongadmin', 'password')).toBe(false);
     });
 
     it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+        expect(verifyCredentials('admin', 'wrongpassword')).toBe(false);
     });
 
     it('should authenticate with valid session cookie', () => {
