@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -18,9 +14,32 @@ function sign(data: string): string {
  * Verifies the username and password against the hardcoded credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    // Determine the expected username and password based on environment
+    let expectedUsername = import.meta.env.ADMIN_USERNAME;
+    let expectedPassword = import.meta.env.ADMIN_PASSWORD;
+
+    // Fallback to defaults only in development mode
+    if (import.meta.env.DEV) {
+        if (!expectedUsername) expectedUsername = 'admin';
+        if (!expectedPassword) expectedPassword = 'password';
+    }
+
+    // Fail-closed policy: if no credentials are set, reject all logins
+    if (!expectedUsername || !expectedPassword) {
+        return false;
+    }
+
+    if (username !== expectedUsername) return false;
+
+    // Compare hashes of both passwords using timingSafeEqual to prevent timing attacks
+    const inputHash = createHash('sha256').update(password).digest();
+    const expectedHash = createHash('sha256').update(expectedPassword).digest();
+
+    if (inputHash.length !== expectedHash.length) {
+        return false;
+    }
+
+    return timingSafeEqual(inputHash, expectedHash);
 }
 
 /**
