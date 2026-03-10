@@ -126,8 +126,22 @@
       let maxScrollY = 0;
       let reEngagementTracked = false;
 
+      // ⚡ Bolt: Cache layout properties to prevent layout thrashing on scroll
+      let cachedScrollHeight = 0;
+      const updateDimensions = () => {
+          cachedScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      };
+
+      // Initialize and observe dimension changes
+      updateDimensions();
+      window.addEventListener('resize', updateDimensions, { passive: true });
+      if ('ResizeObserver' in window) {
+          new ResizeObserver(updateDimensions).observe(document.body);
+      }
+
       const handleScroll = () => {
-          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+          // ⚡ Bolt: Use cached scrollHeight to avoid synchronous reflows
+          const scrollHeight = cachedScrollHeight > 0 ? cachedScrollHeight : 1;
           const scrolled = window.scrollY;
           const percentage = Math.round((scrolled / scrollHeight) * 100);
 
