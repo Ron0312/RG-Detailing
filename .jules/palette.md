@@ -10,3 +10,6 @@
 ## 2025-03-09 - Added aria-valuetext to BeforeAfterSlider
 **Learning:** Adding custom screen-reader-only (`sr-only`) text to explain standard keyboard interactions (like using arrow keys on a `role="slider"`) is an accessibility anti-pattern. Screen readers natively announce how to interact with standard ARIA roles. However, `aria-valuetext` is extremely useful alongside `aria-valuenow` to explicitly communicate the semantic meaning of the slider number to screen readers (e.g., explaining that "50" means "50% Vorher sichtbar").
 **Action:** Use `aria-valuetext` to give semantic context to numbers in sliders, but avoid redundantly explaining basic keyboard controls for standard ARIA roles like `slider`.
+## 2025-03-09 - Accessible ExpandableText
+**Learning:** Found that the 'Mehr erfahren' expand/collapse button in ExpandableText.jsx lacked the semantic `type="button"` and `focus-visible` styles, which makes keyboard navigation harder.
+**Action:** Ensure all interactive text expander buttons use `type="button"` to prevent form submissions and include `focus-visible` Tailwind classes to maintain a clear focus state for keyboard accessibility.
