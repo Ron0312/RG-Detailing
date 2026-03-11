@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -15,12 +11,49 @@ function sign(data: string): string {
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Gets an environment variable securely across both Node (runtime) and Astro (build-time) environments.
+ */
+function getEnv(key: string): string | undefined {
+    if (typeof process !== 'undefined' && process.env[key]) {
+        return process.env[key];
+    }
+    // Static property access required by Vite
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+        if (key === 'ADMIN_USERNAME') return import.meta.env.ADMIN_USERNAME;
+        if (key === 'ADMIN_PASSWORD') return import.meta.env.ADMIN_PASSWORD;
+    }
+    return undefined;
+}
+
+/**
+ * Verifies the username and password against configured credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
+    const expectedUsername = getEnv('ADMIN_USERNAME');
+    const expectedPasswordHash = getEnv('ADMIN_PASSWORD');
+
+    if (!expectedUsername || !expectedPasswordHash) {
+        // Enforce fail-closed policy if env vars are missing
+        if (import.meta.env.DEV) {
+            // Default to 'admin'/'password' in development only if missing
+            // SHA-256 of "password"
+            const devPasswordHash = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+            if (username !== 'admin') return false;
+            const hash = createHash('sha256').update(password).digest('hex');
+            return hash === devPasswordHash;
+        }
+        return false;
+    }
+
+    if (username !== expectedUsername) return false;
+
     const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    const hashBuf = Buffer.from(hash);
+    const expectedHashBuf = Buffer.from(expectedPasswordHash);
+
+    if (hashBuf.length !== expectedHashBuf.length) return false;
+
+    return timingSafeEqual(hashBuf, expectedHashBuf);
 }
 
 /**
