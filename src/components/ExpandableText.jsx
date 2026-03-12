@@ -28,8 +28,9 @@ export default function ExpandableText({ children, initialHeight = 160 }) {
 
       {shouldShowButton && (
         <button
+            type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-6 flex items-center gap-2 text-red-500 hover:text-red-400 font-bold text-sm tracking-widest uppercase group transition-colors"
+            className="mt-6 flex items-center gap-2 text-red-500 hover:text-red-400 font-bold text-sm tracking-widest uppercase group transition-colors focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded"
             aria-expanded={isExpanded}
         >
             <span>{isExpanded ? 'Weniger anzeigen' : 'Mehr erfahren'}</span>
