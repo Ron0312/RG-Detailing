@@ -1,7 +1,18 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
+    // Tests are expecting specific username and password, we can mock process.env for these cases
+    // if verifyCredentials relies on environment variables now. We'll set these up explicitly.
+    beforeEach(() => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+    });
+
     it('should verify correct credentials', () => {
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
     });
