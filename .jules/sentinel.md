@@ -7,3 +7,7 @@
 **Vulnerability:** The API endpoint `submit-quote.ts` contained a hardcoded fallback API key for Web3Forms.
 **Learning:** Storing secrets in source code, even as "fallbacks" or public keys, is a security risk as it exposes credentials to anyone with read access to the repository, potentially leading to unauthorized API usage or data breaches.
 **Prevention:** Always use environment variables for API keys and secrets, prioritizing `process.env` (runtime) and `import.meta.env` (build time).
+## 2025-03-05 - [Hardcoded Admin Credentials]
+**Vulnerability:** The authentication module `src/lib/auth.ts` had a hardcoded username ('Ronni') and a hardcoded SHA-256 hash for the password ('Remo!123#').
+**Learning:** Hardcoded credentials in source code allow anyone with read access to the repository to discover admin login credentials.
+**Prevention:** Always rely on securely injected environment variables for sensitive credentials (e.g. `import.meta.env.ADMIN_USERNAME` and `ADMIN_PASSWORD`), employing a strict fail-closed policy when these variables are missing in production.
