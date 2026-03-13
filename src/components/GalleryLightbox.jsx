@@ -63,6 +63,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {categories.map(cat => (
             <button
+              type="button"
               key={cat}
               onClick={() => handleFilterChange(cat)}
               aria-pressed={filter === cat}
@@ -111,6 +112,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
       {hasMore && (
           <div className="mt-8 text-center">
               <button
+                type="button"
                 onClick={showMore}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900/80 border border-white/10 text-white font-bold hover:bg-zinc-800 transition-colors shadow-lg focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
               >

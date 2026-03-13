@@ -102,6 +102,7 @@ export default function WhyUs() {
                 >
                     {items.map((_, index) => (
                         <button
+                            type="button"
                             key={index}
                             onClick={() => scrollToSlide(index)}
                             aria-label={`Gehe zu Slide ${index + 1}`}
