@@ -542,6 +542,7 @@ export default function PriceCalculator() {
                                 </div>
 
                                 <button
+                                    type="button"
                                     onClick={handleCamperConfirm}
                                     className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(220,38,38,0.3)] hover:shadow-[0_15px_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-3 transform hover:-translate-y-1 active:scale-95"
                                 >
@@ -808,7 +809,7 @@ export default function PriceCalculator() {
                                 </a>
                             </div>
 
-                            <button onClick={reset} className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10 font-bold uppercase tracking-wider text-sm hover:border-white/20 active:scale-95 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900">
+                            <button type="button" onClick={reset} className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10 font-bold uppercase tracking-wider text-sm hover:border-white/20 active:scale-95 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900">
                                 Neue Berechnung
                             </button>
                         </div>

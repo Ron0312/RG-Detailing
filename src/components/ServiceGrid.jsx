@@ -127,6 +127,7 @@ export default function ServiceGrid({ services }) {
             <div className="flex flex-wrap justify-center gap-2 mb-12">
                 {categories.map((category) => (
                     <button
+                        type="button"
                         key={category}
                         onClick={() => setActiveCategory(category)}
                         aria-pressed={activeCategory === category}
@@ -163,6 +164,7 @@ export default function ServiceGrid({ services }) {
             <div className="flex md:hidden justify-center gap-3 mt-4" aria-label="Karussell Navigation">
                 {filteredServices.map((_, index) => (
                     <button
+                        type="button"
                         key={index}
                         onClick={() => scrollToCard(index)}
                         aria-label={`Gehe zu Karte ${index + 1}`}
