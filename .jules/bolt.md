@@ -6,3 +6,6 @@
 ## 2023-10-27 - Preventing Layout Thrashing in Scroll Listeners
 **Learning:** In highly interactive components like `ScrollProgress.jsx`, reading layout properties like `scrollHeight` and `clientHeight` directly inside a `scroll` event handler forces the browser to recalculate layout (reflow), even if wrapped in `requestAnimationFrame`. This leads to significant performance degradation (layout thrashing) on scroll.
 **Action:** Use a `useRef` to cache static or slow-changing dimensions. Update these cached values only during initial render, window `resize` events, or by using a `ResizeObserver` on the target element. Keep the `scroll` event handler lean by reading only the fast `scrollTop` property and pairing event listeners with `{ passive: true }`.
+## 2025-02-28 - [PageTracker Scroll Thrashing]
+**Learning:** In highly interactive scripts like `PageTracker.astro`, reading layout properties like `scrollHeight` directly inside a `scroll` event handler forces synchronous layout recalculation (reflow) on every scroll frame, causing layout thrashing.
+**Action:** Always cache slow-changing dimensions like `scrollHeight` in a variable outside the scroll handler, and update it using a `ResizeObserver` or window `resize` event, keeping the scroll event lean.
