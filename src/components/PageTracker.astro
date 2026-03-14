@@ -125,11 +125,26 @@
       let lastScrollY = 0;
       let maxScrollY = 0;
       let reEngagementTracked = false;
+      let cachedScrollHeight = 0;
+
+      // ⚡ Bolt Optimization: Cache layout properties to prevent layout thrashing on scroll
+      const updateScrollHeight = () => {
+          cachedScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      };
+
+      // Initial calculation
+      updateScrollHeight();
+
+      // Update on resize
+      window.addEventListener('resize', updateScrollHeight, { passive: true });
+      if ('ResizeObserver' in window) {
+          const observer = new ResizeObserver(updateScrollHeight);
+          observer.observe(document.body);
+      }
 
       const handleScroll = () => {
-          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
           const scrolled = window.scrollY;
-          const percentage = Math.round((scrolled / scrollHeight) * 100);
+          const percentage = cachedScrollHeight > 0 ? Math.round((scrolled / cachedScrollHeight) * 100) : 0;
 
           // Track Depth
           thresholds.forEach(t => {
