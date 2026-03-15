@@ -93,7 +93,9 @@ try {
 
 // Aggregation
 const totalEvents = events.length;
-const totalPageViews = events.filter(e => e.event === 'page_view').length;
+// OPTIMIZATION: Moved totalPageViews and totalUniqueVisitors into the main loop to avoid O(N) traversals and intermediate array allocations.
+let totalPageViews = 0;
+const uniqueVisitorSet = new Set();
 const eventsByName: Record<string, number> = {};
 const services: Record<string, number> = {};
 const galleryFilters: Record<string, number> = {};
@@ -143,6 +145,10 @@ interface Session {
 const sessions: Record<string, Session> = {};
 
 events.forEach(e => {
+    if (e.event === 'page_view') totalPageViews++;
+    const uniqueId = e.visitorId || e.dailyHash || e.sessionId;
+    if (uniqueId) uniqueVisitorSet.add(uniqueId);
+
     // Date Key (YYYY-MM-DD)
     const dObj = new Date(e.timestamp);
     const dateKey = e.timestamp.split('T')[0];
@@ -297,7 +303,7 @@ const chartData = sortedDates.map(date => ({
     visitors: history[date].visitors.size
 }));
 
-const totalUniqueVisitors = new Set(events.map(e => e.visitorId || e.dailyHash || e.sessionId).filter(Boolean)).size;
+const totalUniqueVisitors = uniqueVisitorSet.size;
 const liveUserCount = liveUsers.size;
 
 // Session Aggregations
