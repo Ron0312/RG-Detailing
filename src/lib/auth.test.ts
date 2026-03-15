@@ -1,7 +1,17 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
+    beforeEach(() => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
+        vi.stubEnv('VITE_DEV', 'false');
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+    });
+
     it('should verify correct credentials', () => {
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
     });
@@ -12,6 +22,19 @@ describe('Auth Library', () => {
 
     it('should reject incorrect password', () => {
         expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+    });
+
+    it('should use dev fallback if no env vars set and in dev mode', () => {
+        vi.unstubAllEnvs();
+        vi.stubEnv('VITE_DEV', 'true');
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(false);
+    });
+
+    it('should fail closed if no env vars set and not in dev mode', () => {
+        vi.unstubAllEnvs();
+        vi.stubEnv('VITE_DEV', 'false');
+        expect(verifyCredentials('admin', 'password')).toBe(false);
     });
 
     it('should authenticate with valid session cookie', () => {

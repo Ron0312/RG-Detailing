@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -18,9 +14,56 @@ function sign(data: string): string {
  * Verifies the username and password against the hardcoded credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    // Check for dev mode via explicit process.env / import.meta.env
+    // to handle variations in Astro/Vite testing environments
+    let isDev = false;
+    if (typeof process !== 'undefined' && process.env.VITE_DEV === 'true') {
+        isDev = true;
+    } else if (typeof process !== 'undefined' && process.env.VITE_DEV === 'false') {
+        isDev = false;
+    } else if (typeof import.meta !== 'undefined' && import.meta.env) {
+        if (import.meta.env.VITE_DEV === 'true') isDev = true;
+        else if (import.meta.env.VITE_DEV === 'false') isDev = false;
+        else {
+            if (import.meta.env.DEV === true || import.meta.env.DEV === 'true') isDev = true;
+            if (import.meta.env.MODE === 'development') isDev = true;
+        }
+    }
+
+    let expectedUsername = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.ADMIN_USERNAME : undefined;
+    if (!expectedUsername && typeof process !== 'undefined') expectedUsername = process.env.ADMIN_USERNAME;
+
+    let expectedPassword = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.ADMIN_PASSWORD : undefined;
+    if (!expectedPassword && typeof process !== 'undefined') expectedPassword = process.env.ADMIN_PASSWORD;
+
+    if ((!expectedUsername || !expectedPassword) && isDev) {
+        expectedUsername = 'admin';
+        expectedPassword = 'password';
+    }
+
+    if (!expectedUsername || !expectedPassword) {
+        return false; // Fail closed
+    }
+
+    // Compare username with timing-safe equal
+    const usernameBuf = Buffer.from(username);
+    const expectedUsernameBuf = Buffer.from(expectedUsername);
+    if (usernameBuf.length !== expectedUsernameBuf.length || !timingSafeEqual(usernameBuf, expectedUsernameBuf)) {
+        return false;
+    }
+
+    // Compare password hash with timing-safe equal
+    const inputHash = createHash('sha256').update(password).digest('hex');
+    const expectedHash = createHash('sha256').update(expectedPassword).digest('hex');
+
+    const inputHashBuf = Buffer.from(inputHash);
+    const expectedHashBuf = Buffer.from(expectedHash);
+
+    if (inputHashBuf.length !== expectedHashBuf.length || !timingSafeEqual(inputHashBuf, expectedHashBuf)) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
