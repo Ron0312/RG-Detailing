@@ -128,6 +128,8 @@ let timeOnPageCount = 0;
 const history: Record<string, { views: number; visitors: Set<string> }> = {};
 // Live Data
 const liveUsers = new Set<string>();
+// Unique Visitors Tracking Optimization
+const allUniqueVisitors = new Set<string>();
 
 // Session Analysis
 interface Session {
@@ -143,6 +145,10 @@ interface Session {
 const sessions: Record<string, Session> = {};
 
 events.forEach(e => {
+    // Track Unique Visitors globally without O(N) map/filter
+    const globalUniqueId = e.visitorId || e.dailyHash || e.sessionId;
+    if (globalUniqueId) allUniqueVisitors.add(globalUniqueId);
+
     // Date Key (YYYY-MM-DD)
     const dObj = new Date(e.timestamp);
     const dateKey = e.timestamp.split('T')[0];
@@ -297,7 +303,7 @@ const chartData = sortedDates.map(date => ({
     visitors: history[date].visitors.size
 }));
 
-const totalUniqueVisitors = new Set(events.map(e => e.visitorId || e.dailyHash || e.sessionId).filter(Boolean)).size;
+const totalUniqueVisitors = allUniqueVisitors.size;
 const liveUserCount = liveUsers.size;
 
 // Session Aggregations
