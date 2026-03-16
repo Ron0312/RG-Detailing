@@ -2,16 +2,33 @@ import { describe, it, expect, vi } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
-        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+    it('should verify correct credentials from env', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'customAdmin');
+        vi.stubEnv('ADMIN_PASSWORD', 'superSecurePass');
+
+        expect(verifyCredentials('customAdmin', 'superSecurePass')).toBe(true);
+        expect(verifyCredentials('customAdmin', 'wrongpassword')).toBe(false);
+        expect(verifyCredentials('wrongAdmin', 'superSecurePass')).toBe(false);
+
+        vi.unstubAllEnvs();
     });
 
-    it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+    it('should default to admin/password in dev mode when missing env vars', () => {
+        vi.stubEnv('VITE_DEV', 'true');
+
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+        expect(verifyCredentials('admin', 'wrongpass')).toBe(false);
+
+        vi.unstubAllEnvs();
     });
 
-    it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+    it('should fail-closed in production mode when missing env vars', () => {
+        vi.stubEnv('VITE_DEV', 'false');
+        vi.stubEnv('VITE_PROD', 'true'); // Used to override the vitest meta env config in our logic
+
+        expect(verifyCredentials('admin', 'password')).toBe(false);
+
+        vi.unstubAllEnvs();
     });
 
     it('should authenticate with valid session cookie', () => {

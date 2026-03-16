@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -15,12 +11,45 @@ function sign(data: string): string {
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies the username and password against securely configured credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    const getEnv = (key: string) => {
+        if (typeof process !== 'undefined' && process.env[key]) {
+            return process.env[key];
+        }
+        if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+            return import.meta.env[key];
+        }
+        return undefined;
+    };
+
+    let expectedUsername = getEnv('ADMIN_USERNAME');
+    let expectedPassword = getEnv('ADMIN_PASSWORD');
+
+    // Default to admin/password in DEV mode ONLY
+    // Since Vitest runs in 'test' mode, we need to carefully handle `import.meta.env.MODE`
+    // Ensure that it only falls back to true if VITE_PROD is not explicitly true.
+    const isDev = getEnv('VITE_DEV') === 'true' ||
+                  (getEnv('VITE_PROD') !== 'true' && typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.DEV === true || import.meta.env.DEV === 'true' || import.meta.env.MODE === 'development'));
+
+    if (!expectedUsername || !expectedPassword) {
+        if (isDev) {
+            expectedUsername = 'admin';
+            expectedPassword = 'password';
+        } else {
+            // Fail-closed in production
+            return false;
+        }
+    }
+
+    if (username !== expectedUsername) return false;
+
+    // Securely compare the hashes to prevent timing attacks
+    const expectedHashBuf = Buffer.from(createHash('sha256').update(expectedPassword).digest('hex'));
+    const actualHashBuf = Buffer.from(createHash('sha256').update(password).digest('hex'));
+
+    return expectedHashBuf.length === actualHashBuf.length && timingSafeEqual(expectedHashBuf, actualHashBuf);
 }
 
 /**
