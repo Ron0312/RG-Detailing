@@ -43,10 +43,13 @@ import glossbossLogo from '../assets/glossboss-autopflege-zubehoer-logo.webp';
 
 export const prerender = true;
 
-const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif', width: 1024});
-const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif', width: 1024});
-const beforeMobile = await getImage({src: wohnmobilBefore, format: 'avif', width: 600});
-const afterMobile = await getImage({src: wohnmobilAfter, format: 'avif', width: 600});
+const [optimizedBefore, optimizedAfter, beforeMobile, afterMobile, optimizedHero] = await Promise.all([
+    getImage({src: wohnmobilBefore, format: 'avif', width: 1024}),
+    getImage({src: wohnmobilAfter, format: 'avif', width: 1024}),
+    getImage({src: wohnmobilBefore, format: 'avif', width: 600}),
+    getImage({src: wohnmobilAfter, format: 'avif', width: 600}),
+    getImage({src: heroImage, format: 'avif', width: 640, quality: 60})
+]);
 
 const beforeSrcSet = `${beforeMobile.src} 600w, ${optimizedBefore.src} 1024w`;
 const afterSrcSet = `${afterMobile.src} 600w, ${optimizedAfter.src} 1024w`;
@@ -258,13 +261,6 @@ const faqSchema = {
     }
   }))
 };
-
-const optimizedHero = await getImage({
-    src: heroImage,
-    format: 'avif',
-    width: 640,
-    quality: 60,
-});
 
 ---
 
