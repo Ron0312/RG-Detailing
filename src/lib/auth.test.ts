@@ -2,16 +2,42 @@ import { describe, it, expect, vi } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
+    it('should verify correct credentials from environment variables', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect username', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+        vi.unstubAllEnvs();
     });
 
     it('should reject incorrect password', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'Ronni');
+        vi.stubEnv('ADMIN_PASSWORD', 'Remo!123#');
         expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+        vi.unstubAllEnvs();
+    });
+
+    it('should fail closed in production if credentials missing', () => {
+        vi.stubEnv('VITE_DEV', 'false');
+        // Make sure import.meta.env is not overriding
+        vi.stubEnv('MODE', 'production');
+        // Also stub DEV from import.meta.env if possible, but testing via MODE is safer
+
+        // When not in dev mode and no credentials set, it should fail
+        expect(verifyCredentials('admin', 'password')).toBe(false);
+        vi.unstubAllEnvs();
+    });
+
+    it('should fallback to admin/password in dev mode if missing env vars', () => {
+        vi.stubEnv('VITE_DEV', 'true');
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+        vi.unstubAllEnvs();
     });
 
     it('should authenticate with valid session cookie', () => {
