@@ -1,17 +1,37 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
 
 describe('Auth Library', () => {
-    it('should verify correct credentials', () => {
-        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+    beforeEach(() => {
+        vi.unstubAllEnvs();
     });
 
-    it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+    it('should verify correct credentials from environment', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'adminuser');
+        vi.stubEnv('ADMIN_PASSWORD', 'securepass');
+        expect(verifyCredentials('adminuser', 'securepass')).toBe(true);
     });
 
-    it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+    it('should reject incorrect username with environment credentials', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'adminuser');
+        vi.stubEnv('ADMIN_PASSWORD', 'securepass');
+        expect(verifyCredentials('wronguser', 'securepass')).toBe(false);
+    });
+
+    it('should reject incorrect password with environment credentials', () => {
+        vi.stubEnv('ADMIN_USERNAME', 'adminuser');
+        vi.stubEnv('ADMIN_PASSWORD', 'securepass');
+        expect(verifyCredentials('adminuser', 'wrongpass')).toBe(false);
+    });
+
+    it('should fallback to default credentials in dev mode when env vars are unset', () => {
+        vi.stubEnv('VITE_DEV', 'true');
+        expect(verifyCredentials('admin', 'password')).toBe(true);
+    });
+
+    it('should fail closed in production when env vars are unset', () => {
+        vi.stubEnv('VITE_DEV', 'false');
+        expect(verifyCredentials('admin', 'password')).toBe(false);
     });
 
     it('should authenticate with valid session cookie', () => {

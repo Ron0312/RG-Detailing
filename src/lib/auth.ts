@@ -2,10 +2,6 @@ import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypt
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
-
 // Generate a random secret for signing session cookies.
 // In a real production app, this should persist or be in ENV to survive restarts.
 const SESSION_SECRET = randomBytes(32);
@@ -15,12 +11,51 @@ function sign(data: string): string {
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Helper to securely get env variables
+ */
+const getEnv = (key: string) => {
+    if (typeof process !== 'undefined' && process.env[key]) {
+        return process.env[key];
+    }
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+        return import.meta.env[key];
+    }
+    return undefined;
+};
+
+/**
+ * Verifies the username and password against environment credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    let expectedUsername = getEnv('ADMIN_USERNAME');
+    let expectedPassword = getEnv('ADMIN_PASSWORD');
+
+    // Vitest runs with MODE=test by default, which can cause import.meta.env.DEV to be true.
+    // If VITE_DEV is explicitly set to false, we should respect that over the default.
+    const isDev =
+        getEnv('VITE_DEV') === 'true' ||
+        getEnv('VITE_DEV') === true ||
+        ((getEnv('VITE_DEV') !== 'false' && getEnv('VITE_DEV') !== false) &&
+            ((typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV === true) ||
+            (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.MODE === 'development')));
+
+    if (!expectedUsername || !expectedPassword) {
+        if (isDev) {
+            expectedUsername = 'admin';
+            expectedPassword = 'password';
+        } else {
+            // Fail closed in production if no credentials configured
+            return false;
+        }
+    }
+
+    if (username !== expectedUsername) return false;
+
+    // Use timing-safe comparison to prevent timing attacks
+    const inputHash = createHash('sha256').update(password).digest();
+    const expectedHash = createHash('sha256').update(expectedPassword).digest();
+
+    return timingSafeEqual(inputHash, expectedHash);
 }
 
 /**
@@ -52,11 +87,13 @@ export function isAuthenticated(context: APIContext): boolean {
     const url = new URL(context.request.url);
     const key = url.searchParams.get('key') || context.request.headers.get('Authorization')?.replace('Bearer ', '');
 
-    const envSecret = import.meta.env.STATS_SECRET;
+    const envSecret = getEnv('STATS_SECRET');
     if (envSecret && key) {
-        const keyBuf = Buffer.from(key);
-        const secretBuf = Buffer.from(envSecret);
-        if (keyBuf.length === secretBuf.length && timingSafeEqual(keyBuf, secretBuf)) {
+        // Hash both to ensure identical buffer lengths (32 bytes)
+        // Prevents length-leakage attacks while using timingSafeEqual
+        const keyHash = createHash('sha256').update(key).digest();
+        const secretHash = createHash('sha256').update(envSecret).digest();
+        if (timingSafeEqual(keyHash, secretHash)) {
             return true;
         }
     }
