@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useId } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function ExpandableText({ children, initialHeight = 160 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef(null);
   const [shouldShowButton, setShouldShowButton] = useState(false);
+  const contentId = useId();
 
   useEffect(() => {
     if (contentRef.current && contentRef.current.scrollHeight > initialHeight) {
@@ -15,6 +16,7 @@ export default function ExpandableText({ children, initialHeight = 160 }) {
   return (
     <div className="relative">
       <div
+        id={contentId}
         className="overflow-hidden transition-[max-height] duration-700 ease-in-out relative"
         style={{ maxHeight: isExpanded ? `${contentRef.current?.scrollHeight + 40}px` : `${initialHeight}px` }}
         ref={contentRef}
@@ -28,9 +30,11 @@ export default function ExpandableText({ children, initialHeight = 160 }) {
 
       {shouldShowButton && (
         <button
+            type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-6 flex items-center gap-2 text-red-500 hover:text-red-400 font-bold text-sm tracking-widest uppercase group transition-colors"
+            className="mt-6 flex items-center gap-2 text-red-500 hover:text-red-400 font-bold text-sm tracking-widest uppercase group transition-colors focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 rounded-sm"
             aria-expanded={isExpanded}
+            aria-controls={contentId}
         >
             <span>{isExpanded ? 'Weniger anzeigen' : 'Mehr erfahren'}</span>
             {isExpanded ? (
