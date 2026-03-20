@@ -18,9 +18,16 @@ function sign(data: string): string {
  * Verifies the username and password against the hardcoded credentials.
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
-    const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    // Security: Prevent user enumeration via timing attacks by computing hashes
+    // regardless of whether the username is correct or not.
+    const isUsernameMatch = username === USERNAME;
+
+    const expectedHashBuf = Buffer.from(PASSWORD_HASH, 'hex');
+    const inputHashBuf = createHash('sha256').update(password).digest();
+
+    const isPasswordMatch = timingSafeEqual(inputHashBuf, expectedHashBuf);
+
+    return isUsernameMatch && isPasswordMatch;
 }
 
 /**
@@ -33,11 +40,13 @@ export function isAuthenticated(context: APIContext): boolean {
         const [payload, signature] = cookie.value.split('.');
         if (payload && signature) {
             const expectedSignature = sign(payload);
-            const signatureBuf = Buffer.from(signature);
-            const expectedBuf = Buffer.from(expectedSignature);
 
-            if (signatureBuf.length === expectedBuf.length &&
-                timingSafeEqual(signatureBuf, expectedBuf)) {
+            // Security: Hash both strings before timingSafeEqual to prevent length-leakage
+            // and guarantee identical buffer sizes (32 bytes for SHA-256).
+            const signatureHashBuf = createHash('sha256').update(signature).digest();
+            const expectedHashBuf = createHash('sha256').update(expectedSignature).digest();
+
+            if (timingSafeEqual(signatureHashBuf, expectedHashBuf)) {
                 // Check expiry timestamp in payload
                 const expiry = parseInt(payload.split(':')[1] || '0');
                 if (Date.now() < expiry) {
@@ -54,9 +63,11 @@ export function isAuthenticated(context: APIContext): boolean {
 
     const envSecret = import.meta.env.STATS_SECRET;
     if (envSecret && key) {
-        const keyBuf = Buffer.from(key);
-        const secretBuf = Buffer.from(envSecret);
-        if (keyBuf.length === secretBuf.length && timingSafeEqual(keyBuf, secretBuf)) {
+        // Security: Hash both strings before timingSafeEqual to prevent length-leakage
+        const keyHashBuf = createHash('sha256').update(key).digest();
+        const secretHashBuf = createHash('sha256').update(envSecret).digest();
+
+        if (timingSafeEqual(keyHashBuf, secretHashBuf)) {
             return true;
         }
     }
