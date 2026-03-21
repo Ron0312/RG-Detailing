@@ -7,3 +7,7 @@
 **Vulnerability:** The API endpoint `submit-quote.ts` contained a hardcoded fallback API key for Web3Forms.
 **Learning:** Storing secrets in source code, even as "fallbacks" or public keys, is a security risk as it exposes credentials to anyone with read access to the repository, potentially leading to unauthorized API usage or data breaches.
 **Prevention:** Always use environment variables for API keys and secrets, prioritizing `process.env` (runtime) and `import.meta.env` (build time).
+## 2025-03-05 - [CSV Injection (Formula Injection)]
+**Vulnerability:** The `/api/export-csv.ts` endpoint generated CSV files without escaping dangerous formula characters (`=`, `+`, `-`, `@`, `\t`, `\r`), allowing an attacker to inject executable formulas via analytics logs (e.g. `event`, `url`, `browser`, `os`).
+**Learning:** Even if data is properly enclosed in quotes, spreadsheet applications like Excel or LibreOffice will interpret fields starting with specific characters as executable code, leading to potentially severe Remote Code Execution (RCE) vulnerabilities.
+**Prevention:** When generating CSV files from untrusted user input, always prepend a single quote (`'`) to values that start with dangerous spreadsheet formula characters.
