@@ -90,6 +90,7 @@ export default function GalleryLightbox({ images, limit = 10 }) {
               className={`aspect-square bg-zinc-800 rounded-xl overflow-hidden group cursor-pointer relative animate-fade-in-up w-full p-0 border-0 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none ${isHiddenOnMobile ? 'hidden md:block' : ''}`}
               onClick={() => handleImageClick(i)}
               aria-label={`Bild vergrößern: ${image.alt || 'Galeriebild'}`}
+              title={`Bild vergrößern: ${image.alt || 'Galeriebild'}`}
             >
               <img
                 src={image.thumbnail || image.src}
