@@ -382,7 +382,7 @@ try {
 } catch (e) {}
 
 // SVG Chart Generator
-const maxVal = Math.max(...chartData.map(d => d.views), 10);
+const maxVal = chartData.reduce((max, d) => Math.max(max, d.views), 10);
 const chartHeight = 150;
 const chartWidth = 1000;
 const pointsViews = chartData.map((d, i) => {
