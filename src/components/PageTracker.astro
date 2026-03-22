@@ -156,11 +156,16 @@
           }
 
           lastScrollY = scrolled;
+
+          // ⚡ Bolt Optimization: Stop listening once all thresholds and re-engagement are tracked
+          if (tracked.size === thresholds.length && reEngagementTracked) {
+              window.removeEventListener('scroll', throttledScrollHandler);
+          }
       };
 
       // Throttle scroll event
       let ticking = false;
-      window.addEventListener('scroll', () => {
+      const throttledScrollHandler = () => {
           lastActivity = Date.now();
           if (!ticking) {
               window.requestAnimationFrame(() => {
@@ -169,6 +174,8 @@
               });
               ticking = true;
           }
-      }, { passive: true });
+      };
+
+      window.addEventListener('scroll', throttledScrollHandler, { passive: true });
   }
 </script>
