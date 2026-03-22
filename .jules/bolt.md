@@ -6,3 +6,7 @@
 ## 2023-10-27 - Preventing Layout Thrashing in Scroll Listeners
 **Learning:** In highly interactive components like `ScrollProgress.jsx`, reading layout properties like `scrollHeight` and `clientHeight` directly inside a `scroll` event handler forces the browser to recalculate layout (reflow), even if wrapped in `requestAnimationFrame`. This leads to significant performance degradation (layout thrashing) on scroll.
 **Action:** Use a `useRef` to cache static or slow-changing dimensions. Update these cached values only during initial render, window `resize` events, or by using a `ResizeObserver` on the target element. Keep the `scroll` event handler lean by reading only the fast `scrollTop` property and pairing event listeners with `{ passive: true }`.
+
+## 2026-03-05 - [Unnecessary Event Listeners]
+**Learning:** Continuous high-frequency events like `scroll` can execute repeatedly even when their purpose has been fulfilled (e.g. tracking thresholds in an analytics script). This consumes CPU cycles and can degrade mobile scrolling performance by continuously forcing `requestAnimationFrame`.
+**Action:** Always stop or remove event listeners as soon as they have completed their lifecycle or objective. Use named function references so you can call `window.removeEventListener` properly when the state indicates no further tracking is needed.
