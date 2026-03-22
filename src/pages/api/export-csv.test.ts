@@ -84,4 +84,29 @@ describe('GET /api/export-csv', () => {
         expect(row).toContain('"sess""2"""'); // Quotes escaped as double quotes
         // expect(row).toContain('"Hello\nWorld"'); // Newlines wrapped (might be tricky to match exactly depending on implementation details of JSON.stringify in the test vs code)
     });
+
+    it('prevents CSV injection', async () => {
+        (fs.access as any).mockResolvedValue(undefined);
+        const mockEvents = [
+            { timestamp: '2023-10-27T10:00:00.000Z', event: '=cmd|', url: '+cmd|', sessionId: '-cmd|', visitorId: '@cmd|', data: { device: '\tcmd|', referrer: '\rcmd|' }, browser: 'normal', os: '="cmd"' }
+        ];
+        (fs.readFile as any).mockResolvedValue(JSON.stringify(mockEvents[0]));
+
+        const req = new Request('http://localhost/api/export-csv?key=RG!123');
+        const context = { request: req, url: new URL('http://localhost/api/export-csv?key=RG!123'), cookies: { get: vi.fn() } };
+
+        const response = await GET(context as any);
+        const text = await response.text();
+        const row = text.split('\n')[1];
+
+        // Check formula injection prevention
+        expect(row).toContain("'=cmd|");
+        expect(row).toContain("'+cmd|");
+        expect(row).toContain("'-cmd|");
+        expect(row).toContain("'@cmd|");
+        expect(row).toContain("'\tcmd|");
+        expect(row).toContain("'\rcmd|");
+        expect(row).toContain("normal");
+        expect(row).toContain("'=\"\"cmd\"\"\"");
+    });
 });

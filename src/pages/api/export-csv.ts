@@ -7,7 +7,13 @@ import type { AnalyticsEvent } from '../../types/analytics';
 // CSV Escaping: Wrap in quotes if contains comma or quotes, and double quotes
 const escapeCsv = (str: string | undefined | null) => {
     if (str === null || str === undefined) return '';
-    const s = String(str);
+    let s = String(str);
+
+    // Prevent CSV Injection (Formula Injection)
+    if (/^[=+\-@\t\r]/.test(s)) {
+        s = "'" + s;
+    }
+
     if (s.includes('"') || s.includes(',') || s.includes('\n')) {
         return `"${s.replace(/"/g, '""')}"`;
     }
