@@ -392,7 +392,7 @@ export default function PriceCalculator() {
 
         // Track attempt immediately to debug potential drop-offs
         trackEvent('calculator_submit_attempt', {
-            step: STEPS.RESULT,
+            step: STEPS.RESULT.toString(),
             email_provided: !!email
         });
 
@@ -530,7 +530,7 @@ export default function PriceCalculator() {
                                         step="0.5"
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
-                                        onBlur={() => trackEvent('form_interaction', { field: 'camper_length', value: selections.camperLength })}
+                                        onBlur={() => trackEvent('form_interaction', { field: 'camper_length', value: selections.camperLength.toString() })}
                                         className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
