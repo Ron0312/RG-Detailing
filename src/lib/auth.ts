@@ -1,26 +1,71 @@
-import { createHash, randomBytes, createHmac, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes, createHmac, timingSafeEqual, scryptSync } from 'node:crypto';
 import { Buffer } from 'node:buffer';
 import type { APIContext } from 'astro';
 
-const USERNAME = 'Ronni';
-// SHA-256 of "Remo!123#"
-const PASSWORD_HASH = '61840eb1a5c8ab075562dfb1839f5f5a454a2a482af67438fe7cdaf9f41336ba';
+function getEnv(key: string): string | undefined {
+    if (typeof process !== 'undefined' && process.env[key]) {
+        return process.env[key];
+    }
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+        return import.meta.env[key] as string;
+    }
+    return undefined;
+}
 
-// Generate a random secret for signing session cookies.
-// In a real production app, this should persist or be in ENV to survive restarts.
-const SESSION_SECRET = randomBytes(32);
+// Session secret from ENV survives restarts; falls back to random (dev only).
+const SESSION_SECRET = (() => {
+    const envSecret = getEnv('SESSION_SECRET');
+    if (envSecret) return Buffer.from(envSecret, 'hex');
+    if (getEnv('PROD') || import.meta.env.PROD) {
+        console.warn('[auth] SESSION_SECRET not set — sessions will not survive restarts');
+    }
+    return randomBytes(32);
+})();
 
 function sign(data: string): string {
     return createHmac('sha256', SESSION_SECRET).update(data).digest('hex');
 }
 
 /**
- * Verifies the username and password against the hardcoded credentials.
+ * Verifies username and password.
+ * Supports two formats for ADMIN_PASSWORD_HASH:
+ *   - scrypt: "scrypt:<salt_hex>:<hash_hex>"
+ *   - sha256: plain 64-char hex string (legacy, not recommended)
  */
 export function verifyCredentials(username: string, password: string): boolean {
-    if (username !== USERNAME) return false;
+    const expectedUser = getEnv('ADMIN_USERNAME') || 'admin';
+    if (username !== expectedUser) return false;
+
+    const storedHash = getEnv('ADMIN_PASSWORD_HASH');
+    if (!storedHash) {
+        console.error('[auth] ADMIN_PASSWORD_HASH not set — login disabled');
+        return false;
+    }
+
+    if (storedHash.startsWith('scrypt:')) {
+        const parts = storedHash.split(':');
+        if (parts.length !== 3) return false;
+        const salt = Buffer.from(parts[1], 'hex');
+        const expected = Buffer.from(parts[2], 'hex');
+        const derived = scryptSync(password, salt, 64);
+        return derived.length === expected.length && timingSafeEqual(derived, expected);
+    }
+
+    // Legacy SHA-256 fallback (for migration)
     const hash = createHash('sha256').update(password).digest('hex');
-    return hash === PASSWORD_HASH;
+    const hashBuf = Buffer.from(hash);
+    const storedBuf = Buffer.from(storedHash);
+    return hashBuf.length === storedBuf.length && timingSafeEqual(hashBuf, storedBuf);
+}
+
+/**
+ * Generates a scrypt hash string for use in ADMIN_PASSWORD_HASH env var.
+ * Usage: node -e "import('./src/lib/auth.ts').then(m => console.log(m.hashPassword('mypassword')))"
+ */
+export function hashPassword(password: string): string {
+    const salt = randomBytes(16);
+    const hash = scryptSync(password, salt, 64);
+    return `scrypt:${salt.toString('hex')}:${hash.toString('hex')}`;
 }
 
 /**

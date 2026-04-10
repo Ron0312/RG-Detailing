@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GalleryLightbox from '../components/GalleryLightbox.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getImage } from 'astro:assets';
+
+import imgLack from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lackveredelung-01.png';
+import imgInnen2 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-02.jpg';
+import imgKeramik3 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramikversiegelung-03.jpg';
+import imgVorherNachher4 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-vorher-nachher-04.jpg';
+import imgDetailing5 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-detailing-05.jpg';
+import imgCoating6 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-coating-06.jpg';
+import imgCockpit7 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenreinigung-cockpit-07.jpg';
+import imgLack8 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-politur-08.jpg';
+import imgLack9 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-politur-09.jpg';
+import imgLack10 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-politur-10.jpg';
+import imgLack11 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-politur-11.jpg';
+import imgKeramikBremssattel12 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramik-bremssattel-12.jpg';
+import imgKeramikDetail13 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-keramik-detail-13.jpg';
+import imgInnenraumDetail14 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenraum-detail-14.jpg';
+import imgLackKratzer15 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-lack-kratzer-entfernung-15.jpg';
+import imgInnenraumDetail16 from '../assets/gallery/fahrzeugaufbereitung-tensfeld-innenraum-detail-16.jpg';
+
+export const prerender = true;
+
+const galleryRawImages = [
+  { src: imgInnenraumDetail16, alt: "Fahrzeugaufbereitung Tensfeld Innenraum Detailpflege und Lederpflege", category: "Innenraum", title: "Detailpflege Innenraum", description: "Porentiefe Reinigung und schonende Pflege hochwertiger Interieur-Materialien." },
+  { src: imgLackKratzer15, alt: "Lackkratzer Entfernung und Defektkorrektur Tensfeld", category: "Lack", title: "Kratzerentfernung & Lackkorrektur", description: "Entfernung tiefer Kratzer und Swirls für eine makellose Oberfläche." },
+  { src: imgKeramikDetail13, alt: "Keramikversiegelung Detailarbeit Tensfeld", category: "Keramik", title: "Präzisionsarbeit im Detail", description: "Sorgfältige Applikation der Keramikversiegelung für lückenlosen Schutz." },
+  { src: imgInnenraumDetail14, alt: "Alpine A110 Innenraum Fahrzeugaufbereitung Tensfeld", category: "Innenraum", title: "Alpine A110 Innenraum Veredelung", description: "Hochwertige Innenraumreinigung und Pflege für den exklusiven Alpine A110." },
+  { src: imgLack, alt: "Lackveredelung und Fahrzeugaufbereitung Ergebnis Tensfeld", category: "Lack", title: "Lackveredelung Tensfeld", description: "Hochwertige Fahrzeugaufbereitung für maximalen Glanz und Werterhalt." },
+  { src: imgInnen2, alt: "Professionelle Innenraumreinigung Vorher-Nachher", category: "Innenraum", title: "Innenraum Tiefenreinigung", description: "Professionelle Reinigung von Polstern, Teppichen und Oberflächen." },
+  { src: imgKeramik3, alt: "Keramikversiegelung Hochglanz Ergebnis Labocosmetica", category: "Keramik", title: "Labocosmetica Keramikversiegelung", description: "Extremer Tiefenglanz durch zertifizierte Labocosmetica Keramikversiegelung." },
+  { src: imgVorherNachher4, alt: "Fahrzeugaufbereitung Detailarbeit Ergebnis", category: "Keramik", title: "Lackveredelung vor Versiegelung", description: "Perfekte Vorbereitung des Lacks durch mehrstufige Politur." },
+  { src: imgDetailing5, alt: "Exklusives Detailing Ergebnis Schleswig-Holstein", category: "Keramik", title: "High-End Detailing", description: "Perfektes Finish und Lackveredelung für höchste Ansprüche." },
+  { src: imgCoating6, alt: "Professionelles Coating Anwendung", category: "Keramik", title: "Professionelle Coating Anwendung", description: "Fachgerechte Applikation der Keramikversiegelung." },
+  { src: imgCockpit7, alt: "Mercedes Cockpit Innenraumreinigung Detail", category: "Innenraum", title: "Cockpit & Lederpflege", description: "Schonende Reinigung empfindlicher Armaturen und Ledersitze." },
+  { src: imgLack8, alt: "Lackaufbereitung Detailaufnahme Glanz", category: "Lack", title: "Lackkorrektur im Detail", description: "Entfernung von feinen Kratzern und Swirls." },
+  { src: imgLack9, alt: "Hochglanz Politur Ergebnis", category: "Lack", title: "Spiegelglanz Politur", description: "Mehrstufige Politurverfahren bringen die wahre Farbtiefe zurück." },
+  { src: imgLack10, alt: "Fahrzeugaufbereitung Tensfeld Lackversiegelung", category: "Lack", title: "Lackschutz & Versiegelung", description: "Dauerhafter Schutz gegen Witterungseinflüsse." },
+  { src: imgLack11, alt: "Professionelle Lackpflege Vorher-Nachher Effekt", category: "Lack", title: "Vorher-Nachher Effekt", description: "Sichtbare Transformation durch professionelle Lackaufbereitung." },
+  { src: imgKeramikBremssattel12, alt: "Keramikversiegelung Bremssattel Detail", category: "Keramik", title: "Bremssattel Keramikversiegelung", description: "Hitzebeständige Versiegelung für Bremssättel." }
+];
+
+const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
+    const full = await getImage({ src: img.src, format: 'webp', width: 1280 });
+    const thumb = await getImage({ src: img.src, format: 'webp', width: 600 });
+    const thumbSmall = await getImage({ src: img.src, format: 'webp', width: 400 });
+    const thumbLarge = await getImage({ src: img.src, format: 'webp', width: 800 });
+    return {
+        src: full.src, thumbnail: thumb.src,
+        srcSet: `${thumbSmall.src} 400w, ${thumb.src} 600w, ${thumbLarge.src} 800w`,
+        alt: img.alt, category: img.category, title: img.title, description: img.description
+    };
+}));
+---
+
+<Layout
+    title="Galerie – Ergebnisse unserer Fahrzeugaufbereitung"
+    description="Überzeugen Sie sich selbst: Galerie mit Vorher-Nachher-Bildern unserer Lackkorrektur, Keramikversiegelung und Innenraumreinigung in Tensfeld."
+>
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4">
+            <Breadcrumbs crumbs={[{ label: "Startseite", href: "/" }, { label: "Galerie", href: "/galerie" }]} />
+
+            <div class="text-center mb-16">
+                <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Arbeit</span>
+                <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Ergebnisse aus unserer Werkstatt</h1>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
+                    Jedes Fahrzeug erzählt eine Geschichte. Hier sehen Sie eine Auswahl unserer Arbeiten – von der Innenraumreinigung bis zur High-End Keramikversiegelung.
+                </p>
+            </div>
+
+            <GalleryLightbox client:visible images={galleryImages} limit={50} />
+
+            <div class="text-center mt-16">
+                <a href="/#rechner" class="inline-flex items-center gap-2 px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-2xl font-bold transition-all hover:scale-105">
+                    Jetzt Preis berechnen
+                </a>
+            </div>
+        </div>
+    </main>
+</Layout>

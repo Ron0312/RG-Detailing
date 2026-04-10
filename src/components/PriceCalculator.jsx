@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, forwardRef, memo } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
-import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Lightbulb, Calculator, Car, Eye, Droplets, Hammer } from 'lucide-react';
+import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Calculator, Car, Eye, Droplets, Hammer } from 'lucide-react';
 
 const STEPS = {
     SIZE: 0,
@@ -163,7 +163,7 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
                 </div>
 
                 <WhatsAppButton message={message} />
-                <div className="text-center text-zinc-600 text-xs">Oder E-Mail unten nutzen</div>
+                <div className="text-center text-zinc-400 text-xs">Oder E-Mail unten nutzen</div>
             </div>
         )
     }
@@ -265,7 +265,13 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
                 </div>
 
                 <WhatsAppButton message={message} />
-                <div className="text-center text-zinc-600 text-sm font-medium mt-4">Oder nutze das Formular unten</div>
+                <div className="text-center text-zinc-400 text-sm font-medium mt-4">Oder nutze das Formular unten</div>
+
+                {/* Trust: Labocosmetica Zertifizierung */}
+                <div className="mt-6 flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-white/5 border border-white/5">
+                    <Shield className="w-5 h-5 text-red-500 shrink-0" />
+                    <span className="text-xs text-zinc-400 font-medium">Zertifizierter <span className="text-white font-bold">Labocosmetica</span> Detailer mit Herstellergarantie</span>
+                </div>
             </div>
         </div>
     );
@@ -298,9 +304,15 @@ export default function PriceCalculator() {
         const params = new URLSearchParams(window.location.search);
         const preselect = params.get('preselect');
 
-        // Check hash
+        // Check hash — skip teaser state when user clicked "Preis berechnen"
         if (window.location.hash === '#rechner') {
             setIsExpanded(true);
+            // Scroll into view after a short delay for DOM to settle
+            setTimeout(() => {
+                if (containerRef.current) {
+                    containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
         }
 
         if (preselect === 'camper') {
