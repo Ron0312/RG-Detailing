@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FAQ from '../components/FAQ.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+export const prerender = true;
+
+const faqItems = [
+  {
+    question: "Bieten Sie auch eine reine Innenraumreinigung an?",
+    answer: 'Nur in Kombination mit einer Außenwäsche. Wir legen Wert auf ein ganzheitliches Ergebnis – inklusive sauberer Türeinstiege, damit Ihr Fahrzeug nicht "halbfertig" aussieht.'
+  },
+  {
+    question: "Was kostet eine Fahrzeugaufbereitung / Auto polieren lassen?",
+    answer: 'Wenn Sie Ihr Auto polieren lassen wollen, hängt der Preis vom Zustand ab. Nutzen Sie unseren <a href="/#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Auto Komplettreinigung bis zum Full Detailing.'
+  },
+  {
+    question: "Machen Sie auch Motorwäsche?",
+    answer: "Ja, aber ausschließlich schonend mit Trockendampf. So gelangt nur minimale Feuchtigkeit an empfindliche Bauteile – für maximale Sicherheit."
+  },
+  {
+    question: "Wie lange muss mein Auto bei Ihnen bleiben?",
+    answer: "Je nach Paket zwischen 1 Tag (Innenraum/Basis) und 3-4 Tagen (Full Detailing mit Keramikversiegelung inkl. Aushärtezeit)."
+  },
+  {
+    question: "Warum bieten Sie keine mobile Autoreinigung an?",
+    answer: "Qualität braucht perfekte Bedingungen. In unserer Manufaktur in Tensfeld arbeiten wir unter speziellem Lack-Licht, staubfrei und temperaturkontrolliert. Eine solche Präzision ist bei Wind und Wetter bei einer mobilen Aufbereitung schlicht nicht möglich."
+  },
+  {
+    question: "Waschanlage oder Handwäsche?",
+    answer: "Ganz klar: Handwäsche. Selbst moderne Waschanlagen erzeugen mikroskopisch feine Kratzer (Swirls), die den Lack mit der Zeit stumpf machen. Wir waschen ausschließlich schonend von Hand."
+  },
+  {
+    question: "Was ist der Unterschied zu Wachs oder Nanoversiegelung?",
+    answer: "Während Wachs nur aufliegt und schnell verdunstet, geht eine echte Keramikversiegelung eine feste chemische Bindung ein. Sie ist extrem hart, hitzebeständig und hält Jahre statt Wochen."
+  },
+  {
+    question: "Kann ich danach in die Waschanlage?",
+    answer: "Ja, aber wir empfehlen Handwäsche, um den Glanz maximal zu erhalten. Textilwaschanlagen sind okay, vermeiden Sie aber aggressive Bürsten."
+  },
+  {
+    question: "Gibt es eine Garantie?",
+    answer: "Ja, als zertifizierter Labocosmetica Detailer erhalten Sie eine schriftliche Garantiekarte und ein Pflegeheft für Ihre Versiegelung."
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer.replace(/<[^>]*>?/gm, '')
+    }
+  }))
+};
+---
+
+<Layout
+    title="Häufige Fragen zur Fahrzeugaufbereitung"
+    description="Antworten auf die häufigsten Fragen zu Fahrzeugaufbereitung, Keramikversiegelung, Preisen und Ablauf bei RG Detailing in Tensfeld."
+    schema={faqSchema}
+>
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4">
+            <Breadcrumbs crumbs={[{ label: "Startseite", href: "/" }, { label: "FAQ", href: "/faq" }]} />
+
+            <div class="text-center mb-16">
+                <span class="text-red-500 font-bold tracking-widest text-sm uppercase">Ihre Fragen</span>
+                <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-6 text-white">Häufige Fragen zur Fahrzeugaufbereitung</h1>
+                <p class="text-zinc-400 max-w-2xl mx-auto text-lg">
+                    Hier finden Sie Antworten auf die häufigsten Fragen rund um unsere Dienstleistungen, Preise und den Ablauf.
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <FAQ client:visible items={faqItems} />
+            </div>
+
+            <div class="text-center mt-16">
+                <p class="text-zinc-400 mb-6">Ihre Frage war nicht dabei?</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wa.me/491633845081" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#128C7E] hover:bg-[#0f7c6e] text-white rounded-2xl font-bold transition-all hover:scale-105">
+                        WhatsApp Frage stellen
+                    </a>
+                    <a href="/#rechner" class="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold transition-all hover:scale-105">
+                        Preis berechnen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

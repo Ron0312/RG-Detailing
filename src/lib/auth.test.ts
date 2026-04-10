@@ -1,17 +1,55 @@
-import { describe, it, expect, vi } from 'vitest';
-import { verifyCredentials, isAuthenticated, createSession, destroySession } from './auth';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { verifyCredentials, isAuthenticated, createSession, destroySession, hashPassword } from './auth';
 
 describe('Auth Library', () => {
+    const testPassword = 'TestPass!456#';
+    let originalEnv: Record<string, string | undefined>;
+
+    beforeEach(() => {
+        originalEnv = {
+            ADMIN_USERNAME: process.env.ADMIN_USERNAME,
+            ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH,
+        };
+        // Set up test credentials with scrypt hash
+        process.env.ADMIN_USERNAME = 'TestAdmin';
+        process.env.ADMIN_PASSWORD_HASH = hashPassword(testPassword);
+    });
+
+    afterEach(() => {
+        process.env.ADMIN_USERNAME = originalEnv.ADMIN_USERNAME;
+        process.env.ADMIN_PASSWORD_HASH = originalEnv.ADMIN_PASSWORD_HASH;
+    });
+
     it('should verify correct credentials', () => {
-        expect(verifyCredentials('Ronni', 'Remo!123#')).toBe(true);
+        expect(verifyCredentials('TestAdmin', testPassword)).toBe(true);
     });
 
     it('should reject incorrect username', () => {
-        expect(verifyCredentials('Admin', 'Remo!123#')).toBe(false);
+        expect(verifyCredentials('WrongUser', testPassword)).toBe(false);
     });
 
     it('should reject incorrect password', () => {
-        expect(verifyCredentials('Ronni', 'wrongpassword')).toBe(false);
+        expect(verifyCredentials('TestAdmin', 'wrongpassword')).toBe(false);
+    });
+
+    it('should reject login when ADMIN_PASSWORD_HASH is not set', () => {
+        delete process.env.ADMIN_PASSWORD_HASH;
+        expect(verifyCredentials('TestAdmin', testPassword)).toBe(false);
+    });
+
+    it('should support legacy SHA-256 hash format', () => {
+        const { createHash } = require('node:crypto');
+        const sha256 = createHash('sha256').update('legacyPass').digest('hex');
+        process.env.ADMIN_PASSWORD_HASH = sha256;
+        expect(verifyCredentials('TestAdmin', 'legacyPass')).toBe(true);
+        expect(verifyCredentials('TestAdmin', 'wrongPass')).toBe(false);
+    });
+
+    it('should generate valid scrypt hashes', () => {
+        const hash = hashPassword('somePassword');
+        expect(hash).toMatch(/^scrypt:[0-9a-f]+:[0-9a-f]+$/);
+        process.env.ADMIN_PASSWORD_HASH = hash;
+        expect(verifyCredentials('TestAdmin', 'somePassword')).toBe(true);
     });
 
     it('should authenticate with valid session cookie', () => {

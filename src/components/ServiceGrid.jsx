@@ -18,7 +18,7 @@ const ServiceCard = memo(({ service, index, IconComponent }) => {
     return (
         <div
             data-index={index}
-            className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0"
+            className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center group glass-card p-6 md:p-10 relative overflow-hidden flex flex-col animate-fade-in-up first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0 cursor-pointer"
         >
                 <a
                 href={service.link}
@@ -167,7 +167,7 @@ export default function ServiceGrid({ services }) {
                         onClick={() => scrollToCard(index)}
                         aria-label={`Gehe zu Karte ${index + 1}`}
                         aria-current={index === activeIndex ? 'step' : undefined}
-                        style={{ padding: 0, minWidth: 0, minHeight: 0 }} className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
+                        className={`w-3 h-3 rounded-full transition-all duration-300 p-2 box-content focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
                             index === activeIndex ? 'bg-red-600 scale-125' : 'bg-zinc-700 hover:bg-zinc-600'
                         }`}
                     />

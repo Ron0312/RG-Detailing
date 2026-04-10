@@ -27,6 +27,6 @@ export default defineConfig({
     '/fahrzeugaufbereitung-schleswig': '/'
   },
   security: {
-    checkOrigin: false
+    checkOrigin: true
   }
 });

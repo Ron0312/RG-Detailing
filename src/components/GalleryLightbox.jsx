@@ -126,6 +126,13 @@ export default function GalleryLightbox({ images, limit = 10 }) {
         slides={lightboxSlides}
         plugins={[Zoom, Captions]}
         zoom={{ maxZoomPixelRatio: 3 }}
+        render={{
+          portal: ({ children }) => (
+            <div role="dialog" aria-modal="true" aria-label="Bildergalerie">
+              {children}
+            </div>
+          )
+        }}
       />
     </>
   );
