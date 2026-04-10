@@ -77,6 +77,17 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
 
         {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
         <LocalSchema />
+
+        {/* Umami Analytics — self-hosted, cookieless, GDPR-compliant. No consent required. */}
+        <script
+            is:inline
+            defer
+            src="https://analytics.rg-detailing.de/script.js"
+            data-website-id="4b1731c8-dc78-4399-bb3c-bf86bb34b720"
+            data-domains="rg-detailing.de"
+            data-do-not-track="true"
+        ></script>
+
         <script is:inline>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {

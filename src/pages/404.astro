@@ -69,24 +69,11 @@ import { ArrowRight, Home, HelpCircle, Phone, Mail } from 'lucide-react';
 </Layout>
 
 <script>
-  // Log 404 to server
-  const log404 = async () => {
-    try {
-      await fetch('/api/log-404', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          url: window.location.href,
-          referrer: document.referrer,
-          userAgent: navigator.userAgent
-        }),
-      });
-    } catch (e) {
-      console.error('Failed to log 404', e);
-    }
-  };
-
-  log404();
+  // Track 404 events via Umami
+  if (typeof window !== 'undefined' && window.umami?.track) {
+    window.umami.track('404_not_found', {
+      url: window.location.pathname,
+      referrer: document.referrer || 'direct'
+    });
+  }
 </script>

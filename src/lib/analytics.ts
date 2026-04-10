@@ -1,82 +1,46 @@
+// Analytics wrapper that forwards events to Umami (self-hosted, cookieless)
+// Umami is running at https://analytics.rg-detailing.de
+// All previous API endpoints (/api/log-event) have been removed.
+
 export const botRegex = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl|python|aiohttp|httpx|libwww|http-client|axios|got|node-fetch|mediapartners|scoutjet|w3c_validator|gtmetrix|telegrambot|whatsapp|skype|slack/i;
 
+declare global {
+  interface Window {
+    umami?: {
+      track: (eventName?: string, eventData?: Record<string, any>) => void;
+      identify?: (userId: string, data?: Record<string, any>) => void;
+    };
+    trackEvent?: typeof trackEvent;
+  }
+}
+
+/**
+ * Track a custom event via Umami.
+ * Safe to call on server-side (no-op) and when Umami hasn't loaded yet.
+ * Returns a resolved promise for backwards compatibility with code that awaits it.
+ */
 export const trackEvent = async (eventName: string, data: Record<string, any> = {}) => {
   if (typeof window === 'undefined') return;
 
-  // 1. Bot Check (Global)
-  if (botRegex.test(navigator.userAgent)) {
-      // console.log('Analytics skipped: Bot detected');
-      return;
-  }
+  // Bot filter (Umami also filters bots server-side, this is extra safety)
+  if (botRegex.test(navigator.userAgent)) return;
 
-  // 2. Exclude Admin & Localhost
+  // Exclude localhost and admin paths
   const { hostname, pathname } = window.location;
   if (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname.endsWith('.local') ||
-      pathname.startsWith('/admin') ||
-      pathname.startsWith('/keystatic')
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.endsWith('.local') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/keystatic')
   ) {
-      console.log('Analytics skipped: Localhost/Admin detected');
-      return;
+    return;
   }
 
+  // Forward to Umami — fails silently if Umami script hasn't loaded yet
   try {
-    let sessionId = sessionStorage.getItem('analytics_session_id');
-    if (!sessionId) {
-      sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-      sessionStorage.setItem('analytics_session_id', sessionId);
-    }
-
-    // Persistent Visitor ID (Consent Dependent)
-    let visitorId = undefined;
-    if (localStorage.getItem('cookie-consent') === 'accepted') {
-        visitorId = localStorage.getItem('analytics_visitor_id');
-        if (!visitorId) {
-            visitorId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-            localStorage.setItem('analytics_visitor_id', visitorId);
-        }
-    }
-
-    // Capture context
-    const context = {
-        referrer: document.referrer || 'direct',
-        screen: `${window.screen.width}x${window.screen.height}`,
-        language: navigator.language || 'unknown',
-        userAgent: navigator.userAgent
-    };
-
-    const payload = {
-      eventName,
-      url: window.location.href,
-      sessionId,
-      visitorId,
-      data: {
-          ...context,
-          ...data
-      }
-    };
-
-    await fetch('/api/log-event', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload),
-        keepalive: true
-    });
-  } catch (err) {
-    // Fail silently to not impact user experience
-    // console.warn("Analytics tracking failed:", err);
+    window.umami?.track(eventName, data);
+  } catch {
+    // swallow
   }
 };
-
-// Auto-track exits
-if (typeof document !== 'undefined') {
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-            trackEvent('page_exit');
-        }
-    });
-}
