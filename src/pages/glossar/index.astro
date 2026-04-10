@@ -6,6 +6,16 @@ import { ArrowRight, Book } from 'lucide-react';
 
 const glossaryEntries = await getCollection('glossary');
 const sortedEntries = glossaryEntries.sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// Group entries by first letter for A-Z jump navigation
+const groupedEntries = sortedEntries.reduce<Record<string, typeof sortedEntries>>((acc, entry) => {
+    const letter = entry.data.title.charAt(0).toUpperCase();
+    if (!acc[letter]) acc[letter] = [];
+    acc[letter].push(entry);
+    return acc;
+}, {});
+const availableLetters = Object.keys(groupedEntries).sort();
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 ---
 
 <Layout title="Glossar & Fachbegriffe | RG Detailing" description="Das RG Detailing Lexikon. Wir erklären Fachbegriffe aus der Fahrzeugaufbereitung wie Hologramme, Standzeit und Keramikversiegelung.">
@@ -20,35 +30,66 @@ const sortedEntries = glossaryEntries.sort((a, b) => a.data.title.localeCompare(
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-12 -mt-20 relative z-20">
+    <div class="container mx-auto px-4 py-12 -mt-20 relative z-20">
         <Breadcrumbs crumbs={[
             { label: 'Startseite', href: '/' },
             { label: 'Glossar', href: '/glossar' }
         ]} />
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-            {sortedEntries.map((entry) => (
-                <a href={`/glossar/${entry.slug}`} class="glass-panel p-8 hover:bg-zinc-800 transition-colors group flex flex-col h-full">
-                    <div class="flex items-center gap-3 mb-4 text-red-500">
-                        <Book size={20} />
-                        <span class="text-xs font-bold uppercase tracking-widest">{entry.data.category}</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">{entry.data.title}</h2>
-                    <p class="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
-                        {entry.data.description}
-                    </p>
-                    <div class="flex items-center text-sm font-bold text-white mt-auto pt-4 border-t border-white/5">
-                        Definition lesen <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                    </div>
-                </a>
-            ))}
-        </div>
+        {sortedEntries.length > 0 && (
+            <nav aria-label="Alphabet-Navigation" class="sticky top-20 z-30 mt-8 mb-12 bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl py-3 px-2 shadow-2xl">
+                <ul class="flex flex-wrap justify-center gap-1">
+                    {alphabet.map((letter) => {
+                        const hasEntries = availableLetters.includes(letter);
+                        return (
+                            <li>
+                                {hasEntries ? (
+                                    <a href={`#letter-${letter}`} class="flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold text-white bg-white/5 hover:bg-red-600 hover:text-white border border-white/10 hover:border-red-500 transition-all">
+                                        {letter}
+                                    </a>
+                                ) : (
+                                    <span aria-hidden="true" class="flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold text-zinc-700 cursor-not-allowed">
+                                        {letter}
+                                    </span>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        )}
+
+        {availableLetters.map((letter) => (
+            <section id={`letter-${letter}`} class="mb-16 scroll-mt-32">
+                <div class="flex items-baseline gap-4 mb-8 border-b border-red-500/30 pb-3">
+                    <h2 class="text-5xl md:text-6xl font-bold text-red-500">{letter}</h2>
+                    <span class="text-zinc-500 text-sm uppercase tracking-widest font-bold">{groupedEntries[letter].length} Eintrag{groupedEntries[letter].length !== 1 ? 'e' : ''}</span>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {groupedEntries[letter].map((entry) => (
+                        <a href={`/glossar/${entry.slug}`} class="glass-panel p-6 md:p-8 hover:bg-zinc-800 hover:border-red-500/30 transition-all group flex flex-col h-full">
+                            <div class="flex items-center gap-3 mb-4 text-red-500">
+                                <Book size={18} aria-hidden="true" />
+                                <span class="text-xs font-bold uppercase tracking-widest">{entry.data.category}</span>
+                            </div>
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">{entry.data.title}</h3>
+                            <p class="text-zinc-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
+                                {entry.data.description}
+                            </p>
+                            <div class="flex items-center text-sm font-bold text-white mt-auto pt-4 border-t border-white/5">
+                                Definition lesen <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        ))}
 
         {sortedEntries.length === 0 && (
              <div class="text-center py-20">
                 <p class="text-zinc-400">Das Glossar wird gerade befüllt. Schauen Sie bald wieder vorbei!</p>
              </div>
         )}
-    </main>
+    </div>
 
 </Layout>

@@ -1,10 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Gem, FlaskConical, Handshake } from 'lucide-react';
 
 export default function WhyUs() {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const scrollRef = useRef(null);
-
     const items = [
         {
             icon: Gem,
@@ -23,66 +20,22 @@ export default function WhyUs() {
         }
     ];
 
-    // OPTIMIZATION: Use IntersectionObserver instead of scroll event listener
-    // Prevents layout thrashing (reflows) on every scroll frame.
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const index = Number(entry.target.getAttribute('data-index'));
-                        setActiveIndex(index);
-                    }
-                });
-            },
-            {
-                root: scrollRef.current,
-                threshold: 0.6 // Item considered active when >60% visible
-            }
-        );
-
-        const container = scrollRef.current;
-        if (container) {
-            const elements = container.querySelectorAll('[data-index]');
-            elements.forEach(el => observer.observe(el));
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
-    const scrollToSlide = (index) => {
-        if (scrollRef.current) {
-            const width = scrollRef.current.offsetWidth;
-            scrollRef.current.scrollTo({
-                left: width * index,
-                behavior: 'smooth'
-            });
-            // State update happens via observer, but we can optimistically set it too
-            // However, let's rely on observer to be consistent
-        }
-    };
-
     return (
-        <section className="section-spacing">
+        <section className="section-spacing content-auto">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16 animate-fade-in-up">
                     <span className="text-red-500 font-bold tracking-widest text-sm uppercase">Unsere Philosophie</span>
                     <h2 className="text-3xl md:text-5xl font-bold mt-4 text-white">Warum RG Detailing?</h2>
                 </div>
 
-                <div
-                    ref={scrollRef}
-                    role="region"
-                    aria-label="Vorteile Karussell"
-                    className="flex overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-3 gap-0 md:gap-8 pb-4 md:pb-0 hide-scrollbar px-4 md:px-0 -mx-4 md:mx-0 scroll-pl-4 relative animate-pulse-right"
-                >
+                {/* Stack on mobile (3 items don't need a carousel), 3-col on desktop */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     {items.map((item, index) => {
                         const Icon = item.icon;
                         return (
-                             <div
+                            <div
                                 key={index}
-                                data-index={index}
-                                className="w-full flex-shrink-0 md:w-auto md:flex-shrink snap-center glass-panel p-6 md:p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group first:ml-0 md:first:ml-0 mr-4 md:mr-0 last:mr-4 md:last:mr-0 animate-fade-in-up"
+                                className="glass-panel p-6 md:p-10 flex flex-col items-center text-center hover:bg-zinc-900/60 transition-colors group animate-fade-in-up"
                                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
                             >
                                 <div className="w-20 h-20 bg-zinc-950 rounded-full flex items-center justify-center mb-6 md:mb-8 border border-white/10 group-hover:border-red-500/50 shadow-lg">
@@ -93,26 +46,6 @@ export default function WhyUs() {
                             </div>
                         );
                     })}
-                </div>
-
-                {/* Mobile Pagination Dots */}
-                <div
-                    className="flex md:hidden justify-center gap-3 mt-6"
-                    aria-label="Karussell Navigation"
-                >
-                    {items.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => scrollToSlide(index)}
-                            aria-label={`Gehe zu Slide ${index + 1}`}
-                            aria-current={index === activeIndex ? 'step' : undefined}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
-                                index === activeIndex
-                                    ? 'bg-red-600 scale-125'
-                                    : 'bg-zinc-700 hover:bg-zinc-600'
-                            }`}
-                        />
-                    ))}
                 </div>
             </div>
         </section>

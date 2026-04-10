@@ -13,11 +13,11 @@ const FAQ = ({ items }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
       {items.map((item, index) => (
         <div
           key={index}
-          className={`glass-card rounded-2xl overflow-hidden border transition-all duration-300 ${
+          className={`glass-card rounded-2xl overflow-hidden border transition-all duration-300 h-fit ${
              openIndex === index ? 'border-red-500/30 bg-zinc-900/60' : 'border-white/5 hover:border-red-500/20'
           }`}
         >

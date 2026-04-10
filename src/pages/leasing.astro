@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import PriceCalculator from '../components/PriceCalculator.jsx';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import ScrollReveal from '../components/ScrollReveal.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Reviews from '../components/Reviews.astro';
 import FAQ from '../components/FAQ.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
@@ -80,7 +82,13 @@ const faqItems = [
         </div>
     </div>
 
-    <main class="w-full overflow-x-hidden">
+    <div class="w-full overflow-x-hidden">
+        <div class="container mx-auto px-4 pt-8">
+            <Breadcrumbs crumbs={[
+                { label: 'Startseite', href: '/' },
+                { label: 'Leasingrückgabe', href: '/leasing' }
+            ]} />
+        </div>
 
         {/* THE TRAP SECTION */}
         <section id="vorteile" class="section-spacing border-b border-white/5 bg-zinc-950">
@@ -206,6 +214,8 @@ const faqItems = [
             </div>
         </section>
 
+        <Reviews limit={4} />
+
         {/* FAQ */}
         <section class="section-spacing bg-zinc-900/30 border-y border-white/5">
             <div class="container mx-auto px-4 max-w-3xl">
@@ -232,5 +242,5 @@ const faqItems = [
             </div>
         </section>
 
-    </main>
+    </div>
 </Layout>

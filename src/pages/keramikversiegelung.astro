@@ -4,6 +4,7 @@ import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
 import FAQ from '../components/FAQ.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { ShieldCheck, Droplets, Gem, Sun, Clock, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/labocosmetica-hpc-pro.jpg';
@@ -160,7 +161,14 @@ const schema = {
         </div>
     </div>
 
-    <main class="w-full overflow-x-hidden">
+    <div class="w-full overflow-x-hidden">
+        <div class="container mx-auto px-4 pt-8">
+            <Breadcrumbs crumbs={[
+                { label: 'Startseite', href: '/' },
+                { label: 'Keramikversiegelung', href: '/keramikversiegelung' }
+            ]} />
+        </div>
+
         {/* BENEFITS GRID */}
         <section id="vorteile" class="section-spacing relative overflow-hidden">
             <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
@@ -301,5 +309,5 @@ const schema = {
                 </div>
             </div>
         </section>
-    </main>
+    </div>
 </Layout>

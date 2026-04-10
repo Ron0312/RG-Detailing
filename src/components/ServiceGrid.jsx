@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, memo } from 'react';
 import { ShieldCheck, Sparkles, Caravan, RefreshCw, Droplets, Hammer, Star, ArrowRight, Calculator, Clock } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
+import { INTERSECTION_THRESHOLDS } from '../lib/constants';
 import GlossaryLinker from './GlossaryLinker';
 
 const iconMap = {
@@ -85,7 +86,7 @@ export default function ServiceGrid({ services }) {
             },
             {
                 root: scrollRef.current,
-                threshold: 0.6 // Card must be 60% visible to be considered active
+                threshold: INTERSECTION_THRESHOLDS.SERVICE_CARD_ACTIVE
             }
         );
 

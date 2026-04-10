@@ -1,6 +1,5 @@
 ---
 import { Youtube, Podcast, Instagram } from 'lucide-react';
-import ExpandableText from './ExpandableText.jsx';
 import Certificates from './Certificates.jsx';
 import { Image, getImage } from 'astro:assets';
 import remoImage from '../assets/certificates/remo-steam-cleaning.jpg';
@@ -49,40 +48,38 @@ const certificateImages = [
                 <h3 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Remo Gerhardt <br/><span class="text-zinc-400">Vom Hobby zur Perfektion</span></h3>
 
                 <div class="text-zinc-400 leading-relaxed text-lg">
-                    <ExpandableText client:visible initialHeight={240}>
-                        <div class="space-y-6">
-                            <p>
-                                Moin, ich bin Remo. Früher habe ich mich über jeden Kratzer an meinem eigenen Auto geärgert. Die Waschanlage war für mich Sperrzone. Ich habe stundenlang in der Garage gestanden, poliert und versiegelt – immer auf der Jagd nach dem perfekten Glanz.
-                            </p>
-                            <p>
-                                Irgendwann wurde aus dem Hobby eine Berufung. Freunde fragten: "Kannst du das auch bei meinem machen?" Doch "Hobby-Niveau" reichte mir nicht. Ich wollte Profi-Qualität. Heute bin ich <a href="https://www.labocosmetica.de" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-red-500 transition-colors">zertifizierter Labocosmetica Detailer</a> und offizieller <a href="https://dampfdrache.de" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-red-500 transition-colors">Dampfdrachen Vertriebspartner</a>.
-                            </p>
-                            <p>
-                                Bei RG Detailing gibt es keine Massenabfertigung wie am Fließband. Ich nehme mir die Zeit, die Ihr Fahrzeug braucht. Das ist Wellness für das Auto. Egal ob Sportwagen oder Familienkombi – ich behandle jedes Fahrzeug, als wäre es mein eigenes.
-                            </p>
-                            <p>
-                                Ehrlich, direkt und norddeutsch: Ich schnacke Ihnen nichts an, was Sie nicht brauchen. Aber ich verspreche Ihnen: Wenn Sie Ihr Auto abholen, werden Sie den Unterschied sehen und fühlen.
-                            </p>
+                    <div class="space-y-6">
+                        <p>
+                            Moin, ich bin Remo. Früher habe ich mich über jeden Kratzer an meinem eigenen Auto geärgert. Die Waschanlage war für mich Sperrzone. Ich habe stundenlang in der Garage gestanden, poliert und versiegelt – immer auf der Jagd nach dem perfekten Glanz.
+                        </p>
+                        <p>
+                            Irgendwann wurde aus dem Hobby eine Berufung. Freunde fragten: "Kannst du das auch bei meinem machen?" Doch "Hobby-Niveau" reichte mir nicht. Ich wollte Profi-Qualität. Heute bin ich <a href="https://www.labocosmetica.de" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-red-500 transition-colors">zertifizierter Labocosmetica Detailer</a> und offizieller <a href="https://dampfdrache.de" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-red-500 transition-colors">Dampfdrachen Vertriebspartner</a>.
+                        </p>
+                        <p>
+                            Bei RG Detailing gibt es keine Massenabfertigung wie am Fließband. Ich nehme mir die Zeit, die Ihr Fahrzeug braucht. Das ist Wellness für das Auto. Egal ob Sportwagen oder Familienkombi – ich behandle jedes Fahrzeug, als wäre es mein eigenes.
+                        </p>
+                        <p>
+                            Ehrlich, direkt und norddeutsch: Ich schnacke Ihnen nichts an, was Sie nicht brauchen. Aber ich verspreche Ihnen: Wenn Sie Ihr Auto abholen, werden Sie den Unterschied sehen und fühlen.
+                        </p>
 
-                            <div class="pt-4 flex items-center gap-4">
-                                <div class="font-handwriting text-2xl text-red-500 -rotate-2">Remo Gerhardt</div>
-                                <div class="h-px bg-zinc-800 flex-grow"></div>
-                                <div class="text-xs uppercase tracking-widest font-bold text-zinc-400">Inhaber & Detailer</div>
-                            </div>
+                        <div class="pt-4 flex items-center gap-4">
+                            <div class="font-handwriting text-2xl text-red-500 -rotate-2">Remo Gerhardt</div>
+                            <div class="h-px bg-zinc-800 flex-grow"></div>
+                            <div class="text-xs uppercase tracking-widest font-bold text-zinc-400">Inhaber & Detailer</div>
                         </div>
-                    </ExpandableText>
+                    </div>
 
                     <div class="mt-8 flex flex-wrap gap-4">
-                        <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-green-600/50 hover:bg-green-900/10 hover:text-green-500 transition-all text-sm font-bold text-zinc-300">
-                            <Podcast size={18} />
+                        <a href="https://open.spotify.com/show/63m3iI02yHqeENGb2CtBwa?si=d07c55fca4b843bc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-red-600/50 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm font-bold text-zinc-300">
+                            <Podcast size={18} aria-hidden="true" />
                             <span>Podcast</span>
                         </a>
                         <a href="https://www.youtube.com/channel/UC-_u0Tc9YmcniT7Q93XPRwg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-red-600/50 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm font-bold text-zinc-300">
-                            <Youtube size={18} />
+                            <Youtube size={18} aria-hidden="true" />
                             <span>YouTube</span>
                         </a>
-                        <a href="https://www.instagram.com/r.g.detailing/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-pink-600/50 hover:bg-pink-900/10 hover:text-pink-500 transition-all text-sm font-bold text-zinc-300">
-                            <Instagram size={18} />
+                        <a href="https://www.instagram.com/r.g.detailing/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 bg-zinc-900 border border-white/10 rounded-xl hover:border-red-600/50 hover:bg-red-900/10 hover:text-red-500 transition-all text-sm font-bold text-zinc-300">
+                            <Instagram size={18} aria-hidden="true" />
                             <span>Instagram</span>
                         </a>
                     </div>

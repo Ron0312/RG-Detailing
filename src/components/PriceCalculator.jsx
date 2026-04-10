@@ -543,7 +543,7 @@ export default function PriceCalculator() {
                                         value={selections.camperLength}
                                         onChange={(e) => setSelections({...selections, camperLength: parseFloat(e.target.value)})}
                                         onBlur={() => trackEvent('form_interaction', { field: 'camper_length', value: selections.camperLength })}
-                                        className="w-full h-8 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
+                                        className="w-full h-11 md:h-3 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-red-600 hover:accent-red-500 transition-all touch-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
                                         style={{ backgroundImage: `linear-gradient(to right, #dc2626 0%, #dc2626 ${((selections.camperLength - 4) / 4) * 100}%, #27272a ${((selections.camperLength - 4) / 4) * 100}%, #27272a 100%)` }}
                                     />
                                     <div className="flex justify-between text-zinc-400 text-xs mt-4 font-bold uppercase tracking-wider">

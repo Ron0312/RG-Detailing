@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Reviews from '../components/Reviews.astro';
 import ServiceSchema from '../components/ServiceSchema.astro';
 import { ShieldCheck, CalendarClock, Gem, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Image } from 'astro:assets';
@@ -33,7 +34,7 @@ export const prerender = true;
              <Image
                 src={heroImage}
                 alt="RG Detailing Werterhalt Garantie"
-                class="w-full h-full object-cover opacity-30"
+                class="w-full h-full object-cover opacity-50"
                 loading="eager"
              />
              <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-950/60 to-zinc-950"></div>
@@ -53,7 +54,7 @@ export const prerender = true;
         </div>
     </div>
 
-    <main class="bg-zinc-950 relative z-20 -mt-20">
+    <div class="bg-zinc-950 relative z-20 -mt-20">
 
         <div class="container mx-auto px-4 py-8">
             <Breadcrumbs crumbs={[
@@ -178,6 +179,8 @@ export const prerender = true;
             </div>
         </section>
 
+        <Reviews limit={4} />
+
         {/* CTA SECTION */}
         <section class="py-20 border-t border-white/5 bg-zinc-900/50">
             <div class="container mx-auto px-4 text-center">
@@ -196,5 +199,5 @@ export const prerender = true;
             </div>
         </section>
 
-    </main>
+    </div>
 </Layout>

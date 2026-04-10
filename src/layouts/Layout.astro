@@ -40,9 +40,14 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
 <html lang="de" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+
+        {/* Font preload — LCP hero fonts */}
+        <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href="/fonts/inter-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href="/fonts/syne-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
 
         <title>{title} | RG Detailing</title>
         <meta name="description" content={description} />
@@ -102,9 +107,9 @@ const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.s
             Zum Inhalt springen
         </a>
         <Header />
-        <div id="main-content" class="flex-grow">
+        <main id="main-content" class="flex-grow">
 		    <slot />
-        </div>
+        </main>
         <Footer />
         <div class="hidden md:block">
             <WhatsAppButton />

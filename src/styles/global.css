@@ -9,6 +9,24 @@
   --color-brand-red: #D80000;
   --color-brand-dark: #050505;
   --color-brand-surface: #121212;
+
+  /* Modular Type Scale — fluid, clamp-based, premium-rhythm */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.82rem + 0.27vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.38vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.6rem + 1.38vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.85rem + 2vw, 3.25rem);
+  --text-5xl: clamp(3rem, 2.4rem + 3vw, 4.5rem);
+  --text-6xl: clamp(3.75rem, 2.9rem + 4.25vw, 5.5rem);
+  --text-display: clamp(3.5rem, 2.6rem + 4.5vw, 6rem);
+
+  /* Line Heights */
+  --leading-display: 1;
+  --leading-heading: 1.15;
+  --leading-body: 1.7;
 }
 
 html, body {
@@ -16,6 +34,7 @@ html, body {
   background-color: var(--color-brand-dark);
   overflow-x: hidden;
   width: 100%;
+  line-height: var(--leading-body);
 }
 
 .font-handwriting {
@@ -25,6 +44,18 @@ html, body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
+  line-height: var(--leading-heading);
+}
+
+h1 {
+  line-height: var(--leading-display);
+}
+
+/* Mobile headline breathing — lighter tracking on small screens */
+@media (max-width: 640px) {
+  h1, h2 {
+    letter-spacing: -0.01em;
+  }
 }
 
 /* Consistent Spacing */
@@ -55,10 +86,11 @@ h1, h2, h3, h4, h5, h6 {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700;
 }
 
-/* Accessibility: Focus States (Enhanced) */
+/* Accessibility: Focus States (Enhanced — white/red sandwich for max visibility on any background) */
 :focus-visible {
-    outline: 2px solid #D80000;
+    outline: 2px solid #FFFFFF;
     outline-offset: 4px;
+    box-shadow: 0 0 0 4px #D80000;
     border-radius: 4px;
 }
 
@@ -143,4 +175,23 @@ h1, h2, h3, h4, h5, h6 {
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* WCAG 2.3.3: Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important; /* Progressive enhancement fallback */
+  }
 }
