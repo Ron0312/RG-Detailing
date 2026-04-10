@@ -9,13 +9,8 @@
   const isBot = /bot|googlebot|crawler|spider|robot|crawling|bingbot|yandex|baidu|slurp|facebookexternalhit|headless|lighthouse|adsbot|plesk|screenshot|thumb|wget|curl/i.test(navigator.userAgent);
 
   if (!isBot) {
-      // Track Page Load
+      // Page views are tracked automatically by Umami — no manual call needed.
       window.addEventListener('load', () => {
-        trackEvent('page_view', {
-          device: window.innerWidth < 768 ? 'Mobile' : 'Desktop',
-          platform: navigator.platform
-        });
-
         // Performance Tracking (LCP, CLS)
         if ('PerformanceObserver' in window) {
             try {
