@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rg-detailing-v5';
+const CACHE_NAME = 'rg-detailing-v6';
 
 // Assets to cache immediately on install
 const PRECACHE_URLS = [
@@ -37,20 +37,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Detect HTML navigation requests — more robust than only checking Accept header
+function isHtmlRequest(request) {
+  if (request.mode === 'navigate') return true;
+  const accept = request.headers.get('Accept') || '';
+  return accept.includes('text/html');
+}
+
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
   // Skip cross-origin requests unless it's a font or specific asset
   if (!event.request.url.startsWith(self.location.origin)) {
-     // Optional: Cache Google Fonts or similar if needed
      return;
   }
 
   // Network First, fallback to Cache for HTML (pages)
-  if (event.request.headers.get('Accept').includes('text/html')) {
+  if (isHtmlRequest(event.request)) {
      event.respondWith(
-        // Use { cache: 'reload' } to force browser to ignore HTTP cache and go to network
         fetch(event.request, { cache: 'reload' })
            .then((response) => {
               const responseClone = response.clone();
@@ -61,7 +66,7 @@ self.addEventListener('fetch', (event) => {
            })
            .catch(() => {
               return caches.match(event.request).then((response) => {
-                 return response || caches.match('/'); // Fallback to home if offline
+                 return response || caches.match('/');
               });
            })
      );
@@ -83,4 +88,11 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse || fetchPromise;
     })
   );
+});
+
+// Allow pages to request immediate activation of a waiting worker
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
