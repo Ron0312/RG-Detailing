@@ -51,7 +51,7 @@ const processSteps = [
     {
         step: "04",
         title: "Coating Applikation",
-        description: "Auftrag der Labocosmetica #HPC oder #SAM Beschichtung in mehreren Schichten (Base Coat + Top Coat)."
+        description: "Individuelle Applikation der Keramikversiegelung – wir wählen das passende Produkt anhand von Lackzustand, Farbe und Nutzung Ihres Fahrzeugs aus."
     },
     {
         step: "05",
@@ -75,7 +75,7 @@ const faqItems = [
     },
     {
         question: "Gibt es eine Garantie?",
-        answer: "Ja, als zertifizierter Labocosmetica Detailer erhalten Sie eine schriftliche Garantiekarte und ein Pflegeheft für Ihre Versiegelung."
+        answer: "Ja, als zertifizierter Detailer erhalten Sie eine schriftliche Garantiekarte und ein Pflegeheft für Ihre Versiegelung."
     },
     {
         question: "Versiegeln Sie auch Wohnmobile?",
@@ -92,24 +92,17 @@ const schema = {
     "name": "RG Detailing",
     "image": "https://rg-detailing.de/logo.png"
   },
-  "description": "High-End Keramikversiegelung mit Labocosmetica Zertifizierung. Bis zu 5 Jahre Lackschutz und extremer Tiefenglanz.",
+  "description": "Zertifizierte High-End Keramikversiegelung – individuell auf Ihr Fahrzeug abgestimmt. Wir verarbeiten hochwertige Produkte von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield. Bis zu 5 Jahre Lackschutz und extremer Tiefenglanz.",
   "areaServed": "Schleswig-Holstein",
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Coating Packages",
+    "name": "Keramikversiegelung",
     "itemListElement": [
       {
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Basis Keramik (1 Schicht)"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Premium Keramik (Mehrschichtig)"
+          "name": "Individuelle Keramikversiegelung – auf Fahrzeug, Lack und Nutzung abgestimmt"
         }
       }
     ]
@@ -119,7 +112,7 @@ const schema = {
 
 <Layout
     title="Keramikversiegelung Schleswig-Holstein | High-End Lackschutz"
-    description="Zertifizierte Keramikversiegelung von RG Detailing. Schützen Sie Ihren Lack dauerhaft vor Kratzern & Umwelteinflüssen. Labocosmetica Partner."
+    description="Zertifizierte Keramikversiegelung von RG Detailing – individuell auf Ihr Fahrzeug abgestimmt. Wir verarbeiten hochwertige Produkte von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield."
     schema={schema}
 >
     {/* HERO SECTION */}
@@ -127,7 +120,7 @@ const schema = {
         <div class="absolute inset-0 z-0">
              <Image
                 src={heroImage}
-                alt="Labocosmetica Keramikversiegelung Applikation"
+                alt="High-End Keramikversiegelung Applikation"
                 class="w-full h-full object-cover opacity-50"
                 loading="eager"
                 fetchpriority="high"
@@ -185,7 +178,7 @@ const schema = {
                 {/* QUICK ACTION */}
                 <div class="mt-16 text-center animate-fade-in-up delay-500">
                     <p class="text-zinc-400 mb-6 max-w-2xl mx-auto">
-                        Sie sind unsicher, welches Paket zu Ihrem Fahrzeug passt?
+                        Sie sind unsicher, welche Versiegelung zu Ihrem Fahrzeug passt? Kein Problem – wir finden gemeinsam die passende Lösung.
                     </p>
                     <a href="#rechner" class="inline-flex items-center gap-3 bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-full font-bold border border-white/10 transition-all active:scale-95 backdrop-blur-sm">
                         <Zap size={20} class="text-yellow-500" />
@@ -195,16 +188,19 @@ const schema = {
             </div>
         </section>
 
-        {/* LABOCOSMETICA SECTION */}
+        {/* INDIVIDUAL COATING SECTION */}
         <section class="section-spacing border-y border-white/5 bg-zinc-900/20">
             <div class="container mx-auto px-4">
                 <div class="flex flex-col lg:flex-row items-center gap-16">
                     <div class="lg:w-1/2">
                         <ScrollReveal client:visible>
-                            <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Certified Detailer</span>
-                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Labocosmetica <br/> Excellence Center</h2>
+                            <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Individuell abgestimmt</span>
+                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Keramikversiegelung <br/> nach Maß</h2>
+                            <p class="text-zinc-400 text-lg leading-relaxed mb-6">
+                                Jeder Lack ist anders. Ob hell oder dunkel, weich oder hart, Daily Driver oder Showcar – die passende Versiegelung konfigurieren wir gemeinsam im persönlichen Gespräch, abgestimmt auf Fahrzeug, Lackzustand und Nutzung.
+                            </p>
                             <p class="text-zinc-400 text-lg leading-relaxed mb-8">
-                                Wir setzen auf die Technologie von <strong>Labocosmetica</strong> aus Italien. Diese Keramikversiegelungen sind speziell für moderne, weiche Klarlacke entwickelt und bieten eine unvergleichliche "Selbstheilungs"-Fähigkeit (Self-Healing) bei feinen Kratzern sowie extreme chemische Beständigkeit.
+                                Dafür verarbeiten wir hochwertige Produkte renommierter Hersteller: <strong class="text-white">Labocosmetica</strong>, <strong class="text-white">Gtechniq</strong>, <strong class="text-white">Sonax</strong>, <strong class="text-white">Koch Chemie</strong> und <strong class="text-white">Safe Shield</strong>. So wählen wir für jedes Fahrzeug die beste Lösung – statt ein Produkt auf jeden Lack zu zwingen.
                             </p>
                             <ul class="space-y-4 mb-10">
                                 <li class="flex items-center gap-3 text-zinc-300">

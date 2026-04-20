@@ -27,7 +27,7 @@ const variants = [
 
       <h3 class="text-xl font-bold text-white mb-3 mt-6">Warum Kunden aus {{City}} uns vertrauen</h3>
       <p>
-        Wir setzen auf absolute Transparenz und High-End-Produkte, unter anderem als zertifizierter Partner von <em>Labocosmetica</em>.
+        Wir setzen auf absolute Transparenz und hochwertige Produkte renommierter Hersteller: <em>Labocosmetica</em>, <em>Gtechniq</em>, <em>Sonax</em>, <em>Koch Chemie</em> und <em>Safe Shield</em>. So wählen wir für jedes Fahrzeug die passende Versiegelung aus – statt ein Produkt auf jeden Lack zu zwingen.
         Wir versprechen keine Wunder, sondern liefern reproduzierbare Spitzenqualität. Ob Sie einen Youngtimer, einen Sportwagen oder Ihr tägliches Familienauto bringen – wir behandeln jedes Fahrzeug mit der gleichen Akribie.
         Dank der unkomplizierten Anbindung ist der Weg von {{City}} zu uns der erste Schritt zu einem Fahrzeug, das wieder aussieht wie am ersten Tag – oder oft sogar besser.
       </p>
@@ -58,9 +58,9 @@ const variants = [
 
       <h3 class="text-xl font-bold text-white mb-3 mt-6">Zertifizierte Qualität statt leere Versprechen</h3>
       <p>
-        Als zertifizierter <strong>Labocosmetica Detailer</strong> haben wir Zugriff auf professionelle Beschichtungen, die Endverbrauchern nicht zugänglich sind.
+        Als zertifizierter Detailer haben wir Zugriff auf professionelle Beschichtungen, die Endverbrauchern nicht zugänglich sind – darunter hochwertige Systeme von <strong>Labocosmetica</strong>, <strong>Gtechniq</strong>, <strong>Sonax</strong>, <strong>Koch Chemie</strong> und <strong>Safe Shield</strong>. Welche Versiegelung am besten zu Ihrem Fahrzeug passt, besprechen wir individuell – abhängig von Lackfarbe, Lackhärte, Zustand und Nutzung.
         Wir tragen die Versiegelung nicht einfach nur auf – das wäre zu einfach. Der entscheidende Teil ist die Vorarbeit: In mehreren Polierstufen holen wir das Maximum an Glanz aus dem Lack, entfernen Defekte und entfetten die Oberfläche klinisch rein.
-        Erst dann erfolgt die Applikation der Keramik in mehreren Schichten. Das ist Handwerkskunst, die man in {{City}} in dieser Konsequenz lange suchen muss und die wir Ihnen mit Stolz anbieten.
+        Erst dann erfolgt die fachgerechte Applikation der Keramikversiegelung. Das ist Handwerkskunst, die man in {{City}} in dieser Konsequenz lange suchen muss und die wir Ihnen mit Stolz anbieten.
       </p>
     `
   },

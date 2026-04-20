@@ -11,7 +11,7 @@ Eine Keramikversiegelung ist eine transparente, flüssige Beschichtung auf Siliz
 *   **Härtegrad:** Schützt vor feinen Kratzern (Waschkratzern).
 *   **Hydrophobie:** Extremes Wasserabperlverhalten (Beading).
 *   **Chemische Resistenz:** Schutz vor Vogelkot (in Grenzen), Insekten und UV-Strahlung.
-*   **Standzeit:** Je nach Produkt 2 bis 5+ Jahre (bei RG Detailing bis zu 90.000 km mit Labocosmetica).
+*   **Standzeit:** Je nach Produkt 2 bis 5+ Jahre (bei RG Detailing bis zu 90.000 km – wir wählen die passende Versiegelung individuell aus unserem Portfolio von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield).
 
 ### Unterschied zu Wachs
 Wachs ist organisch (z.B. Carnauba) und hält meist nur wenige Wochen bis Monate. Keramik ist anorganisch und extrem widerstandsfähig.

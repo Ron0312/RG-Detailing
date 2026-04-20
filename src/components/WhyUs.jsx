@@ -9,12 +9,12 @@ export default function WhyUs() {
         {
             icon: Gem,
             title: "Zertifizierte Keramikversiegelung",
-            description: "Als Labocosmetica Certified Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit."
+            description: "Als zertifizierter Detailer garantieren wir höchste Standards bei Lackschutz und Standzeit – individuell auf Ihr Fahrzeug abgestimmt."
         },
         {
             icon: FlaskConical,
             title: "High-End Pflegeprodukte",
-            description: "Wir nutzen exklusive Chemie (z.B. Labocosmetica, Gtechniq) für maximalen Glanz, den man in Schleswig-Holstein selten findet."
+            description: "Wir verarbeiten hochwertige Produkte von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield – für jeden Lack die passende Lösung."
         },
         {
             icon: Handshake,

@@ -267,10 +267,10 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
                 <WhatsAppButton message={message} />
                 <div className="text-center text-zinc-400 text-sm font-medium mt-4">Oder nutze das Formular unten</div>
 
-                {/* Trust: Labocosmetica Zertifizierung */}
+                {/* Trust: Zertifizierung */}
                 <div className="mt-6 flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-white/5 border border-white/5">
                     <Shield className="w-5 h-5 text-red-500 shrink-0" />
-                    <span className="text-xs text-zinc-400 font-medium">Zertifizierter <span className="text-white font-bold">Labocosmetica</span> Detailer mit Herstellergarantie</span>
+                    <span className="text-xs text-zinc-400 font-medium">Zertifizierter Detailer – Premium-Produkte von <span className="text-white font-bold">Labocosmetica, Gtechniq, Sonax, Koch Chemie & Safe Shield</span></span>
                 </div>
             </div>
         </div>
