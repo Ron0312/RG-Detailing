@@ -136,10 +136,10 @@ const schema = {
                 <span class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-widest">Das beliebteste Komplettpaket</span>
             </div>
 
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tighter animate-fade-in-up delay-100">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight md:tracking-tighter animate-fade-in-up delay-100">
                 All-in-One <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700">Werterhalt</span>
             </h1>
-            <p class="text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
+            <p class="text-base sm:text-lg md:text-2xl text-zinc-300 max-w-3xl mx-auto mb-10 font-light leading-relaxed animate-fade-in-up delay-200">
                 Der perfekte Einstieg in die Welt des Detailings. Wir bringen Innenraum und Lack wieder auf Vordermann – ideal für den <strong class="text-white font-normal">Verkauf</strong>, die <strong class="text-white font-normal">Leasingrückgabe</strong> oder den <strong class="text-white font-normal">Frühjahrsputz</strong>.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up delay-300">
@@ -159,10 +159,10 @@ const schema = {
             <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
             <div class="container mx-auto px-4 relative z-10">
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                     {benefits.map((benefit, index) => (
                         <ScrollReveal client:visible delay={index * 100}>
-                            <div class="h-full p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-red-500/30 hover:bg-zinc-900 transition-all group">
+                            <div class="h-full p-6 md:p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-red-500/30 hover:bg-zinc-900 transition-all group">
                                 <div class="w-14 h-14 bg-zinc-950 rounded-2xl flex items-center justify-center mb-6 text-red-500 group-hover:scale-110 transition-transform shadow-inner border border-white/5">
                                     <benefit.icon size={28} strokeWidth={1.5} />
                                 </div>
@@ -180,12 +180,12 @@ const schema = {
         {/* DETAILS SECTION */}
         <section class="section-spacing border-y border-white/5 bg-zinc-900/20">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
                     <div class="lg:w-1/2">
                         <ScrollReveal client:visible>
                             <span class="text-red-500 font-bold uppercase tracking-widest text-sm mb-4 block">Detailing Einstieg</span>
-                            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Mehr als nur <br/>"Sauber machen"</h2>
-                            <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+                            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">Mehr als nur <br/>"Sauber machen"</h2>
+                            <p class="text-zinc-400 text-base sm:text-lg leading-relaxed mb-8">
                                 Unser All-in-One Paket schließt die Lücke zwischen einer einfachen Waschanlagen-Wäsche und einem High-End Detailing. Wir kombinieren professionelle Handwäsche, hygienische Innenraumreinigung und maschinelle Politur zu einem Paket, das Preis und Leistung perfekt vereint.
                             </p>
                             <ul class="space-y-4 mb-10">
