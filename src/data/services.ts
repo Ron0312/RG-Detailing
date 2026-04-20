@@ -1,7 +1,7 @@
 export const services = [
     {
         title: "Full Detailing",
-        description: "Das ultimative Upgrade für Liebhaber. Wenn Sie Ihr Auto polieren lassen wollen für einen Zustand 'Besser als Neu': Unsere mehrstufige Lackkorrektur entfernt Swirls & Kratzer. Veredelt mit zertifizierter Labocosmetica Keramikversiegelung.",
+        description: "Das ultimative Upgrade für Liebhaber. Wenn Sie Ihr Auto polieren lassen wollen für einen Zustand 'Besser als Neu': Unsere mehrstufige Lackkorrektur entfernt Swirls & Kratzer. Veredelt mit zertifizierter Keramikversiegelung – individuell abgestimmt mit hochwertigen Produkten von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield.",
         icon: "shield",
         shortDescription: "High-End Lackkorrektur (Auto polieren) + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 800 €.",
         link: "/keramikversiegelung",
