@@ -93,22 +93,22 @@ const WhatsAppButton = ({ message }) => (
 
 // New Teaser Component
 const Teaser = ({ onStart }) => (
-    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-8 md:p-14 text-center group cursor-pointer hover:border-red-500/50 transition-all shadow-[0_0_40px_rgba(220,38,38,0.1)] hover:shadow-[0_0_60px_rgba(220,38,38,0.2)] animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
+    <button type="button" data-track-view="calculator-teaser" className="w-full relative overflow-hidden rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-900/20 to-black p-6 sm:p-10 md:p-14 text-center group cursor-pointer hover:border-red-500/50 transition-all shadow-[0_0_40px_rgba(220,38,38,0.1)] hover:shadow-[0_0_60px_rgba(220,38,38,0.2)] animate-fade-in-up focus-visible:ring-4 focus-visible:ring-red-500 focus-visible:outline-none focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900" onClick={onStart}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-500/10 via-transparent to-transparent opacity-60"></div>
 
         <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-500/10 text-red-500 mb-8 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
-                <Calculator size={40} />
+             <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-500/10 text-red-500 mb-6 md:mb-8 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
+                <Calculator className="w-8 h-8 sm:w-10 sm:h-10" />
             </div>
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Dein individueller Preis</h3>
-            <p className="text-zinc-400 mb-10 text-lg md:text-xl leading-relaxed">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 md:mb-6 tracking-tight">Dein individueller Preis</h3>
+            <p className="text-zinc-400 mb-8 md:mb-10 text-base sm:text-lg md:text-xl leading-relaxed">
                 Finde in nur 3 Klicks heraus, was die Aufbereitung für dein Fahrzeug kostet. 100% kostenlos und unverbindlich.
             </p>
             <div
-                className="inline-flex items-center gap-3 px-10 py-4 bg-red-600 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] text-lg group-hover:bg-red-500 group-hover:scale-105 group-hover:-translate-y-1 group-focus-visible:bg-red-500 group-focus-visible:scale-105"
+                className="inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-4 bg-red-600 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] text-base sm:text-lg group-hover:bg-red-500 group-hover:scale-105 group-hover:-translate-y-1 group-focus-visible:bg-red-500 group-focus-visible:scale-105 whitespace-nowrap"
             >
-                <Sparkles size={24} />
-                Preis berechnen (3 Klicks)
+                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+                <span>Preis berechnen</span>
             </div>
         </div>
     </button>
