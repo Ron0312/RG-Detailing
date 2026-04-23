@@ -7,3 +7,7 @@
 **Vulnerability:** The API endpoint `submit-quote.ts` contained a hardcoded fallback API key for Web3Forms.
 **Learning:** Storing secrets in source code, even as "fallbacks" or public keys, is a security risk as it exposes credentials to anyone with read access to the repository, potentially leading to unauthorized API usage or data breaches.
 **Prevention:** Always use environment variables for API keys and secrets, prioritizing `process.env` (runtime) and `import.meta.env` (build time).
+## 2024-05-18 - Prevent XSS in FAQ
+**Vulnerability:** FAQ items allowed XSS via `dangerouslySetInnerHTML`.
+**Learning:** React components using `dangerouslySetInnerHTML` need input sanitation.
+**Prevention:** Always use a sanitation library like DOMPurify when using `dangerouslySetInnerHTML`.
