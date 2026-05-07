@@ -67,8 +67,8 @@ export function calculatePrice(
     // Round to nearest 10
     const minPrice = Math.round(calculatedBase / 10) * 10;
 
-    // Create range +15%
-    const maxPrice = Math.round((minPrice * 1.15) / 10) * 10;
+    // Create range +10%
+    const maxPrice = Math.round((minPrice * 1.10) / 10) * 10;
 
     return {
         minPrice,
