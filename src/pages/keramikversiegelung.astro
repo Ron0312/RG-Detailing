@@ -7,7 +7,8 @@ import ScrollReveal from '../components/ScrollReveal.jsx';
 import { ShieldCheck, Droplets, Gem, Sun, Clock, Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/labocosmetica-hpc-pro.jpg';
-import detailImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
+import detailImage from '../assets/keramikversiegelung-mercedes-sl-tensfeld.webp';
+import showcaseImage from '../assets/keramikversiegelung-detailing-halle-tensfeld.jpg';
 
 const benefits = [
     {
@@ -225,9 +226,10 @@ const schema = {
                         <div class="absolute inset-0 bg-red-500/20 blur-[100px] rounded-full"></div>
                         <Image
                             src={detailImage}
-                            alt="Fahrzeugaufbereitung Detailarbeit"
+                            alt="Mercedes 380 SL nach Keramikversiegelung in unserer Halle in Tensfeld – tiefer Lackglanz und Hydrophobie-Effekt"
                             class="relative z-10 rounded-3xl border border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700"
                             width={800}
+                            loading="lazy"
                         />
                     </div>
                 </div>
@@ -266,6 +268,30 @@ const schema = {
                         ))}
                     </div>
                 </div>
+            </div>
+        </section>
+
+        {/* SHOWCASE */}
+        <section class="section-spacing border-y border-white/5 bg-zinc-950">
+            <div class="container mx-auto px-4">
+                <ScrollReveal client:visible>
+                    <div class="text-center mb-12">
+                        <span class="text-red-500 font-bold uppercase tracking-widest text-sm">Aus unserer Halle</span>
+                        <h2 class="text-3xl md:text-5xl font-bold text-white mt-4">Keramikversiegelung in Aktion</h2>
+                        <p class="text-zinc-400 mt-4 max-w-2xl mx-auto">
+                            Beispiele aus unserer Werkstatt in Tensfeld – Liebhaberstücke wie Daily Driver behandeln wir mit derselben Sorgfalt.
+                        </p>
+                    </div>
+                </ScrollReveal>
+                <ScrollReveal client:visible delay={200}>
+                    <Image
+                        src={showcaseImage}
+                        alt="Mercedes 380 SL Cabrio in der Halle von RG Detailing – hochwertige Lackveredelung & Keramikversiegelung Schleswig-Holstein"
+                        class="rounded-3xl border border-white/10 shadow-2xl mx-auto max-w-4xl w-full"
+                        width={1600}
+                        loading="lazy"
+                    />
+                </ScrollReveal>
             </div>
         </section>
 

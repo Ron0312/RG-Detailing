@@ -185,7 +185,7 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
                         <div className="font-bold text-white text-lg mb-1">Expertentipp</div>
                         <div className="text-sm text-zinc-300 leading-relaxed">
                             Ein Kratzer im Protokoll kostet oft 300-600€. Wir entfernen ihn für einen Bruchteil.
-                            <br/><span className="text-red-400 font-bold mt-1 block">Sparpotenzial: bis zu 70%</span>
+                            <br/><span className="text-red-400 font-bold mt-1 block">Maximal Ersparnis durch Leasing-Aufbereitung möglich</span>
                         </div>
                     </div>
                 </div>
