@@ -135,7 +135,7 @@ const faqSchema = {
 ---
 
 <Layout
-    title="Fahrzeugaufbereitung & Keramikversiegelung Schleswig-Holstein"
+    title="Fahrzeugaufbereitung & Keramikversiegelung"
     description="High-End Fahrzeugaufbereitung in Schleswig-Holstein: Innenraumreinigung, Keramikversiegelung und Lackpolitur vom Profi. Jetzt Preis berechnen!"
     preloadImage={optimizedHero.src}
     schema={[
@@ -330,7 +330,7 @@ const faqSchema = {
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 md:mb-12 text-center">Ergebnisse aus unserer Werkstatt</h2>
                     <GalleryLightbox client:visible images={galleryImages} limit={4} />
                     <div class="text-center mt-8 md:mt-10">
-                        <a href="/galerie" class="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold transition-all hover:scale-105" data-astro-prefetch>
+                        <a href="/galerie/" class="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-bold transition-all hover:scale-105" data-astro-prefetch>
                             Alle Ergebnisse ansehen <ArrowRight className="w-5 h-5" />
                         </a>
                     </div>
@@ -484,7 +484,7 @@ const faqSchema = {
                     <h2 class="text-3xl font-bold text-white mb-8 text-center">Häufige Fragen zur Fahrzeugaufbereitung</h2>
                     <FAQ client:visible items={faqItems} />
                     <div class="text-center mt-8">
-                        <a href="/faq" class="inline-flex items-center gap-2 text-zinc-400 hover:text-white font-bold transition-colors" data-astro-prefetch>
+                        <a href="/faq/" class="inline-flex items-center gap-2 text-zinc-400 hover:text-white font-bold transition-colors" data-astro-prefetch>
                             Alle Fragen ansehen <ArrowRight className="w-4 h-4" />
                         </a>
                     </div>
@@ -497,13 +497,13 @@ const faqSchema = {
              <div class="container mx-auto px-4 text-center">
                  <h2 class="text-2xl font-bold text-white mb-6">Unser Einzugsgebiet für Premium Fahrzeugaufbereitung</h2>
                  <p class="text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-                     Wir sind Ihr spezialisierter Ansprechpartner für <strong>Lackveredelung</strong>, <strong>Keramikversiegelung</strong> und professionelle <a href="/leasing" class="text-zinc-300 hover:text-red-500 underline">Leasingrückgabe</a> in Schleswig-Holstein.
+                     Wir sind Ihr spezialisierter Ansprechpartner für <strong>Lackveredelung</strong>, <strong>Keramikversiegelung</strong> und professionelle <a href="/leasing/" class="text-zinc-300 hover:text-red-500 underline">Leasingrückgabe</a> in Schleswig-Holstein.
                      Viele unserer Kunden nehmen den Weg aus folgenden Städten und Regionen auf sich, um von unserer zertifizierten Qualität zu profitieren:
                  </p>
                  <div class="flex flex-wrap justify-center gap-3 text-sm text-zinc-500">
                     {sortedCities.map((city, i) => (
                         <span>
-                            <a href={`/${city.data.slug}`} class="hover:text-red-500 transition-colors" data-astro-prefetch>{city.data.name}</a>
+                            <a href={`/${city.data.slug}/`} class="hover:text-red-500 transition-colors" data-astro-prefetch>{city.data.name}</a>
                             {i < sortedCities.length - 1 && <span class="ml-3">&bull;</span>}
                         </span>
                     ))}

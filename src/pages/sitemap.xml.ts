@@ -36,16 +36,18 @@ export async function GET({ site }) {
       return route;
     });
 
+  // trailingSlash: 'always' -> die Sitemap muss die kanonische Slash-Form
+  // listen, sonst zeigt jeder Eintrag auf eine 301.
   const cityUrls = cities.map((city) => ({
-    loc: new URL(city.data.slug, site).href
+    loc: new URL(`${city.data.slug}/`, site).href
   }));
 
   const glossaryUrls = glossaryEntries.map((entry) => ({
-    loc: new URL(`glossar/${entry.slug}`, site).href
+    loc: new URL(`glossar/${entry.slug}/`, site).href
   }));
 
   const staticUrls = staticPages.map((page) => ({
-    loc: new URL(page, site).href
+    loc: new URL(page === '' ? '' : `${page}/`, site).href
   }));
 
   const allUrls = [...staticUrls, ...cityUrls, ...glossaryUrls];

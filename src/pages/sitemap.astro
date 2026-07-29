@@ -10,10 +10,10 @@ const sortedGlossary = glossaryEntries.sort((a, b) => a.data.title.localeCompare
 const mainPages = [
     { title: 'Startseite', href: '/' },
     { title: 'Leistungen', href: '/#leistungen' },
-    { title: 'Wohnmobil-Aufbereitung', href: '/wohnmobil' },
-    { title: 'Leasing-Rückgabe', href: '/leasing' },
-    { title: 'Dampfreinigung', href: '/dampfreinigung' },
-    { title: 'Werterhalt-Garantie', href: '/werterhalt-garantie' },
+    { title: 'Wohnmobil-Aufbereitung', href: '/wohnmobil/' },
+    { title: 'Leasing-Rückgabe', href: '/leasing/' },
+    { title: 'Dampfreinigung', href: '/dampfreinigung/' },
+    { title: 'Werterhalt-Garantie', href: '/werterhalt-garantie/' },
     { title: 'Galerie', href: '/#gallery' },
     { title: 'Über mich', href: '/#about' },
     { title: 'Preisrechner', href: '/#rechner' },
@@ -21,9 +21,9 @@ const mainPages = [
 ];
 
 const legalPages = [
-    { title: 'Impressum', href: '/impressum' },
-    { title: 'Datenschutz', href: '/datenschutz' },
-    { title: 'AGB', href: '/agb' },
+    { title: 'Impressum', href: '/impressum/' },
+    { title: 'Datenschutz', href: '/datenschutz/' },
+    { title: 'AGB', href: '/agb/' },
 ];
 ---
 
@@ -52,7 +52,7 @@ const legalPages = [
                 <ul class="space-y-3">
                     {sortedCities.map(city => (
                         <li>
-                            <a href={`/${city.data.slug}`} class="hover:text-red-500 transition-colors block py-1">
+                            <a href={`/${city.data.slug}/`} class="hover:text-red-500 transition-colors block py-1">
                                 Fahrzeugaufbereitung {city.data.name}
                             </a>
                         </li>
@@ -66,7 +66,7 @@ const legalPages = [
                 <ul class="space-y-3">
                     {sortedGlossary.map(entry => (
                         <li>
-                            <a href={`/glossar/${entry.slug}`} class="hover:text-red-500 transition-colors block py-1">
+                            <a href={`/glossar/${entry.slug}/`} class="hover:text-red-500 transition-colors block py-1">
                                 {entry.data.title}
                             </a>
                         </li>

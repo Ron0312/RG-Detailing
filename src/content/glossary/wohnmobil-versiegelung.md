@@ -15,3 +15,5 @@ Eine Keramikversiegelung schließt die Poren des GFK und bildet eine extrem glat
 *   **Kein Auskreiden:** Die Farbe bleibt frisch.
 *   **Regenstreifen:** Lassen sich spielend leicht abwaschen.
 *   **Werterhalt:** Ein versiegeltes Wohnmobil sieht auch nach Jahren noch gepflegt aus.
+
+> Wir versiegeln Wohnmobile und Caravans bis 8 m Länge in unserer Halle in Tensfeld. Details zum Ablauf: [Keramikversiegelung für Wohnmobil & Caravan](/wohnmobil/).

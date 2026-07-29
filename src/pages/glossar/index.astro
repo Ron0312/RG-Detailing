@@ -23,12 +23,12 @@ const sortedEntries = glossaryEntries.sort((a, b) => a.data.title.localeCompare(
     <main class="container mx-auto px-4 py-12 -mt-20 relative z-20">
         <Breadcrumbs crumbs={[
             { label: 'Startseite', href: '/' },
-            { label: 'Glossar', href: '/glossar' }
+            { label: 'Glossar', href: '/glossar/' }
         ]} />
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {sortedEntries.map((entry) => (
-                <a href={`/glossar/${entry.slug}`} class="glass-panel p-8 hover:bg-zinc-800 transition-colors group flex flex-col h-full">
+                <a href={`/glossar/${entry.slug}/`} class="glass-panel p-8 hover:bg-zinc-800 transition-colors group flex flex-col h-full">
                     <div class="flex items-center gap-3 mb-4 text-red-500">
                         <Book size={20} />
                         <span class="text-xs font-bold uppercase tracking-widest">{entry.data.category}</span>

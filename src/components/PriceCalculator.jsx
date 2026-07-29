@@ -778,7 +778,7 @@ export default function PriceCalculator() {
                                      </div>
                                     <p className="text-[10px] text-zinc-400 leading-normal">
                                         Ihre Daten werden vertraulich behandelt. <br/>
-                                        Mit dem Absenden stimmen Sie der <a href="/datenschutz" className="text-zinc-400 underline hover:text-white">Datenschutzerklärung</a> zu.
+                                        Mit dem Absenden stimmen Sie der <a href="/datenschutz/" className="text-zinc-400 underline hover:text-white">Datenschutzerklärung</a> zu.
                                     </p>
                                 </div>
                             </form>
