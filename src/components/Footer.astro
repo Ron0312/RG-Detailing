@@ -1,13 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import PrivacyMap from './PrivacyMap.astro';
 import { Youtube, Podcast, MessageCircle } from 'lucide-react';
 import { Image } from 'astro:assets';
 import logoImage from '../assets/logo.png';
 
 const currentYear = new Date().getFullYear();
-const cities = await getCollection('cities');
-const sortedCities = cities.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 <footer id="kontakt" class="bg-zinc-950 text-zinc-400 py-12 mt-20 border-t border-zinc-900 content-auto">
     <div class="container mx-auto px-4 grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">

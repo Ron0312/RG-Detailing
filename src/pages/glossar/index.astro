@@ -8,7 +8,7 @@ const glossaryEntries = await getCollection('glossary');
 const sortedEntries = glossaryEntries.sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 
-<Layout title="Glossar & Fachbegriffe | RG Detailing" description="Das RG Detailing Lexikon. Wir erklären Fachbegriffe aus der Fahrzeugaufbereitung wie Hologramme, Standzeit und Keramikversiegelung.">
+<Layout title="Glossar & Fachbegriffe" description="Das RG Detailing Lexikon. Wir erklären Fachbegriffe aus der Fahrzeugaufbereitung wie Hologramme, Standzeit und Keramikversiegelung.">
 
     <div class="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-black">
         <div class="absolute inset-0 bg-red-900/10 mix-blend-overlay"></div>

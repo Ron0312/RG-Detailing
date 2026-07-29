@@ -33,6 +33,7 @@ const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
+  "@id": "https://rg-detailing.de/#localBusiness",
   "name": "RG Detailing",
   "url": `https://rg-detailing.de/${cityEntry.data.slug}`,
   "description": metaDescription,
@@ -55,14 +56,6 @@ const localBusinessSchema = {
     "addressCountry": "DE",
     "addressRegion": "Schleswig-Holstein"
   },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "18:00"
-    }
-  ],
   "image": "https://rg-detailing.de/logo.png",
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -134,7 +127,7 @@ const optimizedHero = await getImage({
 });
 ---
 
-<Layout title={`Fahrzeugaufbereitung ${name} | RG Detailing`} description={metaDescription} schema={schema} preloadImage={optimizedHero.src}>
+<Layout title={`Fahrzeugaufbereitung ${name}`} description={metaDescription} schema={schema} preloadImage={optimizedHero.src}>
 
     <div class="absolute top-24 left-0 w-full z-30 container mx-auto px-4">
         <Breadcrumbs crumbs={[

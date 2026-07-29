@@ -35,7 +35,7 @@ describe('PriceCalculator Security', () => {
         render(<PriceCalculator />);
 
         // Expand
-        await user.click(screen.getByText(/Preis berechnen \(3 Klicks\)/));
+        await user.click(screen.getByText(/Preis berechnen/));
 
         // 1. Size: Kleinwagen
         const sizeButton = screen.getByText('Kleinwagen').closest('button');
