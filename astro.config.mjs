@@ -21,10 +21,16 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
+  trailingSlash: 'always',
   redirects: {
-    '/datenschutzerklaerung-eu': '/datenschutz',
-    '/cookie-richtlinie-eu': '/datenschutz',
-    '/fahrzeugaufbereitung-schleswig': '/'
+    '/datenschutzerklaerung-eu': '/datenschutz/',
+    '/cookie-richtlinie-eu': '/datenschutz/',
+    // Legacy WordPress URLs. Sie ranken weiterhin und bekommen Klicks,
+    // liefen aber bis 2026-07 in einen 404.
+    '/preisrechner': '/',
+    '/preisrechner-2': '/',
+    '/referenzen': '/galerie/',
+    '/haftungsausschluss': '/impressum/'
   },
   security: {
     checkOrigin: true

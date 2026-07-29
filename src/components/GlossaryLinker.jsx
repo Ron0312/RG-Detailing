@@ -3,13 +3,13 @@ import React, { memo } from 'react';
 // Common terms to link. In a real app, pass this from props or a store to avoid duplication.
 // Optimization: Moved outside component to avoid re-creation on every render.
 const TERMS = {
-    'Keramikversiegelung': '/glossar/keramikversiegelung',
-    'Trockendampf': '/glossar/trockendampf',
-    'Hologramme': '/glossar/hologramme',
-    'Standzeit': '/glossar/standzeit',
-    'Kneten': '/glossar/kneten',
-    'Polieren': '/glossar/polieren',
-    'Flugrost': '/glossar/flugrost'
+    'Keramikversiegelung': '/glossar/keramikversiegelung/',
+    'Trockendampf': '/glossar/trockendampf/',
+    'Hologramme': '/glossar/hologramme/',
+    'Standzeit': '/glossar/standzeit/',
+    'Kneten': '/glossar/kneten/',
+    'Polieren': '/glossar/polieren/',
+    'Flugrost': '/glossar/flugrost/'
 };
 
 // Optimization: Pre-compute regex and lookup map to avoid re-creation on every render.

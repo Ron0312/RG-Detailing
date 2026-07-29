@@ -5,6 +5,7 @@ export const GET = ({ site }) => {
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin/
 
 Sitemap: ${sitemapURL.href}
 `.trim(),

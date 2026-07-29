@@ -25,7 +25,7 @@ describe('GlossaryLinker', () => {
         // "Keramikversiegelung" should be a link
         const link = screen.getByRole('link', { name: /Keramikversiegelung/i });
         expect(link).toBeDefined();
-        expect(link.getAttribute('href')).toBe('/glossar/keramikversiegelung');
+        expect(link.getAttribute('href')).toBe('/glossar/keramikversiegelung/');
 
         // The rest of the text should be present.
         expect(screen.getByText(/Wir bieten eine professionelle/)).toBeDefined();
@@ -37,7 +37,7 @@ describe('GlossaryLinker', () => {
 
         const link = screen.getByRole('link', { name: /keramikversiegelung/i });
         expect(link).toBeDefined();
-        expect(link.getAttribute('href')).toBe('/glossar/keramikversiegelung');
+        expect(link.getAttribute('href')).toBe('/glossar/keramikversiegelung/');
     });
 
     it('renders multiple links for multiple terms', () => {
@@ -49,8 +49,8 @@ describe('GlossaryLinker', () => {
 
         expect(link1).toBeDefined();
         expect(link2).toBeDefined();
-        expect(link1.getAttribute('href')).toBe('/glossar/polieren');
-        expect(link2.getAttribute('href')).toBe('/glossar/hologramme');
+        expect(link1.getAttribute('href')).toBe('/glossar/polieren/');
+        expect(link2.getAttribute('href')).toBe('/glossar/hologramme/');
     });
 
     it('handles null or empty text gracefully', () => {
