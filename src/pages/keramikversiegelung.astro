@@ -63,6 +63,22 @@ const processSteps = [
 
 const faqItems = [
     {
+        question: "Was ist eine Keramikversiegelung?",
+        answer: "Eine Keramikversiegelung ist eine flüssig aufgetragene Schutzschicht auf Basis von Siliziumdioxid, die nach dem Aushärten eine glasartige, chemisch gebundene Schicht auf dem Lack bildet. Sie schützt vor UV-Strahlung, Vogelkot und Streusalz, lässt Wasser abperlen und verstärkt die Farbtiefe. Anders als Wachs liegt sie nicht auf, sondern verbindet sich fest mit dem Klarlack."
+    },
+    {
+        question: "Was kostet eine Keramikversiegelung?",
+        answer: "Der Preis hängt vom Fahrzeug und vom Lackzustand ab, denn der Aufwand steckt in der Vorbereitung, nicht im Auftragen. Bei uns startet die Keramikversiegelung als Teil des High-End Detailings ab 950 €. Den Preis für Ihr konkretes Fahrzeug rechnen Sie in unserem Preisrechner in drei Klicks aus."
+    },
+    {
+        question: "Wie lange dauert eine Keramikversiegelung?",
+        answer: "Rechnen Sie mit 3 bis 4 Werktagen. Der größte Teil davon ist Vorbereitung: Handwäsche, Dekontamination, Kneten und die mehrstufige Lackkorrektur. Das Auftragen selbst dauert wenige Stunden, danach härtet die Versiegelung unter Infrarot-Strahlern in unserer Halle aus."
+    },
+    {
+        question: "Was ist der Unterschied zwischen Nanoversiegelung und Keramikversiegelung?",
+        answer: "In der Praxis meinen beide Begriffe oft dasselbe, denn \"Nano\" beschreibt nur die Partikelgröße und ist kein geschützter Begriff. Entscheidend ist der Feststoffanteil und ob das Produkt eine echte chemische Bindung mit dem Lack eingeht. Billige \"Nanoversiegelungen\" sind häufig Polymer-Sprays mit wenigen Monaten Standzeit, eine zertifizierte Keramikversiegelung hält mehrere Jahre."
+    },
+    {
         question: "Was ist der Unterschied zu Wachs oder Nanoversiegelung?",
         answer: "Während Wachs nur aufliegt und schnell verdunstet, geht eine echte Keramikversiegelung (oft fälschlich 'Nanoversiegelung' genannt) eine feste chemische Bindung ein. Sie ist extrem hart, hitzebeständig und hält Jahre statt Wochen."
     },
@@ -110,12 +126,25 @@ const schema = {
     ]
   }
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
 ---
 
 <Layout
     title="Keramikversiegelung Schleswig-Holstein"
     description="Zertifizierte Keramikversiegelung in Schleswig-Holstein, individuell auf Ihr Fahrzeug abgestimmt. Bis zu 5 Jahre Lackschutz und extremer Tiefenglanz."
-    schema={schema}
+    schema={[schema, faqSchema]}
 >
     {/* HERO SECTION */}
     <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-black">
@@ -292,6 +321,107 @@ const schema = {
                         width={1600}
                         loading="lazy"
                     />
+                </ScrollReveal>
+            </div>
+        </section>
+
+        {/* NANO VS KERAMIK */}
+        <section class="section-spacing">
+            <div class="container mx-auto px-4 max-w-4xl">
+                <ScrollReveal client:visible>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center">Nanoversiegelung oder Keramikversiegelung?</h2>
+                    <p class="text-zinc-400 leading-relaxed text-center mb-12 max-w-2xl mx-auto">
+                        Die beiden Begriffe werden ständig durcheinandergeworfen. "Nano" beschreibt nur die
+                        Partikelgröße und ist kein geschützter Begriff, jeder darf ihn auf die Flasche
+                        schreiben. Entscheidend sind zwei andere Dinge: der Feststoffanteil und ob sich das
+                        Produkt chemisch mit dem Klarlack verbindet.
+                    </p>
+
+                    <div class="overflow-x-auto rounded-2xl border border-white/10">
+                        <table class="w-full text-left text-sm sm:text-base">
+                            <thead class="bg-zinc-900/80 text-zinc-300">
+                                <tr>
+                                    <th class="p-4 font-bold"></th>
+                                    <th class="p-4 font-bold">Wachs / Polymer-Spray</th>
+                                    <th class="p-4 font-bold text-white">Zertifizierte Keramikversiegelung</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-zinc-400 divide-y divide-white/5">
+                                <tr>
+                                    <td class="p-4 font-bold text-zinc-300">Haftung</td>
+                                    <td class="p-4">Liegt auf dem Lack auf</td>
+                                    <td class="p-4 text-white">Feste chemische Bindung mit dem Klarlack</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-zinc-300">Standzeit</td>
+                                    <td class="p-4">Wochen bis wenige Monate</td>
+                                    <td class="p-4 text-white">Bis zu 60 Monate</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-zinc-300">Vorbereitung</td>
+                                    <td class="p-4">Auftragen auf den vorhandenen Lack</td>
+                                    <td class="p-4 text-white">Dekontamination und mehrstufige Lackkorrektur zwingend</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-zinc-300">Chemikalien</td>
+                                    <td class="p-4">Waschanlagenreiniger lösen die Schicht</td>
+                                    <td class="p-4 text-white">Beständig gegen Streusalz, Vogelkot und Insektenreste</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-zinc-300">Nachweis</td>
+                                    <td class="p-4">Keiner</td>
+                                    <td class="p-4 text-white">Schriftliche Garantiekarte und Pflegeheft</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-zinc-500 text-sm mt-6 text-center">
+                        Mehr dazu im Glossar:
+                        <a href="/glossar/nano-versiegelung/" class="text-zinc-300 hover:text-red-500 underline">Nanoversiegelung</a>
+                        und
+                        <a href="/glossar/keramikversiegelung/" class="text-zinc-300 hover:text-red-500 underline">Keramikversiegelung</a>.
+                    </p>
+                </ScrollReveal>
+            </div>
+        </section>
+
+        {/* GARANTIE */}
+        <section class="section-spacing bg-zinc-900/30 border-y border-white/5">
+            <div class="container mx-auto px-4 max-w-4xl">
+                <ScrollReveal client:visible>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Keramikversiegelung mit Garantie</h2>
+                    <p class="text-zinc-400 leading-relaxed mb-10 text-center max-w-2xl mx-auto">
+                        Eine Versiegelung ist nur so gut wie die Hand, die sie aufträgt. Als zertifizierter
+                        Labocosmetica Detailer arbeite ich nach dem Herstellerprotokoll, und genau deshalb kann
+                        ich Ihnen eine Garantie schriftlich geben statt sie nur zu versprechen.
+                    </p>
+
+                    <div class="grid sm:grid-cols-3 gap-6 mb-10">
+                        <div class="p-6 rounded-2xl bg-black/40 border border-white/10">
+                            <div class="text-red-500 font-bold text-sm uppercase tracking-widest mb-2">Schriftlich</div>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Sie bekommen eine Garantiekarte und ein Pflegeheft für Ihr Fahrzeug, kein mündliches Versprechen.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-black/40 border border-white/10">
+                            <div class="text-red-500 font-bold text-sm uppercase tracking-widest mb-2">Zertifiziert</div>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Applikation nach Herstellerprotokoll mit Produkten von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-black/40 border border-white/10">
+                            <div class="text-red-500 font-bold text-sm uppercase tracking-widest mb-2">Bis 5 Jahre</div>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Je nach gewähltem System bis zu 60 Monate Standzeit, abgesichert durch regelmäßige Kontrolle.</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-zinc-400 leading-relaxed mb-6 max-w-2xl mx-auto">
+                            Damit die Garantie greift, braucht die Versiegelung Pflege. Keine Wunderwaffe, die man
+                            einmal aufträgt und dann vergisst. Dafür gibt es unser Pflege-Abo mit
+                            Maintenance-Wäschen zum Vorzugspreis.
+                        </p>
+                        <a href="/werterhalt-garantie/" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold transition-all">
+                            Werterhalt-Garantie ansehen <ArrowRight className="w-4 h-4" />
+                        </a>
+                    </div>
                 </ScrollReveal>
             </div>
         </section>
