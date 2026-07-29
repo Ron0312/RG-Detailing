@@ -6,17 +6,20 @@ import { Image, getImage } from 'astro:assets';
 import remoImage from '../assets/certificates/remo-steam-cleaning.jpg';
 import cert1 from '../assets/certificates/remo-gerhardt-zertifikat.jpg';
 import cert2 from '../assets/certificates/remo-gerhardt-labocosmetica-zertifikat.jpg';
+import cert3 from '../assets/certificates/remo-gerhardt-ppf-zertifikat.jpg';
 
-const [optimizedCert1, optimizedCert2, optimizedCert3] = await Promise.all([
+const [optimizedCert1, optimizedCert2, optimizedCert3, optimizedCert4] = await Promise.all([
     getImage({src: cert1, format: 'avif'}),
     getImage({src: cert2, format: 'avif'}),
+    getImage({src: cert3, format: 'avif'}),
     getImage({src: remoImage, format: 'avif'})
 ]);
 
 const certificateImages = [
   { src: optimizedCert1.src, alt: "Remo Gerhardt Zertifikat", width: optimizedCert1.attributes.width, height: optimizedCert1.attributes.height },
   { src: optimizedCert2.src, alt: "Labocosmetica Zertifikat", width: optimizedCert2.attributes.width, height: optimizedCert2.attributes.height },
-  { src: optimizedCert3.src, alt: "Remo Gerhardt Dampfdrachen Vertriebspartner", width: optimizedCert3.attributes.width, height: optimizedCert3.attributes.height }
+  { src: optimizedCert3.src, alt: "Labocosmetica Armorius PPF Zertifikat – Remo Gerhardt", width: optimizedCert3.attributes.width, height: optimizedCert3.attributes.height },
+  { src: optimizedCert4.src, alt: "Remo Gerhardt Dampfdrachen Vertriebspartner", width: optimizedCert4.attributes.width, height: optimizedCert4.attributes.height, cover: true }
 ];
 ---
 <section class="section-spacing bg-black relative overflow-hidden" id="about">

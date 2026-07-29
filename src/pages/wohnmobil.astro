@@ -19,9 +19,10 @@ const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
 const schema = {
   "@context": "https://schema.org",
   "@type": "AutoDetailing",
+  "@id": "https://rg-detailing.de/#localBusiness",
   "name": "RG Detailing - Wohnmobil Aufbereitung",
   "description": "Professionelle Wohnmobil-Aufbereitung in Tensfeld. GFK-Pflege, Keramikversiegelung und hygienische Dampfreinigung.",
-  "priceRange": "$$$",
+  "priceRange": "€€-€€€",
   "dateModified": new Date().toISOString().split('T')[0]
 };
 
@@ -54,11 +55,11 @@ const faqSchema = {
 };
 ---
 
-<Layout title="Wohnmobil & Caravan Aufbereitung Schleswig-Holstein | RG Detailing" description="Professionelle Wohnmobil-Aufbereitung in Schleswig-Holstein. Spezialisiert auf GFK-Pflege, Keramikversiegelung & hygienische Innenreinigung in Tensfeld." schema={[schema, faqSchema]} preloadImage={heroImage.src}>
+<Layout title="Wohnmobil & Caravan Aufbereitung Schleswig-Holstein" description="Professionelle Wohnmobil-Aufbereitung in Schleswig-Holstein. Spezialisiert auf GFK-Pflege, Keramikversiegelung & hygienische Innenreinigung in Tensfeld." schema={[schema, faqSchema]} preloadImage={heroImage.src}>
     <ServiceSchema
         name="Wohnmobil Aufbereitung"
         description="Spezialpflege für Wohnmobile und Caravans. GFK-Politur, Keramikversiegelung und Innenraum-Hygiene in großer Halle."
-        priceRange="$$$"
+        priceRange="€€-€€€"
     />
 
     {/* HERO SECTION */}
@@ -154,7 +155,7 @@ const faqSchema = {
                 <a href="tel:+491633845081" class="inline-block bg-red-700 hover:bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition shadow-lg shadow-red-900/30">
                     Termin zur Besichtigung vereinbaren
                 </a>
-                <a href="/#rechner?preselect=camper" class="inline-block bg-zinc-800 hover:bg-zinc-700 text-white px-8 py-4 rounded-full font-bold text-lg transition border border-zinc-700">
+                <a href="/?preselect=camper#rechner" class="inline-block bg-zinc-800 hover:bg-zinc-700 text-white px-8 py-4 rounded-full font-bold text-lg transition border border-zinc-700">
                     Preisrechner starten
                 </a>
             </div>

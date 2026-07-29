@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import ScrollProgress from '../../components/ScrollProgress.jsx';
 
 export const prerender = true;
 
@@ -30,8 +29,7 @@ const schema = {
 };
 ---
 
-<Layout title={`${entry.data.title} - Glossar | RG Detailing`} description={entry.data.description} schema={schema}>
-    <ScrollProgress client:load />
+<Layout title={`${entry.data.title} - Glossar`} description={entry.data.description} schema={schema}>
     <div class="container mx-auto px-4 py-32">
         <Breadcrumbs crumbs={[
             { label: 'Startseite', href: '/' },

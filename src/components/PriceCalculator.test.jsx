@@ -25,7 +25,7 @@ describe('PriceCalculator Accessibility', () => {
         render(<PriceCalculator />);
 
         // Expand calculator
-        const startButton = screen.getByText(/Preis berechnen \(3 Klicks\)/);
+        const startButton = screen.getByText(/Preis berechnen/);
         await user.click(startButton);
 
         // Initial state: Not selected
@@ -61,7 +61,7 @@ describe('PriceCalculator Accessibility', () => {
         render(<PriceCalculator />);
 
         // Expand calculator
-        const startButton = screen.getByText(/Preis berechnen \(3 Klicks\)/);
+        const startButton = screen.getByText(/Preis berechnen/);
         await user.click(startButton);
 
         // Click "Wohnmobil / Caravan" to go to camper length step
@@ -76,7 +76,7 @@ describe('PriceCalculator Accessibility', () => {
     it('renders teaser as an accessible button', () => {
         render(<PriceCalculator />);
 
-        const teaserButton = screen.getByText(/Preis berechnen \(3 Klicks\)/).closest('button');
+        const teaserButton = screen.getByText(/Preis berechnen/).closest('button');
 
         expect(teaserButton).not.toBeNull();
         expect(teaserButton.getAttribute('type')).toBe('button');

@@ -8,7 +8,7 @@ interface Props {
   priceRange?: string;
 }
 
-const { name, description, image, price, priceCurrency = "EUR", priceRange = "$$$" } = Astro.props;
+const { name, description, image, price, priceCurrency = "EUR", priceRange = "€€-€€€" } = Astro.props;
 
 const schema = {
   "@context": "https://schema.org",
@@ -17,6 +17,7 @@ const schema = {
   "description": description,
   "provider": {
     "@type": "AutoDetailing",
+    "@id": "https://rg-detailing.de/#localBusiness",
     "name": "RG Detailing",
     "image": "https://rg-detailing.de/logo.png",
     "address": {
@@ -43,8 +44,8 @@ const schema = {
           "@type": "Service",
           "name": name
         },
-        "price": price,
-        "priceCurrency": priceCurrency
+        // priceCurrency without a price is invalid, so only emit the pair together
+        ...(price && { "price": price, "priceCurrency": priceCurrency })
       }
     ]
   },

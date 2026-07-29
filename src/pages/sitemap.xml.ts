@@ -13,7 +13,12 @@ export async function GET({ site }) {
       const isDynamic = path.includes('[');
       const isApi = path.includes('/api/');
       const is404 = path.includes('404');
-      return !isDynamic && !isApi && !is404;
+      // Exclude pure redirect stubs (they only 301 to /datenschutz)
+      const isRedirectStub = /(cookie-richtlinie-eu|datenschutzerklaerung-eu)/.test(path);
+      // Exclude the legacy autoaufbereitung-* city pages: they canonicalise
+      // to the /fahrzeugaufbereitung-* equivalents from the cities collection.
+      const isCanonicalisedDuplicate = path.includes('/autoaufbereitung-');
+      return !isDynamic && !isApi && !is404 && !isRedirectStub && !isCanonicalisedDuplicate;
     })
     .map((path) => {
       // Convert file path to URL path
@@ -32,18 +37,15 @@ export async function GET({ site }) {
     });
 
   const cityUrls = cities.map((city) => ({
-    loc: new URL(city.data.slug, site).href,
-    lastmod: new Date().toISOString()
+    loc: new URL(city.data.slug, site).href
   }));
 
-   const glossaryUrls = glossaryEntries.map((entry) => ({
-    loc: new URL(`glossar/${entry.slug}`, site).href,
-    lastmod: new Date().toISOString()
+  const glossaryUrls = glossaryEntries.map((entry) => ({
+    loc: new URL(`glossar/${entry.slug}`, site).href
   }));
 
   const staticUrls = staticPages.map((page) => ({
-    loc: new URL(page, site).href,
-    lastmod: new Date().toISOString()
+    loc: new URL(page, site).href
   }));
 
   const allUrls = [...staticUrls, ...cityUrls, ...glossaryUrls];
@@ -54,7 +56,6 @@ export async function GET({ site }) {
   ${allUrls.map((url) => `
   <url>
     <loc>${url.loc}</loc>
-    <lastmod>${url.lastmod}</lastmod>
   </url>`).join('')}
 </urlset>`.trim(),
     {

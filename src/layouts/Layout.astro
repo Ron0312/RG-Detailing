@@ -21,6 +21,8 @@ interface Props {
     keywords?: string;
     image?: string;
     preloadImage?: string;
+    /** Absolute or root-relative URL to canonicalise to. Defaults to the current path. */
+    canonical?: string;
 }
 
 const {
@@ -29,10 +31,11 @@ const {
     schema,
     keywords = "Fahrzeugaufbereitung, Autoaufbereitung, Autoreinigung, Innenraumreinigung, KFZ Aufbereitung, Keramikversiegelung, Lackaufbereitung, Leasing Rückgabe, Motorwäsche, Schleswig-Holstein, Bad Segeberg, Neumünster, Tensfeld",
     image = "/images/logo-og.png",
-    preloadImage
+    preloadImage,
+    canonical
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site);
 // If image is an external URL, use it directly. If relative, resolve it.
 const socialImageURL = image.startsWith('http') ? image : new URL(image, Astro.site);
 ---
