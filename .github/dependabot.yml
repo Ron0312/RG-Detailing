@@ -1,0 +1,46 @@
+# Woechentliche Meldung ueber veraltete Abhaengigkeiten.
+#
+# Angelegt 07.08.2026. Dieses Projekt betreibt einen laufenden Node-Prozess,
+# hier ist eine veraltete Abhaengigkeit erreichbarer Code und nicht nur ein
+# Bauwerkzeug. Deshalb gehoert es zu den ersten vier, die eine Meldung bekommen.
+#
+# Wichtig zur Abgrenzung: diese Datei steuert nur regelmaessige Versions-Updates.
+# Die Meldung ueber Sicherheitsluecken kommt aus den Dependabot-Alarmen, das ist
+# eine Repo-Einstellung und wurde am selben Tag eingeschaltet.
+#
+# Major-Upgrades bleiben bewusst aussen vor. Dieses Projekt haengt zwei
+# Hauptversionen zurueck, ein automatischer Sprung waere ein Bruch statt eines
+# Updates. Der Sprung wird als eigener Vorgang gemacht, die woechentlichen
+# Minor- und Patch-Updates halten die Luecke bis dahin klein.
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 3
+    labels:
+      - dependencies
+    groups:
+      # Alles Kleine in eine einzige PR. Sonst entstehen pro Woche zehn
+      # Einzel-PRs, und nach der dritten Woche schaut niemand mehr hin.
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - ci
