@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
+import DOMPurify from 'isomorphic-dompurify';
 
 const FAQ = ({ items }) => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -45,7 +46,7 @@ const FAQ = ({ items }) => {
             }`}
           >
             <div className="px-6 pb-6 text-zinc-400 leading-relaxed">
-               <div dangerouslySetInnerHTML={{ __html: item.answer }} />
+               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.answer) }} />
             </div>
           </div>
         </div>
