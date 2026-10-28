@@ -3,6 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import http from 'node:http';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -25,20 +26,19 @@ try {
 // Vorgerenderte Seiten und Assets laufen nicht durch src/middleware.ts.
 // Deshalb hier fuer jede Antwort die Sicherheitsheader setzen, falls sie fehlen.
 // Fehlt security-headers.mjs auf dem Server, startet die App trotzdem.
-try {
-    const { securityHeaders } = await import('./security-headers.mjs');
-    const http = await import('node:http');
-    const originalWriteHead = http.ServerResponse.prototype.writeHead;
-    http.ServerResponse.prototype.writeHead = function (...args) {
-        if (!this.headersSent) {
-            for (const [name, value] of Object.entries(securityHeaders)) {
-                if (!this.hasHeader(name)) this.setHeader(name, value);
+// Kein top-level await: Passenger laedt app.js per require(), das scheitert
+// an ESM mit top-level await (ERR_REQUIRE_ASYNC_MODULE).
+import('./security-headers.mjs')
+    .then(({ securityHeaders }) => {
+        const originalWriteHead = http.ServerResponse.prototype.writeHead;
+        http.ServerResponse.prototype.writeHead = function (...args) {
+            if (!this.headersSent) {
+                for (const [name, value] of Object.entries(securityHeaders)) {
+                    if (!this.hasHeader(name)) this.setHeader(name, value);
+                }
             }
-        }
-        return originalWriteHead.apply(this, args);
-    };
-} catch (err) {
-    console.error('Sicherheitsheader nicht geladen:', err);
-}
-
-import('./dist/server/entry.mjs');
+            return originalWriteHead.apply(this, args);
+        };
+    })
+    .catch((err) => console.error('Sicherheitsheader nicht geladen:', err))
+    .then(() => import('./dist/server/entry.mjs'));
