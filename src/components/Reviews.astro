@@ -1,5 +1,5 @@
 ---
-import { reviews } from '../data/reviews';
+import { reviews, GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '../data/reviews';
 import { Star } from 'lucide-react';
 
 interface Props {
@@ -23,7 +23,7 @@ const displayedReviews = limit ? reviews.slice(0, limit) : reviews;
                     <Star className="w-6 h-6 fill-current" />
                     <Star className="w-6 h-6 fill-current" />
                 </div>
-                <span class="text-zinc-400 font-medium">5,0 (54 Bewertungen)</span>
+                <span class="text-zinc-400 font-medium">{GOOGLE_RATING} ({GOOGLE_REVIEW_COUNT} Bewertungen)</span>
             </div>
             <p class="text-zinc-400 max-w-2xl mx-auto">Echte Meinungen von Kunden aus Tensfeld, Bad Segeberg und Umgebung.</p>
         </div>
