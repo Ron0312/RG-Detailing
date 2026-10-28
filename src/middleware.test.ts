@@ -28,4 +28,15 @@ describe('Middleware Security Headers', () => {
     // Verify script-src does NOT contain unsafe-eval
     expect(csp).not.toContain("'unsafe-eval'");
   });
+
+  it('erlaubt das selbst gehostete Umami (Skript und Events)', async () => {
+    const next = vi.fn().mockResolvedValue(new Response('<html></html>', {
+        headers: { 'Content-Type': 'text/html' }
+    }));
+    // @ts-ignore - type mismatch for context/next mocks is expected in test
+    const response = await onRequest({}, next);
+    const csp = response.headers.get('Content-Security-Policy') ?? '';
+    expect(csp).toMatch(/script-src [^;]*https:\/\/analytics\.rg-detailing\.de/);
+    expect(csp).toMatch(/connect-src [^;]*https:\/\/analytics\.rg-detailing\.de/);
+  });
 });

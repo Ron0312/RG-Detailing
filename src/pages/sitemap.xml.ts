@@ -40,7 +40,7 @@ export async function GET({ site }) {
   }));
 
   const glossaryUrls = glossaryEntries.map((entry) => ({
-    loc: new URL(`glossar/${entry.slug}/`, site).href
+    loc: new URL(`glossar/${entry.id}/`, site).href
   }));
 
   const staticUrls = staticPages.map((page) => ({

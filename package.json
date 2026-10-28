@@ -12,9 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@astrojs/node": "^9.5.2",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/node": "^11.1.9",
+    "@astrojs/react": "^7.1.2",
     "@fontsource/cedarville-cursive": "^5.2.7",
     "@fontsource/hind": "^5.2.8",
     "@fontsource/inter": "^5.2.8",
@@ -24,22 +24,22 @@
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.10",
+    "astro": "^7.4.3",
     "lucide-react": "^0.562.0",
     "nanostores": "^1.1.0",
-    "nodemailer": "^8.0.1",
+    "nodemailer": "^10.2.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "yet-another-react-lightbox": "^3.28.0",
-    "zod": "^3.25.76"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/nodemailer": "^7.0.11",
+    "@types/nodemailer": "^8.0.2",
     "jsdom": "^27.4.0",
     "vitest": "^4.0.17"
   }

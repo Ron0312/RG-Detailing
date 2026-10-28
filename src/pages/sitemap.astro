@@ -66,7 +66,7 @@ const legalPages = [
                 <ul class="space-y-3">
                     {sortedGlossary.map(entry => (
                         <li>
-                            <a href={`/glossar/${entry.slug}/`} class="hover:text-red-500 transition-colors block py-1">
+                            <a href={`/glossar/${entry.id}/`} class="hover:text-red-500 transition-colors block py-1">
                                 {entry.data.title}
                             </a>
                         </li>

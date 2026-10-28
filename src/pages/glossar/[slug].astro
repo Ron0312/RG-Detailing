@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
@@ -8,13 +8,13 @@ export const prerender = true;
 export async function getStaticPaths() {
   const glossaryEntries = await getCollection('glossary');
   return glossaryEntries.map(entry => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const schema = {
   "@context": "https://schema.org",
@@ -34,7 +34,7 @@ const schema = {
         <Breadcrumbs crumbs={[
             { label: 'Startseite', href: '/' },
             { label: 'Glossar', href: '/glossar/' },
-            { label: entry.data.title, href: `/glossar/${entry.slug}/` }
+            { label: entry.data.title, href: `/glossar/${entry.id}/` }
         ]} />
 
         <article class="max-w-3xl mx-auto mt-12">

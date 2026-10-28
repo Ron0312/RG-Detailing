@@ -22,4 +22,23 @@ try {
     // .env file is optional — ENV vars can come from Plesk/system
 }
 
+// Vorgerenderte Seiten und Assets laufen nicht durch src/middleware.ts.
+// Deshalb hier fuer jede Antwort die Sicherheitsheader setzen, falls sie fehlen.
+// Fehlt security-headers.mjs auf dem Server, startet die App trotzdem.
+try {
+    const { securityHeaders } = await import('./security-headers.mjs');
+    const http = await import('node:http');
+    const originalWriteHead = http.ServerResponse.prototype.writeHead;
+    http.ServerResponse.prototype.writeHead = function (...args) {
+        if (!this.headersSent) {
+            for (const [name, value] of Object.entries(securityHeaders)) {
+                if (!this.hasHeader(name)) this.setHeader(name, value);
+            }
+        }
+        return originalWriteHead.apply(this, args);
+    };
+} catch (err) {
+    console.error('Sicherheitsheader nicht geladen:', err);
+}
+
 import('./dist/server/entry.mjs');

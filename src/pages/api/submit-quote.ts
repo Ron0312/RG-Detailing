@@ -66,7 +66,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
         const rawIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || clientAddress || 'unknown';
         // Validate IP to prevent key bloating / memory exhaustion
-        const ip = z.string().ip().safeParse(rawIp).success ? rawIp : 'unknown';
+        const ip = z.union([z.ipv4(), z.ipv6()]).safeParse(rawIp).success ? rawIp : 'unknown';
 
         if (!checkRateLimit(`submit-quote:${ip}`, 10, 60 * 60 * 1000)) { // 10 requests per hour
             return new Response(JSON.stringify({ error: "Zu viele Anfragen. Bitte versuchen Sie es später erneut." }), { status: 429 });
