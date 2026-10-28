@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { priceFaqAnswer } from '../lib/priceFacts';
 import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx';
 import PriceCalculator from '../components/PriceCalculator.jsx';
 import Reviews from '../components/Reviews.astro';
@@ -73,7 +74,7 @@ const galleryImages = await Promise.all(galleryRawImages.map(async (img) => {
 const faqItems = [
   {
     question: "Was kostet eine Fahrzeugaufbereitung / Auto polieren lassen?",
-    answer: 'Wenn Sie Ihr Auto polieren lassen wollen, hängt der Preis vom Zustand ab. Nutzen Sie unseren <a href="#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Auto Komplettreinigung bis zum Full Detailing.'
+    answer: priceFaqAnswer('#rechner')
   },
   {
     question: "Wie lange muss mein Auto bei Ihnen bleiben?",
