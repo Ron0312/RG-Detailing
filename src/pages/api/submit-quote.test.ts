@@ -1,6 +1,14 @@
-import { POST, escapeHtml } from './submit-quote';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { POST, escapeHtml, pruneQuoteLog } from './submit-quote';
+import { describe, it, expect, vi, afterEach, beforeAll } from 'vitest';
+import os from 'node:os';
+import path from 'node:path';
+import fs from 'node:fs';
 import { hits } from '../../lib/rate-limit';
+
+// Tests duerfen nie in das echte logs/quotes.jsonl schreiben.
+beforeAll(() => {
+    process.env.QUOTE_LOG_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'rg-quotes-'));
+});
 
 const mockSendMail = vi.fn();
 
@@ -18,6 +26,14 @@ describe('API submit-quote', () => {
         delete process.env.SMTP_PASS;
         hits.clear();
         mockSendMail.mockClear();
+    });
+
+    it('loescht Log-Eintraege, die aelter als 30 Tage sind', () => {
+        const now = Date.parse('2026-10-28T12:00:00Z');
+        const old = JSON.stringify({ timestamp: '2026-09-01T12:00:00Z', name: 'Alt' });
+        const fresh = JSON.stringify({ timestamp: '2026-10-20T12:00:00Z', name: 'Neu' });
+        const result = pruneQuoteLog(`${old}\n${fresh}\nkaputt\n`, now);
+        expect(result).toBe(`${fresh}\n`);
     });
 
     it('escapes HTML special characters correctly', () => {

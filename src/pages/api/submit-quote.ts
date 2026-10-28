@@ -32,6 +32,29 @@ export const escapeHtml = (unsafe: string): string => {
         .replace(/'/g, "&#039;");
 }
 
+// Fail-safe-Log fuer den Fall, dass die Mail nicht ankommt. Laut
+// Datenschutzerklaerung werden Eintraege nach 30 Tagen geloescht.
+export const QUOTE_LOG_RETENTION_DAYS = 30;
+
+const getLogDir = () => process.env.QUOTE_LOG_DIR || path.join(process.cwd(), 'logs');
+
+export const pruneQuoteLog = (content: string, now: number = Date.now()): string => {
+    const cutoff = now - QUOTE_LOG_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+    return content
+        .split('\n')
+        .filter((line) => {
+            if (!line.trim()) return false;
+            try {
+                const ts = Date.parse(JSON.parse(line).timestamp);
+                return Number.isFinite(ts) && ts >= cutoff;
+            } catch {
+                return false;
+            }
+        })
+        .map((line) => line + '\n')
+        .join('');
+};
+
 const maskEmail = (email: string): string => {
     const parts = email.split('@');
     if (parts.length !== 2) return '***';
@@ -108,19 +131,22 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
         // Log to local file (Fail-safe)
         try {
-            const logDir = path.join(process.cwd(), 'logs');
+            const logDir = getLogDir();
+            const logFile = path.join(logDir, 'quotes.jsonl');
             await fs.mkdir(logDir, { recursive: true });
 
+            // Ohne IP-Adresse: die braucht es nur fuers Rate-Limit im Speicher.
+            const { botcheck, ...customerData } = data;
             const logEntry = {
                 timestamp: new Date().toISOString(),
-                ip,
-                ...data,
+                ...customerData,
                 quote: priceQuote
             };
 
-            await fs.appendFile(
-                path.join(logDir, 'quotes.jsonl'),
-                JSON.stringify(logEntry) + '\n',
+            const existing = await fs.readFile(logFile, 'utf-8').catch(() => '');
+            await fs.writeFile(
+                logFile,
+                pruneQuoteLog(existing) + JSON.stringify(logEntry) + '\n',
                 'utf-8'
             );
             console.log(`>>> Quote logged locally for ${maskEmail(data.email)}`);

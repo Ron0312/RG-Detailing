@@ -25,3 +25,6 @@ wget-log
 
 # jetbrains setting folder
 .idea/
+
+# Fail-safe-Log der Preisanfragen (personenbezogen, nie committen)
+logs/
