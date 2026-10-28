@@ -7,6 +7,8 @@ import Reviews from '../components/Reviews.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PrivacyMap from '../components/PrivacyMap.astro';
 import { getSeoContent } from '../lib/seoContent';
+import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '../data/reviews';
+import pricingConfig from '../lib/pricingConfig.json';
 import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
@@ -26,6 +28,12 @@ export async function getStaticPaths() {
 const { cityEntry } = Astro.props;
 const { name, metaDescription, introText, geo, distance } = cityEntry.data;
 const seoContent = getSeoContent(name, distance);
+
+// GSC 10/2026: Gesucht wird meist "Autoaufbereitung <Stadt>", dazu Preis und
+// Bewertung im Snippet wie bei der Konkurrenz. Einstiegspreis kommt aus dem Rechner.
+const minPrice = Math.min(...Object.values(pricingConfig.packages).map((p) => p.basePrice));
+const pageTitle = `Autoaufbereitung ${name} | Fahrzeugaufbereitung ab ${minPrice} €`;
+const pageDescription = `★ ${GOOGLE_RATING} bei ${GOOGLE_REVIEW_COUNT} Google-Bewertungen, ab ${minPrice} €. ${metaDescription}`;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
@@ -127,7 +135,7 @@ const optimizedHero = await getImage({
 });
 ---
 
-<Layout title={`Fahrzeugaufbereitung ${name}`} description={metaDescription} schema={schema} preloadImage={optimizedHero.src}>
+<Layout title={pageTitle} description={pageDescription} schema={schema} preloadImage={optimizedHero.src}>
 
     <div class="absolute top-24 left-0 w-full z-30 container mx-auto px-4">
         <Breadcrumbs crumbs={[

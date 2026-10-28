@@ -15,10 +15,7 @@ export async function GET({ site }) {
       const is404 = path.includes('404');
       // Exclude pure redirect stubs (they only 301 to /datenschutz)
       const isRedirectStub = /(cookie-richtlinie-eu|datenschutzerklaerung-eu)/.test(path);
-      // Exclude the legacy autoaufbereitung-* city pages: they canonicalise
-      // to the /fahrzeugaufbereitung-* equivalents from the cities collection.
-      const isCanonicalisedDuplicate = path.includes('/autoaufbereitung-');
-      return !isDynamic && !isApi && !is404 && !isRedirectStub && !isCanonicalisedDuplicate;
+      return !isDynamic && !isApi && !is404 && !isRedirectStub;
     })
     .map((path) => {
       // Convert file path to URL path
@@ -43,7 +40,7 @@ export async function GET({ site }) {
   }));
 
   const glossaryUrls = glossaryEntries.map((entry) => ({
-    loc: new URL(`glossar/${entry.slug}/`, site).href
+    loc: new URL(`glossar/${entry.id}/`, site).href
   }));
 
   const staticUrls = staticPages.map((page) => ({

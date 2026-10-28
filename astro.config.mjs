@@ -30,7 +30,11 @@ export default defineConfig({
     '/preisrechner': '/',
     '/preisrechner-2': '/',
     '/referenzen': '/galerie/',
-    '/haftungsausschluss': '/impressum/'
+    '/haftungsausschluss': '/impressum/',
+    // Alte Doppelseiten der Stadtseiten. Der Canonical allein reichte nicht:
+    // Google zeigte sie 10/2026 weiter auf Position 20 bis 26 an.
+    '/autoaufbereitung-neumuenster': '/fahrzeugaufbereitung-neumuenster/',
+    '/autoaufbereitung-bad-segeberg': '/fahrzeugaufbereitung-bad-segeberg/'
   },
   security: {
     checkOrigin: true

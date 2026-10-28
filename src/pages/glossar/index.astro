@@ -28,7 +28,7 @@ const sortedEntries = glossaryEntries.sort((a, b) => a.data.title.localeCompare(
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {sortedEntries.map((entry) => (
-                <a href={`/glossar/${entry.slug}/`} class="glass-panel p-8 hover:bg-zinc-800 transition-colors group flex flex-col h-full">
+                <a href={`/glossar/${entry.id}/`} class="glass-panel p-8 hover:bg-zinc-800 transition-colors group flex flex-col h-full">
                     <div class="flex items-center gap-3 mb-4 text-red-500">
                         <Book size={20} />
                         <span class="text-xs font-bold uppercase tracking-widest">{entry.data.category}</span>

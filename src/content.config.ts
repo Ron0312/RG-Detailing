@@ -1,7 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const citiesCollection = defineCollection({
-  type: 'data',
+  loader: glob({ pattern: '**/*.json', base: './src/content/cities' }),
   schema: z.object({
     name: z.string(),
     slug: z.string(), // e.g. 'fahrzeugaufbereitung-bad-segeberg'
@@ -18,7 +20,7 @@ const citiesCollection = defineCollection({
 });
 
 const servicesCollection = defineCollection({
-  type: 'data',
+  loader: glob({ pattern: '**/*.json', base: './src/content/services' }),
   schema: z.object({
     title: z.string(),
     slug: z.string(),
@@ -30,7 +32,7 @@ const servicesCollection = defineCollection({
 });
 
 const glossaryCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/glossary' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

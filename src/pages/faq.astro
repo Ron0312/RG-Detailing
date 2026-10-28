@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { priceFaqAnswer } from '../lib/priceFacts';
 import FAQ from '../components/FAQ.jsx';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 
@@ -12,7 +13,7 @@ const faqItems = [
   },
   {
     question: "Was kostet eine Fahrzeugaufbereitung / Auto polieren lassen?",
-    answer: 'Wenn Sie Ihr Auto polieren lassen wollen, hängt der Preis vom Zustand ab. Nutzen Sie unseren <a href="/#rechner" class="text-red-500 hover:underline">Preisrechner</a> für eine individuelle Schätzung. Wir bieten Pakete von der einfachen Auto Komplettreinigung bis zum Full Detailing.'
+    answer: priceFaqAnswer('/#rechner')
   },
   {
     question: "Machen Sie auch Motorwäsche?",
