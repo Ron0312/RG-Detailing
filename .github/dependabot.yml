@@ -1,4 +1,4 @@
-# Woechentliche Meldung ueber veraltete Abhaengigkeiten.
+# Monatliche Meldung ueber veraltete Abhaengigkeiten.
 #
 # Angelegt 07.08.2026. Dieses Projekt betreibt einen laufenden Node-Prozess,
 # hier ist eine veraltete Abhaengigkeit erreichbarer Code und nicht nur ein
@@ -18,18 +18,19 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: "06:00"
       timezone: "Europe/Berlin"
     open-pull-requests-limit: 3
     labels:
       - dependencies
     groups:
-      # Alles Kleine in eine einzige PR. Sonst entstehen pro Woche zehn
-      # Einzel-PRs, und nach der dritten Woche schaut niemand mehr hin.
-      minor-and-patch:
+      # Alles Kleine in eine einzige PR. Sonst entstehen pro Monat zehn
+      # Einzel-PRs, und nach dem dritten Monat schaut niemand mehr hin.
+      alle:
         applies-to: version-updates
+        patterns:
+          - "*"
         update-types:
           - minor
           - patch
