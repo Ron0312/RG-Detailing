@@ -44,8 +44,18 @@ const schema = {
           "@type": "Service",
           "name": name
         },
-        // priceCurrency without a price is invalid, so only emit the pair together
-        ...(price && { "price": price, "priceCurrency": priceCurrency })
+        // priceCurrency without a price is invalid, so only emit the pair together.
+        // Alle Preise sind Nettopreise, das sagt valueAddedTaxIncluded: false.
+        ...(price && {
+          "price": price,
+          "priceCurrency": priceCurrency,
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "price": price,
+            "priceCurrency": priceCurrency,
+            "valueAddedTaxIncluded": false
+          }
+        })
       }
     ]
   },

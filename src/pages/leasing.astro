@@ -7,6 +7,8 @@ import FAQ from '../components/FAQ.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 import { CheckCircle2, AlertTriangle, Calculator, ArrowRight, ShieldCheck, Banknote, Car } from 'lucide-react';
+import { startingPrices } from '../lib/priceFacts';
+import { euroNetto } from '../lib/priceFormat';
 
 export const prerender = true;
 
@@ -174,7 +176,7 @@ const faqItems = [
                                     </div>
                                      <div class="flex justify-between items-center pb-4 border-b border-white/5">
                                         <span class="text-green-400 font-bold">Kosten RG Detailing</span>
-                                        <span class="text-green-400 font-bold text-xl">ab 400 €</span>
+                                        <span class="text-green-400 font-bold text-xl">ab {euroNetto(startingPrices.leasing)}</span>
                                     </div>
                                     <div class="flex justify-between items-center pt-2 p-4 bg-white/5 rounded-xl border border-white/5">
                                         <span class="text-white font-bold text-lg">Ihre Ersparnis</span>

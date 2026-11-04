@@ -24,6 +24,6 @@ Wir bereiten Ihr Fahrzeug so auf, dass es den strengen Rückgaberichtlinien ents
 *   **Dellen & Felgen:** Größere Schäden beheben wir kostengünstig über unser zuverlässiges Partnernetzwerk (Beulendoktor / Smart Repair).
 
 ### Ihre Rechnung geht auf
-Eine Aufbereitung kostet Sie einen Bruchteil dessen, was das Autohaus für "Mängel" in Rechnung stellt. Investieren Sie z.B. 400€ in eine Aufbereitung und vermeiden Sie 1.500€ Nachzahlung.
+Eine Aufbereitung kostet Sie einen Bruchteil dessen, was das Autohaus für "Mängel" in Rechnung stellt. Investieren Sie z.B. 400 € (netto) in eine Aufbereitung und vermeiden Sie 1.500€ Nachzahlung.
 
 **Tipp:** Vereinbaren Sie ca. 2 Wochen vor Rückgabe einen **kostenlosen Vorab-Check** bei uns. Wir schauen uns das Auto an und sagen Ihnen ehrlich, was gemacht werden muss – und was nicht.

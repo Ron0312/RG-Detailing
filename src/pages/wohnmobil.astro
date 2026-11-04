@@ -10,6 +10,7 @@ import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
 import wohnmobilAfter from '../assets/wohnmobil-after.jpg';
 import { Check } from 'lucide-react';
 import FAQ from '../components/FAQ.jsx';
+import { euroNetto } from '../lib/priceFormat';
 
 export const prerender = true;
 
@@ -139,7 +140,7 @@ const faqSchema = {
                         <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> GFK-Spezialpolitur gegen Auskreiden</li>
                         <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Keramikversiegelung für Langzeitschutz</li>
                         <li class="flex items-center"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Hygienische Innenreinigung</li>
-                        <li class="flex items-center font-bold text-white"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Außenwäsche ab 125 €</li>
+                        <li class="flex items-center font-bold text-white"><span class="text-red-500 mr-2 flex items-center justify-center"><Check className="w-4 h-4" /></span> Außenwäsche ab {euroNetto(125)}</li>
                     </ul>
                  </div>
             </div>
