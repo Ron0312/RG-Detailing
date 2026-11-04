@@ -7,6 +7,12 @@ import FAQ from '../components/FAQ.jsx';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 import { CheckCircle2, AlertTriangle, Calculator, ArrowRight, ShieldCheck, Banknote, Car } from 'lucide-react';
+import { startingPrices } from '../lib/priceFacts';
+import { brutto, euro, euroNetto, INKL_MWST } from '../lib/priceFormat';
+
+// Beispielrechnung: geschätzte Nachzahlung beim Autohaus (kein eigener Preis, Endpreis inkl. MwSt.).
+// Die Ersparnis vergleicht deshalb mit dem eigenen Endpreis inkl. MwSt.
+const AUTOHAUS_SCHAETZUNG = 2500;
 
 export const prerender = true;
 
@@ -170,15 +176,18 @@ const faqItems = [
                                 <div class="space-y-6 relative z-10 mb-8">
                                     <div class="flex justify-between items-center pb-4 border-b border-white/5">
                                         <span class="text-zinc-400">Kosten Autohaus (Schätzung)</span>
-                                        <span class="text-red-500 font-bold text-xl decoration-red-500/30 line-through decoration-2">2.500 €</span>
+                                        <span class="text-red-500 font-bold text-xl decoration-red-500/30 line-through decoration-2">{euro(AUTOHAUS_SCHAETZUNG)}</span>
                                     </div>
                                      <div class="flex justify-between items-center pb-4 border-b border-white/5">
                                         <span class="text-green-400 font-bold">Kosten RG Detailing</span>
-                                        <span class="text-green-400 font-bold text-xl">ab 400 €</span>
+                                        <span class="text-right whitespace-nowrap">
+                                            <span class="block text-green-400 font-bold text-xl">ab {euro(brutto(startingPrices.leasing))}</span>
+                                            <span class="block text-sm text-zinc-300">{INKL_MWST}, {euroNetto(startingPrices.leasing)}</span>
+                                        </span>
                                     </div>
                                     <div class="flex justify-between items-center pt-2 p-4 bg-white/5 rounded-xl border border-white/5">
                                         <span class="text-white font-bold text-lg">Ihre Ersparnis</span>
-                                        <span class="text-white font-bold text-3xl drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">bis zu 2.100 €</span>
+                                        <span class="text-white font-bold text-3xl drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">bis zu {euro(AUTOHAUS_SCHAETZUNG - brutto(startingPrices.leasing))}</span>
                                     </div>
                                 </div>
 
