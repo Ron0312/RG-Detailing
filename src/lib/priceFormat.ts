@@ -5,6 +5,9 @@ export const NETTO = 'netto';
 export const MWST_ZUSATZ = 'zzgl. gesetzl. MwSt.';
 export const PREISHINWEIS = 'Alle Preise sind Nettopreise zzgl. der gesetzlichen MwSt.';
 
-export const euro = (betrag: number): string => `${betrag.toLocaleString('de-DE')} €`;
+// Geschütztes Leerzeichen zwischen Betrag und €, damit das Zeichen nie allein umbricht.
+const GESCHUETZT = String.fromCodePoint(0x00a0);
+
+export const euro = (betrag: number): string => `${betrag.toLocaleString('de-DE')}${GESCHUETZT}€`;
 
 export const euroNetto = (betrag: number): string => `${euro(betrag)} ${NETTO}`;

@@ -222,7 +222,7 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
 
                     <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 border border-white/10 rounded-2xl p-6 my-6 shadow-xl">
                         <p className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-2">Geschätzte Investition</p>
-                        <div className="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
                             {euro(quote.minPrice)} <span className="text-zinc-500 text-2xl font-normal">-</span> {euro(quote.maxPrice)}<span className="text-lg text-zinc-400 align-top ml-1">*</span>
                         </div>
                         <p className="text-sm font-bold text-zinc-200">{NETTO}, {MWST_ZUSATZ}</p>
