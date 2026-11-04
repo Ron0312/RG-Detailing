@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, forwardRef, memo } from 'react';
 import { calculatePrice } from '../lib/pricing';
 import { trackEvent } from '../lib/analytics';
 import config from '../lib/pricingConfig.json';
-import { euro, NETTO, MWST_ZUSATZ, PREISHINWEIS } from '../lib/priceFormat';
+import { brutto, euro, euroNetto, INKL_MWST, PREISHINWEIS } from '../lib/priceFormat';
 import { Check, Star, Shield, Truck, Sparkles, ArrowRight, ChevronRight, Calculator, Car, Eye, Droplets, Hammer } from 'lucide-react';
 
 const STEPS = {
@@ -73,9 +73,9 @@ const Card = ({ title, desc, price, badge, highlight, onClick, active, icon: Ico
         {price && (
             <div className={`mt-auto pt-4 border-t transition-colors ${active ? 'border-red-500/20' : 'border-white/5 group-hover:border-white/10'} flex justify-between items-center relative z-10`}>
                 <span className="text-xs text-zinc-400 uppercase tracking-wider font-bold">Ab</span>
-                <span className="whitespace-nowrap">
-                    <span className={`font-bold text-xl tracking-tighter ${highlight ? 'text-yellow-500' : 'text-red-500'}`}>{euro(price)}</span>
-                    <span className="text-xs text-zinc-400 font-bold ml-1.5">{NETTO}</span>
+                <span className="whitespace-nowrap text-right">
+                    <span className={`block font-bold text-xl tracking-tighter ${highlight ? 'text-yellow-500' : 'text-red-500'}`}>{euro(brutto(price))}</span>
+                    <span className="block text-xs text-zinc-300 font-bold">{INKL_MWST}, {euroNetto(price)}</span>
                 </span>
             </div>
         )}
@@ -148,9 +148,9 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
 
                 <div className="bg-zinc-950/50 p-6 rounded-2xl border border-white/5 mb-8 text-center shadow-inner">
                     <div className="text-zinc-400 text-xs uppercase tracking-widest mb-2 font-bold">Wäsche-Preis ({selections.camperLength}m)</div>
-                    <div className="text-5xl font-bold text-white mb-1 tracking-tight">{euro(washPrice)}</div>
-                    <div className="text-sm font-bold text-zinc-200 mb-2">{NETTO}, {MWST_ZUSATZ}</div>
-                     <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {euro(meterPrice)}/m netto). Politur auf Anfrage.</div>
+                    <div className="text-5xl font-bold text-white mb-1 tracking-tight">{euro(brutto(washPrice))}</div>
+                    <div className="text-sm font-bold text-zinc-200 mb-2">{INKL_MWST}, {euroNetto(washPrice)}</div>
+                     <div className="text-xs text-zinc-400 mb-6">*Basiswäsche inkl. Dach (ca. {euro(brutto(meterPrice))}/m {INKL_MWST}, {euro(meterPrice)}/m netto). Politur auf Anfrage.</div>
                      <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full my-4"></div>
                      <div className="text-zinc-300 text-sm font-medium">
                         <span className="text-red-400 font-bold uppercase tracking-wide text-xs block mb-1">Keramik & Politur</span>
@@ -197,8 +197,8 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
 
                 <div className="text-center mb-8">
                     <div className="text-xs text-zinc-400 uppercase tracking-widest font-bold mb-2">Ihre Investition (Sparpotenzial)</div>
-                    <div className="text-5xl font-bold text-white tracking-tighter">~{euro(quote.minPrice)}<span className="text-lg text-zinc-400 align-top ml-1">*</span></div>
-                    <div className="text-sm font-bold text-zinc-200 mt-2">{NETTO}, {MWST_ZUSATZ}</div>
+                    <div className="text-5xl font-bold text-white tracking-tighter">~{euro(brutto(quote.minPrice))}<span className="text-lg text-zinc-400 align-top ml-1">*</span></div>
+                    <div className="text-sm font-bold text-zinc-200 mt-2">{INKL_MWST}, ~{euroNetto(quote.minPrice)}</div>
                     <p className="text-xs text-zinc-500 mt-2">*Der finale Preis richtet sich nach dem genauen Zustand bei Besichtigung.</p>
                 </div>
 
@@ -222,10 +222,11 @@ const ResultCard = memo(({ quote, selections, stepTitleRef }) => {
 
                     <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 border border-white/10 rounded-2xl p-6 my-6 shadow-xl">
                         <p className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-2">Geschätzte Investition</p>
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
-                            {euro(quote.minPrice)} <span className="text-zinc-500 text-2xl font-normal">-</span> {euro(quote.maxPrice)}<span className="text-lg text-zinc-400 align-top ml-1">*</span>
+                        <div className="text-3xl sm:text-4xl font-bold text-white mb-2 tracking-tight">
+                            <span className="whitespace-nowrap">{euro(brutto(quote.minPrice))}</span> <span className="text-zinc-500 text-2xl font-normal">-</span> <span className="whitespace-nowrap">{euro(brutto(quote.maxPrice))}<span className="text-lg text-zinc-400 align-top ml-1">*</span></span>
                         </div>
-                        <p className="text-sm font-bold text-zinc-200">{NETTO}, {MWST_ZUSATZ}</p>
+                        <p className="text-sm font-bold text-zinc-200">{INKL_MWST}</p>
+                        <p className="text-sm font-bold text-zinc-300 mt-1">{euro(quote.minPrice)} - {euroNetto(quote.maxPrice)}</p>
                         <p className="text-xs text-zinc-500 mt-2">*Der finale Preis richtet sich nach dem genauen Zustand bei Besichtigung.</p>
                     </div>
                 </div>

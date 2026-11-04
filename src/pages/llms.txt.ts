@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { startingPrices, sizeMarkupText } from '../lib/priceFacts';
-import { euroNetto, PREISHINWEIS } from '../lib/priceFormat';
+import { preisText, PREISHINWEIS } from '../lib/priceFormat';
 import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '../data/reviews';
 
 export const prerender = true;
@@ -27,10 +27,10 @@ export const GET: APIRoute = async ({ site }) => {
 
 ## Leistungen und Einstiegspreise
 Richtwerte für einen Kleinwagen in gutem Zustand. ${PREISHINWEIS} ${sizeMarkupText} Den genauen Preis zeigt der Preisrechner auf der Startseite.
-- Basis-Aufbereitung: Innenraum-Tiefenreinigung mit Trockendampf, Polster- und Lederreinigung, Außenwäsche. Ab ${euroNetto(startingPrices.basis)}.
-- Leasing-Rückgabe: komplette Aufbereitung innen und außen vor der Rückgabe, um Nachzahlungen zu vermeiden. Ab ${euroNetto(startingPrices.leasing)}. ${url('/leasing/')}
-- Premium-Aufbereitung: Tiefenreinigung, Lederpflege, Hochglanzpolitur und Versiegelung. Ab ${euroNetto(startingPrices.premium)}. ${url('/all-in-one/')}
-- High-End Detailing: Lackkorrektur und zertifizierte Keramikversiegelung mit bis zu 5 Jahren Garantie. Ab ${euroNetto(startingPrices.highEnd)}. ${url('/keramikversiegelung/')}
+- Basis-Aufbereitung: Innenraum-Tiefenreinigung mit Trockendampf, Polster- und Lederreinigung, Außenwäsche. Ab ${preisText(startingPrices.basis)}.
+- Leasing-Rückgabe: komplette Aufbereitung innen und außen vor der Rückgabe, um Nachzahlungen zu vermeiden. Ab ${preisText(startingPrices.leasing)}. ${url('/leasing/')}
+- Premium-Aufbereitung: Tiefenreinigung, Lederpflege, Hochglanzpolitur und Versiegelung. Ab ${preisText(startingPrices.premium)}. ${url('/all-in-one/')}
+- High-End Detailing: Lackkorrektur und zertifizierte Keramikversiegelung mit bis zu 5 Jahren Garantie. Ab ${preisText(startingPrices.highEnd)}. ${url('/keramikversiegelung/')}
 - Wohnmobil und Caravan: Halle für Fahrzeuge bis 8 m, GFK-Pflege und Keramikversiegelung gegen Auskreiden. Preis auf Anfrage. ${url('/wohnmobil/')}
 - Dampfreinigung: ${url('/dampfreinigung/')}
 - Smart Repair für Kratzer, Dellen und Felgen über ein Partnernetzwerk: ${url('/smart-repair/')}

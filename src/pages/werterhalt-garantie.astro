@@ -6,7 +6,7 @@ import { ShieldCheck, CalendarClock, Gem, CheckCircle2, ArrowRight } from 'lucid
 import { Image } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 import { startingPrices } from '../lib/priceFacts';
-import { euroNetto } from '../lib/priceFormat';
+import { euroBrutto, euroNetto } from '../lib/priceFormat';
 
 export const prerender = true;
 ---
@@ -174,7 +174,7 @@ export const prerender = true;
                 <div class="mt-12 text-center bg-red-900/10 border border-red-500/20 rounded-2xl p-6 max-w-2xl mx-auto">
                     <p class="text-zinc-300">
                         <strong>Hinweis:</strong> Dieses Angebot gilt exklusiv für Fahrzeuge, die bei uns ein
-                        <span class="text-white font-bold">Full Detailing (ab {euroNetto(startingPrices.highEnd)})</span> mit Keramik- oder Graphenversiegelung erhalten haben.
+                        <span class="text-white font-bold">Full Detailing (ab {euroBrutto(startingPrices.highEnd)}, {euroNetto(startingPrices.highEnd)})</span> mit Keramik- oder Graphenversiegelung erhalten haben.
                     </p>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import heroImage from '../assets/labocosmetica-hpc-pro.jpg';
 import detailImage from '../assets/keramikversiegelung-mercedes-sl-tensfeld.webp';
 import showcaseImage from '../assets/keramikversiegelung-detailing-halle-tensfeld.jpg';
 import { startingPrices } from '../lib/priceFacts';
-import { euroNetto } from '../lib/priceFormat';
+import { preisText } from '../lib/priceFormat';
 
 const benefits = [
     {
@@ -70,7 +70,7 @@ const faqItems = [
     },
     {
         question: "Was kostet eine Keramikversiegelung?",
-        answer: `Der Preis hängt vom Fahrzeug und vom Lackzustand ab, denn der Aufwand steckt in der Vorbereitung, nicht im Auftragen. Bei uns startet die Keramikversiegelung als Teil des High-End Detailings ab ${euroNetto(startingPrices.highEnd)}. Den Preis für Ihr konkretes Fahrzeug rechnen Sie in unserem Preisrechner in drei Klicks aus.`
+        answer: `Der Preis hängt vom Fahrzeug und vom Lackzustand ab, denn der Aufwand steckt in der Vorbereitung, nicht im Auftragen. Bei uns startet die Keramikversiegelung als Teil des High-End Detailings ab ${preisText(startingPrices.highEnd)}. Den Preis für Ihr konkretes Fahrzeug rechnen Sie in unserem Preisrechner in drei Klicks aus.`
     },
     {
         question: "Wie lange dauert eine Keramikversiegelung?",

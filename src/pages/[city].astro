@@ -9,7 +9,7 @@ import PrivacyMap from '../components/PrivacyMap.astro';
 import { getSeoContent } from '../lib/seoContent';
 import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '../data/reviews';
 import pricingConfig from '../lib/pricingConfig.json';
-import { euroNetto } from '../lib/priceFormat';
+import { euroBrutto, preisText } from '../lib/priceFormat';
 import { Image, getImage } from 'astro:assets';
 import heroImage from '../assets/rg-detailing_Fahrzeugaufbereitung_Tensfeld_Hero.jpg';
 import wohnmobilBefore from '../assets/wohnmobil-before.jpg';
@@ -33,8 +33,8 @@ const seoContent = getSeoContent(name, distance);
 // GSC 10/2026: Gesucht wird meist "Autoaufbereitung <Stadt>", dazu Preis und
 // Bewertung im Snippet wie bei der Konkurrenz. Einstiegspreis kommt aus dem Rechner.
 const minPrice = Math.min(...Object.values(pricingConfig.packages).map((p) => p.basePrice));
-const pageTitle = `Autoaufbereitung ${name} | Fahrzeugaufbereitung ab ${euroNetto(minPrice)}`;
-const pageDescription = `★ ${GOOGLE_RATING} bei ${GOOGLE_REVIEW_COUNT} Google-Bewertungen, ab ${euroNetto(minPrice)}. ${metaDescription}`;
+const pageTitle = `Autoaufbereitung ${name} | Fahrzeugaufbereitung ab ${euroBrutto(minPrice)}`;
+const pageDescription = `★ ${GOOGLE_RATING} bei ${GOOGLE_REVIEW_COUNT} Google-Bewertungen, ab ${preisText(minPrice)}. ${metaDescription}`;
 
 const optimizedBefore = await getImage({src: wohnmobilBefore, format: 'avif'});
 const optimizedAfter = await getImage({src: wohnmobilAfter, format: 'avif'});
