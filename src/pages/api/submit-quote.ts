@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import nodemailer from 'nodemailer';
 import { calculatePrice, type PackageId, type SizeId, type ConditionId } from '../../lib/pricing';
+import { brutto, euro, euroBrutto, euroNetto } from '../../lib/priceFormat';
 import config from '../../lib/pricingConfig.json';
 import { checkRateLimit } from '../../lib/rate-limit';
 
@@ -188,7 +189,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
                 <h3>Kalkulation</h3>
                 <p style="font-size: 1.2em; font-weight: bold;">
-                    Geschätzter Preis: ${priceQuote.minPrice}€ - ${priceQuote.maxPrice}€
+                    Geschätzter Preis: ${euro(priceQuote.minPrice)} - ${euroNetto(priceQuote.maxPrice)} (${euro(brutto(priceQuote.minPrice))} - ${euroBrutto(priceQuote.maxPrice)})
                 </p>
 
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />

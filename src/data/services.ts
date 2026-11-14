@@ -1,9 +1,12 @@
+import { startingPrices } from '../lib/priceFacts';
+import { preisText } from '../lib/priceFormat';
+
 export const services = [
     {
         title: "Full Detailing",
         description: "Das ultimative Upgrade für Liebhaber. Wenn Sie Ihr Auto polieren lassen wollen für einen Zustand 'Besser als Neu': Unsere mehrstufige Lackkorrektur entfernt Swirls & Kratzer. Veredelt mit zertifizierter Keramikversiegelung – individuell abgestimmt mit hochwertigen Produkten von Labocosmetica, Gtechniq, Sonax, Koch Chemie und Safe Shield.",
         icon: "shield",
-        shortDescription: "High-End Lackkorrektur (Auto polieren) + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab 950 €.",
+        shortDescription: `High-End Lackkorrektur (Auto polieren) + zertifiziertes Coating für extremen Tiefenglanz. Das Beste für Ihren Wagen. Ab ${preisText(startingPrices.highEnd)}.`,
         link: "/keramikversiegelung/",
         category: "Lack & Keramik",
         duration: "ca. 3-4 Tage"
@@ -12,7 +15,7 @@ export const services = [
         title: "All-in-One (Werterhalt)",
         description: "Der perfekte Einstieg in die Welt des Detailings. Innenraum-Pflege, Hochglanzpolitur (Auto polieren) und Lackschutz sichern den Wert Ihres Fahrzeugs langfristig.",
         icon: "sparkles",
-        shortDescription: "Werterhalt und Glanz in einem Paket. Ideal für gepflegte Daily Driver. Ab 700 €.",
+        shortDescription: `Werterhalt und Glanz in einem Paket. Ideal für gepflegte Daily Driver. Ab ${preisText(startingPrices.premium)}.`,
         link: "/all-in-one/",
         category: "Lack & Keramik",
         duration: "ca. 1-2 Tage"
@@ -21,7 +24,7 @@ export const services = [
         title: "Wohnmobil-Spezial",
         description: "Spezialisierte Wohnmobil Aufbereitung und Keramikversiegelung. Wir schützen GFK und Lack vor Auskreiden und Vergilben.",
         icon: "bus",
-        shortDescription: "Halle für Fahrzeuge bis 8m. GFK-Pflege und Versiegelung gegen Auskreiden. Außenwäsche ab 125 €.",
+        shortDescription: `Halle für Fahrzeuge bis 8m. GFK-Pflege und Versiegelung gegen Auskreiden. Außenwäsche ab ${preisText(125)}.`,
         link: "/wohnmobil/",
         category: "Spezial & Reparatur",
         duration: "nach Absprache"
@@ -39,7 +42,7 @@ export const services = [
         title: "Innen & Hygiene",
         description: "Professionelle Innenraumreinigung inkl. Polster, Teppich und Türeinstiege. Tiefenreinigung mit 170°C Trockendampf tötet Bakterien ohne Chemie. Nur in Kombination mit Außenwäsche.",
         icon: "droplet",
-        shortDescription: "Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar. Ab 350 €.",
+        shortDescription: `Tiefenreinigung mit 170°C Trockendampf. Nur in Kombination mit Außenwäsche buchbar. Ab ${preisText(startingPrices.basis)}.`,
         link: "/dampfreinigung/",
         category: "Innen & Sonstiges",
         duration: "ca. 1 Tag"

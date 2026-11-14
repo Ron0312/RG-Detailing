@@ -1,8 +1,11 @@
 ---
+import { brutto } from '../lib/priceFormat';
+
 interface Props {
   name: string;
   description: string;
   image?: string;
+  // Nettopreis des Inhabers; im Schema steht wie auf der Seite der Endpreis inkl. MwSt.
   price?: string;
   priceCurrency?: string;
   priceRange?: string;
@@ -44,8 +47,17 @@ const schema = {
           "@type": "Service",
           "name": name
         },
-        // priceCurrency without a price is invalid, so only emit the pair together
-        ...(price && { "price": price, "priceCurrency": priceCurrency })
+        // priceCurrency without a price is invalid, so only emit the pair together.
+        ...(price && {
+          "price": brutto(Number(price)),
+          "priceCurrency": priceCurrency,
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "price": brutto(Number(price)),
+            "priceCurrency": priceCurrency,
+            "valueAddedTaxIncluded": true
+          }
+        })
       }
     ]
   },

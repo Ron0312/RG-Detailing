@@ -1,4 +1,5 @@
 import config from './pricingConfig.json';
+import { preisText, PREISHINWEIS } from './priceFormat';
 
 // Einstiegspreise direkt aus dem Preisrechner, damit FAQ, Schema und llms.txt
 // nie von den Rechnerpreisen abweichen.
@@ -18,9 +19,9 @@ export const sizeMarkupText =
 
 export const priceFaqAnswer = (rechnerHref: string): string =>
     `Der Preis hängt von Fahrzeuggröße und Zustand ab. Richtwerte für einen Kleinwagen in gutem Zustand: ` +
-    `Basis-Aufbereitung (Innenraum-Tiefenreinigung und Außenwäsche) ab ${startingPrices.basis} €, ` +
-    `Leasing-Rückgabe ab ${startingPrices.leasing} €, ` +
-    `Premium-Aufbereitung mit Politur und Versiegelung ab ${startingPrices.premium} €, ` +
-    `High-End Detailing mit Lackkorrektur und Keramikversiegelung ab ${startingPrices.highEnd} €. ` +
-    `${sizeMarkupText} ` +
+    `Basis-Aufbereitung (Innenraum-Tiefenreinigung und Außenwäsche) ab ${preisText(startingPrices.basis)}, ` +
+    `Leasing-Rückgabe ab ${preisText(startingPrices.leasing)}, ` +
+    `Premium-Aufbereitung mit Politur und Versiegelung ab ${preisText(startingPrices.premium)}, ` +
+    `High-End Detailing mit Lackkorrektur und Keramikversiegelung ab ${preisText(startingPrices.highEnd)}. ` +
+    `${sizeMarkupText} ${PREISHINWEIS} ` +
     `Ihren Preis zeigt der <a href="${rechnerHref}" class="text-red-500 hover:underline">Preisrechner</a> in drei Klicks.`;

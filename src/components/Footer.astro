@@ -3,6 +3,7 @@ import PrivacyMap from './PrivacyMap.astro';
 import { Youtube, Podcast, MessageCircle } from 'lucide-react';
 import { Image } from 'astro:assets';
 import logoImage from '../assets/logo.png';
+import { PREISHINWEIS } from '../lib/priceFormat';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -65,7 +66,7 @@ const currentYear = new Date().getFullYear();
     </div>
 
     <div class="text-center mt-8 pt-8 border-t border-zinc-900 text-sm">
-        <p class="text-zinc-400 mb-4 text-xs">Alle Preise inkl. gesetzl. MwSt.</p>
+        <p class="text-zinc-400 mb-4 text-xs">{PREISHINWEIS}</p>
         <div class="flex justify-center gap-4 mb-4 flex-wrap items-center">
             <a href="/impressum/" class="hover:text-white py-3 px-3">Impressum</a>
             <a href="/datenschutz/" class="hover:text-white py-3 px-3">Datenschutz</a>
